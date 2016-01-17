@@ -1,0 +1,59 @@
+
+<link rel="stylesheet" type="text/css" href="login.scss?__inline">
+
+<div class="login">
+    <validator name="login">
+    <form class="am-form am-form-horizontal am-u-sm-12 am-u-lg-4 am-u-lg-centered">
+        <fieldset>
+            <legend>网络营销管理系统</legend>
+
+            <div class="am-form-group am-form-group-sm">
+                <label for="login-username" class="am-u-sm-3 am-form-label"><i class="am-icon-user am-icon-sm"></i>用户名</label>
+                <div class="am-u-sm-9">
+                    <input type="text" id="login-username" class="am-form-field am-radius"  v-model="username"
+                           placeholder="请输入账户名" v-validate:username="{ required: true}">
+                    <span class="tips" v-if="$login.username.required">账户名不能为空!</span>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-group-sm">
+                <label for="login-password" class="am-u-sm-3 am-form-label"><i class="am-icon-key am-icon-sm"></i>密码</label>
+                <div class="am-u-sm-9">
+                    <input type="password" id="login-password" class="am-form-field am-radius" v-model="password"
+                           placeholder="请输入密码" v-validate:password="{ required: true}">
+                    <span class="tips" v-if="$login.password.required">密码不能为空!</span>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-group-sm">
+                <div class="am-u-sm-offset-3 am-u-sm-9 am-g-collapse">
+                    <div class="am-u-sm-5">
+                        <input type="text" class="am-form-field am-radius" v-model="securityCode"
+                               placeholder="请输入验证码" v-validate:security-code="{ required: true}">
+                    </div>
+                    <div class="am-u-sm-7">
+                        <button class="am-btn am-btn-primary am-radius getSecurityCode">获取验证码</button>
+                    </div>
+                    <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-group-sm">
+                <div class="am-u-sm-offset-3 am-u-sm-9">
+                    <div class="am-checkbox">
+                        <label>
+                            <input type="checkbox"> 两周内免登陆
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group">
+                <div class="am-u-sm-9 am-u-sm-offset-3">
+                    <button class="am-btn am-btn-default  am-radius" @click="onLogin" v-if="$login.valid">登陆</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    </validator>
+</div>

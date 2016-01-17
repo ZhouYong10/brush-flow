@@ -1,0 +1,13 @@
+# ignore output folder
+backstage/public
+
+# ignore node_moduels
+backstage/node_modules
+web-workflow/node_modules
+
+# ignore IDE dir
+.idea
+
+
+#  --no-cache --update $FileName$:$FileNameWithoutExtension$.css
+#  --source-maps --out-file $FileNameWithoutExtension$-compiled.js $FilePath$
