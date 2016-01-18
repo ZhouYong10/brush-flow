@@ -15,6 +15,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.post('/users/login', function (req, res) {
+  console.log(req.body);
+  res.send('欢迎访问/user/login........................username: ' + req.body.username + ' password: ' +
+      req.body.password + ' securityCode: ' + req.body.securityCode);
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

@@ -1,7 +1,7 @@
 
 var Vue = require('vue');
-var VueValidator = require('vue-validator');
-Vue.use(VueValidator);
+Vue.use(require('vue-validator'));
+Vue.use(require('vue-resource'));
 
 module.exports = Vue.extend({
     template: __inline('./login.html'),
@@ -14,9 +14,14 @@ module.exports = Vue.extend({
     },
     methods: {
         onLogin: function() {  //使用es6语法,获取不到相应的数据,例如this.username,得不到数据.
-            console.log(this.username);
-            console.log(this.password);
-            console.log(this.securityCode);
+            this.$http.post('/users/login', {
+                username: this.username,
+                password: this.password,
+                securityCode: this.securityCode
+            }).then((res) => {
+                console.log(res.data);
+            });
+            //this.$route.router.go('/login');
         }
     },
     route: {
