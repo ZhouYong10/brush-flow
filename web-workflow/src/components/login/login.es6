@@ -14,7 +14,7 @@ module.exports = Vue.extend({
     },
     methods: {
         onLogin: function() {  //使用es6语法,获取不到相应的数据,例如this.username,得不到数据.
-            this.$http.post('/users/login', {
+            this.$http.post('/login', {
                 username: this.username,
                 password: this.password,
                 securityCode: this.securityCode

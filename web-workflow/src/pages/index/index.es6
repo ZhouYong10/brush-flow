@@ -17,13 +17,13 @@ router.map({
     },
     '/login': {
         component: {
-            template: '<h1>跳转到/login</h1>'
+            template: '<h1>锟斤拷转锟斤拷/login</h1>'
         }
     }
 });
 
 router.redirect({
-    // 重定向任意未匹配路径到 /home
+    // 锟截讹拷锟斤拷锟斤拷锟斤拷未匹锟斤拷路锟斤拷锟斤拷 /home
     '*': '/'
 });
 
