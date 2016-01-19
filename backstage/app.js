@@ -13,8 +13,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 passport.serializeUser(function (user, done) {
-  console.log(user.id, 'serializeUser  user.id 000000000000000000000000000000000000000000000');
-  done(null, user.id);
+  console.log(user, 'serializeUser  user.id 000000000000000000000000000000000000000000000');
+  done(null, user._id);
 });
 
 passport.deserializeUser(function (id, done) {
@@ -27,22 +27,26 @@ passport.deserializeUser(function (id, done) {
 
 passport.use(new LocalStrategy({
   usernameField: 'username' ,
+  passwordField: 'password',
   passReqToCallback: true
 }, function(req, username, password, done) {
-  var res = req.res;
   //实现用户名或邮箱登录
   //这里判断提交上的username是否含有@，来决定查询的字段是哪一个
   var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username};
   User.findOne(criteria, function(err, user) {
-    res.message = '用户名或邮箱 ' + username + ' 不存在';
-    if (!user) return done(null, false, res);
+    if (!user) return done(null, false, '用户名或邮箱 ' + username + ' 不存在');
+
+    //bcrypt.genSalt(10, function (err, salt) {
+    //  bcrypt.hash(password, salt, function (err, hash) {
+    //    console.log(hash, 'hash   11111111111111111111111111111111111111111111111');
+    //  })
+    //});
+
     bcrypt.compare(password, user.password, function(err, isMatch) {
       if (isMatch) {
-        res.message = '登陆成功...............';
-        return done(null, user, res);
+        return done(null, user, '登陆成功...............');
       } else {
-        res.message = '密码不匹配';
-        return done(null, false, res);
+        return done(null, false, '密码不匹配');
       }
     });
   });
@@ -63,19 +67,25 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
-app.post('/login', passport.authenticate('local', function(err, user, res) {
-
-  console.log(user,'user!!!!!!!!!!!!!!!!!!!!!!!!!-------------------------------');
-
-  //res.send(res.message);
-
-  res.redirect('/login');
-}));
+app.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.send(info);
+    }
+    req.logIn(user, function(err) {
+      if (err) {
+        return next(err);
+      }
+      return res.send(info);
+    });
+  })(req, res, next);
+});
 
 
 app.get('/login', function(req, res) {
-  console.log(req.session,'=======================================');
   res.send('登录失败!  redirect to:  /login');
 });
 
@@ -86,9 +96,8 @@ app.get('/login', function(req, res) {
 //};
 
 var isAuthenticated = function(req, res, next) {
-  console.log(req.session,'=======================================');
   if (req.isAuthenticated()){
-    res.send('您已经登陆了,可以随便访问.')
+    return res.send('您已经登陆了,可以随便访问.');
   }
   res.send('对不起,您还没有登陆......');
 };
@@ -98,12 +107,11 @@ app.get('/user', isAuthenticated);
 
 app.get('/logout', function(req, res){
   req.logout();
-  res.redirect('/');
+  res.send('退出登录。。。。。。。。');
 });
 
 
 app.post('/users/login', function (req, res) {
-  console.log(req.body);
   res.send('欢迎访问/user/login........................username: ' + req.body.username + ' password: ' +
       req.body.password + ' securityCode: ' + req.body.securityCode);
 });
