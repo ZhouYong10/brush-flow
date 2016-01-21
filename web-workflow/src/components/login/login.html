@@ -8,7 +8,7 @@
             <legend>网络营销管理系统</legend>
 
             <div class="am-form-group am-form-group-sm">
-                <label for="login-username" class="am-u-sm-3 am-form-label"><i class="am-icon-user am-icon-sm"></i>用户名</label>
+                <label for="login-username" class="am-u-sm-3 am-form-label"><i class="am-icon-user am-icon-sm"></i> 用户名</label>
                 <div class="am-u-sm-9">
                     <input type="text" id="login-username" class="am-form-field am-radius"  v-model="username"
                            placeholder="请输入账户名" v-validate:username="{ required: true}">
@@ -17,7 +17,7 @@
             </div>
 
             <div class="am-form-group am-form-group-sm">
-                <label for="login-password" class="am-u-sm-3 am-form-label"><i class="am-icon-key am-icon-sm"></i>密码</label>
+                <label for="login-password" class="am-u-sm-3 am-form-label"><i class="am-icon-key am-icon-sm"></i> 密码</label>
                 <div class="am-u-sm-9">
                     <input type="password" id="login-password" class="am-form-field am-radius" v-model="password"
                            placeholder="请输入密码" v-validate:password="{ required: true}">
@@ -26,13 +26,14 @@
             </div>
 
             <div class="am-form-group am-form-group-sm">
-                <div class="am-u-sm-offset-3 am-u-sm-9 am-g-collapse">
+                <label for="login-password" class="am-u-sm-3 am-form-label"><i class="am-icon-refresh am-icon-sm"></i> 验证码</label>
+                <div class="am-u-sm-9 am-g-collapse">
                     <div class="am-u-sm-5">
                         <input type="text" class="am-form-field am-radius" v-model="securityCode"
-                               placeholder="请输入验证码" v-validate:security-code="{ required: true}">
+                               placeholder="区分大小写" v-validate:security-code="{ required: true}">
                     </div>
                     <div class="am-u-sm-7">
-                        <button class="am-btn am-btn-primary am-radius getSecurityCode">获取验证码</button>
+                        <img class="am-radius getSecurityCode" src="/securityImg" @click="changeImg"/>
                     </div>
                     <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
                 </div>
@@ -57,3 +58,4 @@
     </form>
     </validator>
 </div>
+

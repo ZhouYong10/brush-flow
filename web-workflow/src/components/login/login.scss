@@ -17,7 +17,10 @@ legend{
 
 .getSecurityCode{
   float: right;
-  padding: 7px;
+  width: 120px;
+  height: 35px;
+  cursor: pointer;
+  box-shadow: 2px 2px 8px 2px #000;
 }
 
 .tips{

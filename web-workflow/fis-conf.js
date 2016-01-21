@@ -73,6 +73,13 @@ fis.match('/src/pages/**/(*.html)', {
 
 
 /*
+* deal with plugins
+* */
+fis.match('/static/plugins/(**)', {
+    release: '/static/$1'
+});
+
+/*
 * deploy
 * */
 fis.match('**', {

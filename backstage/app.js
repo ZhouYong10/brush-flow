@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var ccap = require('ccap')();
 
 var bcrypt = require('bcryptjs');
 var User = require('./db').getCollection('User');
@@ -30,11 +31,17 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, username, password, done) {
+  if(req.body.securityCode != req.session.securityCode) {
+    return done(null, false, '验证码错误！');
+  }
+
   //实现用户名或邮箱登录
   //这里判断提交上的username是否含有@，来决定查询的字段是哪一个
   var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username};
   User.findOne(criteria, function(err, user) {
-    if (!user) return done(null, false, '用户名或邮箱 ' + username + ' 不存在');
+    if (!user){
+      return done(null, false, '用户名 ' + username + ' 不存在!');
+    }
 
     //bcrypt.genSalt(10, function (err, salt) {
     //  bcrypt.hash(password, salt, function (err, hash) {
@@ -44,9 +51,9 @@ passport.use(new LocalStrategy({
 
     bcrypt.compare(password, user.password, function(err, isMatch) {
       if (isMatch) {
-        return done(null, user, '登陆成功...............');
+        return done(null, user, '登陆成功！');
       } else {
-        return done(null, false, '密码不匹配');
+        return done(null, false, '密码错误！');
       }
     });
   });
@@ -66,6 +73,11 @@ app.use(session({secret: 'need change'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/securityImg', function (req, res) {
+  var ary = ccap.get();
+  req.session.securityCode = ary[0];
+  res.end(ary[1]);
+});
 
 app.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
@@ -73,13 +85,19 @@ app.post('/login', function(req, res, next) {
       return next(err);
     }
     if (!user) {
-      return res.send(info);
+      return res.send({
+        isOK: false,
+        message: info
+      });
     }
     req.logIn(user, function(err) {
       if (err) {
         return next(err);
       }
-      return res.send(info);
+      return res.send({
+        isOK: true,
+        message: info
+      });
     });
   })(req, res, next);
 });

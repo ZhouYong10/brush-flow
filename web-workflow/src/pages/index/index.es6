@@ -6,7 +6,6 @@ var Vue = require('vue');
 var VueRouter = require('vue-router');
 Vue.use(VueRouter);
 
-
 var App = Vue.extend();
 
 var router = new VueRouter();
@@ -15,15 +14,14 @@ router.map({
     '/': {
         component: require('login')
     },
-    '/login': {
+    '/home': {
         component: {
-            template: '<h1>��ת��/login</h1>'
+            template: '<h1>发哈里了多少的收费和 老子登陆成功了。。。。。/home </h1>'
         }
     }
 });
 
 router.redirect({
-    // �ض�������δƥ��·���� /home
     '*': '/'
 });
 
