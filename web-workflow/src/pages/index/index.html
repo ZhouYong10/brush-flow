@@ -7,13 +7,13 @@
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-    <title>网络营销系统</title>
-
     <!-- Set render engine for 360 browser -->
     <meta name="renderer" content="webkit">
 
     <!-- No Baidu Siteapp-->
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+    <title><%=title%></title>
 
     <link rel="icon" type="image/png" href="/static/images/favicon.ico">
 
@@ -32,14 +32,69 @@
     <meta name="msapplication-TileColor" content="#0e90d2">
 
     <link rel="stylesheet" href="/static/css/amazeui.css">
-    <link rel="stylesheet" type="text/css" href="./index.scss">
+    <link rel="stylesheet" href="../base.scss">
+
+    <link rel="stylesheet" href="index.scss" >
 </head>
 <body>
 
-<div id="app">
-    <router-view></router-view>
-</div>
+<div id="login" class="login">
+    <validator name="login">
+        <form class="am-form am-form-horizontal am-u-sm-12 am-u-lg-4 am-u-lg-centered">
+            <fieldset>
+                <legend>网络营销管理系统</legend>
 
+                <div class="am-form-group am-form-group-sm">
+                    <label for="login-username" class="am-u-sm-3 am-form-label"><i class="am-icon-user am-icon-sm"></i> 用户名</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" id="login-username" class="am-form-field am-radius"  v-model="username"
+                               placeholder="请输入账户名" v-validate:username="{ required: true}">
+                        <span class="tips" v-if="$login.username.required">账户名不能为空!</span>
+                    </div>
+                </div>
+
+                <div class="am-form-group am-form-group-sm">
+                    <label for="login-password" class="am-u-sm-3 am-form-label"><i class="am-icon-key am-icon-sm"></i> 密码</label>
+                    <div class="am-u-sm-9">
+                        <input type="password" id="login-password" class="am-form-field am-radius" v-model="password"
+                               placeholder="请输入密码" v-validate:password="{ required: true}">
+                        <span class="tips" v-if="$login.password.required">密码不能为空!</span>
+                    </div>
+                </div>
+
+                <div class="am-form-group am-form-group-sm">
+                    <label for="login-password" class="am-u-sm-3 am-form-label"><i class="am-icon-refresh am-icon-sm"></i> 验证码</label>
+                    <div class="am-u-sm-9 am-g-collapse">
+                        <div class="am-u-sm-5">
+                            <input type="text" class="am-form-field am-radius" v-model="securityCode"
+                                   placeholder="区分大小写" v-validate:security-code="{ required: true}">
+                        </div>
+                        <div class="am-u-sm-7">
+                            <img class="am-radius getSecurityCode" src="/securityImg" @click="changeImg"/>
+                        </div>
+                        <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
+                    </div>
+                </div>
+
+                <div class="am-form-group am-form-group-sm">
+                    <div class="am-u-sm-offset-3 am-u-sm-9">
+                        <div class="am-checkbox">
+                            <label>
+                                <input type="checkbox"> 两周内免登陆
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <div class="am-u-sm-9 am-u-sm-offset-3">
+                        <button class="am-btn am-btn-primary am-radius" @click="onLogin" v-if="$login.valid">登陆</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </validator>
+</div>
 
 <!--[if (gte IE 9)|!(IE)]><!-->
 <script src="/static/js/jquery.js"></script>
@@ -50,15 +105,15 @@
 <script src="/static/js/modernizr.js"></script>
 <script src="/static/js/amazeui.ie8polyfill.js"></script>
 <![endif]-->
-
 <script src="/static/js/amazeui.js"></script>
-<script src="/static/plugins/layer/layer.js"></script>
 
+<!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 
 <script src="/static/js/mod.js"></script>
 
 <script>
-    require('./index');
+    require(['index']);
 </script>
 
 </body>

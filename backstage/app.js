@@ -28,9 +28,10 @@ passport.use(new LocalStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, username, password, done) {
-  if(req.body.securityCode != req.session.securityCode) {
-    return done(null, false, '验证码错误！');
-  }
+  //判断验证码
+  //if(req.body.securityCode != req.session.securityCode) {
+  //  return done(null, false, '验证码错误！');
+  //}
 
   //实现用户名或邮箱登录
   //这里判断提交上的username是否含有@，来决定查询的字段是哪一个
@@ -58,6 +59,11 @@ passport.use(new LocalStrategy({
 
 var app = express();
 
+// view engine setup
+app.engine('.html', require('ejs').__express);
+app.set('views', path.join(__dirname, 'public/views'));
+app.set('view engine', 'html');
+
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public/static/images', 'favicon.ico')));
 app.use(logger('dev'));
@@ -70,10 +76,26 @@ app.use(session({secret: 'need change'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
+app.get('/', function (req, res) {
+  res.render('index', {title: '网络营销系统'});
+});
+
 app.get('/securityImg', function (req, res) {
   var ary = ccap.get();
   req.session.securityCode = ary[0];
   res.end(ary[1]);
+});
+
+//拦截未登录
+app.use(function(req, res, next) {
+  var originalUrl = req.originalUrl;
+  if(originalUrl === '/login' || req.isAuthenticated()){
+    next();
+  }else{
+    res.redirect('/');
+  }
 });
 
 app.post('/login', function(req, res, next) {
@@ -99,6 +121,10 @@ app.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
+app.get('/client/home', function (req, res) {
+
+  res.render('clientHome', {title: '网络营销系统'});
+});
 
 app.get('/login', function(req, res) {
   res.send('登录失败!  redirect to:  /login');
@@ -131,8 +157,10 @@ app.post('/users/login', function (req, res) {
       req.body.password + ' securityCode: ' + req.body.securityCode);
 });
 
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  console.log('======================================');
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
