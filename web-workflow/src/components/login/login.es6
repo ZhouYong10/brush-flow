@@ -33,40 +33,11 @@ module.exports = Vue.extend({
             }).then((res) => {
                 console.log(res.data.isOK);
                 if(res.data.isOK) {
-                    router.go('/home');
+                    router.go('/client/home');
                 }else{
                     Layer.msg(res.data.message);
                 }
             });
-            //this.$route.router.go('/login');
-        }
-    },
-    //asyncData: function(resolve, reject) {
-    //    this.$http.get('/securityImg').then((res) => {
-    //        console.log(res);
-    //        resolve({
-    //            securityImg: res
-    //        })
-    //    })
-    //},
-    route: {
-        canReuse: function() {
-            console.log('canRuse Foo');
-        },
-        canDeactivate: function() {
-            console.log('canDeactivate Foo');
-        },
-        canActivate: function() {
-            console.log('canActivate Foo');
-        },
-        deactivate: function() {
-            console.log('deactivate Foo');
-        },
-        activate: function() {
-            console.log('activate Foo');
-        },
-        data: function() {
-            console.log('data Foo');
         }
     }
 });

@@ -14,14 +14,11 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 passport.serializeUser(function (user, done) {
-  console.log(user, 'serializeUser  user.id 000000000000000000000000000000000000000000000');
   done(null, user._id);
 });
 
 passport.deserializeUser(function (id, done) {
-  console.log(id, 'id 000000000000000000000000000000000000000000000');
   User.findById(id, function (err, user) {
-    console.log(user, 'deserializeUser user 000000000000000000000000000000000000000000000');
     done(err, user);
   })
 });

@@ -14,7 +14,7 @@ router.map({
     '/': {
         component: require('login')
     },
-    '/home': {
+    '/client/home': {
         component: {
             template: '<h1>发哈里了多少的收费和 老子登陆成功了。。。。。/home </h1>'
         }
