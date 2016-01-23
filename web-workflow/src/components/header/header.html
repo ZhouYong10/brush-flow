@@ -1,17 +1,59 @@
+<link rel="stylesheet" href="header.scss?__inline">
 
 <header data-am-widget="header"
         class="am-header am-header-default">
     <div class="am-header-left am-header-nav">
         <a href="#left-link" class="">
-
             <i class="am-header-icon am-icon-home"></i>
+            <h1 class="am-hide-sm">
+                {{title}}
+            </h1>
         </a>
     </div>
 
     <h1 class="am-header-title">
-        <a href="#title-link" class="">
-            {{title}}
-        </a>
+        <i class="am-icon-credit-card am-show-sm"> {{title}}</i>
+
+        <span class="am-hide-sm">可用余额: {{title}}</span>
     </h1>
 
+    <div class="am-header-right am-header-nav">
+        <div class="am-dropdown" data-am-dropdown>
+            <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
+                <i class="am-icon-credit-card am-show-sm"> </i>
+                <span class="am-hide-sm">充值管理 </span>
+                <span class="am-icon-caret-down"></span>
+            </button>
+            <ul class="am-dropdown-content header-dropdown-content">
+                <li><a href="#">在线充值</a></li>
+                <li class="am-active"><a href="#">充值记录</a></li>
+                <li><a href="#">消费记录</a></li>
+            </ul>
+        </div>
+
+        <div class="am-dropdown" data-am-dropdown>
+            <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
+                <i class="am-icon-user am-show-sm"> </i>
+                <span class="am-hide-sm">演示账号(超级代理) </span>
+                <span class="am-icon-caret-down"></span>
+            </button>
+            <ul class="am-dropdown-content header-dropdown-content">
+                <li><a href="#">我的详情</a></li>
+                <li class="am-active"><a href="#">修改密码</a></li>
+                <li><a href="#">我的下级用户</a></li>
+                <li><a href="#">添加下级用户</a></li>
+                <li><a href="#">问题反馈</a></li>
+                <li><a href="#">申请提现</a></li>
+                <li><a href="#">错误信息汇总</a></li>
+                <li><a href="#">退出登陆</a></li>
+            </ul>
+        </div>
+
+        <a href="#cart-link" class="">
+
+            <!--<i class="am-header-icon am-icon-shopping-cart"></i>-->
+        </a>
+    </div>
 </header>
+
+
