@@ -1,0 +1,15 @@
+
+.menu-item{
+  font-size: 1.4em;
+}
+
+.menu-item:hover{
+  background-color: #3BB4F2;
+  font-size: 1.5em;
+}
+
+@media screen and (min-width: 1000px){
+  .am-menu-nav{
+    padding: 8px 18% !important;
+  }
+}

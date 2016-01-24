@@ -2,53 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-    <!-- Set render engine for 360 browser -->
-    <meta name="renderer" content="webkit">
-
-    <!-- No Baidu Siteapp-->
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
-
     <title><%=title%></title>
 
-    <link rel="icon" type="image/png" href="/static/images/favicon.ico">
+    <link rel="import" href="../../components/head/head.html?__inline">
 
-    <link rel="stylesheet" href="/static/css/amazeui.css">
-    <link rel="stylesheet" href="../base.scss">
-
-    <link rel="stylesheet" href="./clientHome.scss">
-
+    <link rel="stylesheet" href="./clientHome.scss?__inline">
 </head>
 <body>
 
 <div id="app">
-    <app-header></app-header>
-    <app-mune></app-mune>
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <ul class="am-list">
+                    <li>
+                        <a href="#">
+                            <span>[系统公告] </span>
+                            <span>1/22/2016: </span>
+                            每个人都有一个死角， 自己走不出来，别人也闯不进去。
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span>[系统公告] </span>
+                            <span>1/22/2016: </span>
+                            我把最深沉的秘密放在那里。
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span>[系统公告] </span>
+                            <span>1/22/2016: </span>
+                            你不懂我，我不怪你。
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span>[系统公告] </span>
+                            <span>1/22/2016: </span>
+                            每个人都有一道伤口， 或深或浅，盖上布，以为不存在。
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
 </div>
 
-
-<!--[if (gte IE 9)|!(IE)]><!-->
-<script src="/static/js/jquery.js"></script>
-<!--<![endif]-->
-
-<!--[if lte IE 8 ]>
-<script src="/static/js/jquery-1.11.1.js"></script>
-<script src="/static/js/modernizr.js"></script>
-<script src="/static/js/amazeui.ie8polyfill.js"></script>
-<![endif]-->
-<script src="/static/js/amazeui.js"></script>
+<link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
-
-<script src="/static/js/mod.js"></script>
-
-<script>
-    require('./clientHome');
-</script>
 
 </body>
 </html>

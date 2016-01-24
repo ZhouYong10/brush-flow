@@ -2,6 +2,7 @@
  * Created by Administrator on 2015/12/21.
  */
 fis.set('project.ignore', ['node_modules/**', 'output/**', 'fis-conf.js', 'README.md', 'package.json', '.gitignore']);
+fis.config.set("project.watch.usePolling", true);
 
 fis.hook('commonjs');
 
@@ -32,7 +33,7 @@ fis.match('/{src,static}/(**.{js,es6})', {
 });
 
 fis.match('/{mock,test}/(**.{js,es6})', {
-    release: '$0'
+    release: '/static/$0'
 });
 
 /*
@@ -67,7 +68,7 @@ fis.match('/src/**.html', {
     release: false
 });
 fis.match('/src/pages/**/(*.html)', {
-    release: '/views/$1',
+    release: '/$1',
     useCache: false
 });
 
@@ -82,9 +83,15 @@ fis.match('/static/plugins/(**)', {
 /*
 * deploy
 * */
-fis.match('**', {
+fis.match('/{src,static}/**', {
     deploy: fis.plugin('local-deliver', {
         to: '../backstage/public'
+    })
+});
+
+fis.match('/src/pages/**.html', {
+    deploy: fis.plugin('local-deliver', {
+        to: '../backstage/views'
     })
 });
 

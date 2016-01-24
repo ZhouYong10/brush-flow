@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="addLowerUser.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <form class="am-form am-form-horizontal">
+                    <div class="am-form-group">
+                        <label for="username" class="am-u-sm-3 am-u-lg-2 am-form-label"><span class="tips">* </span>账号</label>
+                        <div class="am-u-sm-9 am-u-lg-10">
+                            <input id="username" class="am-radius am-input-sm" type="text" placeholder="请输入用户名">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="password" class="am-u-sm-3 am-u-lg-2 am-form-label"><span class="tips">* </span>密码</label>
+                        <div class="am-u-sm-9 am-u-lg-10">
+                            <input id="password" class="am-radius am-input-sm" type="password" placeholder="请输入用户密码">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="userQQ" class="am-u-sm-3 am-u-lg-2 am-form-label"><span class="tips">* </span>ＱＱ</label>
+                        <div class="am-u-sm-9 am-u-lg-10">
+                            <input id="userQQ" class="am-radius am-input-sm" type="text" placeholder="请输入用户QQ">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-phone" class="am-u-sm-3 am-u-lg-2 am-form-label">电话</label>
+                        <div class="am-u-sm-9 am-u-lg-10">
+                            <input id="user-phone" class="am-radius am-input-sm" type="text" placeholder="请输入用户电话">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="user-remark" class="am-u-sm-3 am-u-lg-2 am-form-label">备注</label>
+                        <div class="am-u-sm-9 am-u-lg-10">
+                            <textarea id="user-remark" class="am-radius" rows="3" placeholder="添加用户备注"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                            <button type="submit" class="am-btn am-btn-primary">添加子用户</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+</body>
+</html>

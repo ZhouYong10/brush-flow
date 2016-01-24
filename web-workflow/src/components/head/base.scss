@@ -1,0 +1,16 @@
+html, body{
+  height: 100%;
+  width: 100%;
+  font-size: 10px;
+}
+
+.app-content{
+  padding: 12px 3px 0;
+  font-size: 1.4em;
+}
+
+@media screen and (min-width: 1000px){
+  .app-content{
+    max-width: 64%;
+  }
+}

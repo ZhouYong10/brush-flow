@@ -61,7 +61,7 @@ var app = express();
 
 // view engine setup
 app.engine('.html', require('ejs').__express);
-app.set('views', path.join(__dirname, 'public/views'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
@@ -122,40 +122,14 @@ app.post('/login', function(req, res, next) {
 });
 
 app.get('/client/home', function (req, res) {
-
-  res.render('clientHome', {title: '网络营销系统'});
+  res.render('clientHome', {title: '系统公告', money: 12.3});
 });
 
-app.get('/login', function(req, res) {
-  res.send('登录失败!  redirect to:  /login');
-});
-
-//将req.isAuthenticated()封装成中间件
-//var isAuthenticated = function(req, res, next) {
-//  if (req.isAuthenticated()) return next();
-//  res.redirect('/login');
-//};
-
-var isAuthenticated = function(req, res, next) {
-  if (req.isAuthenticated()){
-    return res.send('您已经登陆了,可以随便访问.');
-  }
-  res.send('对不起,您还没有登陆......');
-};
-
-//这里getUser方法需要自定义
-app.get('/user', isAuthenticated);
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.send('退出登录。。。。。。。。');
-});
+app.use('/user', require('./router/user.js'));
 
 
-app.post('/users/login', function (req, res) {
-  res.send('欢迎访问/user/login........................username: ' + req.body.username + ' password: ' +
-      req.body.password + ' securityCode: ' + req.body.securityCode);
-});
+
+
 
 
 // catch 404 and forward to error handler
