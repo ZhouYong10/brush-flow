@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="videoFlowTask.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd prompt-content">
+                        支持站点：<br/>
+                        ［ 乐视（2.20/万） 优酷网（3.20/万） 搜狐自媒体（4.20/万） 腾讯视频（1.70/万） 第一视频（1.70/万）
+                        视友网（1.70/万） 爱奇艺（2.70/万） 土豆网（2.20/万） 新浪网（1.40/万） 56视频（1.70/万）
+                        酷6（1.70/万） PPS网络视频（2.20/万） 凤凰视频（1.40/万） 激动网（1.40/万） 华数视频（2.20/万）
+                        西柚网（1.40/万） 爱拍视频（2.20/万） AcFun（2.20/万） 搜狐视频（6.70/万） 哔哩哔哩（57.00/万）
+                        17173（1.70/万） 今日头条（37.00/万） ］<br/>
+                        <span class="tips">价格说明：初始10000流量起步执行，不足10000按10000算，超过部分按照5000来算，不足5000按5000计算。</span>
+                    </div>
+                </div>
+
+                <form class="am-form am-form-horizontal">
+                    <div class="am-form-group">
+                        <label for="aimAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>视频地址</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="aimAddress" class="am-radius am-input-sm" type="text" placeholder="请输入目标地址">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="aimTitle" class="am-u-sm-4 am-u-lg-2 am-form-label">视频标题</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="aimTitle" class="am-radius am-input-sm" type="text" disabled>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="taskNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>执行数量</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="taskNum" class="am-radius am-input-sm" type="text" placeholder="需要添加的任务数量">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="aimTotal" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="aimTotal" class="am-radius am-input-sm" type="text" disabled>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="aimRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <textarea id="aimRemark" class="am-radius" rows="3" placeholder="添加任务备注"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                            <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+</body>
+</html>
