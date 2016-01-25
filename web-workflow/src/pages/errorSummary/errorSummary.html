@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="errorSummary.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-form am-form-inline">
+                    <div class="am-form-group am-form-group-sm">
+                        <label for="errorType" class="am-u-sm-5 am-form-label errorTypeLabel">问题错误类型</label>
+                        <div class="am-u-sm-7 errorTypeWrap">
+                            <select id="errorType" class="am-form-field am-input-sm">
+                                <option value="">添加了</option>
+                                <option value="">添加了  xcv</option>
+                                <option value="">添加了</option>
+                                <option value="">添 o发的地方地方d加了</option>
+                                <option value="">添加了</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group am-form-group-sm">
+                        <button class="am-btn am-btn-success am-radius">
+                            <i class="am-icon-search"></i>
+                            搜索
+                        </button>
+                    </div>
+                </div>
+
+                <div class="am-scrollable-horizontal am-text-center errorSummary-content">
+                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>错误类型</th>
+                            <th>问题地址	</th>
+                            <th>问题描述	</th>
+                            <th>提交时间</th>
+                            <th>问题状态</th>
+                            <th>处理人</th>
+                            <th>处理人备注</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Amaze UI</td>
+                            <td>http://amazeui.org</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                        </tr>
+
+                        <tr>
+                            <td>Amaze UI</td>
+                            <td>http://amazeui.org</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                        </tr>
+                        <tr>
+                            <td>Amaze UI</td>
+                            <td>http://amazeui.org</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                        </tr>
+                        <tr>
+                            <td>Amaze UI</td>
+                            <td>http://amazeui.org</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                        </tr>
+                        <tr>
+                            <td>Amaze UI</td>
+                            <td>http://amazeui.org</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                            <td>2012-10-01</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+</body>
+</html>

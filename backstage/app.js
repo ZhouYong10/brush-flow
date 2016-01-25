@@ -33,6 +33,12 @@ passport.use(new LocalStrategy({
   //  return done(null, false, '验证码错误！');
   //}
 
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hash) {
+      console.log(hash, 'hash   11111111111111111111111111111111111111111111111');
+    })
+  });
+
   //实现用户名或邮箱登录
   //这里判断提交上的username是否含有@，来决定查询的字段是哪一个
   var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username};
@@ -40,12 +46,6 @@ passport.use(new LocalStrategy({
     if (!user){
       return done(null, false, '用户名 ' + username + ' 不存在!');
     }
-
-    //bcrypt.genSalt(10, function (err, salt) {
-    //  bcrypt.hash(password, salt, function (err, hash) {
-    //    console.log(hash, 'hash   11111111111111111111111111111111111111111111111');
-    //  })
-    //});
 
     bcrypt.compare(password, user.password, function(err, isMatch) {
       if (isMatch) {

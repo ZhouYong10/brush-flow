@@ -33,4 +33,8 @@ router.get('/withdraw', function (req, res) {
     res.render('withdraw', {title: '我要提现', money: 100});
 });
 
+router.get('/errorSummary', function (req, res) {
+    res.render('errorSummary', {title: '错误信息汇总', money: 200});
+});   
+
 module.exports = router;
