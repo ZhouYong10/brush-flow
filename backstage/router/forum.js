@@ -8,36 +8,55 @@
 var router = require('express').Router();
 
 router.get('/video', function (req, res) {
-    res.render('forumTemplate', {title: '视频', money: 10.01})
+    res.render('forumTemplate', {title: '视频站点', money: 10.01})
 });
 
-router.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
+router.get('/complex', function (req, res) {
+    res.render('forumTemplate', {title: '综合社区', money: 10.01})
 });
 
-router.get('/changePwd', function (req, res) {
-    res.render('changePassword', {title: '修改账号密码', money: 22.22});
+router.get('/female', function (req, res) {
+    res.render('forumTemplate', {title: '女性时尚', money: 10.01})
 });
 
-router.get('/lowerUser', function (req, res) {
-    res.render('lowerUser', {title: '我的下级用户', money: 33.33});
+router.get('/car', function (req, res) {
+    res.render('forumTemplate', {title: '汽车社区', money: 10.01})
 });
 
-router.get('/addLowerUser', function (req, res) {
-    res.render('addLowerUser', {title: '添加下级用户', money: 11});
+router.get('/estate', function (req, res) {
+    res.render('forumTemplate', {title: '房产社区', money: 10.01})
 });
 
-router.get('/feedback', function (req, res) {
-    res.render('feedback', {title: '问题反馈', money: 33});
+router.get('/IT', function (req, res) {
+    res.render('forumTemplate', {title: 'IT科技类', money: 10.01})
 });
 
-router.get('/withdraw', function (req, res) {
-    res.render('withdraw', {title: '我要提现', money: 100});
+router.get('/blog', function (req, res) {
+    res.render('forumTemplate', {title: '博客类', money: 10.01})
 });
 
-router.get('/errorSummary', function (req, res) {
-    res.render('errorSummary', {title: '错误信息汇总', money: 200});
+router.get('/child', function (req, res) {
+    res.render('forumTemplate', {title: '母婴社区', money: 10.01})
+});
+
+router.get('/news', function (req, res) {
+    res.render('forumTemplate', {title: '新闻门户', money: 10.01})
+});
+
+router.get('/travel', function (req, res) {
+    res.render('forumTemplate', {title: '旅游社区', money: 10.01})
+});
+
+router.get('/finance', function (req, res) {
+    res.render('forumTemplate', {title: '财经社区', money: 10.01})
+});
+
+router.get('/games', function (req, res) {
+    res.render('forumTemplate', {title: '游戏社区', money: 10.01})
+});
+
+router.get('/taskHistory', function (req, res) {
+    res.render('forumTaskHistory', {title: '论坛业务历史记录', money: 10.01})
 });
 
 module.exports = router;
