@@ -8,16 +8,32 @@ router.get('/like', function (req, res) {
     res.render('WBlike', {title: '微博高级点赞任务', money: 10.01})
 });
 
+router.get('/like/add', function (req, res) {
+    res.render('WBlikeAdd', {title: '添加微博高级点赞任务', money: 10.01})
+});
+
 router.get('/vote', function (req, res) {
     res.render('WBvote', {title: '微博投票任务', money: 111});
+});
+
+router.get('/vote/add', function (req, res) {
+    res.render('WBvoteAdd', {title: '添加微博投票任务', money: 111});
 });
 
 router.get('/fans', function (req, res) {
     res.render('WBfans', {title: '微博粉丝任务', money: 22});
 });
 
+router.get('/fans/add', function (req, res) {
+    res.render('WBfansAdd', {title: '添加微博粉丝任务', money: 22});
+});
+
 router.get('/forward', function (req, res) {
     res.render('WBforward', {title: '微博转发任务', money: 33});
+});
+
+router.get('/forward/add', function (req, res) {
+    res.render('WBforwardAdd', {title: '添加微博转发任务', money: 33});
 });
 
 module.exports = router;
