@@ -128,6 +128,9 @@ app.get('/client/home', function (req, res) {
 app.use('/user', require('./router/user.js'));
 app.use('/forum', require('./router/forum.js'));
 app.use('/flow', require('./router/flow.js'));
+app.use('/WX', require('./router/WX.js'));
+app.use('/MP', require('./router/MP.js'));
+app.use('/WB', require('./router/WB.js'));
 
 
 
