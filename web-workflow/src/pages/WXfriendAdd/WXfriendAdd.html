@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="WXfriendAdd.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        1．单次下单上限1万，累计上限100万。<br/>
+                        2．多次提交同一链接排队执行。<br/>
+                        3．地区粉已开启，精确到城市。<br/>
+                    </div>
+                </div>
+
+                <form class="am-form am-form-horizontal">
+                    <div class="am-form-group">
+                        <label for="fansID" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>微信账号</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansID" class="am-radius am-input-sm" type="text" placeholder="请填写公众平台微信号或者ID">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansPrice" class="am-radius am-input-sm" type="text" value="公众粉丝0.105/个" disabled>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>粉丝数量</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的粉丝数量，最低100起">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="totalPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="totalPrice" class="am-radius am-input-sm" type="text" disabled>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">加粉限速</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansSpeed" class="am-radius am-input-sm" type="text" placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个粉丝，输入100即可">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansType" class="am-u-sm-4 am-u-lg-2 am-form-label">指定模式</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <select id="fansType" class="am-radius am-input-sm">
+                                <option value="">-- 选择模式 --</option>
+                                <option value="宽松匹配">宽松匹配</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansCountry" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝国家</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <select id="fansCountry" class="am-radius am-input-sm">
+                                <option value="">-- 选择国家 --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansProvince" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝省份</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <select id="fansProvince" class="am-radius am-input-sm">
+                                <option value="">-- 选择省份/州 --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansCity" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝城市</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <select id="fansCity" class="am-radius am-input-sm">
+                                <option value="">-- 选择城市 --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝性别</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <label class="am-radio-inline">
+                                <input type="radio"  value="" name="docInlineRadio"> 男
+                            </label>
+                            <label class="am-radio-inline">
+                                <input type="radio" name="docInlineRadio"> 女
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>计划时间</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="planTime" class="am-radius am-input-sm" type="text" placeholder="首次开始任务的时间">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <textarea id="fansRemark" class="am-radius" rows="3" placeholder="添加任务备注"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                            <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+</body>
+</html>
+
