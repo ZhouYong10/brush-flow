@@ -4,6 +4,18 @@
 
 var router = require('express').Router();
 
+router.get('/recharge', function (req, res) {
+    res.render('recharge', {title: '在线充值', money: 10.01})
+});
+
+router.get('/recharge/history', function (req, res) {
+    res.render('rechargeHistory', {title: '充值记录', money: 10.01})
+});
+
+router.get('/consume/history', function (req, res) {
+    res.render('consumeHistory', {title: '消费记录', money: 10.01})
+});
+
 router.get('/info', function (req, res) {
     res.render('userInfo', {title: '我的详细信息', money: 10.01})
 });

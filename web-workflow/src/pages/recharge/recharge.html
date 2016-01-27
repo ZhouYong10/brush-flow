@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="recharge.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        1、[在线充值]:   支付宝账号：vip990011@qq.com,支付宝名称：*青青。<br/>
+
+                        2、[在线充值]:   通过支付宝进行转账，请核对收款名称与支付宝名称是否与上面一致。<br/>
+
+                        3、[在线充值]:   转账完成后，点击付款页面的“查看详情”，记录下 28 或 32 位的交易号。<br/>
+
+                        4、[在线充值]:   输入交易号，稍等 ３ 分钟即可自动入账，如果遇到较长延迟，请联系我们。<br/>
+
+                        5、[在线充值]:   如果付款后提示交易号无法充值，请点击【充值遇到问题】。<br/>
+
+                        6、[在线充值]:   请确保每次充值的金额为50的整数倍,否则可能造成系统无法识别的情况。<br/>
+                    </div>
+                </div>
+
+                <form class="am-form am-form-horizontal">
+
+                    <div class="am-form-group">
+                        <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>支付宝交易号</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="">
+                        </div>
+                    </div>
+
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>本次数量</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<input id="readNum" class="am-radius am-input-sm" type="text" placeholder="价格说明：刷100次起步，不足100按100计算 ">-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="taskRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">本次备注</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<textarea id="taskRemark" class="am-radius" rows="3" placeholder="备注信息,防止混淆 "></textarea>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+                    <!--<div class="am-form-group">-->
+                    <!--<label for="totalPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>-->
+                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                    <!--<input id="totalPrice" class="am-radius am-input-sm" type="text" disabled>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="am-form-group">-->
+                    <!--<label for="setSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>速度设置</label>-->
+                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                    <!--<select id="setSpeed" class="am-radius am-input-sm">-->
+                    <!--<option value="">无要求 </option>-->
+                    <!--<option value="">每秒 </option>-->
+                    <!--<option value="">每分钟 </option>-->
+                    <!--<option value="">每小时 </option>-->
+                    <!--</select>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="am-form-group">-->
+                    <!--<label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>速度数量</label>-->
+                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                    <!--<input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="需要定期增加的数量">-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="am-form-group">-->
+                    <!--<label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>计划时间</label>-->
+                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                    <!--<input id="planTime" class="am-radius am-input-sm" type="text" placeholder="首次开始任务的时间">-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="am-form-group">-->
+                    <!--<label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>-->
+                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                    <!--<input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行">-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                            <button type="submit" class="am-btn am-btn-primary am-radius">立即充值</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+</body>
+</html>

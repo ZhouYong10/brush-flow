@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="consumeHistory.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-form am-form-inline">
+                    <div class="am-form-group am-form-group-sm search-title">
+                        <label for="rechargeTotal" class="am-u-sm-3 am-form-label taskTypeLabel">消费金额</label>
+                        <div class="am-u-sm-9 taskTypeWrap">
+                            <input id="rechargeTotal" type="text" class="am-form-field am-input-sm am-radius" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group am-form-group-sm search-title">
+                        <label for="rechargeTime" class="am-u-sm-3 am-form-label taskTypeLabel">消费时间</label>
+                        <div class="am-u-sm-9 taskTypeWrap">
+                            <input id="rechargeTime" type="text" class="am-form-field am-input-sm am-radius" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group am-form-group-sm">
+                        <button class="am-btn am-btn-success am-radius am-btn-sm">
+                            <i class="am-icon-search"></i>
+                            搜索
+                        </button>
+                    </div>
+                </div>
+
+                <div class="am-scrollable-horizontal am-text-center flowTask-content">
+                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>类型	</th>
+                            <th>消费金额</th>
+                            <th>余额	</th>
+                            <th>描述	</th>
+                            <th>消费时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="am-text-middle">Amaze UI</td>
+                            <td class="am-text-middle">http://amazeui.org</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                        </tr>
+                        <tr>
+                            <td class="am-text-middle">Amaze UI</td>
+                            <td class="am-text-middle">http://amazeui.org</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                        </tr>
+                        <tr>
+                            <td class="am-text-middle">Amaze UI</td>
+                            <td class="am-text-middle">http://amazeui.org</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle">2012-10-01</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+</body>
+</html>
+
+
