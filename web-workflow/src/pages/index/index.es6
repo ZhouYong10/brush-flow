@@ -29,6 +29,7 @@ new Vue({
                 securityCode: this.securityCode
             }).then((res) => {
                 if(res.data.isOK) {
+                    //$('<a href="/admin/home" ></a>').get(0).click();
                     $('<a href="/client/home" ></a>').get(0).click();
                 }else{
                     layer.msg(res.data.message);

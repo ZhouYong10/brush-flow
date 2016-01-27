@@ -131,6 +131,9 @@ app.use('/WX', require('./router/WX.js'));
 app.use('/MP', require('./router/MP.js'));
 app.use('/WB', require('./router/WB.js'));
 
+app.use('/admin', require('./router/admin.js'));
+
+
 
 
 
