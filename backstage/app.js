@@ -88,16 +88,6 @@ app.get('/securityImg', function (req, res) {
   res.end(ary[1]);
 });
 
-//拦截未登录
-app.use(function(req, res, next) {
-  var originalUrl = req.originalUrl;
-  if(originalUrl === '/login' || req.isAuthenticated()){
-    next();
-  }else{
-    res.redirect('/');
-  }
-});
-
 app.post('/login', function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
     if (err) {
@@ -119,6 +109,15 @@ app.post('/login', function(req, res, next) {
       });
     });
   })(req, res, next);
+});
+
+//拦截未登录
+app.use(function(req, res, next) {
+  if(req.isAuthenticated()){
+    next();
+  }else{
+    res.redirect('/');
+  }
 });
 
 app.get('/client/home', function (req, res) {
