@@ -9,7 +9,7 @@ router.get('/friend', function (req, res) {
 });
 
 router.get('/friend/add', function (req, res) {
-    res.render('WXfriendAdd', {title: '添加微信公众粉丝回复任务', money: 10.01})
+    res.render('WXfriendAdd', {title: '添加微信粉丝', money: 10.01})
 });
 
 router.get('/fans', function (req, res) {

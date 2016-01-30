@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="withdrawAdd.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <form class="am-form am-form-horizontal">
+                    <div class="am-form-group">
+                        <label for="fansID" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>提现金额</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansID" class="am-radius am-input-sm" type="text" placeholder="请填写公众平台微信号或者ID">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>支付宝账户</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="fansNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的粉丝数量，最低20起">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="replyNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>支付宝昵称</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <input id="replyNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的回复数量，不能大于粉丝数量">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                            <button type="submit" class="am-btn am-btn-primary am-radius">确认提现</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+</body>
+</html>

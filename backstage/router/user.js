@@ -45,6 +45,10 @@ router.get('/withdraw', function (req, res) {
     res.render('withdraw', {title: '我要提现', money: 100});
 });
 
+router.get('/withdraw/add', function (req, res) {
+    res.render('withdrawAdd', {title: '申请提现', money: 100});
+});
+
 router.get('/errorSummary', function (req, res) {
     res.render('errorSummary', {title: '错误信息汇总', money: 200});
 });   

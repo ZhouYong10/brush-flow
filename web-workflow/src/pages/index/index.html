@@ -44,7 +44,7 @@
                                    placeholder="区分大小写" v-validate:security-code="{ required: true}">
                         </div>
                         <div class="am-u-sm-7">
-                            <img class="am-radius getSecurityCode" src="/securityImg" @click="changeImg"/>
+                            <img class="am-radius getSecurityCode" src="/securityImg" @click.stop.prevent="changeImg"/>
                         </div>
                         <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
                     </div>
@@ -62,7 +62,7 @@
 
                 <div class="am-form-group">
                     <div class="am-u-sm-9 am-u-sm-offset-3">
-                        <button class="am-btn am-btn-primary am-radius" @click="onLogin" v-if="$login.valid">登陆</button>
+                        <button class="am-btn am-btn-primary am-radius" @click.stop.prevent="onLogin" v-if="$login.valid">登陆</button>
                     </div>
                 </div>
             </fieldset>

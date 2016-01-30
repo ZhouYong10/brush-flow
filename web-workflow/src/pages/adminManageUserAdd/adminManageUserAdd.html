@@ -8,7 +8,7 @@
 
     <link rel="import" href="../../components/head/head.html?__inline">
 
-    <link rel="stylesheet" href="./adminPlacardAdd.scss?__inline">
+    <link rel="stylesheet" href="adminManageUserAdd.scss?__inline">
 </head>
 <body>
 
@@ -26,35 +26,43 @@
         <div class="am-u-lg-10 am-u-md-9">
             <div class="am-panel am-panel-primary">
                 <div class="am-panel-hd"><%= title %></div>
-                <div class="am-panel-bd am-scrollable-horizontal">
+                <div class="am-panel-bd">
 
                     <form class="am-form am-form-horizontal">
-
                         <div class="am-form-group">
-                            <label for="taskPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">公告类型</label>
+                            <label for="one" class="am-u-sm-4 am-u-lg-2 am-form-label">用户名</label>
                             <div class="am-u-sm-8 am-u-lg-10">
-                                <input id="taskPrice" class="am-radius am-input-sm" type="text" value="输入公告类型">
+                                <input class="am-radius am-input-sm" type="email" id="one" disabled>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="eleven" class="am-u-sm-4 am-u-lg-2 am-form-label">密码</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <input class="am-radius am-input-sm" type="email" id="eleven" disabled>
                             </div>
                         </div>
 
                         <div class="am-form-group">
-                            <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label">类型备注</label>
+                            <label for="fansCity" class="am-u-sm-4 am-u-lg-2 am-form-label">等级</label>
                             <div class="am-u-sm-8 am-u-lg-10">
-                                <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="输入类型备注">
+                                <select id="fansCity" class="am-radius am-input-sm">
+                                    <option value="">-- 选择等级 --</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="am-form-group">
                             <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                                <button type="submit" class="am-btn am-btn-primary am-radius">增加</button>
-                                <button type="reset" class="am-btn am-btn-default am-radius">重置</button>
+                                <button type="submit" class="am-btn am-btn-primary am-radius">确认添加</button>
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">

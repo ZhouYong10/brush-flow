@@ -1,8 +1,22 @@
 /**
  * Created by zhouyong10 on 1/24/16.
  */
+var User = require('../db').getCollection('User');
 
 var router = require('express').Router();
+
+//拦截非管理员登录
+router.use(function(req, res, next) {
+    User.findById(req.session.passport.user, function (err, user) {
+        if(user.role === 'admin'){
+            next();
+        }else{
+            console.log('不是管理员，不能非法登陆。。。。。。。。。。。。');
+            res.redirect('/');
+        }
+    });
+});
+
 
 router.get('/home', function (req, res) {
     res.render('adminHome', {title: '管理员公告', money: 10.01})
@@ -22,7 +36,11 @@ router.get('/withdraw/already', function (req, res) {
 });
 
 router.get('/manage/user', function (req, res) {
-    res.render('adminManageUser', {title: '设置 / 用户管理', money: 10.01})
+    res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01})
+});
+
+router.get('/manage/user/add', function (req, res) {
+    res.render('adminManageUserAdd', {title: '设置 / 用户管理 / 添加用户', money: 10.01})
 });
 
 

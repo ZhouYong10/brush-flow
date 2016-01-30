@@ -103,10 +103,18 @@ app.post('/login', function(req, res, next) {
       if (err) {
         return next(err);
       }
-      return res.send({
-        isOK: true,
-        message: info
-      });
+
+      if(user.role === 'admin'){
+        return res.send({
+          isOK: true,
+          path: '/admin/home'
+        });
+      }else{
+        return res.send({
+          isOK: true,
+          path: '/client/home'
+        });
+      }
     });
   })(req, res, next);
 });

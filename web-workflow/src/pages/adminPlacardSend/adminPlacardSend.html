@@ -26,34 +26,31 @@
         <div class="am-u-lg-10 am-u-md-9">
             <div class="am-panel am-panel-primary">
                 <div class="am-panel-hd"><%= title %></div>
-                <div class="am-panel-bd am-scrollable-horizontal am-text-center">
+                <div class="am-panel-bd am-scrollable-horizontal">
 
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>用户</th>
-                            <th>下单日期</th>
-                            <th>微信账号</th>
-                            <th>粉丝数量</th>
-                            <th>回复数量</th>
-                            <th>国/省/市</th>
-                            <th>性别</th>
-                            <th>回复信息</th>
-                            <th>模式</th>
-                            <th>速度限制</th>
-                            <th>价格</th>
-                            <th>备注</th>
-                            <th>返还A</th>
-                            <th>返还B</th>
-                            <th>返还C</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                    <form class="am-form am-form-horizontal">
+                        <div class="am-form-group">
+                            <label for="fansCity" class="am-u-sm-4 am-u-lg-2 am-form-label">公告类型</label>
+                            <div class="am-u-sm-8 am-u-lg-5 am-u-end">
+                                <select id="fansCity" class="am-radius am-input-sm">
+                                    <option value="">系统公告</option>
+                                </select>
+                            </div>
+                        </div>
 
-                        </tbody>
-                    </table>
+                        <div class="am-form-group">
+                            <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">公告内容</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <textarea id="fansRemark" class="am-radius" rows="3" placeholder="输入公告内容"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                                <button type="submit" class="am-btn am-btn-primary am-radius">发布公告</button>
+                            </div>
+                        </div>
+                    </form>
 
                 </div>
             </div>
