@@ -5,15 +5,23 @@ var mongoskin = require('mongoskin');
 var dbConf = require('./db-conf');
 var db = null;
 
-exports.getCollection = function(collectionName) {
+require('./init-user').initUser(getCollection('User'));
+
+
+
+function getCollection(collectionName) {
     if(!db) {
         //连接本机mongodb ,使用帐号密码连接 mongoskin.db('username:password@服务器ip/数据库名
         db = mongoskin.db('mongodb://' + dbConf.host + ':' + dbConf.port + '/' + dbConf.dbName);
     }
     return db.collection(collectionName);
+}
+
+module.exports = {
+    getCollection: getCollection,
+    toObjectID: mongoskin.helper.toObjectID
 };
 
-exports.toObjectID = mongoskin.helper.toObjectID;
 
 
 
