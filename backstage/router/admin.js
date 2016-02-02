@@ -8,7 +8,7 @@ var router = require('express').Router();
 //拦截非管理员登录
 router.use(function(req, res, next) {
     db.getCollection('User').findById(req.session.passport.user, function (err, user) {
-        if(user.role === 'admin'){
+        if(user.role === '管理员'){
             next();
         }else{
             console.log('不是管理员，不能非法登陆。。。。。。。。。。。。');

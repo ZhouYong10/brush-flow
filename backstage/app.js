@@ -104,7 +104,7 @@ app.post('/login', function(req, res, next) {
         return next(err);
       }
 
-      if(user.role === 'admin'){
+      if(user.role === '管理员'){
         return res.send({
           isOK: true,
           path: '/admin/home'
