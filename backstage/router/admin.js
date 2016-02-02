@@ -2,6 +2,7 @@
  * Created by zhouyong10 on 1/24/16.
  */
 var db = require('../db');
+var bcrypt = require('bcryptjs');
 var moment = require('moment');
 var router = require('express').Router();
 
@@ -49,9 +50,18 @@ router.get('/manage/user/add', function (req, res) {
 });
 
 router.post('/manage/user/add', function (req, res) {
-
-    console.log(req.body,'====================================');
-    //res.render('adminManageUserAdd', {title: '设置 / 用户管理 / 添加用户', money: 10.01})
+    db.getCollection('User').insert({
+        username: req.body.username,
+        password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
+        role: req.body.role,
+        createTime: moment().format('YYYY-MM-DD HH:mm:ss')
+    }, function(error, result) {
+        if(error) {
+            res.send('添加用户失败： ' + error);
+        }else{
+            res.redirect('/admin/manage/user');
+        }
+    });
 });
 
 router.post('/manage/user/username/notrepeat', function (req, res) {

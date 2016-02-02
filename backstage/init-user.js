@@ -2,22 +2,21 @@
  * Created by zhouyong10 on 2/2/16.
  */
 
+var bcrypt = require('bcryptjs');
+var moment = require('moment');
+
 var initUsers = [{
     username: 'admin',
-    password: hash('admin'),
-    role: '管理员'
+    password: bcrypt.hashSync('admin', bcrypt.genSaltSync(10)),
+    role: '管理员',
+    createTime: moment().format('YYYY-MM-DD HH:mm:ss')
 }, {
     username: '演示',
-    password: hash('yanshi'),
-    role: '顶级代理'
+    password: bcrypt.hashSync('yanshi', bcrypt.genSaltSync(10)),
+    role: '顶级代理',
+    createTime: moment().format('YYYY-MM-DD HH:mm:ss')
 }];
 
-
-function hash(password) {
-    var bcrypt = require('bcryptjs');
-    var salt = bcrypt.genSaltSync(10);
-    return bcrypt.hashSync(password, salt);
-}
 
 exports.initUser = function(User) {
     initUsers.map(function(user) {
