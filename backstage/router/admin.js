@@ -19,7 +19,12 @@ router.use(function(req, res, next) {
 
 
 router.get('/home', function (req, res) {
-    res.render('adminHome', {title: '管理员公告', money: 10.01})
+    db.getCollection('Placard').find().toArray(function(error, result) {
+        if(error) {
+            return res.send('获取公告失败： ' + error);
+        }
+        res.render('adminHome', {title: '管理员公告', money: 10.01, placards: result})
+    });
 });
 
 
