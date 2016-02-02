@@ -1,13 +1,13 @@
 /**
  * Created by zhouyong10 on 1/24/16.
  */
-var User = require('../db').getCollection('User');
-
+var db = require('../db');
+var moment = require('moment');
 var router = require('express').Router();
 
 //拦截非管理员登录
 router.use(function(req, res, next) {
-    User.findById(req.session.passport.user, function (err, user) {
+    db.getCollection('User').findById(req.session.passport.user, function (err, user) {
         if(user.role === 'admin'){
             next();
         }else{
@@ -62,8 +62,39 @@ router.get('/placard/send', function (req, res) {
     res.render('adminPlacardSend', {title: '公告管理 / 发布公告', money: 10.01})
 });
 
+router.post('/placard/send', function (req, res) {
+    var Placard = db.getCollection('Placard');
+    Placard.insert({
+        placardName: req.body.placardName,
+        placardContent: req.body.placardContent,
+        sendTime: moment().format('YYYY-MM-DD HH:mm:ss')
+    }, function(error, result) {
+        if(error) {
+            res.send('发布公告失败： ' + error);
+        }else{
+            res.redirect('/admin/placard/history');
+        }
+    });
+});
+
 router.get('/placard/history', function (req, res) {
-    res.render('adminPlacardHistory', {title: '公告管理 / 历史公告', money: 10.01})
+    db.getCollection('Placard').find().toArray(function(error, result) {
+        if(error) {
+            return res.send('查询公告失败： ' + error);
+        }
+        res.render('adminPlacardHistory', {title: '公告管理 / 历史公告', money: 10.01, placards: result});
+    });
+});
+
+router.get('/placard/history/del', function (req, res) {
+    db.getCollection('Placard').remove({_id: db.toObjectID(req.query.id)}, function(error, result) {
+        console.log(error,'------------------------------------');
+        console.log(result,'------------------------------------');
+        if(error) {
+            return res.send('删除公告失败： ' + error);
+        }
+        res.redirect('/admin/placard/history');
+    });
 });
 
 router.get('/placard/add', function (req, res) {

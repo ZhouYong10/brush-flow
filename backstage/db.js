@@ -13,6 +13,8 @@ exports.getCollection = function(collectionName) {
     return db.collection(collectionName);
 };
 
+exports.toObjectID = mongoskin.helper.toObjectID;
+
 
 
 

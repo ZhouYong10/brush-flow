@@ -39,15 +39,17 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <% for(var i = 0; i < placards.length; i++){ %>
                         <tr>
-                            <td>#</td>
-                            <td>类型</td>
-                            <td>发布时间</td>
-                            <td>内容</td>
+                            <td><%= i+1 %></td>
+                            <td><%= placards[i].placardName %></td>
+                            <td><%= placards[i].sendTime %></td>
+                            <td><%= placards[i].placardContent %></td>
                             <td>
-                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">删除</button>
+                                <a type="button" href="/admin/placard/history/del?id=<%= placards[i]._id%>" class="am-btn am-btn-primary am-radius am-btn-xs">删除</a>
                             </td>
                         </tr>
+                        <% } %>
                         </tbody>
                     </table>
 

@@ -44,7 +44,7 @@
                                    placeholder="区分大小写" v-validate:security-code="{ required: true}">
                         </div>
                         <div class="am-u-sm-7">
-                            <img class="am-radius getSecurityCode" src="/securityImg" @click.stop.prevent="changeImg"/>
+                            <img class="am-img-responsive am-radius getSecurityCode" src="/securityImg" @click.stop.prevent="changeImg"/>
                         </div>
                         <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
                     </div>

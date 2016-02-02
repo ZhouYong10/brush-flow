@@ -23,17 +23,18 @@
             <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
         </div>
 
-        <div class="am-u-lg-10 am-u-md-9">
+        <div id="placard" class="am-u-lg-10 am-u-md-9">
             <div class="am-panel am-panel-primary">
                 <div class="am-panel-hd"><%= title %></div>
                 <div class="am-panel-bd am-scrollable-horizontal">
 
-                    <form class="am-form am-form-horizontal">
+                    <validator name="placard">
+                    <form class="am-form am-form-horizontal" method="post" action="/admin//placard/send">
                         <div class="am-form-group">
                             <label for="fansCity" class="am-u-sm-4 am-u-lg-2 am-form-label">公告类型</label>
                             <div class="am-u-sm-8 am-u-lg-5 am-u-end">
-                                <select id="fansCity" class="am-radius am-input-sm">
-                                    <option value="">系统公告</option>
+                                <select id="fansCity" class="am-radius am-input-sm" name="placardName">
+                                    <option value="系统公告">系统公告</option>
                                 </select>
                             </div>
                         </div>
@@ -41,16 +42,18 @@
                         <div class="am-form-group">
                             <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">公告内容</label>
                             <div class="am-u-sm-8 am-u-lg-10">
-                                <textarea id="fansRemark" class="am-radius" rows="3" placeholder="输入公告内容"></textarea>
+                                <textarea id="fansRemark" class="am-radius" rows="3" name="placardContent" placeholder="输入公告内容" v-validate:content="['required']"></textarea>
+                                <span class="tips" v-if="$placard.content.required">公告内容不能为空!</span>
                             </div>
                         </div>
 
                         <div class="am-form-group">
                             <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                                <button type="submit" class="am-btn am-btn-primary am-radius">发布公告</button>
+                                <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$placard.valid">发布公告</button>
                             </div>
                         </div>
                     </form>
+                    </validator>
 
                 </div>
             </div>
@@ -61,6 +64,11 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+
+
+<script>
+    require('adminPlacardSend');
+</script>
 
 </body>
 </html>
