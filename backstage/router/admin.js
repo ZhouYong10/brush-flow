@@ -87,9 +87,7 @@ router.get('/placard/history', function (req, res) {
 });
 
 router.get('/placard/history/del', function (req, res) {
-    db.getCollection('Placard').remove({_id: db.toObjectID(req.query.id)}, function(error, result) {
-        console.log(error,'------------------------------------');
-        console.log(result,'------------------------------------');
+    db.getCollection('Placard').remove({_id: db.toObjectID(req.query.id)}, function(error) {
         if(error) {
             return res.send('删除公告失败： ' + error);
         }

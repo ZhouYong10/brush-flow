@@ -24,34 +24,17 @@
             <div class="am-panel-bd">
 
                 <ul class="am-list">
+
+                    <% for(var i = 0; i < placards.length; i++) { %>
                     <li>
-                        <a href="#">
-                            <span>[系统公告] </span>
-                            <span>1/22/2016: </span>
-                            每个人都有一个死角， 自己走不出来，别人也闯不进去。
+                        <a href="##">
+                            <span>【<%= placards[i].placardName %>】 </span>
+                            <span><%= placards[i].sendTime %> &nbsp;</span>
+                            <span><%= placards[i].placardContent %></span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
-                            <span>[系统公告] </span>
-                            <span>1/22/2016: </span>
-                            我把最深沉的秘密放在那里。
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span>[系统公告] </span>
-                            <span>1/22/2016: </span>
-                            你不懂我，我不怪你。
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span>[系统公告] </span>
-                            <span>1/22/2016: </span>
-                            每个人都有一道伤口， 或深或浅，盖上布，以为不存在。
-                        </a>
-                    </li>
+                    <% } %>
+
                 </ul>
 
             </div>

@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var ccap = require('ccap')();
 
 var bcrypt = require('bcryptjs');
-var User = require('./db').getCollection('User');
+var db = require('./db');
 
 var session = require('express-session');
 var passport = require('passport');
@@ -18,7 +18,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
+  db.getCollection('User').findById(id, function (err, user) {
     done(err, user);
   })
 });
@@ -42,7 +42,7 @@ passport.use(new LocalStrategy({
   //实现用户名或邮箱登录
   //这里判断提交上的username是否含有@，来决定查询的字段是哪一个
   var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username};
-  User.findOne(criteria, function(err, user) {
+  db.getCollection('User').findOne(criteria, function(err, user) {
     if (!user){
       return done(null, false, '用户名 ' + username + ' 不存在!');
     }
@@ -129,7 +129,12 @@ app.use(function(req, res, next) {
 });
 
 app.get('/client/home', function (req, res) {
-  res.render('clientHome', {title: '系统公告', money: 12.3});
+  db.getCollection('Placard').find().toArray(function(error, result) {
+    if(error) {
+      return res.send('获取公告失败： ' + error);
+    }
+    res.render('clientHome', {title: '系统公告', money: 12.3, placards: result});
+  });
 });
 
 app.use('/user', require('./router/user.js'));
