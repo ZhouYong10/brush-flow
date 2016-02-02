@@ -40,7 +40,10 @@
                         </div>
 
                         <div class="am-form-group">
-                            <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">公告内容</label>
+                            <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">
+                                <span class="tips" v-if="$placard.content.required">* </span>
+                                公告内容
+                            </label>
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <textarea id="fansRemark" class="am-radius" rows="3" name="placardContent" placeholder="输入公告内容" v-validate:content="['required']"></textarea>
                                 <span class="tips" v-if="$placard.content.required">公告内容不能为空!</span>

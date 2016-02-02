@@ -48,6 +48,12 @@ router.get('/manage/user/add', function (req, res) {
     res.render('adminManageUserAdd', {title: '设置 / 用户管理 / 添加用户', money: 10.01})
 });
 
+router.post('/manage/user/add', function (req, res) {
+
+    console.log(req.body,'====================================');
+    //res.render('adminManageUserAdd', {title: '设置 / 用户管理 / 添加用户', money: 10.01})
+});
+
 
 
 router.get('/price/forum', function (req, res) {
