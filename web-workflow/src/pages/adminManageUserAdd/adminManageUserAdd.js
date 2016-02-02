@@ -3,7 +3,25 @@
  */
 var Vue = require('vue');
 Vue.use(require('vue-validator'));
+Vue.use(require('vue-resource'));
 
 new Vue({
-    el: '#addUser'
+    el: '#addUser',
+    data: {
+        username: '',
+        notrepeat: true
+    },
+    methods: {
+        notRepeat: function() {
+            var self = this;
+            self.$http.post('/admin/manage/user/username/notrepeat', {username: self.username})
+                .then(function (res) {
+                    if(res.data.notRepeat) {
+                        self.notrepeat = true;
+                    }else{
+                        self.notrepeat = false;
+                    }
+                });
+        }
+    }
 });

@@ -54,6 +54,16 @@ router.post('/manage/user/add', function (req, res) {
     //res.render('adminManageUserAdd', {title: '设置 / 用户管理 / 添加用户', money: 10.01})
 });
 
+router.post('/manage/user/username/notrepeat', function (req, res) {
+    db.getCollection('User').findOne({username: req.body.username}, function(error, user) {
+        if(user) {
+            res.send({notRepeat: false});
+        }else{
+            res.send({notRepeat: true});
+        }
+    })
+});
+
 
 
 router.get('/price/forum', function (req, res) {

@@ -36,9 +36,10 @@
                                 用户名
                             </label>
                             <div class="am-u-sm-8 am-u-lg-10">
-                                <input class="am-radius am-input-sm" type="text" id="username" name="username"
-                                v-validate:userName="{required: true}">
+                                <input class="am-radius am-input-sm" type="text" id="username" name="username" v-model="username"
+                                v-validate:username="{required: true}" v-on:keyup="notRepeat">
                                 <span class="tips" v-if="$addUser.username.required">用户名不能为空!</span>
+                                <span class="tips" v-if="!notrepeat">账户已经存在!</span>
                             </div>
                         </div>
                         <div class="am-form-group">
@@ -73,7 +74,8 @@
 
                         <div class="am-form-group">
                             <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                                <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$addUser.valid">确认添加</button>
+                                <button type="submit" class="am-btn am-btn-primary am-radius"
+                                        v-if="$addUser.valid && notrepeat">确认添加</button>
                             </div>
                         </div>
                     </form>
