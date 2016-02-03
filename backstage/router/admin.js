@@ -42,13 +42,21 @@ router.get('/withdraw/already', function (req, res) {
 });
 
 router.get('/manage/user', function (req, res) {
-    db.getCollection('User').find().toArray(function(error, result) {
-        if(error) {
-            res.send('获取用户列表失败： ' + error);
-        }else{
-            res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: result});
-        }
-    });
+    var User = require('../models/user');
+    User.find()
+        .then(function (users) {
+            res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: users});
+        }, function (error) {
+            res.send(error);
+        });
+
+    //db.getCollection('User').find().toArray(function(error, result) {
+    //    if(error) {
+    //        res.send('获取用户列表失败： ' + error);
+    //    }else{
+    //        res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: result});
+    //    }
+    //});
 });
 
 router.get('/manage/user/del', function(req, res) {

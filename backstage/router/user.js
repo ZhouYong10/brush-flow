@@ -17,16 +17,23 @@ router.get('/consume/history', function (req, res) {
 });
 
 router.get('/info', function (req, res) {
-    db.getCollection('User').findOne({
-        _id: db.toObjectID(req.session.passport.user)
-    }, function(error, result) {
-        console.log(result,'result--------------------------------------');
-        if(error) {
-            res.send('获取用户详细信息失败： ' + error);
-        }else{
-            res.render('userInfo', {title: '我的详细信息', money: 10.01, user: result});
-        }
+    var User = require('../models/user');
+    User.findById(req.session.passport.user)
+        .then(function (user) {
+            console.log(user, 'user====================================================');
+        }, function (error) {
+
     });
+    //db.getCollection('User').findOne({
+    //    _id: db.toObjectID(req.session.passport.user)
+    //}, function(error, result) {
+    //    console.log(result,'result--------------------------------------');
+    //    if(error) {
+    //        res.send('获取用户详细信息失败： ' + error);
+    //    }else{
+    //        res.render('userInfo', {title: '我的详细信息', money: 10.01, user: result});
+    //    }
+    //});
 });
 
 router.get('/logout', function(req, res){
