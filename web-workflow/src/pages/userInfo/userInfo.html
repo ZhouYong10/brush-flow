@@ -25,63 +25,63 @@
 
                 <form class="am-form am-form-horizontal">
                     <div class="am-form-group">
-                        <label for="one" class="am-u-sm-4 am-u-lg-2 am-form-label">用户账号</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">用户账号</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="one" disabled>
+                            <p class="disable"><%= user.username %></p>
                         </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="eleven" class="am-u-sm-4 am-u-lg-2 am-form-label">账户余额</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">账户余额</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="eleven" disabled>
+                            <p class="disable"><%= user.funds %></p>
                         </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="three" class="am-u-sm-4 am-u-lg-2 am-form-label">账号状态</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">账号状态</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="three" disabled>
+                            <p class="disable"><%= user.status %></p>
                         </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="four" class="am-u-sm-4 am-u-lg-2 am-form-label">用户级别</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">用户级别</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="four" disabled>
+                            <p class="disable"><%= user.role %></p>
                         </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="ten" class="am-u-sm-4 am-u-lg-2 am-form-label">上线</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">上级</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="ten" disabled>
+                            <p class="disable"><%= user.parent %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">注册时间</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.createTime %></p>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">最后登陆时间</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable"><%= user.lastLoginTime %></p>
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="five" class="am-u-sm-4 am-u-lg-2 am-form-label">ＱＱ号码</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="five" disabled>
+                            <input class="am-radius am-input-sm" type="email" id="five" value="<%= user.QQ %>" disabled>
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="six" class="am-u-sm-4 am-u-lg-2 am-form-label">电话号码</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="six" disabled>
+                            <input class="am-radius am-input-sm" type="email" id="six" value="<%= user.phone %>" disabled>
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="seven" class="am-u-sm-4 am-u-lg-2 am-form-label">电子邮件</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="seven" disabled>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="eight" class="am-u-sm-4 am-u-lg-2 am-form-label">注册时间</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="eight" disabled>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="nine" class="am-u-sm-4 am-u-lg-2 am-form-label">登出时间</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="nine" disabled>
+                            <input class="am-radius am-input-sm" type="email" id="seven" value="<%= user.email %>" disabled>
                         </div>
                     </div>
 
