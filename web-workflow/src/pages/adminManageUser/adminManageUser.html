@@ -52,27 +52,36 @@
                             <thead>
                             <tr>
                                 <th>#</th>
+                                <th>创建时间</th>
                                 <th>等级</th>
                                 <th>用户名</th>
                                 <th>余额</th>
                                 <th>上级</th>
                                 <th>下级/人</th>
+                                <th>最后登陆时间</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td class="am-text-middle">1</td>
-                                <td class="am-text-middle">Amaze UI</td>
-                                <td  class="am-text-middle">2012-10-01</td>
-                                <td  class="am-text-middle">2012-10-01</td>
-                                <td  class="am-text-middle">2012-10-01</td>
-                                <td  class="am-text-middle">2012-10-01</td>
-                                <td  class="am-text-middle">
-                                    <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">修改</button>
-                                    <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">删除</button>
-                                </td>
-                            </tr>
+
+                            <% for(var i = 0; i < users.length; i++) { %>
+                                <tr>
+                                    <td class="am-text-middle"><%= i + 1 %></td>
+                                    <td class="am-text-middle"><%= users[i].createTime %></td>
+                                    <td class="am-text-middle"><%= users[i].role %></td>
+                                    <td  class="am-text-middle"><%= users[i].username %></td>
+                                    <td  class="am-text-middle"><%= users[i].funds %></td>
+                                    <td  class="am-text-middle"><%= users[i].parent %></td>
+                                    <td  class="am-text-middle"><%= users[i].childNum %></td>
+                                    <td  class="am-text-middle"><%= users[i].lastLoginTime %></td>
+                                    <td  class="am-text-middle">
+                                        <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">修改</button>
+                                        <a type="button" class="am-btn am-btn-primary am-radius am-btn-xs"
+                                        href="/admin/manage/user/del?id=<%= users[i]._id %>">删除</a>
+                                    </td>
+                                </tr>
+                            <% } %>
+
                             </tbody>
                         </table>
                     </div>

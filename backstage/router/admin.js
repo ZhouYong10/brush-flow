@@ -42,7 +42,14 @@ router.get('/withdraw/already', function (req, res) {
 });
 
 router.get('/manage/user', function (req, res) {
-    res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01})
+    db.getCollection('User').find().toArray(function(error, result) {
+        console.log(result,'==============================================');
+        if(error) {
+            res.send('获取用户列表失败： ' + error);
+        }else{
+            res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: result});
+        }
+    });
 });
 
 router.get('/manage/user/add', function (req, res) {
