@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ccap = require('ccap')();
+var moment = require('moment');
 
 var bcrypt = require('bcryptjs');
 var db = require('./db');
@@ -103,6 +104,14 @@ app.post('/login', function(req, res, next) {
       if (err) {
         return next(err);
       }
+
+      db.getCollection('User').update({
+        username: user.username
+      }, {
+        $set: {
+          lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
+        }
+      }, function () {});
 
       if(user.role === '管理员'){
         return res.send({
