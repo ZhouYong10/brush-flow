@@ -48,13 +48,13 @@ passport.use(new LocalStrategy({
         }
         bcrypt.compare(password, user.password, function(err, isMatch) {
           if (isMatch) {
-            return done(null, user, '登陆成功！');
+            done(null, user, '登陆成功！');
           } else {
-            return done(null, false, '密码错误！');
+            done(null, false, '密码错误！');
           }
         });
       }, function (error) {
-
+        done(error, false, '登陆查询用户信息失败！');
       });
 }));
 
