@@ -37,7 +37,7 @@
                             </label>
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <input class="am-radius am-input-sm" type="text" id="username" name="username" v-model="username"
-                                v-validate:username="{required: true}" v-on:keyup="notRepeat">
+                                v-validate:username="{required: true}" v-on:keyup="notRepeat" v-on:change="notRepeat">
                                 <span class="tips" v-if="$addUser.username.required">用户名不能为空!</span>
                                 <span class="tips" v-if="!notrepeat">账户已经存在!</span>
                             </div>

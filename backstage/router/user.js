@@ -1,7 +1,7 @@
 /**
  * Created by zhouyong10 on 1/24/16.
  */
-var db = require('../db');
+var User = require('../models/User');
 var router = require('express').Router();
 
 router.get('/recharge', function (req, res) {
@@ -17,23 +17,12 @@ router.get('/consume/history', function (req, res) {
 });
 
 router.get('/info', function (req, res) {
-    var User = require('../models/user');
-    User.findById(req.session.passport.user)
+    User.open().findById(req.session.passport.user)
         .then(function (user) {
-            console.log(user, 'user====================================================');
+            res.render('userInfo', {title: '我的详细信息', money: 10.01, user: user});
         }, function (error) {
-
-    });
-    //db.getCollection('User').findOne({
-    //    _id: db.toObjectID(req.session.passport.user)
-    //}, function(error, result) {
-    //    console.log(result,'result--------------------------------------');
-    //    if(error) {
-    //        res.send('获取用户详细信息失败： ' + error);
-    //    }else{
-    //        res.render('userInfo', {title: '我的详细信息', money: 10.01, user: result});
-    //    }
-    //});
+            res.send('获取用户详细信息失败： ' + error);
+        });
 });
 
 router.get('/logout', function(req, res){

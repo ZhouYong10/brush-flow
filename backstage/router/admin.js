@@ -1,34 +1,46 @@
 /**
  * Created by zhouyong10 on 1/24/16.
  */
-var db = require('../db');
+var User = require('../models/User');
+var Placard = require('../models/Placard');
+
 var bcrypt = require('bcryptjs');
 var moment = require('moment');
+
 var router = require('express').Router();
 
 //拦截非管理员登录
 router.use(function(req, res, next) {
-    db.getCollection('User').findById(req.session.passport.user, function (err, user) {
-        if(user.role === '管理员'){
-            next();
-        }else{
-            console.log('不是管理员，不能非法登陆。。。。。。。。。。。。');
-            res.redirect('/');
-        }
-    });
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            console.log(user, 'user  不是管理员，不能非法登陆。。。。。。。。。。。。');
+            if(user.role === '管理员'){
+                next();
+            }else{
+                console.log('不是管理员，不能非法登陆。。。。。。。。。。。。');
+                res.redirect('/');
+            }
+        }, function (error) {
+            res.send('获取用户信息失败： ' + error);
+        });
 });
 
 
 router.get('/home', function (req, res) {
-    db.getCollection('Placard').find().toArray(function(error, result) {
-        if(error) {
-            return res.send('获取公告失败： ' + error);
-        }
-        res.render('adminHome', {title: '管理员公告', money: 10.01, placards: result})
-    });
+    Placard.open().find()
+        .then(function (placards) {
+            res.render('adminHome', {title: '管理员公告', money: 10.01, placards: placards});
+        }, function (error) {
+            return res.send('获取公告列表失败： ' + error);
+        });
 });
 
 
+
+
+/*
+* manage funds
+* */
 router.get('/recharge/history', function (req, res) {
     res.render('adminRechargeHistory', {title: '资金管理 / 充值记录', money: 10.01})
 });
@@ -41,34 +53,28 @@ router.get('/withdraw/already', function (req, res) {
     res.render('adminWithdrawAlre', {title: '资金管理 / 提现管理 / 已处理', money: 10.01})
 });
 
+
+
+
+/*
+* manage user
+* */
 router.get('/manage/user', function (req, res) {
-    var User = require('../models/user');
-    User.find()
+    User.open().find()
         .then(function (users) {
             res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: users});
         }, function (error) {
-            res.send(error);
+            res.send('获取用户列表失败： ' + error);
         });
-
-    //db.getCollection('User').find().toArray(function(error, result) {
-    //    if(error) {
-    //        res.send('获取用户列表失败： ' + error);
-    //    }else{
-    //        res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: result});
-    //    }
-    //});
 });
 
 router.get('/manage/user/del', function(req, res) {
-    db.getCollection('User').remove({
-        _id: db.toObjectID(req.query.id)
-    }, function(error, result) {
-        if(error) {
-            res.send('删除用户失败： ' + error);
-        }else {
+    User.open().removeById(req.query.id)
+        .then(function (user) {
             res.redirect('/admin/manage/user');
-        }
-    });
+        }, function (error) {
+            res.send('删除用户失败： ' + error);
+        });
 });
 
 router.get('/manage/user/add', function (req, res) {
@@ -76,32 +82,38 @@ router.get('/manage/user/add', function (req, res) {
 });
 
 router.post('/manage/user/add', function (req, res) {
-    db.getCollection('User').insert({
+    User.open().insert({
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
         role: req.body.role,
         createTime: moment().format('YYYY-MM-DD HH:mm:ss')
-    }, function(error, result) {
-        if(error) {
-            res.send('添加用户失败： ' + error);
-        }else{
-            res.redirect('/admin/manage/user');
-        }
+    }).then(function (user) {
+        res.redirect('/admin/manage/user');
+    }, function (error) {
+        res.send('添加用户失败： ' + error);
     });
 });
 
 router.post('/manage/user/username/notrepeat', function (req, res) {
-    db.getCollection('User').findOne({username: req.body.username}, function(error, user) {
+    User.open().findOne({
+        username: req.body.username
+    }).then(function (user) {
         if(user) {
             res.send({notRepeat: false});
         }else{
             res.send({notRepeat: true});
         }
-    })
+    }, function (error) {
+        res.send('查询用户信息失败： ' + error);
+    });
 });
 
 
 
+
+/*
+* manage price
+* */
 router.get('/price/forum', function (req, res) {
     res.render('adminPriceForum', {title: '价格&状态管理 / 论坛模块', money: 10.01})
 });
@@ -115,41 +127,43 @@ router.get('/price/WX/MP/WB', function (req, res) {
 });
 
 
+
+
+/*
+* manage placard
+* */
 router.get('/placard/send', function (req, res) {
     res.render('adminPlacardSend', {title: '公告管理 / 发布公告', money: 10.01})
 });
 
 router.post('/placard/send', function (req, res) {
-    var Placard = db.getCollection('Placard');
-    Placard.insert({
+    Placard.open().insert({
         placardName: req.body.placardName,
         placardContent: req.body.placardContent,
         sendTime: moment().format('YYYY-MM-DD HH:mm:ss')
-    }, function(error, result) {
-        if(error) {
-            res.send('发布公告失败： ' + error);
-        }else{
-            res.redirect('/admin/placard/history');
-        }
+    }).then(function (placard) {
+        res.redirect('/admin/placard/history');
+    }, function (error) {
+        res.send('发布公告失败： ' + error);
     });
 });
 
 router.get('/placard/history', function (req, res) {
-    db.getCollection('Placard').find().toArray(function(error, result) {
-        if(error) {
-            return res.send('查询公告失败： ' + error);
-        }
-        res.render('adminPlacardHistory', {title: '公告管理 / 历史公告', money: 10.01, placards: result});
-    });
+    Placard.open().find()
+        .then(function (placards) {
+            res.render('adminPlacardHistory', {title: '公告管理 / 历史公告', money: 10.01, placards: placards});
+        }, function (error) {
+            return res.send('获取公告列表失败： ' + error);
+        });
 });
 
 router.get('/placard/history/del', function (req, res) {
-    db.getCollection('Placard').remove({_id: db.toObjectID(req.query.id)}, function(error) {
-        if(error) {
+    Placard.open().removeById(req.query.id)
+        .then(function (placard) {
+            res.redirect('/admin/placard/history');
+        }, function (error) {
             return res.send('删除公告失败： ' + error);
-        }
-        res.redirect('/admin/placard/history');
-    });
+        });
 });
 
 router.get('/placard/add', function (req, res) {
@@ -158,6 +172,10 @@ router.get('/placard/add', function (req, res) {
 
 
 
+
+/*
+* manage order form
+* */
 router.get('/reply/wait', function (req, res) {
     res.render('adminReplyWait', {title: '回复订单管理 / 待处理订单', money: 10.01})
 });
