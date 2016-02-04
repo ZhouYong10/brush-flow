@@ -20,7 +20,12 @@ User.open = function() {
 };
 
 User.include({
-
+    isAdmin: function() {
+        if(this.role === '管理员'){
+            return true;
+        }
+        return false;
+    }
 });
 
 

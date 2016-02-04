@@ -13,7 +13,8 @@ var router = require('express').Router();
 router.use(function(req, res, next) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            if(user.role === '管理员'){
+            var userIns = User.wrapToInstance(user);
+            if(userIns.isAdmin()){
                 next();
             }else{
                 console.log('不是管理员，不能非法登陆。。。。。。。。。。。。');

@@ -6,9 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ccap = require('ccap')();
 var moment = require('moment');
-
 var bcrypt = require('bcryptjs');
-var db = require('./db');
+
+var User = require('./models/User');
+var Placard = require('./models/Placard');
 
 var session = require('express-session');
 var passport = require('passport');
@@ -19,9 +20,12 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-  db.getCollection('User').findById(id, function (err, user) {
-    done(err, user);
-  })
+  User.open().findById(id)
+      .then(function (user) {
+        done(null, user);
+      }, function (error) {
+        done(error, null);
+      });
 });
 
 passport.use(new LocalStrategy({
@@ -34,28 +38,24 @@ passport.use(new LocalStrategy({
   //  return done(null, false, '验证码错误！');
   //}
 
-  bcrypt.genSalt(10, function (err, salt) {
-    bcrypt.hash(password, salt, function (err, hash) {
-      console.log(hash, 'hash   11111111111111111111111111111111111111111111111');
-    })
-  });
-
   //实现用户名或邮箱登录
   //这里判断提交上的username是否含有@，来决定查询的字段是哪一个
   var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username};
-  db.getCollection('User').findOne(criteria, function(err, user) {
-    if (!user){
-      return done(null, false, '用户名 ' + username + ' 不存在!');
-    }
+  User.open().findOne(criteria)
+      .then(function (user) {
+        if (!user){
+          return done(null, false, '用户名 ' + username + ' 不存在!');
+        }
+        bcrypt.compare(password, user.password, function(err, isMatch) {
+          if (isMatch) {
+            return done(null, user, '登陆成功！');
+          } else {
+            return done(null, false, '密码错误！');
+          }
+        });
+      }, function (error) {
 
-    bcrypt.compare(password, user.password, function(err, isMatch) {
-      if (isMatch) {
-        return done(null, user, '登陆成功！');
-      } else {
-        return done(null, false, '密码错误！');
-      }
-    });
-  });
+      });
 }));
 
 var app = express();
@@ -105,25 +105,31 @@ app.post('/login', function(req, res, next) {
         return next(err);
       }
 
-      db.getCollection('User').update({
+      User.open().update({
         username: user.username
       }, {
         $set: {
           lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
         }
-      }, function () {});
-
-      if(user.role === '管理员'){
-        return res.send({
-          isOK: true,
-          path: '/admin/home'
+      }).then(function (user) {
+        var userIns = User.wrapToInstance(user);
+        if(userIns.isAdmin()) {
+          res.send({
+            isOK: true,
+            path: '/admin/home'
+          });
+        }else{
+          res.send({
+            isOK: true,
+            path: '/client/home'
+          });
+        }
+      }, function (error) {
+        res.send({
+          isOK: false,
+          message: '更新用户登陆时间失败： ' + error
         });
-      }else{
-        return res.send({
-          isOK: true,
-          path: '/client/home'
-        });
-      }
+      });
     });
   })(req, res, next);
 });
@@ -138,12 +144,12 @@ app.use(function(req, res, next) {
 });
 
 app.get('/client/home', function (req, res) {
-  db.getCollection('Placard').find().toArray(function(error, result) {
-    if(error) {
-      return res.send('获取公告失败： ' + error);
-    }
-    res.render('clientHome', {title: '系统公告', money: 12.3, placards: result});
-  });
+  Placard.open().find()
+      .then(function (placards) {
+        res.render('clientHome', {title: '系统公告', money: 12.3, placards: placards});
+      }, function (error) {
+        res.send('获取公告列表失败： ' + error);
+      });
 });
 
 app.use('/user', require('./router/user.js'));
