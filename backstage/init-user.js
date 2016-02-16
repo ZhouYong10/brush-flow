@@ -8,6 +8,7 @@ var moment = require('moment');
 var initUsers = [{
     username: 'admin',
     password: bcrypt.hashSync('admin', bcrypt.genSaltSync(10)),
+    funds: 0,
     role: '管理员',
     createTime: moment().format('YYYY-MM-DD HH:mm:ss')
 }, {

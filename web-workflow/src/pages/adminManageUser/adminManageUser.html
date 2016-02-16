@@ -70,12 +70,12 @@
                                     <td class="am-text-middle"><%= users[i].createTime %></td>
                                     <td class="am-text-middle"><%= users[i].role %></td>
                                     <td  class="am-text-middle"><%= users[i].username %></td>
-                                    <td  class="am-text-middle"><%= users[i].funds %></td>
+                                    <td  class="am-text-middle">￥ <%= users[i].funds %></td>
                                     <td  class="am-text-middle"><%= users[i].parent %></td>
                                     <td  class="am-text-middle"><%= users[i].childNum %></td>
                                     <td  class="am-text-middle"><%= users[i].lastLoginTime %></td>
                                     <td  class="am-text-middle">
-                                        <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">修改</button>
+                                        <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">编辑</button>
                                         <a type="button" class="am-btn am-btn-primary am-radius am-btn-xs"
                                         href="/admin/manage/user/del?id=<%= users[i]._id %>">删除</a>
                                     </td>
