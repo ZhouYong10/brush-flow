@@ -65,7 +65,7 @@ router.get('/manage/user', function (req, res) {
             res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: users});
         }, function (error) {
             res.send('获取用户列表失败： ' + error);
-        });     
+        });
 });
 
 router.get('/manage/user/edit', function(req, res) {
@@ -75,6 +75,22 @@ router.get('/manage/user/edit', function(req, res) {
         }, function (error) {
             res.send('查询用户详情失败： ' + error);
         });
+});
+
+router.post('/manage/user/edit', function(req, res) {
+    var updateInfo = req.body;
+    User.updateById(updateInfo.id, {$set: {
+        username: updateInfo.username,
+        status: updateInfo.status,
+        role: updateInfo.role,
+        QQ: updateInfo.QQ,
+        phone: updateInfo.phone,
+        email: updateInfo.email
+    }}).then(function (user) {
+        res.redirect('/admin/manage/user');
+    }, function(error) {
+        res.send('更新用户信息失败： ' + error);
+    });
 });
 
 router.get('/manage/user/del', function(req, res) {
@@ -91,17 +107,24 @@ router.get('/manage/user/add', function (req, res) {
 });
 
 router.post('/manage/user/add', function (req, res) {
-    User.open().insert({
-        username: req.body.username,
-        password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
-        funds: 0,
-        role: req.body.role,
-        createTime: moment().format('YYYY-MM-DD HH:mm:ss')
-    }).then(function (user) {
-        res.redirect('/admin/manage/user');
-    }, function (error) {
-        res.send('添加用户失败： ' + error);
-    });
+    User.open().findById(req.session.passport.user)
+        .then(function(parent) {
+            User.open().insert({
+                username: req.body.username,
+                password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
+                funds: 0,
+                status: '正常',
+                parent: parent.username,
+                role: req.body.role,
+                createTime: moment().format('YYYY-MM-DD HH:mm:ss')
+            }).then(function (user) {
+                res.redirect('/admin/manage/user');
+            }, function (error) {
+                res.send('添加用户失败： ' + error);
+            });
+        }, function(error) {
+            res.send('查询上级用户信息失败： ' + error);
+        })
 });
 
 router.post('/manage/user/username/notrepeat', function (req, res) {

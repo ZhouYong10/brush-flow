@@ -10,12 +10,14 @@ var initUsers = [{
     password: bcrypt.hashSync('admin', bcrypt.genSaltSync(10)),
     funds: 0,
     role: '管理员',
+    status: '正常',
     createTime: moment().format('YYYY-MM-DD HH:mm:ss')
 }, {
     username: 'yanshi',
     password: bcrypt.hashSync('yanshi', bcrypt.genSaltSync(10)),
     funds: 0,
     role: '顶级代理',
+    status: '正常',
     createTime: moment().format('YYYY-MM-DD HH:mm:ss')
 }];
 

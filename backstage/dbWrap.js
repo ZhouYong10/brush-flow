@@ -87,6 +87,18 @@ module.exports = {
             }, reject);
         })
     },
+    updateById: function(id, obj) {
+        return new Promise(function(resolve, reject) {
+            haveCollection(function () {
+                collection.updateById(id, obj, function (error, result) {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                })
+            }, reject);
+        })
+    },
     removeById: function(id) {
         return remove({
             _id: db.toObjectID(id)
