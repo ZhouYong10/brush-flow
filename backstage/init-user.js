@@ -11,8 +11,9 @@ var initUsers = [{
     role: '管理员',
     createTime: moment().format('YYYY-MM-DD HH:mm:ss')
 }, {
-    username: '演示',
+    username: 'yanshi',
     password: bcrypt.hashSync('yanshi', bcrypt.genSaltSync(10)),
+    funds: 0,
     role: '顶级代理',
     createTime: moment().format('YYYY-MM-DD HH:mm:ss')
 }];

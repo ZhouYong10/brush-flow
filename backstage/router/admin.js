@@ -85,6 +85,7 @@ router.post('/manage/user/add', function (req, res) {
     User.open().insert({
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
+        funds: 0,
         role: req.body.role,
         createTime: moment().format('YYYY-MM-DD HH:mm:ss')
     }).then(function (user) {
