@@ -65,6 +65,15 @@ router.get('/manage/user', function (req, res) {
             res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: users});
         }, function (error) {
             res.send('获取用户列表失败： ' + error);
+        });     
+});
+
+router.get('/manage/user/edit', function(req, res) {
+    User.open().findById(req.query.id)
+        .then(function (user) {
+            res.render('adminManageUserEdit', {title: '设置 / 用户管理 / 编辑用户信息', money: 33.33, user: user});
+        }, function (error) {
+            res.send('查询用户详情失败： ' + error);
         });
 });
 
