@@ -54,7 +54,7 @@ router.post('/changePwd', function (req, res) {
     var oldPwd = info.oldpwd,
         newPwd = info.newpwd,
         repeatPwd = info.repeatpwd;
-    
+
     //res.render('changePassword', {title: '修改账号密码', money: 22.22});
 });
 
