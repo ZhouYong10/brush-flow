@@ -96,9 +96,9 @@
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button class="am-btn am-btn-primary am-radius" @click.stop.prevent="edit" v-if="!isEdit">修改</button>
-                            <button type="submit" class="am-btn am-btn-primary am-radius" v-if="isEdit">保存</button>
-                            <button class="am-btn am-btn-default am-radius" @click.stop.prevent="cancel" v-if="isEdit">取消</button>
+                            <button class="am-btn am-btn-primary am-radius am-btn-sm" @click.stop.prevent="edit" v-if="!isEdit">编辑</button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius am-btn-sm" v-if="isEdit">保存</button>
+                            <button class="am-btn am-btn-default am-radius am-btn-sm" @click.stop.prevent="cancel" v-if="isEdit">取消</button>
                         </div>
                     </div>
                 </form>
