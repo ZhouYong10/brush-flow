@@ -4,6 +4,8 @@
 var User = require('../models/User');
 var router = require('express').Router();
 
+var bcrypt = require('bcryptjs');
+
 router.get('/recharge', function (req, res) {
     res.render('recharge', {title: '在线充值', money: 10.01})
 });
