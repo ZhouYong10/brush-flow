@@ -108,10 +108,8 @@ router.get('/manage/user/add', function (req, res) {
 
 router.post('/manage/user/add', function (req, res) {
     var userInfo = req.body;
-    console.log(userInfo,'userInfo===============');
     User.open().findById(req.session.passport.user)
         .then(function(result) {
-            console.log(result,'result===============');
             var parent = User.wrapToInstance(result);
             userInfo.parent = parent.username;
             User.createUser(userInfo, function (user) {

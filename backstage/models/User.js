@@ -53,7 +53,9 @@ User.include({
         }
     },
     addChild: function(id) {
-        this.children = this.children || [];
+        if(this.children == undefined) {
+            this.children = [];
+        }
         this.children.unshift(id);
     }
 });
