@@ -49,6 +49,15 @@ router.get('/changePwd', function (req, res) {
     res.render('changePassword', {title: '修改账号密码', money: 22.22});
 });
 
+router.post('/changePwd', function (req, res) {
+    var info = req.body;
+    var oldPwd = info.oldpwd,
+        newPwd = info.newpwd,
+        repeatPwd = info.repeatpwd;
+    
+    //res.render('changePassword', {title: '修改账号密码', money: 22.22});
+});
+
 router.get('/lowerUser', function (req, res) {
     res.render('lowerUser', {title: '我的下级用户', money: 33.33});
 });
