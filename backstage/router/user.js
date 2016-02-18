@@ -95,16 +95,54 @@ router.post('/changePwd', function (req, res) {
             info: '新密码两次输入不一致！！'
         });
     }
-
-    //res.render('changePassword', {title: '修改账号密码', money: 22.22});
 });
 
-router.get('/lowerUser', function (req, res) {
-    res.render('lowerUser', {title: '我的下级用户', money: 33.33});
+router.post('/username/notrepeat', function (req, res) {
+    User.open().findOne({
+        username: req.body.username
+    }).then(function (user) {
+        if(user) {
+            res.send({notRepeat: false});
+        }else{
+            res.send({notRepeat: true});
+        }
+    }, function (error) {
+        res.send('查询用户信息失败： ' + error);
+    });
 });
 
 router.get('/addLowerUser', function (req, res) {
     res.render('addLowerUser', {title: '添加下级用户', money: 11});
+});
+
+router.post('/addLowerUser', function (req, res) {
+    var userInfo = req.body;
+    User.open().findById(req.session.passport.user)
+        .then(function (result) {
+            var parent = User.wrapToInstance(result);
+            userInfo.parent = parent.username;
+            userInfo.role = parent.childRole();
+            User.createUser(userInfo, function (user) {
+                parent.addChild(user[0]._id);
+                User.open().updateById(parent._id, {
+                    $set: {
+                        children: parent.children
+                    }
+                }).then(function (result) {
+                    res.redirect('/user/lowerUser');
+                }, function(error) {
+                    throw (new Error(error));
+                });
+            }, function (error) {
+                res.send('添加下级用户失败： ' + error);
+            });
+        }, function (error) {
+            res.send('查询上级用户信息失败： ' + error);
+        });
+});
+
+router.get('/lowerUser', function (req, res) {
+    res.render('lowerUser', {title: '我的下级用户', money: 33.33});
 });
 
 router.get('/feedback', function (req, res) {

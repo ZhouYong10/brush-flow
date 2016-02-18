@@ -127,20 +127,6 @@ router.post('/manage/user/add', function (req, res) {
         })
 });
 
-router.post('/manage/user/username/notrepeat', function (req, res) {
-    User.open().findOne({
-        username: req.body.username
-    }).then(function (user) {
-        if(user) {
-            res.send({notRepeat: false});
-        }else{
-            res.send({notRepeat: true});
-        }
-    }, function (error) {
-        res.send('查询用户信息失败： ' + error);
-    });
-});
-
 
 
 

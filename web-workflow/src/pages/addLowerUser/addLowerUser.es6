@@ -1,12 +1,10 @@
-/**
- * Created by zhouyong10 on 2/2/16.
- */
+
 var Vue = require('vue');
 Vue.use(require('vue-validator'));
 Vue.use(require('vue-resource'));
 
 new Vue({
-    el: '#addUser',
+    el: '#addLowerUser',
     data: {
         username: '',
         notrepeat: true
