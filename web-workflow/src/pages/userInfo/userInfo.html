@@ -23,7 +23,7 @@
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
-                <form class="am-form am-form-horizontal">
+                <form class="am-form am-form-horizontal" id="userInfo" method="post" action="/user/info">
                     <div class="am-form-group">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">用户账号</label>
                         <div class="am-u-sm-8 am-u-lg-10">
@@ -75,25 +75,29 @@
                     <div class="am-form-group">
                         <label for="five" class="am-u-sm-4 am-u-lg-2 am-form-label">ＱＱ号码</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="five" value="<%= user.QQ %>" disabled>
+                            <input class="am-radius am-input-sm" type="text" id="five" name="QQ" value="<%= user.QQ %>" v-if="isEdit">
+                            <p class="disable" v-if="!isEdit"><%= user.QQ %></p>
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="six" class="am-u-sm-4 am-u-lg-2 am-form-label">电话号码</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="six" value="<%= user.phone %>" disabled>
+                            <input class="am-radius am-input-sm" type="text" id="six" name="phone" value="<%= user.phone %>" v-if="isEdit">
+                            <p class="disable" v-if="!isEdit"><%= user.phone %></p>
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="seven" class="am-u-sm-4 am-u-lg-2 am-form-label">电子邮件</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input class="am-radius am-input-sm" type="email" id="seven" value="<%= user.email %>" disabled>
+                            <input class="am-radius am-input-sm" type="email" id="seven" name="email" value="<%= user.email %>" v-if="isEdit">
+                            <p class="disable" v-if="!isEdit"><%= user.email %></p>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius">修改</button>
+                            <button class="am-btn am-btn-primary am-radius" @click.stop.prevent="edit" v-if="!isEdit">修改</button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius" v-if="isEdit">保存</button>
                         </div>
                     </div>
                 </form>
@@ -107,6 +111,9 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script>
+    require('./userinfo');
+</script>
 
 </body>
 </html>

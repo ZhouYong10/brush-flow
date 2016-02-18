@@ -25,6 +25,21 @@ router.get('/info', function (req, res) {
         });
 });
 
+router.post('/info', function (req, res) {
+    var update = req.body;
+    User.open().updateById(req.session.passport.user, {
+        $set: {
+            QQ: update.QQ,
+            phone: update.phone,
+            email: update.email
+        }
+    }).then(function (user) {
+        res.redirect('/user/info');
+    }, function (error) {
+        res.send('更新用户信息失败： ' + error);
+    });
+});
+
 router.get('/logout', function(req, res){
     req.logout();
     res.redirect('/');
