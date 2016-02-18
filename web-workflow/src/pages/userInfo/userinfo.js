@@ -11,6 +11,9 @@ new Vue({
     methods: {
         edit: function() {
             this.isEdit = true;
+        },
+        cancel: function() {
+            this.isEdit = false;
         }
     }
 });
