@@ -19,11 +19,6 @@ new Vue({
     },
     methods: {
         submit: function() {
-            console.log({
-                oldpwd: this.oldpwd,
-                newpwd: this.newpwd,
-                repeatpwd: this.repeatpwd
-            });
             this.$http.post('/user/changePwd', {
                 oldpwd: this.oldpwd,
                 newpwd: this.newpwd,
