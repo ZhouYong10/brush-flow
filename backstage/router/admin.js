@@ -107,20 +107,26 @@ router.get('/manage/user/add', function (req, res) {
 });
 
 router.post('/manage/user/add', function (req, res) {
+    var userInfo = req.body;
+    console.log(userInfo,'userInfo===============');
     User.open().findById(req.session.passport.user)
-        .then(function(parent) {
-            User.open().insert({
-                username: req.body.username,
-                password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10)),
-                funds: 0,
-                status: '正常',
-                parent: parent.username,
-                role: req.body.role,
-                createTime: moment().format('YYYY-MM-DD HH:mm:ss')
-            }).then(function (user) {
-                res.redirect('/admin/manage/user');
+        .then(function(result) {
+            console.log(result,'result===============');
+            var parent = User.wrapToInstance(result);
+            userInfo.parent = parent.username;
+            User.createUser(userInfo, function (user) {
+                parent.addChild(user[0]._id);
+                User.open().updateById(parent._id, {
+                    $set: {
+                        children: parent.children
+                    }
+                }).then(function (result) {
+                    res.redirect('/admin/manage/user');
+                }, function(error) {
+                    throw (new Error(error));
+                });
             }, function (error) {
-                res.send('添加用户失败： ' + error);
+                res.send('添加下级用户失败： ' + error);
             });
         }, function(error) {
             res.send('查询上级用户信息失败： ' + error);
