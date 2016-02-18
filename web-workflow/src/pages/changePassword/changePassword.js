@@ -19,15 +19,20 @@ new Vue({
     },
     methods: {
         submit: function() {
+            console.log({
+                oldpwd: this.oldpwd,
+                newpwd: this.newpwd,
+                repeatpwd: this.repeatpwd
+            });
             this.$http.post('/user/changePwd', {
                 oldpwd: this.oldpwd,
                 newpwd: this.newpwd,
                 repeatpwd: this.repeatpwd
             }).then(function(res) {
                 if(res.data.isOK) {
-                    $('<a href="' + res.data.path + '" ></a>').get(0).click();
+                    $('<a href="' + res.data.url + '" ></a>').get(0).click();
                 }else{
-                    layer.msg(res.data.message);
+                    layer.msg(res.data.info);
                 }
             });
         }

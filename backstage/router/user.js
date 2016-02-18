@@ -55,6 +55,45 @@ router.post('/changePwd', function (req, res) {
         newPwd = info.newpwd,
         repeatPwd = info.repeatpwd;
 
+    if(newPwd === repeatPwd) {
+        User.open().findById(req.session.passport.user)
+            .then(function(result) {
+                var user = User.wrapToInstance(result);
+                if(user.samePwd(oldPwd)){
+                    User.open().update({
+                        _id: user._id
+                    }, {$set: {
+                        password: bcrypt.hashSync(newPwd, bcrypt.genSaltSync(10))
+                    }}).then(function(user) {
+                        res.send({
+                            isOK: true,
+                            url: '/user/info'
+                        });
+                    }, function(error) {
+                        res.send({
+                            isOK: false,
+                            info: '更新用户密码失败： ' + error
+                        });
+                    })
+                }else{
+                    res.send({
+                        isOK: false,
+                        info: '原密码错误！如果忘记密码，请联系管理员！！'
+                    });
+                }
+            }, function(error) {
+                res.send({
+                    isOK: false,
+                    info: '用户信息查询失败： ' + error
+                });
+            })
+    }else{
+        res.send({
+            isOK: false,
+            info: '新密码两次输入不一致！！'
+        });
+    }
+
     //res.render('changePassword', {title: '修改账号密码', money: 22.22});
 });
 
