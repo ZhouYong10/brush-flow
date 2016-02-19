@@ -143,8 +143,10 @@ router.post('/addLowerUser', function (req, res) {
 router.get('/lowerUser', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (parent) {
+            console.log(parent,'parent===============================');
             User.open().find({_id: {$in: parent.children}})
                 .then(function(children) {
+                    console.log(children,'children===============================');
                     res.render('lowerUser', {title: '我的下级用户', money: 33.33, users: children});
                 }, function(error) {
                     throw new Error('查询下级用户信息失败： ' + error)
@@ -152,6 +154,10 @@ router.get('/lowerUser', function (req, res) {
         }, function(error) {
             res.send(error);
         });
+});
+
+router.get('/removeLowerUser', function (req, res) {
+    User.removeUser(req, res, '/user/lowerUser');
 });
 
 router.get('/feedback', function (req, res) {
