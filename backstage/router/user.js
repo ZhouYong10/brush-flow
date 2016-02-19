@@ -121,6 +121,7 @@ router.post('/addLowerUser', function (req, res) {
         .then(function (result) {
             var parent = User.wrapToInstance(result);
             userInfo.parent = parent.username;
+            userInfo.parentID = parent._id;
             userInfo.role = parent.childRole();
             User.createUser(userInfo, function (user) {
                 parent.addChild(user[0]._id);

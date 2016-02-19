@@ -58,6 +58,16 @@ User.include({
         }
         this.children.unshift(id);
         this.childNum = this.children.length;
+    },
+    removeChild: function(id) {
+        var index;
+        for(var i = 0; i < this.children.length; i++) {
+            if(this.children[i] === id) {
+                index = i;
+            }
+        }
+        this.children.splice(index, 1);
+        this.childNum = this.children.length;
     }
 });
 

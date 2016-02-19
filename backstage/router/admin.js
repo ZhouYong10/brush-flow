@@ -94,12 +94,17 @@ router.post('/manage/user/edit', function(req, res) {
 });
 
 router.get('/manage/user/del', function(req, res) {
-    User.open().removeById(req.query.id)
-        .then(function (user) {
-            res.redirect('/admin/manage/user');
-        }, function (error) {
-            res.send('删除用户失败： ' + error);
-        });
+    console.log(req.query,'===========================');
+    //User.open().findById()
+    //User.open().removeById(req.query.id)
+    //    .then(function (user) {
+    //
+    //
+    //
+    //        res.redirect('/admin/manage/user');
+    //    }, function (error) {
+    //        res.send('删除用户失败： ' + error);
+    //    });
 });
 
 router.get('/manage/user/add', function (req, res) {
@@ -112,6 +117,7 @@ router.post('/manage/user/add', function (req, res) {
         .then(function(result) {
             var parent = User.wrapToInstance(result);
             userInfo.parent = parent.username;
+            userInfo.parentID = parent._id;
             User.createUser(userInfo, function (user) {
                 parent.addChild(user[0]._id);
                 User.open().updateById(parent._id, {
