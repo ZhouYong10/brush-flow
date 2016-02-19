@@ -94,17 +94,32 @@ router.post('/manage/user/edit', function(req, res) {
 });
 
 router.get('/manage/user/del', function(req, res) {
-    console.log(req.query,'===========================');
-    //User.open().findById()
-    //User.open().removeById(req.query.id)
-    //    .then(function (user) {
-    //
-    //
-    //
-    //        res.redirect('/admin/manage/user');
-    //    }, function (error) {
-    //        res.send('删除用户失败： ' + error);
-    //    });
+    if(req.query.parentID) {
+        User.open().findById(req.query.parentID)
+            .then(function (result) {
+                var parent = User.wrapToInstance(result);
+                parent.removeChild(req.query.id);
+                User.open().updateById(parent._id, {$set: parent})
+                    .then(function () {
+                        remove(req.query.id);
+                    }, function(error) {
+                        throw new Error('更新父用户信息失败： ' + error);
+                    })
+            }, function(error) {
+                res.send(error);
+            });
+    }else{
+        remove(req.query.id);
+    }
+   
+    function remove(id) {
+        User.open().removeById(req.query.id)
+            .then(function (user) {
+                res.redirect('/admin/manage/user');
+            }, function (error) {
+                throw new Error('删除用户失败： ' + error);
+            });
+    }
 });
 
 router.get('/manage/user/add', function (req, res) {
