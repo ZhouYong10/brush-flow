@@ -2,6 +2,7 @@
  * Created by zhouyong10 on 1/24/16.
  */
 var User = require('../models/User');
+var Feedback = require('../models/Feedback');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
@@ -171,7 +172,13 @@ router.get('/feedback/add', function (req, res) {
 });
 
 router.post('/feedback/add', function (req, res) {
-    console.log(req.body.feedback,'======================================');
+    Feedback.createFeedback(req.body)
+        .then(function (result) {
+            console.log(result,'resultresult======================================');
+            res.redirect('/user/feedback');
+        }, function (error) {
+            res.send('提交反馈失败： ' + error);
+        });
     //res.render('feedbackAdd', {title: '问题反馈 / 我要提意见', money: 323});
 });
 

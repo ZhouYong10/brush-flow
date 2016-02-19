@@ -24,7 +24,7 @@ Feedback.extend({
     }
 });
 
-User.include({
+Feedback.include({
 
 });
 
