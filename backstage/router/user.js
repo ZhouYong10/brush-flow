@@ -170,6 +170,11 @@ router.get('/feedback/add', function (req, res) {
     res.render('feedbackAdd', {title: '问题反馈 / 我要提意见', money: 323});
 });
 
+router.post('/feedback/add', function (req, res) {
+    console.log(req.body.feedback,'======================================');
+    //res.render('feedbackAdd', {title: '问题反馈 / 我要提意见', money: 323});
+});
+
 router.get('/withdraw', function (req, res) {
     res.render('withdraw', {title: '我要提现', money: 100});
 });

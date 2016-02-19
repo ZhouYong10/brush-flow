@@ -24,7 +24,7 @@
             <div class="am-panel-bd">
 
                 <validator name="feedbackAdd">
-                    <form class="am-form am-form-horizontal" method="post" action="/user/addLowerUser">
+                    <form class="am-form am-form-horizontal" method="post" action="/user/feedback/add">
 
                         <div class="am-form-group">
                             <label for="user-remark" class="am-u-sm-12 am-form-label am-text-left">
@@ -35,6 +35,7 @@
                                 <textarea id="user-remark" class="am-radius" rows="3" placeholder="请将反馈信息填入以下区域"
                                  v-validate:feedback="{required: true}" name="feedback"></textarea>
                                 <span class="tips" v-if="$feedbackAdd.feedback.required">反馈信息不能为空！</span>
+                                <!--<span class="tips" v-if="$feedbackAdd.feedback.minlength">反馈信息内容不能少于10个字符！</span>-->
                             </div>
                         </div>
 
