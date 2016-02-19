@@ -17,7 +17,7 @@
     <link rel="import" href="../../components/adminHeader/adminHeader.html?__inline">
     <link rel="import" href="../../components/adminMenu/adminMenu.html?__inline">
 
-    <div id="app-content" class="app-content am-g">
+    <div class="app-content am-g">
 
         <div class="am-hide-sm am-u-lg-2 am-u-md-3">
             <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
@@ -50,11 +50,13 @@
                             <td class="feedback-content"><%= feedbacks[i].content %></td>
                             <td><%= feedbacks[i].status %></td>
                             <td>
-                                <textarea rows="1" cols="30" placeholder="处理意见"></textarea>
+                                <form id="<%= feedbacks[i]._id %>" method="post" action="/admin/feedback/wait/handle">
+                                    <input type="hidden" value="<%= feedbacks[i]._id %>" name="id">
+                                    <textarea rows="1" cols="30" placeholder="处理意见" name="treatAdvice"></textarea>
+                                </form>
                             </td>
                             <td>
-                                <a type="button" class="am-btn am-btn-primary am-radius am-btn-xs"
-                                   href="/admin/feedback/wait/handle?id=<%= feedbacks[i]._id %>">处理</a>
+                                <button form="<%= feedbacks[i]._id %>" type="submit" class="am-btn am-btn-primary am-radius am-btn-xs">处理</button>
                             </td>
                         </tr>
                         <% } %>
@@ -71,6 +73,7 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+
 
 </body>
 </html>

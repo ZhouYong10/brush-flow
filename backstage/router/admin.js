@@ -287,6 +287,13 @@ router.get('/feedback/wait', function (req, res) {
     })
 });
 
+router.post('/feedback/wait/handle', function (req, res) {
+    Feedback.handleFeedback(req.body, function(result) {
+        console.log(result,'result--------------------');
+        res.redirect('/admin/feedback/wait');
+    });
+});
+
 router.get('/feedback/already', function (req, res) {
     res.render('adminFeedbackAlre', {title: '问题反馈信息管理 / 待处理问题反馈信息', money: 10.01})
 });
