@@ -143,14 +143,16 @@ router.post('/addLowerUser', function (req, res) {
 router.get('/lowerUser', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (parent) {
-            console.log(parent,'parent===============================');
-            User.open().find({_id: {$in: parent.children}})
-                .then(function(children) {
-                    console.log(children,'children===============================');
-                    res.render('lowerUser', {title: '我的下级用户', money: 33.33, users: children});
-                }, function(error) {
-                    throw new Error('查询下级用户信息失败： ' + error)
-                })
+            if(parent.children && parent.children.length > 0){
+                User.open().find({_id: {$in: parent.children}})
+                    .then(function(children) {
+                        res.render('lowerUser', {title: '我的下级用户', money: 33.33, users: children});
+                    }, function(error) {
+                        throw new Error('查询下级用户信息失败： ' + error)
+                    })
+            }else {
+                res.render('lowerUser', {title: '我的下级用户', money: 33.33, users: []});
+            }
         }, function(error) {
             res.send(error);
         });
