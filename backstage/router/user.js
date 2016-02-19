@@ -164,7 +164,12 @@ router.get('/removeLowerUser', function (req, res) {
 });
 
 router.get('/feedback', function (req, res) {
-    res.render('feedback', {title: '问题反馈', money: 33});
+    Feedback.open().find()
+        .then(function (feedbacks) {
+            res.render('feedback', {title: '问题反馈', money: 33, feedbacks: feedbacks});
+        }, function (error) {
+            res.send('获取反馈列表失败： ' + error);
+        });
 });
 
 router.get('/feedback/add', function (req, res) {
@@ -174,12 +179,10 @@ router.get('/feedback/add', function (req, res) {
 router.post('/feedback/add', function (req, res) {
     Feedback.createFeedback(req.body)
         .then(function (result) {
-            console.log(result,'resultresult======================================');
             res.redirect('/user/feedback');
         }, function (error) {
             res.send('提交反馈失败： ' + error);
         });
-    //res.render('feedbackAdd', {title: '问题反馈 / 我要提意见', money: 323});
 });
 
 router.get('/withdraw', function (req, res) {

@@ -39,13 +39,17 @@
                         </tr>
                         </thead>
                         <tbody>
+
+                        <% for(var i = 0; i < feedbacks.length; i++){ %>
                         <tr>
-                            <td>Amaze UI</td>
-                            <td>http://amazeui.org</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
+                            <td><%= i + 1 %></td>
+                            <td><%= feedbacks[i].createTime %></td>
+                            <td><%= feedbacks[i].content %></td>
+                            <td><%= feedbacks[i].status %></td>
+                            <td><%= feedbacks[i].treatAdvice %></td>
                         </tr>
+                        <% } %>
+
                         </tbody>
                     </table>
                 </div>
