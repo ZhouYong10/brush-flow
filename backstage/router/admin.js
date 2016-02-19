@@ -3,6 +3,7 @@
  */
 var User = require('../models/User');
 var Placard = require('../models/Placard');
+var Feedback = require('../models/Feedback');
 
 var bcrypt = require('bcryptjs');
 var moment = require('moment');
@@ -275,7 +276,15 @@ router.get('/error/already', function (req, res) {
 });
 
 router.get('/feedback/wait', function (req, res) {
-    res.render('adminFeedbackWait', {title: '问题反馈信息管理 / 待处理问题反馈信息', money: 10.01})
+    Feedback.open().find({
+        status: '未处理'
+    }).then(function(feedbacks) {
+        res.render('adminFeedbackWait', {
+            title: '问题反馈信息管理 / 待处理问题反馈信息',
+            money: 10.01,
+            feedbacks: feedbacks
+        });
+    })
 });
 
 router.get('/feedback/already', function (req, res) {

@@ -37,9 +37,27 @@
                             <th>反馈内容</th>
                             <th>状态</th>
                             <th>处理人意见</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
+
+                        <% for(var i = 0; i < feedbacks.length; i++){ %>
+                        <tr>
+                            <td><%= i + 1 %></td>
+                            <td><%= feedbacks[i].user %></td>
+                            <td><%= feedbacks[i].createTime %></td>
+                            <td class="feedback-content"><%= feedbacks[i].content %></td>
+                            <td><%= feedbacks[i].status %></td>
+                            <td>
+                                <textarea rows="1" cols="30" placeholder="处理意见"></textarea>
+                            </td>
+                            <td>
+                                <a type="button" class="am-btn am-btn-primary am-radius am-btn-xs"
+                                   href="/admin/feedback/wait/handle?id=<%= feedbacks[i]._id %>">处理</a>
+                            </td>
+                        </tr>
+                        <% } %>
 
                         </tbody>
                     </table>
