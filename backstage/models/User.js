@@ -57,6 +57,7 @@ User.include({
             this.children = [];
         }
         this.children.unshift(id);
+        this.childNum = this.children.length;
     }
 });
 

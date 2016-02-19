@@ -27,7 +27,7 @@ exports.initUser = function(User) {
         User.findAndModify({
             username: user.username,
             role: user.role
-        }, [], user, {
+        }, [], {$set: user}, {
             new: true,
             upsert: true
         }, function(error, result) {

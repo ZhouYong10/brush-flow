@@ -125,9 +125,7 @@ router.post('/addLowerUser', function (req, res) {
             User.createUser(userInfo, function (user) {
                 parent.addChild(user[0]._id);
                 User.open().updateById(parent._id, {
-                    $set: {
-                        children: parent.children
-                    }
+                    $set: parent
                 }).then(function (result) {
                     res.redirect('/user/lowerUser');
                 }, function(error) {
