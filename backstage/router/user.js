@@ -177,12 +177,18 @@ router.get('/feedback/add', function (req, res) {
 });
 
 router.post('/feedback/add', function (req, res) {
-    Feedback.createFeedback(req.body)
-        .then(function (result) {
-            res.redirect('/user/feedback');
-        }, function (error) {
-            res.send('提交反馈失败： ' + error);
-        });
+    var feedback = req.body;
+    User.open().findById(req.session.passport.user)
+        .then(function(user) {
+            feedback.user = user.username;
+            Feedback.createFeedback(feedback)
+                .then(function (result) {
+                    console.log(result,'result==================================');
+                    res.redirect('/user/feedback');
+                }, function (error) {
+                    res.send('提交反馈失败： ' + error);
+                });
+        })
 });
 
 router.get('/withdraw', function (req, res) {
