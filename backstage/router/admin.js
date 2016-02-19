@@ -111,7 +111,7 @@ router.get('/manage/user/del', function(req, res) {
     }else{
         remove(req.query.id);
     }
-   
+
     function remove(id) {
         User.open().removeById(req.query.id)
             .then(function (user) {
