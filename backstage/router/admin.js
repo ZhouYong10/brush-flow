@@ -195,85 +195,96 @@ router.get('/placard/add', function (req, res) {
 * manage order form
 * */
 router.get('/reply/wait', function (req, res) {
-    res.render('adminReplyWait', {title: '回复订单管理 / 待处理订单', money: 10.01})
+    res.render('adminReplyWait', {title: '回复任务管理 / 待处理订单', money: 10.01})
 });
 
 router.get('/reply/already', function (req, res) {
-    res.render('adminReplyAlre', {title: '回复订单管理 / 已处理订单', money: 10.01})
+    res.render('adminReplyAlre', {title: '回复任务管理 / 已处理订单', money: 10.01})
 });
 
+
+
 router.get('/flow/wait', function (req, res) {
-    res.render('adminFlowWait', {title: '流量订单管理 / 待处理订单', money: 10.01})
+    res.render('adminFlowWait', {title: '流量任务管理 / 待处理订单', money: 10.01})
 });
 
 router.get('/flow/already', function (req, res) {
-    res.render('adminFlowAlre', {title: '流量订单管理 / 已处理订单', money: 10.01})
+    res.render('adminFlowAlre', {title: '流量任务管理 / 已处理订单', money: 10.01})
 });
 
+
+
 router.get('/WX/article/wait', function (req, res) {
-    res.render('adminWXarticleWait', {title: '微信原文类订单管理 / 待处理订单', money: 10.01})
+    res.render('adminWXarticleWait', {title: '微信任务管理 / 待处理微信原文任务', money: 10.01})
 });
 
 router.get('/WX/article/already', function (req, res) {
-    res.render('adminWXarticleAlre', {title: '微信原文类订单管理 / 已处理订单', money: 10.01})
+    res.render('adminWXarticleAlre', {title: '微信任务管理 / 已处理微信原文任务', money: 10.01})
 });
 
 router.get('/WX/like/wait', function (req, res) {
-    res.render('adminWXlikeWait', {title: '微信阅读点赞订单管理 / 待处理订单', money: 10.01})
+    res.render('adminWXlikeWait', {title: '微信任务管理 / 待处理微信阅读点赞任务', money: 10.01})
 });
 
 router.get('/WX/like/already', function (req, res) {
-    res.render('adminWXlikeAlre', {title: '微信阅读点赞订单管理 / 已处理订单', money: 10.01})
+    res.render('adminWXlikeAlre', {title: '微信任务管理 / 已处理微信阅读点赞任务', money: 10.01})
 });
 
 router.get('/WX/reply/wait', function (req, res) {
-    res.render('adminWXreplyWait', {title: '微信公众粉丝回复订单管理 / 待处理订单', money: 10.01})
+    res.render('adminWXreplyWait', {title: '微信任务管理 / 待处理公众粉丝回复任务', money: 10.01})
 });
 
 router.get('/WX/reply/already', function (req, res) {
-    res.render('adminWXreplyAlre', {title: '微信公众粉丝回复订单管理 / 已处理订单', money: 10.01})
+    res.render('adminWXreplyAlre', {title: '微信任务管理 / 已处理公众粉丝回复任务', money: 10.01})
 });
 
 router.get('/WX/friend/wait', function (req, res) {
-    res.render('adminWXfriendWait', {title: '微信个人好友订单管理 / 待处理订单', money: 10.01})
+    res.render('adminWXfriendWait', {title: '微信任务管理 / 待处理微信个人好友任务', money: 10.01})
 });
 
 router.get('/WX/friend/already', function (req, res) {
-    res.render('adminWXfriendAlre', {title: '微信个人好友订单管理 / 已处理订单', money: 10.01})
+    res.render('adminWXfriendAlre', {title: '微信任务管理 / 已处理微信个人好友任务', money: 10.01})
 });
 
 router.get('/WX/code/wait', function (req, res) {
-    res.render('adminWXcodeWait', {title: '微信好友地区扫码订单管理 / 待处理订单', money: 10.01})
+    res.render('adminWXcodeWait', {title: '微信任务管理 / 待处理微信好友地区扫码', money: 10.01})
 });
 
 router.get('/WX/code/already', function (req, res) {
-    res.render('adminWXcodeAlre', {title: '微信好友地区扫码订单管理 / 已处理订单', money: 10.01})
+    res.render('adminWXcodeAlre', {title: '微信任务管理 / 已处理微信好友地区扫码', money: 10.01})
 });
 
+
+
 router.get('/MP/wait', function (req, res) {
-    res.render('adminMPWait', {title: '美拍订单管理 / 待处理订单', money: 10.01})
+    res.render('adminMPWait', {title: '美拍任务管理 / 待处理订单', money: 10.01})
 });
 
 router.get('/MP/already', function (req, res) {
-    res.render('adminMPAlre', {title: '美拍订单管理 / 已处理订单', money: 10.01})
+    res.render('adminMPAlre', {title: '美拍任务管理 / 已处理订单', money: 10.01})
 });
 
+
+
 router.get('/WB/wait', function (req, res) {
-    res.render('adminWBWait', {title: '微博订单管理 / 待处理订单', money: 10.01})
+    res.render('adminWBWait', {title: '微博任务管理 / 待处理订单', money: 10.01})
 });
 
 router.get('/WB/already', function (req, res) {
-    res.render('adminWBAlre', {title: '微博订单管理 / 已处理订单', money: 10.01})
+    res.render('adminWBAlre', {title: '微博任务管理 / 已处理订单', money: 10.01})
 });
+
 
 
 router.get('/error/wait', function (req, res) {
-    res.render('adminErrorWait', {title: '错误信息报告管理 / 待处理错误报告', money: 10.01})
+    res.render('adminErrorWait', {title: '错误信息管理 / 待处理错误报告', money: 10.01})
 });
 
 router.get('/error/already', function (req, res) {
-    res.render('adminErrorAlre', {title: '错误信息报告管理 / 待处理错误报告', money: 10.01})
+    res.render('adminErrorAlre', {title: '错误信息管理 / 待处理错误报告', money: 10.01})
 });
+
+
 
 router.get('/feedback/wait', function (req, res) {
     Feedback.open().find({
