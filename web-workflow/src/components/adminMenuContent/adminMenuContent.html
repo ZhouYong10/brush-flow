@@ -2,105 +2,120 @@
 <link rel="stylesheet" href="adminMenuContent.scss?__inline">
 
 
+<section data-am-widget="accordion" class="am-accordion am-accordion-gapped adminMenuContent" data-am-accordion='{  }'>
 
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            回复任务管理
+        </dt>
+        <dd class="am-accordion-bd am-collapse">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li><a href="/admin/reply/wait">待处理<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/reply/already">已处理</a></li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
 
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            流量任务管理
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li><a href="/admin/flow/wait">待处理<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/flow/already">已处理</a></li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
 
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            微信任务管理
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li><a href="/admin/WX/article/wait">待处理微信原文任务<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/WX/article/already">已处理微信原文任务</a></li>
+                    <li><a href="/admin/WX/like/wait">待处理微信阅读点赞任务<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/WX/like/already">已处理微信阅读点赞任务</a></li>
+                    <li><a href="/admin/WX/reply/wait">待处理公众粉丝回复任务<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/WX/reply/already">已处理公众粉丝回复任务</a></li>
+                    <li><a href="/admin/WX/friend/wait">待处理微信个人好友任务<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/WX/friend/already">已处理微信个人好友任务</a></li>
+                    <li><a href="/admin/WX/code/wait">待处理微信好友地区扫码<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/WX/code/already">已处理微信好友地区扫码</a></li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
 
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            美拍任务管理
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li><a href="/admin/MP/wait">待处理<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/MP/already">已处理</a></li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
 
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            微博任务管理
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li><a href="/admin/WB/wait">待处理<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/WB/already">已处理</a></li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
 
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            错误信息管理
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li><a href="/admin/error/wait">待处理<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/error/already">已处理</a></li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
 
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            问题反馈信息管理
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li><a href="/admin/feedback/wait">待处理<span class="tips"> ( 2 )</span></a></li>
+                    <li><a href="/admin/feedback/already">已处理</a></li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
 
+</section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="am-panel am-panel-primary adminMenuContent">
-    <div class="am-panel-hd">
-        <h3 class="am-panel-title">回复任务管理</h3>
-    </div>
-    <ul class="am-list am-list-static">
-        <li><a href="/admin/reply/wait">待处理<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/reply/already">已处理</a></li>
-    </ul>
-</div>
-
-<div class="am-panel am-panel-primary adminMenuContent">
-    <div class="am-panel-hd">
-        <h3 class="am-panel-title">流量任务管理</h3>
-    </div>
-    <ul class="am-list am-list-static">
-        <li><a href="/admin/flow/wait">待处理<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/flow/already">已处理</a></li>
-    </ul>
-</div>
-
-<div class="am-panel am-panel-primary adminMenuContent">
-    <div class="am-panel-hd">
-        <h3 class="am-panel-title">微信任务管理</h3>
-    </div>
-    <ul class="am-list am-list-static">
-        <li><a href="/admin/WX/article/wait">待处理微信原文任务<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/WX/article/already">已处理微信原文任务</a></li>
-        <li><a href="/admin/WX/like/wait">待处理微信阅读点赞任务<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/WX/like/already">已处理微信阅读点赞任务</a></li>
-        <li><a href="/admin/WX/reply/wait">待处理公众粉丝回复任务<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/WX/reply/already">已处理公众粉丝回复任务</a></li>
-        <li><a href="/admin/WX/friend/wait">待处理微信个人好友任务<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/WX/friend/already">已处理微信个人好友任务</a></li>
-        <li><a href="/admin/WX/code/wait">待处理微信好友地区扫码<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/WX/code/already">已处理微信好友地区扫码</a></li>
-    </ul>
-</div>
-
-<div class="am-panel am-panel-primary adminMenuContent">
-    <div class="am-panel-hd">
-        <h3 class="am-panel-title">美拍任务管理</h3>
-    </div>
-    <ul class="am-list am-list-static">
-        <li><a href="/admin/MP/wait">待处理<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/MP/already">已处理</a></li>
-    </ul>
-</div>
-
-<div class="am-panel am-panel-primary adminMenuContent">
-    <div class="am-panel-hd">
-        <h3 class="am-panel-title">微博任务管理</h3>
-    </div>
-    <ul class="am-list am-list-static">
-        <li><a href="/admin/WB/wait">待处理<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/WB/already">已处理</a></li>
-    </ul>
-</div>
-
-<div class="am-panel am-panel-primary adminMenuContent">
-    <div class="am-panel-hd">
-        <h3 class="am-panel-title">错误信息管理</h3>
-    </div>
-    <ul class="am-list am-list-static">
-        <li><a href="/admin/error/wait">待处理<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/error/already">已处理</a></li>
-    </ul>
-</div>
-
-<div class="am-panel am-panel-primary adminMenuContent">
-    <div class="am-panel-hd">
-        <h3 class="am-panel-title">问题反馈信息管理</h3>
-    </div>
-    <ul class="am-list am-list-static">
-        <li><a href="/admin/feedback/wait">待处理<span class="tips"> ( 2 )</span></a></li>
-        <li><a href="/admin/feedback/already">已处理</a></li>
-    </ul>
-</div>
