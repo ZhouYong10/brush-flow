@@ -1,8 +1,6 @@
 /**
  * Created by ubuntu64 on 2/24/16.
  */
-var fs = require('fs');
-
 var AlipayRecord = require('./db').getCollection('AlipayRecord');
 
 var request = require('request');
@@ -63,16 +61,6 @@ setInterval(function() {
                 console.log('保存到数据库的记录为： ');
                 console.log(result);
             });
-
-
-
-
-            //fs.writeFile(fileName+'', i+'======'+order.createTime+'======'+order.orderNum+'======'+order.funds, function (err) {
-            //    if (err) {
-            //        return console.log('写入文件出错： ' + err);
-            //    }
-            //    console.log('写入文件成功！！！！！！！！！！！！！！！！！！！');
-            //});
         })
     });
     console.log(++count,'------------------------------------------');
