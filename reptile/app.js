@@ -6,15 +6,14 @@ var AlipayRecord = require('./db').getCollection('AlipayRecord');
 var request = require('request');
 var cheerio = require('cheerio');
 
-var url = 'https://consumeprod.alipay.com/record/advanced.htm?beginDate=2016.02.25&beginTime=00%3A00&endDate=2016.02.25&endTime=24%3A00&dateRange=today&status=success&keyword=bizOutNo&keyValue=&dateType=createDate&minAmount=&maxAmount=&fundFlow=in&tradeType=ALL&categoryId=&_input_charset=utf-8';
+var url = 'https://consumeprod.alipay.com/record/advanced.htm?tradeType=ALL&dateRange=today&status=success&fundFlow=in&categoryId=&keyword=oppositeName&maxAmount=&beginTime=00%3A00&endDate=2016.02.25&dateType=receiveDate&endTime=24%3A00&beginDate=2016.02.25&_input_charset=utf-8&minAmount=&keyValue=';
 
 var header = {
-    "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-    "Accept-Encoding": 'UTF-8',
+    "Accept": 'text/html,application/xhtml+xml,application/xml',
     "Accept-Language": 'zh-CN,zh;q=0.8',
     "Cache-Control": 'max-age=0',
     "Connection": 'keep-alive',
-    "Cookie": 'JSESSIONID=RZ13qdvjgFg96G8HwQUtdJ1WEge0jCauthGZ00RZ04; cna=DcVRD1E/WkICAXWvtPL2uBgH; BIG_DOOR_SHOWTIME=2016124; unicard1.vm="K1iSL1mnW5fPkpzjDbh2Jg=="; session.cookieNameId=ALIPAYJSESSIONID; JSESSIONID=8545F4107BB21A39582670EC9F8AE3EC; NEW_ALIPAY_HOME=2088022634269985; mobileSendTime=-1; credibleMobileSendTime=-1; ctuMobileSendTime=-1; riskMobileBankSendTime=-1; riskMobileAccoutSendTime=-1; riskMobileCreditSendTime=-1; riskCredibleMobileSendTime=-1; riskOriginalAccountMobileSendTime=-1; ctoken=vHTmBUObD0JeRVzF; LoginForm=alipay_login_auth; alipay="K1iSL1mnW5fPkpzjDbh2JpEIF4KibpuTHXm3qnOXsg=="; CLUB_ALIPAY_COM=2088022634269985; iw.userid="K1iSL1mnW5fPkpzjDbh2Jg=="; ali_apache_tracktmp="uid=2088022634269985"; zone=RZ04A; ALIPAYJSESSIONID=RZ04WeJgCulZipL5KNXlpaLW29AlHXauthRZ04GZ00; spanner=5NgMaXYlqPmS2VHoOUsNG94fWZyEekFV4EJoL7C0n0A=',
+    "Cookie": 'JSESSIONID=GZ002aXsq0xIJHVqpn0MkTtmhlT8OaconsumeprodGZ00; cna=DcVRD1E/WkICAXWvtPL2uBgH; BIG_DOOR_SHOWTIME=2016124; unicard1.vm="K1iSL1mnW5fPkpzjDbh2Jg=="; session.cookieNameId=ALIPAYJSESSIONID; JSESSIONID=141727F36CB16BDC1AD27D0B586B451D; NEW_ALIPAY_HOME=2088022634269985; mobileSendTime=-1; credibleMobileSendTime=-1; ctuMobileSendTime=-1; riskMobileBankSendTime=-1; riskMobileAccoutSendTime=-1; riskMobileCreditSendTime=-1; riskCredibleMobileSendTime=-1; riskOriginalAccountMobileSendTime=-1; ctoken=Rq6v3OJTi9vejO8G; LoginForm=alipay_login_auth; alipay="K1iSL1mnW5fPkpzjDbh2JpEIF4KibpuTHXm3qnOXsg=="; CLUB_ALIPAY_COM=2088022634269985; iw.userid="K1iSL1mnW5fPkpzjDbh2Jg=="; ali_apache_tracktmp="uid=2088022634269985"; zone=RZ04B; ALIPAYJSESSIONID=RZ042rX0LuT2PwvnQIvmx9XWEhL3XjauthRZ04GZ00; spanner=5NgMaXYlqPmS2VHoOUsNG94fWZyEekFV4EJoL7C0n0A=',
     "Host": 'consumeprod.alipay.com',
     "Upgrade-Insecure-Requests": 1,
     "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
@@ -33,18 +32,17 @@ function getInfoByUrl(path, cb) {
     });
 }
 
+
 var count = 0;
 setInterval(function() {
     getInfoByUrl(url, function(body) {
-        var fileName = 0;
+        var total = 0;
         var $ = cheerio.load(body);
         $('#tradeRecordsIndex .J-item').each(function(i,e) {
-            fileName++;
             var time = $(e).children('.time');
             var order = {
                 createTime: time.children('.time-d').text().match(/\d+.\d+.\d+/) + ' ' + time.children('.time-h').text().match(/\d+:\d+/),
                 orderNum: $(e).children('.tradeNo').children().text().split(':')[1],
-                //username: $(e).children('.other').children('.name').text().replace(/\n+\t+/g,''),
                 funds: $(e).children('.amount').children().text().split(' ')[1]
             };
 
@@ -58,11 +56,12 @@ setInterval(function() {
                     return console.log('保存抓取数据到数据库失败： ' + error);
                 }
 
-                console.log('保存到数据库的记录为： ' + ++count);
+                console.log('保存到数据库的记录为： ' + ++total);
                 console.log(result);
             });
         })
     });
+    console.log(++count, '-----------------------------------------------------');
 }, 10000);
 
 
