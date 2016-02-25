@@ -5,6 +5,7 @@ backstage/views
 # ignore node_moduels
 backstage/node_modules
 web-workflow/node_modules
+reptile/node_modules
 
 # ignore IDE dir
 .idea
