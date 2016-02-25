@@ -58,12 +58,11 @@ setInterval(function() {
                     return console.log('保存抓取数据到数据库失败： ' + error);
                 }
 
-                console.log('保存到数据库的记录为： ');
+                console.log('保存到数据库的记录为： ' + ++count);
                 console.log(result);
             });
         })
     });
-    console.log(++count,'------------------------------------------');
 }, 10000);
 
 
