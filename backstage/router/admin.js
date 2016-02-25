@@ -40,8 +40,8 @@ router.get('/home', function (req, res) {
 
 
 /*
-* manage funds
-* */
+ * manage funds
+ * */
 router.get('/recharge/history', function (req, res) {
     res.render('adminRechargeHistory', {title: '资金管理 / 充值记录', money: 10.01})
 });
@@ -58,8 +58,8 @@ router.get('/withdraw/already', function (req, res) {
 
 
 /*
-* manage user
-* */
+ * manage user
+ * */
 router.get('/manage/user', function (req, res) {
     User.open().find()
         .then(function (users) {
@@ -130,8 +130,8 @@ router.post('/manage/user/add', function (req, res) {
 
 
 /*
-* manage price
-* */
+ * manage price
+ * */
 router.get('/price/forum', function (req, res) {
     res.render('adminPriceForum', {title: '价格&状态管理 / 论坛模块', money: 10.01})
 });
@@ -148,8 +148,8 @@ router.get('/price/WX/MP/WB', function (req, res) {
 
 
 /*
-* manage placard
-* */
+ * manage placard
+ * */
 router.get('/placard/send', function (req, res) {
     res.render('adminPlacardSend', {title: '公告管理 / 发布公告', money: 10.01})
 });
@@ -192,8 +192,8 @@ router.get('/placard/add', function (req, res) {
 
 
 /*
-* manage order form
-* */
+ * manage order form
+ * */
 router.get('/reply/wait', function (req, res) {
     res.render('adminReplyWait', {title: '回复任务管理 / 待处理订单', money: 10.01})
 });
