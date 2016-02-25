@@ -2,6 +2,9 @@
  * Created by ubuntu64 on 2/24/16.
  */
 var fs = require('fs');
+
+var AlipayRecord = require('./db').getCollection('AlipayRecord');
+
 var request = require('request');
 var cheerio = require('cheerio');
 
@@ -13,7 +16,7 @@ var header = {
     "Accept-Language": 'zh-CN,zh;q=0.8',
     "Cache-Control": 'max-age=0',
     "Connection": 'keep-alive',
-    "Cookie": 'JSESSIONID=RZ13qdvjgFg96G8HwQUtdJ1WEge0jCauthGZ00RZ04; cna=DcVRD1E/WkICAXWvtPL2uBgH; BIG_DOOR_SHOWTIME=2016124; unicard1.vm="K1iSL1mnW5fPkpzjDbh2Jg=="; session.cookieNameId=ALIPAYJSESSIONID; JSESSIONID=8545F4107BB21A39582670EC9F8AE3EC; mobileSendTime=-1; credibleMobileSendTime=-1; ctuMobileSendTime=-1; riskMobileBankSendTime=-1; riskMobileAccoutSendTime=-1; riskMobileCreditSendTime=-1; riskCredibleMobileSendTime=-1; riskOriginalAccountMobileSendTime=-1; ctoken=h4eHq33UJv2Q7Jpn; LoginForm=alipay_login_auth; alipay="K1iSL1mnW5fPkpzjDbh2JpEIF4KibpuTHXm3qnOXsg=="; CLUB_ALIPAY_COM=2088022634269985; iw.userid="K1iSL1mnW5fPkpzjDbh2Jg=="; ali_apache_tracktmp="uid=2088022634269985"; zone=RZ04A; NEW_ALIPAY_HOME=2088022634269985; ALIPAYJSESSIONID=RZ04OlzbJXp9EcPKBz5bIVI1nsUMisauthRZ04GZ00; spanner=5NgMaXYlqPmS2VHoOUsNG94fWZyEekFV4EJoL7C0n0A=',
+    "Cookie": 'JSESSIONID=RZ13qdvjgFg96G8HwQUtdJ1WEge0jCauthGZ00RZ04; cna=DcVRD1E/WkICAXWvtPL2uBgH; BIG_DOOR_SHOWTIME=2016124; unicard1.vm="K1iSL1mnW5fPkpzjDbh2Jg=="; session.cookieNameId=ALIPAYJSESSIONID; JSESSIONID=8545F4107BB21A39582670EC9F8AE3EC; NEW_ALIPAY_HOME=2088022634269985; mobileSendTime=-1; credibleMobileSendTime=-1; ctuMobileSendTime=-1; riskMobileBankSendTime=-1; riskMobileAccoutSendTime=-1; riskMobileCreditSendTime=-1; riskCredibleMobileSendTime=-1; riskOriginalAccountMobileSendTime=-1; ctoken=vHTmBUObD0JeRVzF; LoginForm=alipay_login_auth; alipay="K1iSL1mnW5fPkpzjDbh2JpEIF4KibpuTHXm3qnOXsg=="; CLUB_ALIPAY_COM=2088022634269985; iw.userid="K1iSL1mnW5fPkpzjDbh2Jg=="; ali_apache_tracktmp="uid=2088022634269985"; zone=RZ04A; ALIPAYJSESSIONID=RZ04WeJgCulZipL5KNXlpaLW29AlHXauthRZ04GZ00; spanner=5NgMaXYlqPmS2VHoOUsNG94fWZyEekFV4EJoL7C0n0A=',
     "Host": 'consumeprod.alipay.com',
     "Upgrade-Insecure-Requests": 1,
     "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
@@ -46,13 +49,30 @@ setInterval(function() {
                 //username: $(e).children('.other').children('.name').text().replace(/\n+\t+/g,''),
                 funds: $(e).children('.amount').children().text().split(' ')[1]
             };
-            console.log(order,'==================================');
-            fs.writeFile(fileName+'', i+'======'+order.createTime+'======'+order.orderNum+'======'+order.funds, function (err) {
-                if (err) {
-                    return console.log('写入文件出错： ' + err);
+
+            AlipayRecord.findAndModify({
+                createTime: order.createTime
+            }, [], {$set: order}, {
+                new: true,
+                upsert: true
+            }, function (error, result) {
+                if (error) {
+                    return console.log('保存抓取数据到数据库失败： ' + error);
                 }
-                console.log('写入文件成功！！！！！！！！！！！！！！！！！！！');
+
+                console.log('保存到数据库的记录为： ');
+                console.log(result);
             });
+
+
+
+
+            //fs.writeFile(fileName+'', i+'======'+order.createTime+'======'+order.orderNum+'======'+order.funds, function (err) {
+            //    if (err) {
+            //        return console.log('写入文件出错： ' + err);
+            //    }
+            //    console.log('写入文件成功！！！！！！！！！！！！！！！！！！！');
+            //});
         })
     });
     console.log(++count,'------------------------------------------');
