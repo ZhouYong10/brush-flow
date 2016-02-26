@@ -57,12 +57,16 @@
                         </tr>
                         </thead>
                         <tbody>
+
+                        <% for(var i = 0; i < recharges.length; i++){ %>
                         <tr>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td class="am-text-middle">http://amazeui</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle"><%= i + 1 %></td>
+                            <td class="am-text-middle"><%= recharges[i].funds %></td>
+                            <td class="am-text-middle"><%= recharges[i].time %></td>
+                            <td class="am-text-middle"><%= recharges[i].orderNum %></td>
                         </tr>
+                        <% } %>
+
                         </tbody>
                     </table>
                 </div>

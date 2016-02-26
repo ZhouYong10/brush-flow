@@ -60,7 +60,12 @@ router.post('/recharge', function (req, res) {
 });
 
 router.get('/recharge/history', function (req, res) {
-    res.render('rechargeHistory', {title: '充值记录', money: req.session.funds})
+    Recharge.open().find({user: req.session.username})
+        .then(function (recharges) {
+            res.render('rechargeHistory', {title: '充值记录', money: req.session.funds, recharges: recharges});
+        }, function (error) {
+            res.send('查询充值记录失败： ' + error);
+        });
 });
 
 router.get('/consume/history', function (req, res) {
