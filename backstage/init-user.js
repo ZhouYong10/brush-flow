@@ -24,18 +24,27 @@ var initUsers = [{
 
 exports.initUser = function(User) {
     initUsers.map(function(user) {
-        User.findAndModify({
-            username: user.username,
-            role: user.role
-        }, [], {$set: user}, {
-            new: true,
-            upsert: true
-        }, function(error, result) {
+        User.findOne({username: user.username, role: user.role}, function(error, result) {
             if(error) {
-                console.log('添加初始化账户失败： ' + error);
-            }else{
-                console.log('添加初始化账户成功!');
+                return console.log('初始化查询用户信息失败： ' + error);
             }
+            if(result) {
+                user = result;
+                delete user._id;
+            }   
+            User.findAndModify({
+                username: user.username,
+                role: user.role
+            }, [], {$set: user}, {
+                new: true,
+                upsert: true
+            }, function(error, result) {
+                if(error) {
+                    console.log('添加初始化账户失败： ' + error);
+                }else{
+                    console.log('添加初始化账户成功!');
+                }
+            })
         })
     })
 };
