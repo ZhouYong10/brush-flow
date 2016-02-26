@@ -6,18 +6,18 @@ var Class = require('./Class');
 
 
 
-var Placard = new Class();
+var Recharge = new Class();
 
 
-Placard.extend(db);
+Recharge.extend(db);
 
-Placard.open = function() {
-    return Placard.openCollection('Placard');
+Recharge.open = function() {
+    return Recharge.openCollection('Recharge');
 };
 
-Placard.include({
+Recharge.include({
 
 });
 
 
-module.exports = Placard;
+module.exports = Recharge;

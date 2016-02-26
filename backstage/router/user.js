@@ -3,6 +3,8 @@
  */
 var User = require('../models/User');
 var Feedback = require('../models/Feedback');
+var AlipayRecord = require('../models/AlipayRecord');
+var Recharge = require('../models/Recharge');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
@@ -12,7 +14,12 @@ router.get('/recharge', function (req, res) {
 });
 
 router.post('/recharge', function (req, res) {
-    console.log(req.body,3333333333333333333333333333333333333);
+    AlipayRecord.open().findOne({orderNum: req.body.orderNum})
+        .then(function (result) {
+            console.log(result, '---------------------------------');
+        }, function (error) {
+            console.log(error, '-====  ======================');
+        });
     //res.render('recharge', {title: '在线充值', money: req.session.funds})
 });
 
