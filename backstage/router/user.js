@@ -19,7 +19,8 @@ router.post('/recharge', function (req, res) {
             if(result) {
                 if(result.status !== 1) {
                     Recharge.open().insert({
-                        user: req.session.username,
+                        username: req.session.username,
+                        userId: req.session.passport.user,
                         funds: result.funds,
                         time: result.createTime,
                         orderNum: result.orderNum
@@ -60,7 +61,7 @@ router.post('/recharge', function (req, res) {
 });
 
 router.get('/recharge/history', function (req, res) {
-    Recharge.open().find({user: req.session.username})
+    Recharge.open().find({userId: req.session.passport.user})
         .then(function (recharges) {
             res.render('rechargeHistory', {title: '充值记录', money: req.session.funds, recharges: recharges});
         }, function (error) {
