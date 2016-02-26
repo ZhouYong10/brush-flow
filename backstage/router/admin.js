@@ -4,6 +4,7 @@
 var User = require('../models/User');
 var Placard = require('../models/Placard');
 var Feedback = require('../models/Feedback');
+var Recharge = require('../models/Recharge');
 
 var bcrypt = require('bcryptjs');
 var moment = require('moment');
@@ -43,7 +44,12 @@ router.get('/home', function (req, res) {
  * manage funds
  * */
 router.get('/recharge/history', function (req, res) {
-    res.render('adminRechargeHistory', {title: '资金管理 / 充值记录', money: 10.01})
+    Recharge.open().find()
+        .then(function(results) {
+            res.render('adminRechargeHistory', {title: '资金管理 / 充值记录', money: 10.01, recharges: results});
+        }, function(error) {
+            res.send('查询充值记录失败： ' + error);
+        })
 });
 
 router.get('/withdraw/wait', function (req, res) {
