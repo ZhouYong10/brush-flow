@@ -20,42 +20,43 @@
 
     <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
+        <div class="am-panel am-panel-primary" id="recharge">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
                 <div class="am-panel am-panel-danger">
                     <div class="am-panel-hd prompt-title">提示</div>
                     <div class="am-panel-bd">
-                        1、[在线充值]:   支付宝账号：vip990011@qq.com,支付宝名称：*青青。<br/>
-
-                        2、[在线充值]:   通过支付宝进行转账，请核对收款名称与支付宝名称是否与上面一致。<br/>
-
-                        3、[在线充值]:   转账完成后，点击付款页面的“查看详情”，记录下 28 或 32 位的交易号。<br/>
-
-                        4、[在线充值]:   输入交易号，稍等 ３ 分钟即可自动入账，如果遇到较长延迟，请联系我们。<br/>
-
-                        5、[在线充值]:   如果付款后提示交易号无法充值，请点击【充值遇到问题】。<br/>
-
-                        6、[在线充值]:   请确保每次充值的金额为50的整数倍,否则可能造成系统无法识别的情况。<br/>
+                        1、支付宝账号：vip990011@qq.com支付宝名称：李青青 <br/>
+                        2、通过支付宝进行转账，请核对收款名称与支付宝名称是否与上面一致。<br/>
+                        3、转账完成后，点击付款页面的“查看详情”，记录下 28 或 32 位的交易号。<br/>
+                        4、输入交易号，稍等 1 分钟即可自动入账，如果遇到较长延迟，请联系我们。<br/>
+                        5、如果付款后提示交易号无法充值，请提交问题反馈。
                     </div>
                 </div>
 
+                <validator name="recharge">
                 <form class="am-form am-form-horizontal">
-
                     <div class="am-form-group">
-                        <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>支付宝订单号</label>
+                        <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label">
+                            <span class="tips" v-if="$recharge.num.required">* </span>
+                            支付宝交易号
+                        </label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="">
+                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="输入28 或 32 位的支付宝交易号"
+                            v-validate:num="{required: true, minlength: 28, maxlength: 32}" v-model="num">
+                            <span class="tips" v-if="$recharge.num.required">支付宝交易号不能为空!</span>
+                            <span class="tips" v-if="$recharge.num.minlength || $recharge.num.maxlength">请输入合法的支付宝交易号!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius">立即充值</button>
+                            <button class="am-btn am-btn-primary am-radius" v-if="$recharge.valid" @click.stop.prevent="commit">立即充值</button>
                         </div>
                     </div>
                 </form>
+                </validator>
 
             </div>
         </div>
@@ -66,6 +67,11 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
+
+<script>
+    require('./recharge');
+</script>
 
 </body>
 </html>
