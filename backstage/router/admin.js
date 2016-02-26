@@ -80,18 +80,14 @@ router.get('/manage/user/edit', function(req, res) {
 
 router.post('/manage/user/edit', function(req, res) {
     var updateInfo = req.body;
-    User.updateById(updateInfo.id, {$set: {
-        username: updateInfo.username,
-        status: updateInfo.status,
-        role: updateInfo.role,
-        QQ: updateInfo.QQ,
-        phone: updateInfo.phone,
-        email: updateInfo.email
-    }}).then(function (user) {
-        res.redirect('/admin/manage/user');
-    }, function(error) {
-        res.send('更新用户信息失败： ' + error);
-    });
+    var id = updateInfo.id;
+    delete updateInfo.id;
+    User.updateById(id, {$set: updateInfo})
+        .then(function (user) {
+            res.redirect('/admin/manage/user');
+        }, function(error) {
+            res.send('更新用户信息失败： ' + error);
+        });
 });
 
 router.get('/manage/user/del', function(req, res) {
