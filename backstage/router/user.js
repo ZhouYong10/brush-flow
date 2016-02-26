@@ -11,6 +11,11 @@ router.get('/recharge', function (req, res) {
     res.render('recharge', {title: '在线充值', money: req.session.funds})
 });
 
+router.post('/recharge', function (req, res) {
+    console.log(req.body,3333333333333333333333333333333333333);
+    //res.render('recharge', {title: '在线充值', money: req.session.funds})
+});
+
 router.get('/recharge/history', function (req, res) {
     res.render('rechargeHistory', {title: '充值记录', money: req.session.funds})
 });
