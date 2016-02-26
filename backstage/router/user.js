@@ -14,13 +14,49 @@ router.get('/recharge', function (req, res) {
 });
 
 router.post('/recharge', function (req, res) {
-    AlipayRecord.open().findOne({orderNum: req.body.orderNum})
+    AlipayRecord.open().findOne(req.body)
         .then(function (result) {
-            console.log(result, '---------------------------------');
+            if(result) {
+                if(result.status !== 1) {
+                    Recharge.open().insert({
+                        user: req.session.username,
+                        funds: result.funds,
+                        time: result.createTime,
+                        orderNum: result.orderNum
+                    }).then(function (recharge) {
+                        req.session.funds = parseFloat(req.session.funds) + parseFloat(result.funds);
+                        User.open().updateById(req.session.passport.user, {$set: {funds: req.session.funds}});
+                        AlipayRecord.open().updateById(result._id, {$set: {status: 1}});
+                        res.send({
+                            isOK: true,
+                            path: '/user/recharge/history'
+                        });
+                    }, function (error) {
+                        console.log('充值失败：' + error);
+                        res.send({
+                            isOK: false,
+                            message: '充值失败：' + error
+                        });
+                    });
+                }else {
+                    res.send({
+                        isOK: false,
+                        message: '该交易号已充值成功，能不重复充值！'
+                    });
+                }
+            }else {
+                res.send({
+                    isOK: false,
+                    message: '请核对交易号是否正确！'
+                });
+            }
         }, function (error) {
-            console.log(error, '-====  ======================');
+            console.log('查询交易记录失败：' + error);
+            res.send({
+                isOK: false,
+                message: '查询交易记录失败：' + error
+            });
         });
-    //res.render('recharge', {title: '在线充值', money: req.session.funds})
 });
 
 router.get('/recharge/history', function (req, res) {
