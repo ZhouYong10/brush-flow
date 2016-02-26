@@ -114,12 +114,12 @@ app.post('/login', function(req, res, next) {
       }).then(function (user) {
         var userIns = User.wrapToInstance(user);
         if(userIns.isAdmin()) {
-          req.session.funds = userIns.funds;
           res.send({
             isOK: true,
             path: '/admin/home'
           });
         }else{
+          req.session.funds = userIns.funds;
           res.send({
             isOK: true,
             path: '/client/home'
@@ -147,7 +147,7 @@ app.use(function(req, res, next) {
 app.get('/client/home', function (req, res) {
   Placard.open().find()
       .then(function (placards) {
-        res.render('clientHome', {title: '系统公告', money: 12.3, placards: placards});
+        res.render('clientHome', {title: '系统公告', money: req.session.funds, placards: placards});
       }, function (error) {
         res.send('获取公告列表失败： ' + error);
       });

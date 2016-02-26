@@ -5,34 +5,34 @@
 var router = require('express').Router();
 
 router.get('/like', function (req, res) {
-    res.render('MPlike', {title: '美拍点赞任务', money: 10.01})
+    res.render('MPlike', {title: '美拍点赞任务', money: req.session.funds})
 });
 
 router.get('/like/add', function (req, res) {
-    res.render('MPlikeAdd', {title: '添加美拍点赞任务', money: 10.01})
+    res.render('MPlikeAdd', {title: '添加美拍点赞任务', money: req.session.funds})
 });
 
 router.get('/comment', function (req, res) {
-    res.render('MPcomment', {title: '美拍评论任务', money: 111});
+    res.render('MPcomment', {title: '美拍评论任务', money: req.session.funds});
 });
 
 router.get('/comment/add', function (req, res) {
-    res.render('MPcommentAdd', {title: '添加美拍评论任务', money: 111});
+    res.render('MPcommentAdd', {title: '添加美拍评论任务', money: req.session.funds});
 });
 
 router.get('/attention', function (req, res) {
-    res.render('MPattention', {title: '美拍关注任务', money: 22});
+    res.render('MPattention', {title: '美拍关注任务', money: req.session.funds});
 });
 
 router.get('/attention/add', function (req, res) {
-    res.render('MPattentionAdd', {title: '添加美拍关注任务', money: 22});
+    res.render('MPattentionAdd', {title: '添加美拍关注任务', money: req.session.funds});
 });
 
 router.get('/forward', function (req, res) {
-    res.render('MPforward', {title: '美拍转发任务', money: 33});
+    res.render('MPforward', {title: '美拍转发任务', money: req.session.funds});
 });
 
 router.get('/forward/add', function (req, res) {
-    res.render('MPforwardAdd', {title: '添加美拍转发任务', money: 33});
+    res.render('MPforwardAdd', {title: '添加美拍转发任务', money: req.session.funds});
 });
 module.exports = router;

@@ -8,21 +8,21 @@ var router = require('express').Router();
 var bcrypt = require('bcryptjs');
 
 router.get('/recharge', function (req, res) {
-    res.render('recharge', {title: '在线充值', money: 10.01})
+    res.render('recharge', {title: '在线充值', money: req.session.funds})
 });
 
 router.get('/recharge/history', function (req, res) {
-    res.render('rechargeHistory', {title: '充值记录', money: 10.01})
+    res.render('rechargeHistory', {title: '充值记录', money: req.session.funds})
 });
 
 router.get('/consume/history', function (req, res) {
-    res.render('consumeHistory', {title: '消费记录', money: 10.01})
+    res.render('consumeHistory', {title: '消费记录', money: req.session.funds})
 });
 
 router.get('/info', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('userInfo', {title: '我的详细信息', money: 10.01, user: user});
+            res.render('userInfo', {title: '我的详细信息', money: req.session.funds, user: user});
         }, function (error) {
             res.send('获取用户详细信息失败： ' + error);
         });
@@ -49,7 +49,7 @@ router.get('/logout', function(req, res){
 });
 
 router.get('/changePwd', function (req, res) {
-    res.render('changePassword', {title: '修改账号密码', money: 22.22});
+    res.render('changePassword', {title: '修改账号密码', money: req.session.funds});
 });
 
 router.post('/changePwd', function (req, res) {
@@ -113,7 +113,7 @@ router.post('/username/notrepeat', function (req, res) {
 });
 
 router.get('/addLowerUser', function (req, res) {
-    res.render('addLowerUser', {title: '添加下级用户', money: 11});
+    res.render('addLowerUser', {title: '添加下级用户', money: req.session.funds});
 });
 
 router.post('/addLowerUser', function (req, res) {
@@ -147,12 +147,12 @@ router.get('/lowerUser', function (req, res) {
             if(parent.children && parent.children.length > 0){
                 User.open().find({_id: {$in: parent.children}})
                     .then(function(children) {
-                        res.render('lowerUser', {title: '我的下级用户', money: 33.33, users: children});
+                        res.render('lowerUser', {title: '我的下级用户', money: req.session.funds, users: children});
                     }, function(error) {
                         throw new Error('查询下级用户信息失败： ' + error)
                     })
             }else {
-                res.render('lowerUser', {title: '我的下级用户', money: 33.33, users: []});
+                res.render('lowerUser', {title: '我的下级用户', money: req.session.funds, users: []});
             }
         }, function(error) {
             res.send(error);
@@ -166,14 +166,14 @@ router.get('/removeLowerUser', function (req, res) {
 router.get('/feedback', function (req, res) {
     Feedback.open().find()
         .then(function (feedbacks) {
-            res.render('feedback', {title: '问题反馈', money: 33, feedbacks: feedbacks});
+            res.render('feedback', {title: '问题反馈', money: req.session.funds, feedbacks: feedbacks});
         }, function (error) {
             res.send('获取反馈列表失败： ' + error);
         });
 });
 
 router.get('/feedback/add', function (req, res) {
-    res.render('feedbackAdd', {title: '问题反馈 / 我要提意见', money: 323});
+    res.render('feedbackAdd', {title: '问题反馈 / 我要提意见', money: req.session.funds});
 });
 
 router.post('/feedback/add', function (req, res) {
@@ -191,15 +191,15 @@ router.post('/feedback/add', function (req, res) {
 });
 
 router.get('/withdraw', function (req, res) {
-    res.render('withdraw', {title: '我要提现', money: 100});
+    res.render('withdraw', {title: '我要提现', money: req.session.funds});
 });
 
 router.get('/withdraw/add', function (req, res) {
-    res.render('withdrawAdd', {title: '申请提现', money: 100});
+    res.render('withdrawAdd', {title: '申请提现', money: req.session.funds});
 });
 
 router.get('/errorSummary', function (req, res) {
-    res.render('errorSummary', {title: '错误信息汇总', money: 200});
+    res.render('errorSummary', {title: '错误信息汇总', money: req.session.funds});
 });   
 
 module.exports = router;
