@@ -31,7 +31,7 @@ exports.initUser = function(User) {
             if(result) {
                 user = result;
                 delete user._id;
-            }   
+            }
             User.findAndModify({
                 username: user.username,
                 role: user.role
