@@ -114,6 +114,7 @@ app.post('/login', function(req, res, next) {
       }).then(function (user) {
         var userIns = User.wrapToInstance(user);
         if(userIns.isAdmin()) {
+          req.session.funds = userIns.funds;
           res.send({
             isOK: true,
             path: '/admin/home'
