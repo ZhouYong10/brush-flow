@@ -15,6 +15,7 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+
 passport.serializeUser(function (user, done) {
   done(null, user._id);
 });
