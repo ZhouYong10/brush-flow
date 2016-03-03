@@ -3,13 +3,13 @@
  */
 $(function () {
     $.get('/admin/update/header/nav', function (obj) {
-        console.log(obj);
+        console.log(obj,'=========================');
     });
 
 
     var socket = io();
 
-    console.log(socket, '===============');
+    //console.log(socket, '===============');
 });
 
 function updateNav(obj) {

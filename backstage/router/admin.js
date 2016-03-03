@@ -4,6 +4,7 @@
 var User = require('../models/User');
 var Placard = require('../models/Placard');
 var Recharge = require('../models/Recharge');
+
 var Withdraw = require('../models/Withdraw');
 var Reply = require('../models/Reply');
 var Flow = require('../models/Flow');
@@ -13,8 +14,6 @@ var Wb = require('../models/Wb');
 var Error = require('../models/Error');
 var Feedback = require('../models/Feedback');
 
-
-var bcrypt = require('bcryptjs');
 var moment = require('moment');
 
 var router = require('express').Router();
@@ -60,8 +59,47 @@ router.get('/update/header/nav', function (req, res) {
         feedback: 0
     };
 
-
-    res.send(updateNav);
+    Withdraw.open().find({status: '未处理'}).then(function (withdraws) {
+        if (withdraws) {
+            updateNav.withdraw = withdraws.length;
+        }
+        Reply.open().find({status: '未处理'}).then(function (replies) {
+            if (replies) {
+                updateNav.reply = replies.length;
+            }
+            Flow.open().find({status: '未处理'}).then(function (flows) {
+                if (flows) {
+                    updateNav.flow = flows.length;
+                }
+                Wx.open().find({status: '未处理'}).then(function (wxs) {
+                    if (wxs) {
+                        updateNav.wx = wxs.length;
+                    }
+                    Mp.open().find({status: '未处理'}).then(function (mps) {
+                        if (mps) {
+                            updateNav.mp = mps.length;
+                        }
+                        Wb.open().find({status: '未处理'}).then(function (wbs) {
+                            if (wbs) {
+                                updateNav.wb = wbs.length;
+                            }
+                            Error.open().find({status: '未处理'}).then(function (errors) {
+                                if (errors) {
+                                    updateNav.error = errors.length;
+                                }
+                                Feedback.open().find({status: '未处理'}).then(function (feedbacks) {
+                                    if (feedbacks) {
+                                        updateNav.feedback = feedbacks.length;
+                                    }
+                                    res.send(updateNav);
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
 });
 
 /*
