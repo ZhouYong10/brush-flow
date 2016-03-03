@@ -52,7 +52,11 @@ router.get('/update/header/nav', function (req, res) {
         withdraw: 0,
         reply: 0,
         flow: 0,
-        wx: 0,
+        wxArticle: 0,
+        wxLike: 0,
+        wxReply: 0,
+        wxFriend: 0,
+        wxCode: 0,
         mp: 0,
         wb: 0,
         error: 0,
@@ -73,7 +77,9 @@ router.get('/update/header/nav', function (req, res) {
                 }
                 Wx.open().find({status: '未处理'}).then(function (wxs) {
                     if (wxs) {
-                        updateNav.wx = wxs.length;
+
+
+
                     }
                     Mp.open().find({status: '未处理'}).then(function (mps) {
                         if (mps) {
