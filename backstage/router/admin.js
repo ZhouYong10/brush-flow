@@ -77,32 +77,25 @@ router.get('/update/header/nav', function (req, res) {
                 }
                 Wx.open().find({status: '未处理'}).then(function (wxs) {
                     if (wxs) {
-                        var article = [], like = [], reply = [], friend = [], code = [];
                         for(var index in wxs) {
-                            var wx = wxs[index];
-                            switch (wx.type) {
+                            switch (wxs[index].type) {
                                 case '微信原文':
-                                    article.push(wx);
+                                    updateNav.wxArticle++;
                                     break;
                                 case '微信阅读点赞':
-                                    like.push(wx);
+                                    updateNav.wxLike++;
                                     break;
                                 case '微信公众粉丝回复':
-                                    reply.push(wx);
+                                    updateNav.wxReply++;
                                     break;
                                 case '微信个人好友':
-                                    friend.push(wx);
+                                    updateNav.wxFriend++;
                                     break;
                                 case '微信好友地区扫码':
-                                    code.push(wx);
+                                    updateNav.wxCode++;
                                     break
                             }
                         }
-                        updateNav.wxArticle = article.length;
-                        updateNav.wxLike = like.length;
-                        updateNav.wxReply = reply.length;
-                        updateNav.wxFriend = friend.length;
-                        updateNav.wxCode = code.length;
                     }
                     Mp.open().find({status: '未处理'}).then(function (mps) {
                         if (mps) {
