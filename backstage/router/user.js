@@ -237,6 +237,7 @@ router.post('/feedback/add', function (req, res) {
             feedback.user = user.username;
             Feedback.createFeedback(feedback)
                 .then(function (result) {
+                    socketIO.emit('updateNav', {'feedback': 1});
                     res.redirect('/user/feedback');
                 }, function (error) {
                     res.send('提交反馈失败： ' + error);
