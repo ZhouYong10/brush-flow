@@ -3,8 +3,16 @@
  */
 var User = require('../models/User');
 var Placard = require('../models/Placard');
-var Feedback = require('../models/Feedback');
 var Recharge = require('../models/Recharge');
+var Withdraw = require('../models/Withdraw');
+var Reply = require('../models/Reply');
+var Flow = require('../models/Flow');
+var Wx = require('../models/Wx');
+var Mp = require('../models/Mp');
+var Wb = require('../models/Wb');
+var Error = require('../models/Error');
+var Feedback = require('../models/Feedback');
+
 
 var bcrypt = require('bcryptjs');
 var moment = require('moment');
