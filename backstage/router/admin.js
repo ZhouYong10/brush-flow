@@ -37,8 +37,24 @@ router.get('/home', function (req, res) {
         });
 });
 
+/*
+* update header nav
+* */
+router.get('/update/header/nav', function (req, res) {
+    var updateNav = {
+        withdraw: 0,
+        reply: 0,
+        flow: 0,
+        wx: 0,
+        mp: 0,
+        wb: 0,
+        error: 0,
+        feedback: 0
+    };
 
 
+    res.send(updateNav);
+});
 
 /*
  * manage funds
