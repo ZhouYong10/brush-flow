@@ -50,6 +50,17 @@ var priceItem = '<tr> ' +
     cancelBtn +
     '</td> ' +
     '</tr>';
+var priceItemText = '<tr> ' +
+    '<td class="num"></td> ' +
+    '<td class="type"> </td> ' +
+    '<td class="smallType"> </td> ' +
+    '<td class="name"> </td> ' +
+    '<td class="adminPrice"> </td> ' +
+    '<td class="topPrice"> </td> ' +
+    '<td class="superPrice"> </td> ' +
+    '<td class="goldPrice"> </td> ' +
+    '<td class="operation"> </td> ' +
+    '</tr>';
 
 $(function () {
     $('#addPrice').click(function () {
@@ -60,14 +71,14 @@ $(function () {
         for(var i = 0; i < allTr.length; i++) {
             $(allTr[i]).find('.num').text(i + 1);
         }
-        registerMethod($tbody);
+        registerSaveCancel($tbody);
     })
 });
 
-function registerMethod($tbody) {
+function registerSaveCancel($tbody) {
     $tbody.find('.save').click(function () {
-        var parentTd = $(this).parent();
-        var $tr = parentTd.parent();
+        var $parentTd = $(this).parent();
+        var $tr = $parentTd.parent();
         var product = {
             type: $tr.find('.type').val(),
             typeName: $tr.find('.type').find('option:selected').text(),
@@ -80,7 +91,28 @@ function registerMethod($tbody) {
             goldPrice: $tr.find('.goldPrice').val()
         };
         $.post('/admin/price/WX/MP/WB', product, function(result) {
-            console.log(result);
+            var $priceItemText = $(priceItemText);
+            var num = $tr.find('.num').text();
+            $priceItemText.find('.num').text(num);
+            $priceItemText.find('.type').text(result.typeName);
+            $priceItemText.find('.name').text(result.name);
+            $priceItemText.find('.smallType').text(result.smallTypeName);
+            $priceItemText.find('.adminPrice').text(result.adminPrice);
+            $priceItemText.find('.topPrice').text(result.topPrice);
+            $priceItemText.find('.superPrice').text(result.superPrice);
+            $priceItemText.find('.goldPrice').text(result.goldPrice);
+            $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + result._id + '"'));
+            var $aim;
+            if(num == 1) {
+                $aim = $tr.parent();
+                $tr.remove();
+                $aim.append($priceItemText);
+            }else{
+                $aim = $tr.prev();
+                $tr.remove();
+                $aim.after($priceItemText);
+            }
+            registerEditDelete($tbody);
         })
     });
 
