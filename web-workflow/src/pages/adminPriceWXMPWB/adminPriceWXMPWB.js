@@ -3,55 +3,56 @@
  */
 var wxSmallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
-    '<option value="mp">原文</option> ' +
-    '<option value="mp">阅读点赞</option> ' +
-    '<option value="mp">公众粉丝回复</option> ' +
-    '<option value="mp">个人好友</option> ' +
-    '<option value="mp">好友地区扫码</option> ' +
+    '<option value="article">原文</option> ' +
+    '<option value="like">阅读点赞</option> ' +
+    '<option value="reply">公众粉丝回复</option> ' +
+    '<option value="friend">个人好友</option> ' +
+    '<option value="code">好友地区扫码</option> ' +
     '</select> ' +
     '</td> ';
 var wbSmallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
-    '<option value="mp">高级赞</option> ' +
-    '<option value="mp">投票</option> ' +
-    '<option value="mp">顶级粉</option> ' +
-    '<option value="mp">转发</option> ' +
+    '<option value="like">高级赞</option> ' +
+    '<option value="vote">投票</option> ' +
+    '<option value="fens">顶级粉</option> ' +
+    '<option value="forward">转发</option> ' +
     '</select> ' +
     '</td> ';
 
 var mpSmallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
-    '<option value="mp">点赞</option> ' +
-    '<option value="mp">评论</option> ' +
-    '<option value="mp">关注</option> ' +
-    '<option value="mp">转发</option> ' +
+    '<option value="like">点赞</option> ' +
+    '<option value="comment">评论</option> ' +
+    '<option value="attention">关注</option> ' +
+    '<option value="forward">转发</option> ' +
     '</select> ' +
     '</td> ';
+
+var priceItem = '<tr> ' +
+    '<td class="num"></td> ' +
+    '<td> ' +
+    '<select class="am-form-group am-form-select type"> ' +
+    '<option value="wx">微信</option> ' +
+    '<option value="mp">美拍</option> ' +
+    '<option value="wb">微博</option> ' +
+    '</select> ' +
+    '</td> ' +
+    wxSmallType+
+    '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="名称"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm adminPrice" type="text" placeholder="管理员价格"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm topPrice" type="text" placeholder="顶级代理价格"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm superPrice" type="text" placeholder="超级代理价格"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm goldPrice" type="text" placeholder="金牌代理价格"> </td> ' +
+    '<td> ' +
+    '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs change">保存</button> ' +
+    '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">取消</button> ' +
+    '</td> ' +
+    '</tr>';
 
 $(function () {
     $('#addPrice').click(function () {
         var $tbody = $('.priceWXMPWB tbody');
-        var trStr = '<tr> ' +
-            '<td class="num"></td> ' +
-            '<td> ' +
-            '<select class="am-form-group am-form-select type"> ' +
-            '<option value="wx">微信</option> ' +
-            '<option value="mp">美拍</option> ' +
-            '<option value="wb">微博</option> ' +
-            '</select> ' +
-            '</td> ' +
-             wxSmallType+
-            '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="名称"> </td> ' +
-            '<td> <input class="am-form-field am-input-sm adminPrice" type="text" placeholder="管理员价格"> </td> ' +
-            '<td> <input class="am-form-field am-input-sm topPrice" type="text" placeholder="顶级代理价格"> </td> ' +
-            '<td> <input class="am-form-field am-input-sm superPrice" type="text" placeholder="超级代理价格"> </td> ' +
-            '<td> <input class="am-form-field am-input-sm goldPrice" type="text" placeholder="金牌代理价格"> </td> ' +
-            '<td> ' +
-            '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs change">保存</button> ' +
-            '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">取消</button> ' +
-            '</td> ' +
-            '</tr>';
-        var $tr = $(trStr);
+        var $tr = $(priceItem);
         $tr.find('.num').text($tbody.children().length + 1);
         $tbody.append($tr);
         registerMethod($tbody);
@@ -64,15 +65,20 @@ function registerMethod($tbody) {
         var $tr = parentTd.parent();
         var product = {
             type: $tr.find('.type').val(),
+            typeName: $tr.find('.type').find('option:selected').text(),
+            smallType: $tr.find('.smallType').val(),
+            smallTypeName: $tr.find('.smallType').find('option:selected').text(),
             name: $tr.find('.name').val(),
             adminPrice: $tr.find('.adminPrice').val(),
             topPrice: $tr.find('.topPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
             goldPrice: $tr.find('.goldPrice').val()
         };
-        $.post('/admin/price/WX/MP/WB', product, function(result) {
-            console.log(result);
-        })
+
+        console.log(product);
+        //$.post('/admin/price/WX/MP/WB', product, function(result) {
+        //    console.log(result);
+        //})
     });
 
     $tbody.find('.delete').click(function () {
