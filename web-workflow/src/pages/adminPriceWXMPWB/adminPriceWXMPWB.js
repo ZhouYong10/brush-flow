@@ -36,11 +36,16 @@ function registerMethod($tbody) {
     });
 
     $tbody.find('.delete').click(function () {
-        var $tr = $(this).parent().parent();
-        $tr.remove();
-        var allTr = $tbody.children();
-        for(var i = 0; i < allTr.length; i++) {
-            $(allTr[i]).find('.num').text(i + 1);
-        }
+        var self = this;
+        var index = layer.confirm('is not?', function(){
+            var $tr = $(self).parent().parent();
+            $tr.remove();
+            var allTr = $tbody.children();
+            for(var i = 0; i < allTr.length; i++) {
+                $(allTr[i]).find('.num').text(i + 1);
+            }
+            
+            layer.close(index);
+        });
     });
 }
