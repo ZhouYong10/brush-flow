@@ -26,6 +26,10 @@ var mpSmallType = '<td> ' +
     '<option value="forward">转发</option> ' +
     '</select> ' +
     '</td> ';
+var saveBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs save">保存</button> ';
+var cancelBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs cancel">取消</button> ';
+var changeBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs edit">修改</button> ';
+var deleteBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button> ';
 var priceItem = '<tr> ' +
     '<td class="num"></td> ' +
     '<td> ' +
@@ -42,18 +46,15 @@ var priceItem = '<tr> ' +
     '<td> <input class="am-form-field am-input-sm superPrice" type="text" placeholder="超级代理价格"> </td> ' +
     '<td> <input class="am-form-field am-input-sm goldPrice" type="text" placeholder="金牌代理价格"> </td> ' +
     '<td> ' +
-    '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs change">保存</button> ' +
-    '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">取消</button> ' +
+    saveBtn +
+    cancelBtn +
     '</td> ' +
     '</tr>';
-var changeBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs edite">修改</button> ';
-var deleteBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button> ';
 
 $(function () {
     $('#addPrice').click(function () {
         var $tbody = $('.priceWXMPWB tbody');
         var $tr = $(priceItem);
-        //$tr.find('.num').text($tbody.children().length + 1);
         $tbody.prepend($tr);
         var allTr = $tbody.children();
         for(var i = 0; i < allTr.length; i++) {
@@ -64,7 +65,7 @@ $(function () {
 });
 
 function registerMethod($tbody) {
-    $tbody.find('.change').click(function () {
+    $tbody.find('.save').click(function () {
         var parentTd = $(this).parent();
         var $tr = parentTd.parent();
         var product = {
@@ -83,7 +84,7 @@ function registerMethod($tbody) {
         })
     });
 
-    $tbody.find('.delete').click(function () {
+    $tbody.find('.cancel').click(function () {
         var self = this;
         var index = layer.confirm('您确定要取消么？', function(){
             var $tr = $(self).parent().parent();
