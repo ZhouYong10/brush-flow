@@ -194,7 +194,20 @@ function registerChangeSaveGiveUp($tbody) {
     });
 
     $tbody.find('.giveUp').click(function () {
+        var $parentTd = $(this).parent();
+        var $tr = $parentTd.parent();
 
+        var $aim ;
+        if($tr.prev().length > 0) {
+            $aim = $tr.prev();
+            $tr.remove();
+            $aim.after($changeItemTr);
+        }else {
+            $aim = $tr.parent();
+            $tr.remove();
+            $aim.prepend($changeItemTr);
+        }
+        registerEditDelete($tbody);
     });
 }
 
