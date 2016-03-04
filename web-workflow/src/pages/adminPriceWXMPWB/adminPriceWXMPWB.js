@@ -129,16 +129,9 @@ function registerSaveCancel($tbody) {
             $priceItemText.find('.superPrice').text(result.superPrice);
             $priceItemText.find('.goldPrice').text(result.goldPrice);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + result._id + '"'));
-            var $aim;
-            if(num == 1) {
-                $aim = $tr.parent();
-                $tr.remove();
-                $aim.append($priceItemText);
-            }else{
-                $aim = $tr.prev();
-                $tr.remove();
-                $aim.after($priceItemText);
-            }
+            var $aim = $tr.parent();
+            $tr.remove();
+            $aim.prepend($priceItemText);
             registerEditDelete($tbody);
         })
     });
