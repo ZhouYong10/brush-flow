@@ -1,6 +1,33 @@
 /**
  * Created by ubuntu64 on 3/3/16.
  */
+var wxSmallType = '<td> ' +
+    '<select class="am-form-group am-form-select smallType"> ' +
+    '<option value="mp">原文</option> ' +
+    '<option value="mp">阅读点赞</option> ' +
+    '<option value="mp">公众粉丝回复</option> ' +
+    '<option value="mp">个人好友</option> ' +
+    '<option value="mp">好友地区扫码</option> ' +
+    '</select> ' +
+    '</td> ';
+var wbSmallType = '<td> ' +
+    '<select class="am-form-group am-form-select smallType"> ' +
+    '<option value="mp">高级赞</option> ' +
+    '<option value="mp">投票</option> ' +
+    '<option value="mp">顶级粉</option> ' +
+    '<option value="mp">转发</option> ' +
+    '</select> ' +
+    '</td> ';
+
+var mpSmallType = '<td> ' +
+    '<select class="am-form-group am-form-select smallType"> ' +
+    '<option value="mp">点赞</option> ' +
+    '<option value="mp">评论</option> ' +
+    '<option value="mp">关注</option> ' +
+    '<option value="mp">转发</option> ' +
+    '</select> ' +
+    '</td> ';
+
 $(function () {
     $('#addPrice').click(function () {
         var $tbody = $('.priceWXMPWB tbody');
@@ -8,11 +35,12 @@ $(function () {
             '<td class="num"></td> ' +
             '<td> ' +
             '<select class="am-form-group am-form-select type"> ' +
-            '<option value="mp">美拍</option> ' +
             '<option value="wx">微信</option> ' +
+            '<option value="mp">美拍</option> ' +
             '<option value="wb">微博</option> ' +
             '</select> ' +
             '</td> ' +
+             wxSmallType+
             '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="名称"> </td> ' +
             '<td> <input class="am-form-field am-input-sm adminPrice" type="text" placeholder="管理员价格"> </td> ' +
             '<td> <input class="am-form-field am-input-sm topPrice" type="text" placeholder="顶级代理价格"> </td> ' +
@@ -60,4 +88,21 @@ function registerMethod($tbody) {
             layer.close(index);
         });
     });
+
+    $tbody.find('.type').change(function() {
+        var $parentTd = $(this).parent();
+        $parentTd.next().remove();
+        var type = $(this).val();
+        switch (type) {
+            case 'wx':
+                $parentTd.after(wxSmallType);
+                break;
+            case 'wb':
+                $parentTd.after(wbSmallType);
+                break;
+            case 'mp':
+                $parentTd.after(mpSmallType);
+                break
+        }
+    })
 }
