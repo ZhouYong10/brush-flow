@@ -18,7 +18,6 @@ var wbSmallType = '<td> ' +
     '<option value="forward">转发</option> ' +
     '</select> ' +
     '</td> ';
-
 var mpSmallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
     '<option value="like">点赞</option> ' +
@@ -27,7 +26,6 @@ var mpSmallType = '<td> ' +
     '<option value="forward">转发</option> ' +
     '</select> ' +
     '</td> ';
-
 var priceItem = '<tr> ' +
     '<td class="num"></td> ' +
     '<td> ' +
@@ -48,13 +46,19 @@ var priceItem = '<tr> ' +
     '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">取消</button> ' +
     '</td> ' +
     '</tr>';
+var changeBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs edite">修改</button> ';
+var deleteBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button> ';
 
 $(function () {
     $('#addPrice').click(function () {
         var $tbody = $('.priceWXMPWB tbody');
         var $tr = $(priceItem);
-        $tr.find('.num').text($tbody.children().length + 1);
-        $tbody.append($tr);
+        //$tr.find('.num').text($tbody.children().length + 1);
+        $tbody.prepend($tr);
+        var allTr = $tbody.children();
+        for(var i = 0; i < allTr.length; i++) {
+            $(allTr[i]).find('.num').text(i + 1);
+        }
         registerMethod($tbody);
     })
 });
@@ -74,11 +78,9 @@ function registerMethod($tbody) {
             superPrice: $tr.find('.superPrice').val(),
             goldPrice: $tr.find('.goldPrice').val()
         };
-
-        console.log(product);
-        //$.post('/admin/price/WX/MP/WB', product, function(result) {
-        //    console.log(result);
-        //})
+        $.post('/admin/price/WX/MP/WB', product, function(result) {
+            console.log(result);
+        })
     });
 
     $tbody.find('.delete').click(function () {
