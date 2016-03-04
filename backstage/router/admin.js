@@ -237,9 +237,19 @@ router.get('/price/WX/MP/WB', function (req, res) {
 });
 
 router.post('/price/WX/MP/WB', function (req, res) {
-    Product.open().update(req.body, {$set: req.body})
+    Product.open().insert(req.body)
         .then(function (result) {
-            res.send(result);
+            res.send(result[0]);
+        });
+});
+
+router.post('/price/WX/MP/WB/update', function (req, res) {
+    var id = req.body.id;
+    delete req.body.id;
+    Product.open().updateById(id, {$set: req.body})
+        .then(function (result) {
+            console.log(result, '===================');
+            res.end();
         });
 });
 

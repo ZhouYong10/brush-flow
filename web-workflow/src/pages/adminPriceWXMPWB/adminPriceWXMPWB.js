@@ -28,6 +28,7 @@ var mpSmallType = '<td> ' +
     '</td> ';
 var saveBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs save">保存</button> ';
 var cancelBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs cancel">取消</button> ';
+var changeSaveBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs changeSave">保存</button> ';
 var giveUpBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs giveUp">放弃</button> ';
 var changeBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs edit">修改</button> ';
 var deleteBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button> ';
@@ -105,10 +106,9 @@ function registerEditDelete($tbody) {
                 $newSmallTypeTdPrev.after($(wbSmallType));
                 break;
         }
-        var $newCancelBtn = $newParentTr.find('.cancel');
-        var $newCancelBtnPrev = $newCancelBtn.prev();
-        $newCancelBtn.remove();
-        $newCancelBtnPrev.after($(giveUpBtn));
+        var $newBtnParent = $newParentTr.find('.save').parent();
+        $newBtnParent.children().remove();
+        $newBtnParent.append($(changeSaveBtn + giveUpBtn + '<input type="hidden" value="'+$parentTr.find('.operation input').val()+'">'));
 
         $newParentTr.find('.num').text(num);
         $newParentTr.find('.type').val($parentTr.find('.type input').val());
@@ -129,7 +129,7 @@ function registerEditDelete($tbody) {
             $parentTr.remove();
             $aim.after($newParentTr);
         }
-        registerSaveCancel($tbody);
+        registerChangeSaveGiveUp($tbody);
     });
 
     $tbody.find('.delete').click(function () {
@@ -145,6 +145,62 @@ function registerEditDelete($tbody) {
                 layer.msg('删除成功！');
             });
         });
+    });
+}
+
+function registerChangeSaveGiveUp($tbody) {
+    $tbody.find('.changeSave').click(function () {
+        var $parentTd = $(this).parent();
+        var $tr = $parentTd.parent();
+        var product = {
+            id: $tr.find('.giveUp').next().val(),
+            type: $tr.find('.type').val(),
+            typeName: $tr.find('.type').find('option:selected').text(),
+            smallType: $tr.find('.smallType').val(),
+            smallTypeName: $tr.find('.smallType').find('option:selected').text(),
+            name: $tr.find('.name').val(),
+            adminPrice: $tr.find('.adminPrice').val(),
+            topPrice: $tr.find('.topPrice').val(),
+            superPrice: $tr.find('.superPrice').val(),
+            goldPrice: $tr.find('.goldPrice').val()
+        };
+        $.post('/admin/price/WX/MP/WB/update', product, function() {
+            var $priceItemText = $(priceItemText);
+            var num = $tr.find('.num').text();
+
+            console.log(111111111111111111111111);
+
+            $priceItemText.find('.num').text(num);
+            $priceItemText.find('.type span').text(product.typeName);
+            $priceItemText.find('.type input').val(product.type);
+            $priceItemText.find('.smallType span').text(product.smallTypeName);
+            $priceItemText.find('.smallType input').val(product.smallType);
+            $priceItemText.find('.name').text(product.name);
+            $priceItemText.find('.adminPrice').text(product.adminPrice);
+            $priceItemText.find('.topPrice').text(product.topPrice);
+            $priceItemText.find('.superPrice').text(product.superPrice);
+            $priceItemText.find('.goldPrice').text(product.goldPrice);
+            $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + product.id + '">'));
+            console.log(222222222222222222222222222);
+            var $aim ;
+            if($tr.prev().length > 0) {
+                console.log(3333333333333333333333);
+                $aim = $tr.prev();
+                $tr.remove();
+                $aim.after($priceItemText);
+            }else {
+                console.log(4444444444444444444444);
+                $aim = $tr.parent();
+                $tr.remove();
+                $aim.prepend($priceItemText);
+            }
+            console.log(55555555555555555555555555);
+            registerEditDelete($tbody);
+        })
+    });
+
+    $tbody.find('.giveUp').click(function () {
+
     });
 }
 
@@ -167,6 +223,7 @@ function registerSaveCancel($tbody) {
             var $priceItemText = $(priceItemText);
             var num = $tr.find('.num').text();
 
+            console.log(result);
             $priceItemText.find('.num').text(num);
             $priceItemText.find('.type span').text(result.typeName);
             $priceItemText.find('.type input').val(result.type);
@@ -177,7 +234,7 @@ function registerSaveCancel($tbody) {
             $priceItemText.find('.topPrice').text(result.topPrice);
             $priceItemText.find('.superPrice').text(result.superPrice);
             $priceItemText.find('.goldPrice').text(result.goldPrice);
-            $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + result._id + '"'));
+            $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + result._id + '">'));
 
             var $aim ;
             if($tr.prev().length > 0) {
