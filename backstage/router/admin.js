@@ -243,6 +243,13 @@ router.post('/price/WX/MP/WB', function (req, res) {
         });
 });
 
+router.post('/price/WX/MP/WB/delete', function (req, res) {
+    Product.open().removeById(req.body.id)
+        .then(function () {
+            res.end();
+        });
+});
+
 
 
 

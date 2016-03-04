@@ -63,17 +63,44 @@ var priceItemText = '<tr> ' +
     '</tr>';
 
 $(function () {
+    registerEditDelete($('.priceWXMPWB tbody'));
+
     $('#addPrice').click(function () {
         var $tbody = $('.priceWXMPWB tbody');
         var $tr = $(priceItem);
         $tbody.prepend($tr);
-        var allTr = $tbody.children();
-        for(var i = 0; i < allTr.length; i++) {
-            $(allTr[i]).find('.num').text(i + 1);
-        }
+        resortNum($tbody);
         registerSaveCancel($tbody);
     })
 });
+
+function resortNum($tbody) {
+    var allTr = $tbody.children();
+    for(var i = 0; i < allTr.length; i++) {
+        $(allTr[i]).find('.num').text(i + 1);
+    }
+}
+
+function registerEditDelete($tbody) {
+    $tbody.find('.edit').click(function () {
+
+    });
+
+    $tbody.find('.delete').click(function () {
+        var self = this;
+        var $parentTd = $(self).parent();
+        var $parentTr = $parentTd.parent();
+        var id = $parentTd.find('input').val();
+        var index = layer.confirm('您确定要删除么？', function(){
+            $.post('/admin/price/WX/MP/WB/delete', {id: id}, function (result) {
+                $parentTr.remove();
+                resortNum($tbody);
+                layer.close(index);
+                layer.msg('删除成功！');
+            });
+        });
+    });
+}
 
 function registerSaveCancel($tbody) {
     $tbody.find('.save').click(function () {
@@ -121,11 +148,7 @@ function registerSaveCancel($tbody) {
         var index = layer.confirm('您确定要取消么？', function(){
             var $tr = $(self).parent().parent();
             $tr.remove();
-            var allTr = $tbody.children();
-            for(var i = 0; i < allTr.length; i++) {
-                $(allTr[i]).find('.num').text(i + 1);
-            }
-
+            resortNum($tbody);
             layer.close(index);
         });
     });
