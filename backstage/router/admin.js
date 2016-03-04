@@ -232,14 +232,14 @@ router.get('/price/flow', function (req, res) {
 router.get('/price/WX/MP/WB', function (req, res) {
     Product.open().find({type: {$in: ['wx', 'wb', 'mp']}})
         .then(function (products) {
-            res.render('adminPriceWXMPWB', {title: '价格&状态管理 / 微信、美拍、微博', money: 10.01, products: products});
+            res.render('adminPriceWXMPWB', {title: '价格&状态管理 / 微信、美拍、微博', money: 10.01, products: products.reverse()});
         });
 });
 
 router.post('/price/WX/MP/WB', function (req, res) {
-    Product.open().insert(req.body)
+    Product.open().update(req.body, {$set: req.body})
         .then(function (result) {
-            res.send(result[0]);
+            res.send(result);
         });
 });
 

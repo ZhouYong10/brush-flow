@@ -53,8 +53,14 @@
                             <% for(var i = 0; i < products.length; i++){ %>
                             <tr>
                                 <td class="num"><%= i + 1 %> </td>
-                                <td class="type"><%= products[i].typeName %> </td>
-                                <td class="smallType"><%= products[i].smallTypeName %> </td>
+                                <td class="type">
+                                    <span><%= products[i].typeName %></span>
+                                    <input type="hidden" value="<%= products[i].type %>">
+                                </td>
+                                <td class="smallType">
+                                    <span><%= products[i].smallTypeName %></span>
+                                    <input type="hidden" value="<%= products[i].smallType %>">
+                                </td>
                                 <td class="name"><%= products[i].name %> </td>
                                 <td class="adminPrice"><%= products[i].adminPrice %> </td>
                                 <td class="topPrice"><%= products[i].topPrice %> </td>
