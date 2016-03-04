@@ -26,6 +26,21 @@ $(function () {
         var $tr = $(trStr);
         $tr.find('.num').text($tbody.children().length + 1);
         $tbody.append($tr);
+        registerMethod($tbody);
     })
 });
 
+function registerMethod($tbody) {
+    $tbody.find('.change').click(function () {
+        var $tr = $(this).parent().parent();
+    });
+
+    $tbody.find('.delete').click(function () {
+        var $tr = $(this).parent().parent();
+        $tr.remove();
+        var allTr = $tbody.children();
+        for(var i = 0; i < allTr.length; i++) {
+            $(allTr[i]).find('.num').text(i + 1);
+        }
+    });
+}
