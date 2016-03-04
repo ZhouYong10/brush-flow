@@ -50,6 +50,24 @@
                             </thead>
                             <tbody>
 
+                            <% for(var i = 0; i < products.length; i++){ %>
+                            <tr>
+                                <td class="num"><%= i + 1 %> </td>
+                                <td class="type"><%= products[i].typeName %> </td>
+                                <td class="smallType"><%= products[i].smallTypeName %> </td>
+                                <td class="name"><%= products[i].name %> </td>
+                                <td class="adminPrice"><%= products[i].adminPrice %> </td>
+                                <td class="topPrice"><%= products[i].topPrice %> </td>
+                                <td class="superPrice"><%= products[i].superPrice %> </td>
+                                <td class="goldPrice"><%= products[i].goldPrice %> </td>
+                                <td class="operation">
+                                    <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs edit">修改</button>
+                                    <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button>
+                                    <input type="hidden" value="<%= products[i]._id %>">
+                                </td>
+                            </tr>
+                            <% } %>
+
                             </tbody>
                         </table>
                     </div>

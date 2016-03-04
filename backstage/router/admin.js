@@ -230,7 +230,10 @@ router.get('/price/flow', function (req, res) {
 });
 
 router.get('/price/WX/MP/WB', function (req, res) {
-    res.render('adminPriceWXMPWB', {title: '价格&状态管理 / 微信、美拍、微博', money: 10.01})
+    Product.open().find({type: {$in: ['wx', 'wb', 'mp']}})
+        .then(function (products) {
+            res.render('adminPriceWXMPWB', {title: '价格&状态管理 / 微信、美拍、微博', money: 10.01, products: products});
+        });
 });
 
 router.post('/price/WX/MP/WB', function (req, res) {
