@@ -168,8 +168,6 @@ function registerChangeSaveGiveUp($tbody) {
             var $priceItemText = $(priceItemText);
             var num = $tr.find('.num').text();
 
-            console.log(111111111111111111111111);
-
             $priceItemText.find('.num').text(num);
             $priceItemText.find('.type span').text(product.typeName);
             $priceItemText.find('.type input').val(product.type);
@@ -181,20 +179,16 @@ function registerChangeSaveGiveUp($tbody) {
             $priceItemText.find('.superPrice').text(product.superPrice);
             $priceItemText.find('.goldPrice').text(product.goldPrice);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + product.id + '">'));
-            console.log(222222222222222222222222222);
             var $aim ;
             if($tr.prev().length > 0) {
-                console.log(3333333333333333333333);
                 $aim = $tr.prev();
                 $tr.remove();
                 $aim.after($priceItemText);
             }else {
-                console.log(4444444444444444444444);
                 $aim = $tr.parent();
                 $tr.remove();
                 $aim.prepend($priceItemText);
             }
-            console.log(55555555555555555555555555);
             registerEditDelete($tbody);
         })
     });

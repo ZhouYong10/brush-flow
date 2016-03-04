@@ -248,7 +248,6 @@ router.post('/price/WX/MP/WB/update', function (req, res) {
     delete req.body.id;
     Product.open().updateById(id, {$set: req.body})
         .then(function (result) {
-            console.log(result, '===================');
             res.end();
         });
 });
