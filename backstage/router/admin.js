@@ -7,6 +7,9 @@ var Recharge = require('../models/Recharge');
 
 var Withdraw = require('../models/Withdraw');
 var Reply = require('../models/Reply');
+
+var Product = require('../models/Product');
+
 var Flow = require('../models/Flow');
 var Wx = require('../models/Wx');
 var Mp = require('../models/Mp');
@@ -228,6 +231,13 @@ router.get('/price/flow', function (req, res) {
 
 router.get('/price/WX/MP/WB', function (req, res) {
     res.render('adminPriceWXMPWB', {title: '价格&状态管理 / 微信、美拍、微博', money: 10.01})
+});
+
+router.post('/price/WX/MP/WB', function (req, res) {
+    Product.open().insert(req.body)
+        .then(function (result) {
+            res.send(result[0]);
+        });
 });
 
 
