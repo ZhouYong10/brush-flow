@@ -2,7 +2,13 @@ th{
   text-align: center;
 }
 
-
-.title-text, .title-url{
-  line-height: 11px;
+.priceFlow{
+  padding-top: 12px;
+  input{
+    text-align: center;
+  }
+  select{
+    margin: 0;
+    padding: .28em;
+  }
 }

@@ -26,34 +26,52 @@
         <div class="am-u-lg-10 am-u-md-9">
             <div class="am-panel am-panel-primary">
                 <div class="am-panel-hd"><%= title %></div>
-                <div class="am-panel-bd am-scrollable-horizontal am-text-center">
+                <div class="am-panel-bd">
 
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>视频/流量类型</th>
-                            <th>管理员</th>
-                            <th>顶级代理</th>
-                            <th>超级代理</th>
-                            <th>金牌代理</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>#</td>
-                            <td>名称</td>
-                            <td>管理员</td>
-                            <td>顶级代理</td>
-                            <td>超级代理</td>
-                            <td>金牌代理</td>
-                            <td>
-                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">修改</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <button id="addPrice" class="am-btn am-btn-success am-radius">
+                        <i class="am-icon-plus-circle"></i>
+                        添加价格项
+                    </button>
+
+                    <div class="am-scrollable-horizontal am-text-center priceFlow">
+                        <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>小类</th>
+                                <th>视频/流量类型</th>
+                                <th>管理员</th>
+                                <th>顶级代理</th>
+                                <th>超级代理</th>
+                                <th>金牌代理</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i = 0; i < products.length; i++){ %>
+                            <tr>
+                                <td class="num"><%= i + 1 %> </td>
+                                <td class="smallType">
+                                    <span><%= products[i].smallTypeName %></span>
+                                    <input type="hidden" value="<%= products[i].smallType %>">
+                                </td>
+                                <td class="name"><%= products[i].name %> </td>
+                                <td class="adminPrice"><%= products[i].adminPrice %> </td>
+                                <td class="topPrice"><%= products[i].topPrice %> </td>
+                                <td class="superPrice"><%= products[i].superPrice %> </td>
+                                <td class="goldPrice"><%= products[i].goldPrice %> </td>
+                                <td class="operation">
+                                    <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs edit">修改</button>
+                                    <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button>
+                                    <input type="hidden" value="<%= products[i]._id %>">
+                                </td>
+                            </tr>
+                            <% } %>
+
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </div>
@@ -64,9 +82,11 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 
 <script>
     require('adminMenuContent');
+    require('adminPriceFlow');
 </script>
 
 </body>

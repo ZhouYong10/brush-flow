@@ -226,7 +226,10 @@ router.get('/price/forum', function (req, res) {
 });
 
 router.get('/price/flow', function (req, res) {
-    res.render('adminPriceFlow', {title: '价格&状态管理 / 流量模块', money: 10.01})
+    Product.open().find({type: 'flow'})
+        .then(function (products) {
+            res.render('adminPriceFlow', {title: '价格&状态管理 / 流量模块', money: 10.01, products: products.reverse()});
+        });
 });
 
 router.get('/price/WX/MP/WB', function (req, res) {
