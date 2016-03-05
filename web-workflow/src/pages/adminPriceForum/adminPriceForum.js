@@ -211,8 +211,8 @@ function registerSaveCancel($tbody) {
         var $parentTd = $(this).parent();
         var $tr = $parentTd.parent();
         var product = {
-            type: $tr.find('.type').val(),
-            typeName: $tr.find('.type').find('option:selected').text(),
+            type: 'forum',
+            typeName: '论坛',
             smallType: $tr.find('.smallType').val(),
             smallTypeName: $tr.find('.smallType').find('option:selected').text(),
             name: $tr.find('.name').val(),
@@ -261,20 +261,58 @@ function registerSaveCancel($tbody) {
         });
     });
 
-    $tbody.find('.type').change(function() {
-        var $parentTd = $(this).parent();
-        $parentTd.next().remove();
-        var type = $(this).val();
-        switch (type) {
-            case 'wx':
-                $parentTd.after(wxSmallType);
-                break;
-            case 'wb':
-                $parentTd.after(wbSmallType);
-                break;
-            case 'mp':
-                $parentTd.after(mpSmallType);
-                break
-        }
+    $tbody.find('.upload').click(function() {
+        var upload = $('<input type="file">');
+        upload.get(0).click();
+        upload.change(function() {
+            //check whether browser fully supports all File API
+            if (window.File && window.FileReader && window.FileList && window.Blob)
+            {
+                var file = upload[0].files[0];
+                var fsize = file.size; //get file size
+                var ftype = file.type; // get file type
+
+                //allow only valid image file types
+                switch(ftype)
+                {
+                    case 'image/png': case 'image/gif': case 'image/jpeg': case 'image/pjpeg':
+                    break;
+                    default:
+                        layer.msg('不支持的文件格式，请选择图片文件！');
+                        return false
+                }
+
+                //Allowed file size is less than 1 MB (1048576)
+                if(fsize>1048576)
+                {
+                    layer.msg('图片太大，请压缩后上传，最大支持1M！');
+                    return false
+                }
+
+                var formData = new FormData(file);
+                $.ajax({
+                    url: '/admin/price/forum/img/upload',
+                    type: 'post',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        console.log('=====================');
+                        console.log(data);
+                    },
+                    error: function() {
+                        layer.msg('图片上传失败，与服务器通信失败！');
+                    }
+                })
+            }
+            else
+            {
+                //Output error to older unsupported browsers that doesn't support HTML5 File API
+                layer.msg('请升级您的浏览器，因为您当前的浏览器版本太低，不支持我们使用到的一些新特性！');
+                return false;
+            }
+        })
+
     })
 }
