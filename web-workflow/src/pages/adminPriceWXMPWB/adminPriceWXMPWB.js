@@ -230,7 +230,6 @@ function registerSaveCancel($tbody) {
             var $priceItemText = $(priceItemText);
             var num = $tr.find('.num').text();
 
-            console.log(result);
             $priceItemText.find('.num').text(num);
             $priceItemText.find('.type span').text(result.typeName);
             $priceItemText.find('.type input').val(result.type);

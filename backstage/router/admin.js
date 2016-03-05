@@ -232,6 +232,30 @@ router.get('/price/flow', function (req, res) {
         });
 });
 
+router.post('/price/flow', function (req, res) {
+    Product.open().insert(req.body)
+        .then(function (result) {
+            res.send(result[0]);
+        });
+});
+
+router.post('/price/flow/update', function (req, res) {
+    var id = req.body.id;
+    delete req.body.id;
+    Product.open().updateById(id, {$set: req.body})
+        .then(function (result) {
+            res.end();
+        });
+});
+
+router.post('/price/flow/delete', function (req, res) {
+    Product.open().removeById(req.body.id)
+        .then(function () {
+            res.end();
+        });
+});
+
+
 router.get('/price/WX/MP/WB', function (req, res) {
     Product.open().find({type: {$in: ['wx', 'wb', 'mp']}})
         .then(function (products) {
