@@ -222,8 +222,13 @@ router.post('/manage/user/add', function (req, res) {
  * manage price
  * */
 router.get('/price/forum', function (req, res) {
-    res.render('adminPriceForum', {title: '价格&状态管理 / 论坛模块', money: 10.01})
+    Product.open().find({type: 'forum'})
+        .then(function (products) {
+            res.render('adminPriceForum', {title: '价格&状态管理 / 论坛模块', money: 10.01, products: products.reverse()});
+        });
 });
+
+
 
 router.get('/price/flow', function (req, res) {
     Product.open().find({type: 'flow'})
