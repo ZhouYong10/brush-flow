@@ -262,13 +262,13 @@ function registerSaveCancel($tbody) {
     });
 
     $tbody.find('.upload').click(function() {
-        var upload = $('<input type="file">');
-        upload.get(0).click();
-        upload.change(function() {
+        var $upload = $('<input type="file">');
+        $upload.get(0).click();
+        $upload.change(function() {
             //check whether browser fully supports all File API
             if (window.File && window.FileReader && window.FileList && window.Blob)
             {
-                var file = upload[0].files[0];
+                var file = $upload[0].files[0];
                 var fsize = file.size; //get file size
                 var ftype = file.type; // get file type
 
@@ -283,13 +283,14 @@ function registerSaveCancel($tbody) {
                 }
 
                 //Allowed file size is less than 1 MB (1048576)
-                if(fsize>1048576)
+                if(fsize>1024*1024)
                 {
                     layer.msg('图片太大，请压缩后上传，最大支持1M！');
                     return false
                 }
 
-                var formData = new FormData(file);
+                var formData = new FormData();
+                formData.append('file', file);
                 $.ajax({
                     url: '/admin/price/forum/img/upload',
                     type: 'post',
@@ -297,9 +298,11 @@ function registerSaveCancel($tbody) {
                     cache: false,
                     contentType: false,
                     processData: false,
-                    success: function(data) {
-                        console.log('=====================');
-                        console.log(data);
+                    success: function(imgUrl) {
+                        var $uploadBtn = $tbody.find('.upload');
+                        var $uploadBtnParent = $uploadBtn.parent();
+                        $uploadBtn.remove();
+                        $uploadBtnParent.append($('<img src="' + imgUrl + '"/><input type="hidden" value="' + imgUrl + '">'));
                     },
                     error: function() {
                         layer.msg('图片上传失败，与服务器通信失败！');

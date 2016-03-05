@@ -18,7 +18,10 @@ var Error = require('../models/Error');
 var Feedback = require('../models/Feedback');
 
 var moment = require('moment');
+var Formidable = require('formidable');
 
+var path = require('path');
+var fs = require('fs');
 var router = require('express').Router();
 
 //拦截非管理员登录
@@ -226,6 +229,30 @@ router.get('/price/forum', function (req, res) {
         .then(function (products) {
             res.render('adminPriceForum', {title: '价格&状态管理 / 论坛模块', money: 10.01, products: products.reverse()});
         });
+});
+
+router.post('/price/forum/img/upload', function (req, res) {
+    var form = new Formidable.IncomingForm();
+    var logoDir = form.uploadDir = path.join(__dirname, '../public/logos/');
+    if(!fs.existsSync(logoDir)){
+        fs.mkdirSync(logoDir);
+    }
+    form.maxFieldsSize = 1024 * 1024;
+    form.encoding = 'utf-8';
+    form.keepExtensions = true;
+    form.hash = 'md5';
+    form.parse(req, function(err, fields, files) {
+        var file = files.file;
+        var filePath = file.path;
+        var fileExt = filePath.substring(filePath.lastIndexOf('.'));
+        var newFileName = file.hash + fileExt;
+        var newFilePath = path.join(logoDir + newFileName);
+
+        fs.rename(filePath, newFilePath, function (err) {
+            res.end('/logos/' + newFileName);
+        });
+    });
+
 });
 
 
