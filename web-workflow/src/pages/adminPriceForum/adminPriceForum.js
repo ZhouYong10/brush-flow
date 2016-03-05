@@ -302,7 +302,7 @@ function registerSaveCancel($tbody) {
                         var $uploadBtn = $tbody.find('.upload');
                         var $uploadBtnParent = $uploadBtn.parent();
                         $uploadBtn.remove();
-                        $uploadBtnParent.append($('<img src="' + imgUrl + '"/><input type="hidden" value="' + imgUrl + '">'));
+                        $uploadBtnParent.append($('<div class="imgWrap"><img src="' + imgUrl + '"/><input type="hidden" value="' + imgUrl + '"><a class="am-icon-remove removeImg" title="删除图片"></a></div>'));
                     },
                     error: function() {
                         layer.msg('图片上传失败，与服务器通信失败！');
