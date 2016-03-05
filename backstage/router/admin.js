@@ -234,6 +234,11 @@ router.get('/price/forum', function (req, res) {
 router.post('/price/forum/img/upload', function (req, res) {
     var form = new Formidable.IncomingForm();
     var logoDir = form.uploadDir = path.join(__dirname, '../public/logos/');
+    Object.defineProperty(global, 'logoDir', {
+        value: logoDir,
+        writable: false,
+        configurable: false
+    });
     if(!fs.existsSync(logoDir)){
         fs.mkdirSync(logoDir);
     }
@@ -252,7 +257,14 @@ router.post('/price/forum/img/upload', function (req, res) {
             res.end('/logos/' + newFileName);
         });
     });
+});
 
+router.post('/price/forum/img/remove', function (req, res) {
+    var fileName = req.body.fileName;
+    var filePath = global.logoDir + fileName;
+    fs.unlink(filePath, function(err) {
+        res.end('删除图片成功！');
+    });
 });
 
 

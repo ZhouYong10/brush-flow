@@ -303,6 +303,7 @@ function registerSaveCancel($tbody) {
                         var $uploadBtnParent = $uploadBtn.parent();
                         $uploadBtn.remove();
                         $uploadBtnParent.append($('<div class="imgWrap"><img src="' + imgUrl + '"/><input type="hidden" value="' + imgUrl + '"><a class="am-icon-remove removeImg" title="删除图片"></a></div>'));
+                        removeImg($tbody);
                     },
                     error: function() {
                         layer.msg('图片上传失败，与服务器通信失败！');
@@ -317,5 +318,15 @@ function registerSaveCancel($tbody) {
             }
         })
 
+    })
+}
+
+function removeImg($tbody) {
+    $tbody.find('.removeImg').click(function() {
+        var imgUrl = $(this).prev().val();
+        var fileName = imgUrl.substring(imgUrl.lastIndexOf('/')+1);
+        $.post('/admin/price/forum/img/remove', {fileName: fileName}, function(result) {
+            
+        })
     })
 }
