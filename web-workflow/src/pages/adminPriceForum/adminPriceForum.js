@@ -38,7 +38,7 @@ var priceItem = '<tr> ' +
     upload +
     ' </td> ' +
     '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="站点名称"> </td> ' +
-    '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="站点网址"> </td> ' +
+    '<td> <input class="am-form-field am-input-sm address" type="text" placeholder="站点网址"> </td> ' +
     '<td> <input class="am-form-field am-input-sm adminPrice" type="text" placeholder="管理员价格"> </td> ' +
     '<td> <input class="am-form-field am-input-sm topPrice" type="text" placeholder="顶级代理价格"> </td> ' +
     '<td> <input class="am-form-field am-input-sm superPrice" type="text" placeholder="超级代理价格"> </td> ' +
@@ -52,13 +52,16 @@ var priceItem = '<tr> ' +
     '</tr>';
 var priceItemText = '<tr> ' +
     '<td class="num"></td> ' +
-    '<td class="type"><span></span> <input type="hidden" value=""></td> ' +
     '<td class="smallType"><span></span> <input type="hidden" value=""></td> ' +
+    '<td class="logo"> <img /> </td>'+
     '<td class="name"> </td> ' +
+    '<td class="address"> </td> ' +
     '<td class="adminPrice"> </td> ' +
     '<td class="topPrice"> </td> ' +
     '<td class="superPrice"> </td> ' +
     '<td class="goldPrice"> </td> ' +
+    '<td class="status"><span></span> <input type="hidden" value=""></td> ' +
+    '<td class="remark"> </td> ' +
     '<td class="operation"> </td> ' +
     '</tr>';
 var $changeItemTr ;
@@ -218,26 +221,35 @@ function registerSaveCancel($tbody) {
             typeName: '论坛',
             smallType: $tr.find('.smallType').val(),
             smallTypeName: $tr.find('.smallType').find('option:selected').text(),
+            logo: $tr.find('.imgWrap input').val(),
             name: $tr.find('.name').val(),
+            address: $tr.find('.address').val(),
             adminPrice: $tr.find('.adminPrice').val(),
             topPrice: $tr.find('.topPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
-            goldPrice: $tr.find('.goldPrice').val()
+            goldPrice: $tr.find('.goldPrice').val(),
+            status: $tr.find('.status').val(),
+            statusName: $tr.find('.status').find('option:selected').text(),
+            remark: $tr.find('.remark').val()
         };
+
         $.post('/admin/price/WX/MP/WB', product, function(result) {
             var $priceItemText = $(priceItemText);
             var num = $tr.find('.num').text();
 
             $priceItemText.find('.num').text(num);
-            $priceItemText.find('.type span').text(result.typeName);
-            $priceItemText.find('.type input').val(result.type);
             $priceItemText.find('.smallType span').text(result.smallTypeName);
             $priceItemText.find('.smallType input').val(result.smallType);
             $priceItemText.find('.name').text(result.name);
+            $priceItemText.find('.logo img').attr('src', result.logo);
+            $priceItemText.find('.address').text(result.address);
             $priceItemText.find('.adminPrice').text(result.adminPrice);
             $priceItemText.find('.topPrice').text(result.topPrice);
             $priceItemText.find('.superPrice').text(result.superPrice);
             $priceItemText.find('.goldPrice').text(result.goldPrice);
+            $priceItemText.find('.status span').text(result.statusName);
+            $priceItemText.find('.status input').val(result.status);
+            $priceItemText.find('.remark').text(result.remark);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + result._id + '">'));
 
             var $aim ;

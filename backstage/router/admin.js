@@ -231,6 +231,13 @@ router.get('/price/forum', function (req, res) {
         });
 });
 
+router.post('/price/forum', function (req, res) {
+    Product.open().insert({type: 'forum'})
+        .then(function (result) {
+            res.send(result[0]);
+        });
+});
+
 router.post('/price/forum/img/upload', function (req, res) {
     var form = new Formidable.IncomingForm();
     var logoDir = form.uploadDir = path.join(__dirname, '../public/logos/');
