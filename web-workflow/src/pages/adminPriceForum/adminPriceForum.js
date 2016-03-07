@@ -17,8 +17,8 @@ var smallType = '<td> ' +
     '<option value="games">游戏社区</option> ' +
     '</select> ' +
     '</td> ';
-var status = '<td> ' +
-    '<select class="am-form-group am-form-select status"> ' +
+var condition = '<td> ' +
+    '<select class="am-form-group am-form-select condition"> ' +
     '<option value="normal">正常</option> ' +
     '<option value="develop">开发中</option> ' +
     '<option value="maintain">维护中</option> ' +
@@ -43,7 +43,7 @@ var priceItem = '<tr> ' +
     '<td> <input class="am-form-field am-input-sm topPrice" type="text" placeholder="顶级代理价格"> </td> ' +
     '<td> <input class="am-form-field am-input-sm superPrice" type="text" placeholder="超级代理价格"> </td> ' +
     '<td> <input class="am-form-field am-input-sm goldPrice" type="text" placeholder="金牌代理价格"> </td> ' +
-    status +
+    condition +
     '<td> <textarea class="remark" rows="1" cols="28"></textarea> </td> ' +
     '<td> ' +
     saveBtn +
@@ -60,7 +60,7 @@ var priceItemText = '<tr> ' +
     '<td class="topPrice"> </td> ' +
     '<td class="superPrice"> </td> ' +
     '<td class="goldPrice"> </td> ' +
-    '<td class="status"><span></span> <input type="hidden" value=""></td> ' +
+    '<td class="condition"><span></span> <input type="hidden" value=""></td> ' +
     '<td class="remark"> </td> ' +
     '<td class="operation"> </td> ' +
     '</tr>';
@@ -114,7 +114,7 @@ function registerEditDelete($tbody) {
         $newParentTr.find('.topPrice').val($parentTr.find('.topPrice').text());
         $newParentTr.find('.superPrice').val($parentTr.find('.superPrice').text());
         $newParentTr.find('.goldPrice').val($parentTr.find('.goldPrice').text());
-        $newParentTr.find('.status').val($parentTr.find('.status input').val());
+        $newParentTr.find('.condition').val($parentTr.find('.condition input').val());
         $newParentTr.find('.remark').val($parentTr.find('.remark').text());
 
         var $aim ;
@@ -164,8 +164,8 @@ function registerChangeSaveGiveUp($tbody) {
             topPrice: $tr.find('.topPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
             goldPrice: $tr.find('.goldPrice').val(),
-            status: $tr.find('.status').val(),
-            statusName: $tr.find('.status').find('option:selected').text(),
+            condition: $tr.find('.condition').val(),
+            conditionName: $tr.find('.condition').find('option:selected').text(),
             remark: $tr.find('.remark').val()
         };
 
@@ -183,8 +183,8 @@ function registerChangeSaveGiveUp($tbody) {
             $priceItemText.find('.topPrice').text(product.topPrice);
             $priceItemText.find('.superPrice').text(product.superPrice);
             $priceItemText.find('.goldPrice').text(product.goldPrice);
-            $priceItemText.find('.status span').text(product.statusName);
-            $priceItemText.find('.status input').val(product.status);
+            $priceItemText.find('.condition span').text(product.conditionName);
+            $priceItemText.find('.condition input').val(product.condition);
             $priceItemText.find('.remark').text(product.remark);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + product.id + '">'));
 
@@ -236,8 +236,8 @@ function registerSaveCancel($tbody) {
             topPrice: $tr.find('.topPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
             goldPrice: $tr.find('.goldPrice').val(),
-            status: $tr.find('.status').val(),
-            statusName: $tr.find('.status').find('option:selected').text(),
+            condition: $tr.find('.condition').val(),
+            conditionName: $tr.find('.condition').find('option:selected').text(),
             remark: $tr.find('.remark').val()
         };
 
@@ -255,8 +255,8 @@ function registerSaveCancel($tbody) {
             $priceItemText.find('.topPrice').text(result.topPrice);
             $priceItemText.find('.superPrice').text(result.superPrice);
             $priceItemText.find('.goldPrice').text(result.goldPrice);
-            $priceItemText.find('.status span').text(result.statusName);
-            $priceItemText.find('.status input').val(result.status);
+            $priceItemText.find('.condition span').text(result.conditionName);
+            $priceItemText.find('.condition input').val(result.condition);
             $priceItemText.find('.remark').text(result.remark);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + result._id + '">'));
 
