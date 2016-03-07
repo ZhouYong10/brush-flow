@@ -4,10 +4,12 @@
 /**
  * Created by zhouyong10 on 1/24/16.
  */
+var Product = require('../models/Product');
 
 var router = require('express').Router();
 
 router.get('/video', function (req, res) {
+
     res.render('forumTemplate', {title: '视频站点', money: req.session.funds})
 });
 

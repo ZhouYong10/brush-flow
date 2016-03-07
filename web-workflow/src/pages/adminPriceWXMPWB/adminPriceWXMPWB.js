@@ -68,7 +68,7 @@ var $changeItemTr ;
 $(function () {
     registerEditDelete($('.priceWXMPWB tbody'));
 
-    $('#addPrice').click(function () {
+    $('#addPrice').off().click(function () {
         var $tbody = $('.priceWXMPWB tbody');
         var $tr = $(priceItem);
         $tbody.prepend($tr);
@@ -85,7 +85,7 @@ function resortNum($tbody) {
 }
 
 function registerEditDelete($tbody) {
-    $tbody.find('.edit').click(function () {
+    $tbody.find('.edit').off().click(function () {
         var self = this;
         var $parentTd = $(self).parent();
         var $parentTr = $parentTd.parent();
@@ -132,7 +132,7 @@ function registerEditDelete($tbody) {
         registerChangeSaveGiveUp($tbody);
     });
 
-    $tbody.find('.delete').click(function () {
+    $tbody.find('.delete').off().click(function () {
         var self = this;
         var $parentTd = $(self).parent();
         var $parentTr = $parentTd.parent();
@@ -149,7 +149,7 @@ function registerEditDelete($tbody) {
 }
 
 function registerChangeSaveGiveUp($tbody) {
-    $tbody.find('.changeSave').click(function () {
+    $tbody.find('.changeSave').off().click(function () {
         var $parentTd = $(this).parent();
         var $tr = $parentTd.parent();
         var product = {
@@ -193,7 +193,7 @@ function registerChangeSaveGiveUp($tbody) {
         })
     });
 
-    $tbody.find('.giveUp').click(function () {
+    $tbody.find('.giveUp').off().click(function () {
         var $parentTd = $(this).parent();
         var $tr = $parentTd.parent();
 
@@ -212,7 +212,7 @@ function registerChangeSaveGiveUp($tbody) {
 }
 
 function registerSaveCancel($tbody) {
-    $tbody.find('.save').click(function () {
+    $tbody.find('.save').off().click(function () {
         var $parentTd = $(this).parent();
         var $tr = $parentTd.parent();
         var product = {
@@ -256,7 +256,7 @@ function registerSaveCancel($tbody) {
         })
     });
 
-    $tbody.find('.cancel').click(function () {
+    $tbody.find('.cancel').off().click(function () {
         var self = this;
         var index = layer.confirm('您确定要取消么？', function(){
             var $tr = $(self).parent().parent();
@@ -266,7 +266,7 @@ function registerSaveCancel($tbody) {
         });
     });
 
-    $tbody.find('.type').change(function() {
+    $tbody.find('.type').off().change(function() {
         var $parentTd = $(this).parent();
         $parentTd.next().remove();
         var type = $(this).val();
