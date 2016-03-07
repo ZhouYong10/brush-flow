@@ -24,6 +24,7 @@ var status = '<td> ' +
     '<option value="maintain">维护中</option> ' +
     '</select> ' +
     '</td> ';
+var upload = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs upload">上传</button>';
 var saveBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs save">保存</button> ';
 var cancelBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs cancel">取消</button> ';
 var changeSaveBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs changeSave">保存</button> ';
@@ -33,7 +34,9 @@ var deleteBtn = '<button type="button" class="am-btn am-btn-primary am-radius am
 var priceItem = '<tr> ' +
     '<td class="num"></td> ' +
     smallType+
-    '<td> <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs upload">上传</button> </td> ' +
+    '<td> ' +
+    upload +
+    ' </td> ' +
     '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="站点名称"> </td> ' +
     '<td> <input class="am-form-field am-input-sm name" type="text" placeholder="站点网址"> </td> ' +
     '<td> <input class="am-form-field am-input-sm adminPrice" type="text" placeholder="管理员价格"> </td> ' +
@@ -261,6 +264,10 @@ function registerSaveCancel($tbody) {
         });
     });
 
+    uploadImg($tbody);
+}
+
+function uploadImg($tbody) {
     $tbody.find('.upload').click(function() {
         var $upload = $('<input type="file">');
         $upload.get(0).click();
@@ -323,10 +330,14 @@ function registerSaveCancel($tbody) {
 
 function removeImg($tbody) {
     $tbody.find('.removeImg').click(function() {
+        var $imgWrap = $(this).parent();
+        var $imgTd = $imgWrap.parent();
         var imgUrl = $(this).prev().val();
         var fileName = imgUrl.substring(imgUrl.lastIndexOf('/')+1);
         $.post('/admin/price/forum/img/remove', {fileName: fileName}, function(result) {
-            
+            $imgWrap.remove();
+            $imgTd.append($(upload));
+            uploadImg($tbody);
         })
     })
 }
