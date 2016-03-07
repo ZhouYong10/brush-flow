@@ -122,6 +122,7 @@ app.post('/login', function(req, res, next) {
         }else{
           req.session.funds = userIns.funds;
           req.session.username = userIns.username;
+          req.session.user = user;
           res.send({
             isOK: true,
             path: '/client/home'
