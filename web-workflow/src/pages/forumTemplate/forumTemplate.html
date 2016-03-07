@@ -62,10 +62,10 @@
                                 </div>
                             </td>
                             <td  class="am-text-middle">
-                                <% if(userRole == '管理员'){ %> <%= products[i].adminPrice %> <% } %>
-                                <% if(userRole == '顶级代理'){ %> <%= products[i].topPrice %> <% } %>
-                                <% if(userRole == '超级代理'){ %> <%= products[i].superPrice %> <% } %>
-                                <% if(userRole == '金牌代理'){ %> <%= products[i].goldPrice %> <% } %>
+                                <% if(role == '管理员'){ %> <%= products[i].adminPrice %> <% } %>
+                                <% if(role == '顶级代理'){ %> <%= products[i].topPrice %> <% } %>
+                                <% if(role == '超级代理'){ %> <%= products[i].superPrice %> <% } %>
+                                <% if(role == '金牌代理'){ %> <%= products[i].goldPrice %> <% } %>
                             </td>
                             <td  class="am-text-middle"><%= products[i].conditionName %></td>
                             <td  class="am-text-middle"><%= products[i].remark %></td>

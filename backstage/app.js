@@ -148,9 +148,16 @@ app.use(function(req, res, next) {
 });
 
 app.get('/client/home', function (req, res) {
+  var user = req.session.user;
   Placard.open().find()
       .then(function (placards) {
-        res.render('clientHome', {title: '系统公告', money: req.session.funds, placards: placards});
+        res.render('clientHome', {
+          title: '系统公告',
+          money: req.session.funds,
+          placards: placards,
+          username: user.username,
+          role: user.role
+        });
       }, function (error) {
         res.send('获取公告列表失败： ' + error);
       });
