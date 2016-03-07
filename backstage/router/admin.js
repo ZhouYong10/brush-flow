@@ -253,6 +253,13 @@ router.post('/price/forum/update', function (req, res) {
         });
 });
 
+router.post('/price/forum/delete', function (req, res) {
+    Product.open().removeById(req.body.id)
+        .then(function () {
+            res.end();
+        });
+});
+
 router.post('/price/forum/img/upload', function (req, res) {
     var form = new Formidable.IncomingForm();
     var logoDir = form.uploadDir = global.logoDir;

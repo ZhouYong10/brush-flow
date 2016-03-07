@@ -137,7 +137,7 @@ function registerEditDelete($tbody) {
         var $parentTr = $parentTd.parent();
         var id = $parentTd.find('input').val();
         var index = layer.confirm('您确定要删除么？', function(){
-            $.post('/admin/price/WX/MP/WB/delete', {id: id}, function (result) {
+            $.post('/admin/price/forum/delete', {id: id}, function (result) {
                 $parentTr.remove();
                 resortNum($tbody);
                 layer.close(index);
