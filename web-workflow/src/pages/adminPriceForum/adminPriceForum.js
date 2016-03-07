@@ -153,31 +153,41 @@ function registerChangeSaveGiveUp($tbody) {
         var $tr = $parentTd.parent();
         var product = {
             id: $tr.find('.giveUp').next().val(),
-            type: $tr.find('.type').val(),
-            typeName: $tr.find('.type').find('option:selected').text(),
+            type: 'forum',
+            typeName: '论坛',
             smallType: $tr.find('.smallType').val(),
             smallTypeName: $tr.find('.smallType').find('option:selected').text(),
+            logo: $tr.find('.imgWrap input').val(),
             name: $tr.find('.name').val(),
+            address: $tr.find('.address').val(),
             adminPrice: $tr.find('.adminPrice').val(),
             topPrice: $tr.find('.topPrice').val(),
             superPrice: $tr.find('.superPrice').val(),
-            goldPrice: $tr.find('.goldPrice').val()
+            goldPrice: $tr.find('.goldPrice').val(),
+            status: $tr.find('.status').val(),
+            statusName: $tr.find('.status').find('option:selected').text(),
+            remark: $tr.find('.remark').val()
         };
-        $.post('/admin/price/WX/MP/WB/update', product, function() {
+
+        $.post('/admin/price/forum/update', product, function() {
             var $priceItemText = $(priceItemText);
             var num = $tr.find('.num').text();
 
             $priceItemText.find('.num').text(num);
-            $priceItemText.find('.type span').text(product.typeName);
-            $priceItemText.find('.type input').val(product.type);
             $priceItemText.find('.smallType span').text(product.smallTypeName);
             $priceItemText.find('.smallType input').val(product.smallType);
             $priceItemText.find('.name').text(product.name);
+            $priceItemText.find('.logo img').attr('src', product.logo);
+            $priceItemText.find('.address').text(product.address);
             $priceItemText.find('.adminPrice').text(product.adminPrice);
             $priceItemText.find('.topPrice').text(product.topPrice);
             $priceItemText.find('.superPrice').text(product.superPrice);
             $priceItemText.find('.goldPrice').text(product.goldPrice);
+            $priceItemText.find('.status span').text(product.statusName);
+            $priceItemText.find('.status input').val(product.status);
+            $priceItemText.find('.remark').text(product.remark);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + product.id + '">'));
+
             var $aim ;
             if($tr.prev().length > 0) {
                 $aim = $tr.prev();
@@ -231,7 +241,7 @@ function registerSaveCancel($tbody) {
             remark: $tr.find('.remark').val()
         };
 
-        $.post('/admin/price/WX/MP/WB', product, function(result) {
+        $.post('/admin/price/forum', product, function(result) {
             var $priceItemText = $(priceItemText);
             var num = $tr.find('.num').text();
 

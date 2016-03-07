@@ -238,9 +238,18 @@ router.get('/price/forum', function (req, res) {
 });
 
 router.post('/price/forum', function (req, res) {
-    Product.open().insert({type: 'forum'})
+    Product.open().insert(req.body)
         .then(function (result) {
             res.send(result[0]);
+        });
+});
+
+router.post('/price/forum/update', function (req, res) {
+    var id = req.body.id;
+    delete req.body.id;
+    Product.open().updateById(id, {$set: req.body})
+        .then(function (result) {
+            res.end();
         });
 });
 
