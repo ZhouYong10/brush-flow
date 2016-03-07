@@ -92,33 +92,30 @@ function registerEditDelete($tbody) {
         var $parentTr = $parentTd.parent();
         $changeItemTr = $parentTr;
         var num = $parentTr.find('.num').text();
-        var typeName = $parentTr.find('.type span').text();
 
         var $newParentTr = $(priceItem);
-        var $newSmallTypeTd = $newParentTr.find('.smallType').parent();
-        var $newSmallTypeTdPrev = $newSmallTypeTd.prev();
-        switch (typeName) {
-            case '美拍':
-                $newSmallTypeTd.remove();
-                $newSmallTypeTdPrev.after($(mpSmallType));
-                break;
-            case '微博':
-                $newSmallTypeTd.remove();
-                $newSmallTypeTdPrev.after($(wbSmallType));
-                break;
-        }
+
+        var $uploadBtn = $newParentTr.find('.upload');
+        var $uploadBtnParent = $uploadBtn.parent();
+        $uploadBtn.remove();
+        $uploadBtnParent.append($('<div class="imgWrap"><img src="' +
+            $parentTr.find('.logo img').attr('src') + '"/><input type="hidden" value="' +
+            $parentTr.find('.logo img').attr('src') + '"><a class="am-icon-remove removeImg" title="删除图片"></a></div>'));
+
         var $newBtnParent = $newParentTr.find('.save').parent();
         $newBtnParent.children().remove();
         $newBtnParent.append($(changeSaveBtn + giveUpBtn + '<input type="hidden" value="'+$parentTr.find('.operation input').val()+'">'));
 
         $newParentTr.find('.num').text(num);
-        $newParentTr.find('.type').val($parentTr.find('.type input').val());
         $newParentTr.find('.smallType').val($parentTr.find('.smallType input').val());
         $newParentTr.find('.name').val($parentTr.find('.name').text());
+        $newParentTr.find('.address').val($parentTr.find('.address').text());
         $newParentTr.find('.adminPrice').val($parentTr.find('.adminPrice').text());
         $newParentTr.find('.topPrice').val($parentTr.find('.topPrice').text());
         $newParentTr.find('.superPrice').val($parentTr.find('.superPrice').text());
         $newParentTr.find('.goldPrice').val($parentTr.find('.goldPrice').text());
+        $newParentTr.find('.status').val($parentTr.find('.status input').val());
+        $newParentTr.find('.remark').val($parentTr.find('.remark').text());
 
         var $aim ;
         if(num == 1) {
@@ -131,6 +128,7 @@ function registerEditDelete($tbody) {
             $aim.after($newParentTr);
         }
         registerChangeSaveGiveUp($tbody);
+        removeImg($tbody);
     });
 
     $tbody.find('.delete').click(function () {

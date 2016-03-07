@@ -24,6 +24,12 @@ var path = require('path');
 var fs = require('fs');
 var router = require('express').Router();
 
+Object.defineProperty(global, 'logoDir', {
+    value: path.join(__dirname, '../public/logos/'),
+    writable: false,
+    configurable: false
+});
+
 //拦截非管理员登录
 router.use(function(req, res, next) {
     User.open().findById(req.session.passport.user)
@@ -240,12 +246,8 @@ router.post('/price/forum', function (req, res) {
 
 router.post('/price/forum/img/upload', function (req, res) {
     var form = new Formidable.IncomingForm();
-    var logoDir = form.uploadDir = path.join(__dirname, '../public/logos/');
-    Object.defineProperty(global, 'logoDir', {
-        value: logoDir,
-        writable: false,
-        configurable: false
-    });
+    var logoDir = form.uploadDir = global.logoDir;
+
     if(!fs.existsSync(logoDir)){
         fs.mkdirSync(logoDir);
     }
