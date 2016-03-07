@@ -90,20 +90,20 @@ router.get('/update/header/nav', function (req, res) {
                 Wx.open().find({status: '未处理'}).then(function (wxs) {
                     if (wxs) {
                         for(var index in wxs) {
-                            switch (wxs[index].type) {
-                                case '微信原文':
+                            switch (wxs[index].smallType) {
+                                case 'article':
                                     updateNav.wxArticle++;
                                     break;
-                                case '微信阅读点赞':
+                                case 'like':
                                     updateNav.wxLike++;
                                     break;
-                                case '微信公众粉丝回复':
+                                case 'reply':
                                     updateNav.wxReply++;
                                     break;
-                                case '微信个人好友':
+                                case 'friend':
                                     updateNav.wxFriend++;
                                     break;
-                                case '微信好友地区扫码':
+                                case 'code':
                                     updateNav.wxCode++;
                                     break
                             }
