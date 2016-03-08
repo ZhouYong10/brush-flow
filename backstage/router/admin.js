@@ -9,7 +9,7 @@ var Feedback = require('../models/Feedback');
 var Withdraw = require('../models/Withdraw');
 
 var Product = require('../models/Product');
-var Orders = require('../models/Orders');
+var Orders = require('../models/Order');
 
 var moment = require('moment');
 var Formidable = require('formidable');

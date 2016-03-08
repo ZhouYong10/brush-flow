@@ -9,18 +9,18 @@ var Class = require('./Class');
 //var moment = require('moment');
 
 
-var Orders = new Class();
+var Order = new Class();
 
 
-Orders.extend(db);
+Order.extend(db);
 
-Orders.open = function() {
-    return Orders.openCollection('Orders');
+Order.open = function() {
+    return Order.openCollection('Order');
 };
 
-Orders.include({
+Order.include({
 
 });
 
 
-module.exports = Orders;
+module.exports = Order;
