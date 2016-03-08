@@ -19,7 +19,7 @@
 
     <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
+        <div id="wxFans" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
@@ -32,46 +32,55 @@
                     </div>
                 </div>
 
-                <form class="am-form am-form-horizontal">
+                <validator name="wxFans">
+                <form class="am-form am-form-horizontal" method="post" action="/wx/friend/add">
                     <div class="am-form-group">
                         <label for="fansID" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>微信账号</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="fansID" class="am-radius am-input-sm" type="text" placeholder="请填写公众平台微信号或者ID">
+                            <input id="fansID" class="am-radius am-input-sm" type="text" placeholder="请填写公众平台微信号或者ID"
+                            v-validate:account="{required: true}" name="account">
+                            <span class="tips" v-if="$wxFans.account.required">微信账号不能为空!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="fansPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="fansPrice" class="am-radius am-input-sm" type="text" value="公众粉丝0.105/个" disabled>
+                            <p class="disable">公众粉丝￥<%= price %>/个</p>
+                            <input type="hidden" v-model="myPrice" value="<%= price %>">
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>粉丝数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="fansNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的粉丝数量，最低100起">
+                            <input id="fansNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的粉丝数量，最低100起"
+                            v-validate:num="{required: true, isnum: true, min100: true}" name="num" v-model="num" v-on:keyup="total" v-on:change="total">
+                            <span class="tips" v-if="$wxFans.num.required">需要添加的粉丝数量不能为空!</span>
+                            <span class="tips" v-if="$wxFans.num.isnum">数量必须为正整数!</span>
+                            <span class="tips" v-if="$wxFans.num.min100">需要增加的粉丝数量，最低100起!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="totalPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="totalPrice" class="am-radius am-input-sm" type="text" disabled>
+                            <p class="disable taskPrice">￥ {{count}}</p>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="fansSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">加粉限速</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="fansSpeed" class="am-radius am-input-sm" type="text" placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个粉丝，输入100即可">
+                            <input id="fansSpeed" class="am-radius am-input-sm" type="text" name="speed"
+                                   placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个粉丝，输入100即可">
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="fansType" class="am-u-sm-4 am-u-lg-2 am-form-label">指定模式</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="fansType" class="am-radius am-input-sm">
+                            <select id="fansType" class="am-radius am-input-sm" name="mode">
                                 <option value="">-- 选择模式 --</option>
                                 <option value="宽松匹配">宽松匹配</option>
                             </select>
@@ -79,29 +88,23 @@
                     </div>
 
                     <div class="am-form-group">
-                        <label for="fansCountry" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝国家</label>
+                        <label for="s1" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝国家</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="fansCountry" class="am-radius am-input-sm">
-                                <option value="">-- 选择国家 --</option>
-                            </select>
+                            <select id="s1" class="am-radius am-input-sm" name="country"></select>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="fansProvince" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝省份</label>
+                        <label for="s2" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝省份</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="fansProvince" class="am-radius am-input-sm">
-                                <option value="">-- 选择省份/州 --</option>
-                            </select>
+                            <select id="s2" class="am-radius am-input-sm" name="province"></select>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="fansCity" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝城市</label>
+                        <label for="s3" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝城市</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="fansCity" class="am-radius am-input-sm">
-                                <option value="">-- 选择城市 --</option>
-                            </select>
+                            <select id="s3" class="am-radius am-input-sm" name="city"></select>
                         </div>
                     </div>
 
@@ -109,41 +112,50 @@
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝性别</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <label class="am-radio-inline">
-                                <input type="radio"  value="" name="docInlineRadio"> 男
+                                <input type="radio"  value="随机" name="gender" checked> 随机
                             </label>
                             <label class="am-radio-inline">
-                                <input type="radio" name="docInlineRadio"> 女
+                                <input type="radio"  value="男" name="gender"> 男
+                            </label>
+                            <label class="am-radio-inline">
+                                <input type="radio" value="女" name="gender"> 女
                             </label>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>计划时间</label>
+                        <label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划时间</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="planTime" class="am-radius am-input-sm" type="text" placeholder="首次开始任务的时间">
+                            <input id="planTime" class="am-radius am-input-sm" type="text" placeholder="单击选择首次开始任务的时间"
+                                   onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm', min: laydate.now()})"
+                                   name="startTime" readonly>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行">
+                            <input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行"
+                            v-validate:days="{isnum: true}" name="days">
+                            <span class="tips" v-if="$wxFans.days.isnum">天数必须为正整数!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <textarea id="fansRemark" class="am-radius" rows="3" placeholder="添加任务备注"></textarea>
+                            <textarea id="fansRemark" class="am-radius" rows="3" placeholder="添加任务备注" name="remark"></textarea>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius"
+                                    v-if="$wxFans.valid">提交任务</button>
                         </div>
                     </div>
                 </form>
+                </validator>
 
             </div>
         </div>
@@ -154,6 +166,14 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/js/city.js"></script>
+<script src="/static/plugins/laydate/laydate.js"></script>
+
+
+<script>
+    require('WXfriendAdd');
+    init();
+</script>
 
 </body>
 </html>

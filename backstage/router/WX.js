@@ -2,6 +2,11 @@
  * Created by zhouyong10 on 1/24/16.
  */
 
+var User = require('../models/User');
+var Product = require('../models/Product');
+var Order = require('../models/Order');
+
+var moment = require('moment');
 var router = require('express').Router();
 
 router.get('/friend', function (req, res) {
@@ -16,12 +21,42 @@ router.get('/friend', function (req, res) {
 
 router.get('/friend/add', function (req, res) {
     var user = req.session.user;
-    res.render('WXfriendAdd', {
-        title: '添加微信粉丝',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    })
+    Product.open().findOne({type: 'wx', smallType: 'friend'})
+        .then(function(result) {
+            var product = Product.wrapToInstance(result);
+            var myPrice = product.getPriceByRole(user.role);
+            res.render('WXfriendAdd', {
+                title: '添加微信粉丝',
+                money: req.session.funds,
+                username: user.username,
+                role: user.role,
+                price: myPrice
+            })
+        });
+});
+
+router.post('/friend/add', function (req, res) {
+    var user = req.session.user;
+    var order = Order.wrapToInstance(req.body);
+    Product.open().findOne({type: 'wx', smallType: 'friend'})
+        .then(function(result) {
+            var product = Product.wrapToInstance(result);
+            var myPrice = product.getPriceByRole(user.role);
+            order.totalPrice = myPrice * order.num;
+            order.price = myPrice;
+            order.user = user.username;
+            order.userId = user._id;
+            order.type = product.type;
+            order.typeName = product.typeName;
+            order.smallType = product.smallType;
+            order.smallTypeName = product.smallTypeName;
+            order.status = '未处理';
+            order.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+            order.countParentProfit(user, product);
+
+            console.log(order, '===================');
+            res.end();
+        });
 });
 
 router.get('/fans', function (req, res) {
