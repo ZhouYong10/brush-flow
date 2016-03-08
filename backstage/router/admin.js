@@ -4,18 +4,12 @@
 var User = require('../models/User');
 var Placard = require('../models/Placard');
 var Recharge = require('../models/Recharge');
-
-var Withdraw = require('../models/Withdraw');
-var Reply = require('../models/Reply');
-
-var Product = require('../models/Product');
-
-var Flow = require('../models/Flow');
-var Wx = require('../models/Wx');
-var Mp = require('../models/Mp');
-var Wb = require('../models/Wb');
 var Error = require('../models/Error');
 var Feedback = require('../models/Feedback');
+var Withdraw = require('../models/Withdraw');
+
+var Product = require('../models/Product');
+var Orders = require('../models/Orders');
 
 var moment = require('moment');
 var Formidable = require('formidable');
@@ -79,58 +73,56 @@ router.get('/update/header/nav', function (req, res) {
         if (withdraws) {
             updateNav.withdraw = withdraws.length;
         }
-        Reply.open().find({status: '未处理'}).then(function (replies) {
-            if (replies) {
-                updateNav.reply = replies.length;
+        Error.open().find({status: '未处理'}).then(function (errors) {
+            if (errors) {
+                updateNav.error = errors.length;
             }
-            Flow.open().find({status: '未处理'}).then(function (flows) {
-                if (flows) {
-                    updateNav.flow = flows.length;
+            Feedback.open().find({status: '未处理'}).then(function (feedbacks) {
+                if (feedbacks) {
+                    updateNav.feedback = feedbacks.length;
                 }
-                Wx.open().find({status: '未处理'}).then(function (wxs) {
-                    if (wxs) {
-                        for(var index in wxs) {
-                            switch (wxs[index].smallType) {
-                                case 'article':
-                                    updateNav.wxArticle++;
-                                    break;
-                                case 'like':
-                                    updateNav.wxLike++;
-                                    break;
-                                case 'reply':
-                                    updateNav.wxReply++;
-                                    break;
-                                case 'friend':
-                                    updateNav.wxFriend++;
-                                    break;
-                                case 'code':
-                                    updateNav.wxCode++;
-                                    break
-                            }
-                        }
-                    }
-                    Mp.open().find({status: '未处理'}).then(function (mps) {
-                        if (mps) {
-                            updateNav.mp = mps.length;
-                        }
-                        Wb.open().find({status: '未处理'}).then(function (wbs) {
-                            if (wbs) {
-                                updateNav.wb = wbs.length;
-                            }
-                            Error.open().find({status: '未处理'}).then(function (errors) {
-                                if (errors) {
-                                    updateNav.error = errors.length;
+                Orders.open().find({status: '未处理'})
+                    .then(function (results) {
+                        if(results) {
+                            for(var i in results) {
+                                var result = results[i];
+                                switch (result.type) {
+                                    case 'forum':
+                                        updateNav.reply += 1;
+                                        break;
+                                    case 'flow':
+                                        updateNav.flow += 1;
+                                        break;
+                                    case 'wx':
+                                        switch (result.smallType) {
+                                            case 'article':
+                                                updateNav.wxArticle += 1;
+                                                break;
+                                            case 'like':
+                                                updateNav.wxLike += 1;
+                                                break;
+                                            case 'reply':
+                                                updateNav.wxReply += 1;
+                                                break;
+                                            case 'friend':
+                                                updateNav.wxFriend += 1;
+                                                break;
+                                            case 'code':
+                                                updateNav.wxCode += 1;
+                                                break;
+                                        }
+                                        break;
+                                    case 'mp':
+                                        updateNav.mp += 1;
+                                        break;
+                                    case 'wb':
+                                        updateNav.wb += 1;
+                                        break;
                                 }
-                                Feedback.open().find({status: '未处理'}).then(function (feedbacks) {
-                                    if (feedbacks) {
-                                        updateNav.feedback = feedbacks.length;
-                                    }
-                                    res.send(updateNav);
-                                });
-                            });
-                        });
+                            }
+                        }
+                        res.send(updateNav);
                     });
-                });
             });
         });
     });
