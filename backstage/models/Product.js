@@ -19,7 +19,24 @@ Product.open = function() {
 };
 
 Product.include({
-
+    getPriceByRole: function(role) {
+        var price ;
+        switch (role) {
+            case '管理员':
+                price = this.adminPrice;
+                break;
+            case '顶级代理':
+                price = this.topPrice;
+                break;
+            case '超级代理':
+                price = this.superPrice;
+                break;
+            case '金牌代理':
+                price = this.goldPrice;
+                break;
+        }
+        return price;
+    }
 });
 
 
