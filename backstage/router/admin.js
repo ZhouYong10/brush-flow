@@ -9,7 +9,7 @@ var Feedback = require('../models/Feedback');
 var Withdraw = require('../models/Withdraw');
 
 var Product = require('../models/Product');
-var Orders = require('../models/Order');
+var Order = require('../models/Order');
 
 var moment = require('moment');
 var Formidable = require('formidable');
@@ -81,7 +81,7 @@ router.get('/update/header/nav', function (req, res) {
                 if (feedbacks) {
                     updateNav.feedback = feedbacks.length;
                 }
-                Orders.open().find({status: '未处理'})
+                Order.open().find({status: '未处理'})
                     .then(function (results) {
                         if(results) {
                             for(var i in results) {
@@ -442,7 +442,14 @@ router.get('/WX/reply/already', function (req, res) {
 });
 
 router.get('/WX/friend/wait', function (req, res) {
-    res.render('adminWXfriendWait', {title: '微信任务管理 / 待处理微信个人好友任务', money: 10.01})
+    Order.open().find({type: 'wx', smallType: 'friend'})
+        .then(function (results) {
+            res.render('adminWXfriendWait', {
+                title: '微信任务管理 / 待处理微信个人好友任务',
+                money: 10.01,
+                orders: results
+            });
+        });
 });
 
 router.get('/WX/friend/already', function (req, res) {
