@@ -44,6 +44,7 @@ router.post('/friend/add', function (req, res) {
     var order = Order.wrapToInstance(req.body);
     order.createAndSave(user, {type: 'wx', smallType: 'friend'})
         .then(function () {
+            socketIO.emit('updateNav', {'wxFriend': 1});
             res.redirect('/wx/friend');
         });
 });
