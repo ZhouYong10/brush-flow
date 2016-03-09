@@ -220,6 +220,7 @@ router.post('/addLowerUser', function (req, res) {
                 User.open().updateById(parent._id, {
                     $set: parent
                 }).then(function (result) {
+                    req.session.user = parent;
                     res.redirect('/user/lowerUser');
                 }, function(error) {
                     throw (new Error(error));
