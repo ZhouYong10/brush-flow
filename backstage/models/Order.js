@@ -29,6 +29,9 @@ Order.include({
                     var product = Product.wrapToInstance(result);
                     var myPrice = product.getPriceByRole(user.role);
                     self.totalPrice = myPrice * self.num;
+                    if(self.totalPrice > user.funds) {
+                        return reject();
+                    }
                     self.price = myPrice;
                     self.user = user.username;
                     self.userId = user._id;
