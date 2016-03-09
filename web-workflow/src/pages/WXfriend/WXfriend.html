@@ -74,48 +74,31 @@
                         </tr>
                         </thead>
                         <tbody>
+
+                        <% for(var i = 0; i < orders.length; i++){ %>
                         <tr>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td class="am-text-middle">http://amazeui.org</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle"><%= i + 1 %></td>
+                            <td class="am-text-middle"><%= orders[i].account %></td>
+                            <td class="am-text-middle"><%= orders[i].num %></td>
+                            <td class="am-text-middle"><%= orders[i].country %></td>
+                            <td class="am-text-middle"><%= orders[i].province %></td>
+                            <td class="am-text-middle"><%= orders[i].city %></td>
+                            <td class="am-text-middle"><%= orders[i].gender %></td>
+                            <td class="am-text-middle"><%= orders[i].mode %></td>
+                            <td class="am-text-middle"><%= orders[i].speed %></td>
+                            <td class="am-text-middle"><%= orders[i].startTime %></td>
+                            <td class="am-text-middle"><%= orders[i].days %></td>
+                            <td class="am-text-middle"><%= orders[i].totalPrice %></td>
+                            <td class="am-text-middle"><%= orders[i].remark %></td>
+                            <td class="am-text-middle"><%= orders[i].createTime %></td>
+                            <td class="am-text-middle"><%= orders[i].schedule %></td>
+                            <td class="am-text-middle"><%= orders[i].status %></td>
                             <td class="am-text-middle">
                                 <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">报告错误</button>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td class="am-text-middle">http://amazeui.org</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">
-                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">报告错误</button>
-                            </td>
-                        </tr>
+                        <% } %>
+
                         </tbody>
                     </table>
                 </div>

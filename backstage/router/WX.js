@@ -11,12 +11,16 @@ var router = require('express').Router();
 
 router.get('/friend', function (req, res) {
     var user = req.session.user;
-    res.render('WXfriend', {
-        title: '微信个人好友',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    })
+    Order.open().find({userId: user._id, type: 'wx', smallType: 'friend'})
+        .then(function(results) {
+            res.render('WXfriend', {
+                title: '微信个人好友',
+                money: req.session.funds,
+                username: user.username,
+                role: user.role,
+                orders: results
+            })
+        })
 });
 
 router.get('/friend/add', function (req, res) {
