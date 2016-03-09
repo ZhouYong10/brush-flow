@@ -44,7 +44,7 @@ Order.include({
                     self.countParentProfit(user, product, function(obj) {
                         Order.open().insert(obj)
                             .then(function () {
-                                resolve();
+                                resolve(obj);
                             });
                     });
                 });

@@ -18,7 +18,7 @@ router.get('/friend', function (req, res) {
                 money: req.session.funds,
                 username: user.username,
                 role: user.role,
-                orders: results
+                orders: results.reverse()
             })
         })
 });
@@ -43,9 +43,13 @@ router.post('/friend/add', function (req, res) {
     var user = req.session.user;
     var order = Order.wrapToInstance(req.body);
     order.createAndSave(user, {type: 'wx', smallType: 'friend'})
-        .then(function () {
-            socketIO.emit('updateNav', {'wxFriend': 1});
-            res.redirect('/wx/friend');
+        .then(function (order) {
+            user.funds -= order.totalPrice;
+            User.open().updateById(user._id, {$set: {funds: user.funds}})
+                .then(function () {
+                    socketIO.emit('updateNav', {'wxFriend': 1});
+                    res.redirect('/wx/friend');
+                });
         }, function() {
             res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
         });

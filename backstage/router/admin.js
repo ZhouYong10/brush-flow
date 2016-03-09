@@ -464,7 +464,7 @@ router.get('/WX/code/already', function (req, res) {
     res.render('adminWXcodeAlre', {title: '微信任务管理 / 已处理微信好友地区扫码', money: 10.01})
 });
 
-  
+
 
 router.get('/MP/wait', function (req, res) {
     res.render('adminMPWait', {title: '美拍任务管理 / 待处理订单', money: 10.01})
