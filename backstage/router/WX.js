@@ -38,24 +38,9 @@ router.get('/friend/add', function (req, res) {
 router.post('/friend/add', function (req, res) {
     var user = req.session.user;
     var order = Order.wrapToInstance(req.body);
-    Product.open().findOne({type: 'wx', smallType: 'friend'})
-        .then(function(result) {
-            var product = Product.wrapToInstance(result);
-            var myPrice = product.getPriceByRole(user.role);
-            order.totalPrice = myPrice * order.num;
-            order.price = myPrice;
-            order.user = user.username;
-            order.userId = user._id;
-            order.type = product.type;
-            order.typeName = product.typeName;
-            order.smallType = product.smallType;
-            order.smallTypeName = product.smallTypeName;
-            order.status = '未处理';
-            order.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
-            order.countParentProfit(user, product);
-
-            console.log(order, '===================');
-            res.end();
+    order.createAndSave(user, {type: 'wx', smallType: 'friend'})
+        .then(function () {
+            res.redirect('/wx/friend');
         });
 });
 
