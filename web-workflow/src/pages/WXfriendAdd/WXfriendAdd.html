@@ -55,7 +55,8 @@
                         <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>粉丝数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="fansNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的粉丝数量，最低100起"
-                            v-validate:num="{required: true, isnum: true, min100: true}" name="num" v-model="num" v-on:keyup="total" v-on:change="total">
+                            v-validate:num="{required: true, isnum: true, min100: true, maxprice: true}"
+                                   name="num" v-model="num" v-on:keyup="total" v-on:change="total">
                             <span class="tips" v-if="$wxFans.num.required">需要添加的粉丝数量不能为空!</span>
                             <span class="tips" v-if="$wxFans.num.isnum">数量必须为正整数!</span>
                             <span class="tips" v-if="$wxFans.num.min100">需要增加的粉丝数量，最低100起!</span>
@@ -66,6 +67,8 @@
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <p class="disable taskPrice">￥ {{count}}</p>
+                            <span class="tips" v-if="$wxFans.num.maxprice">您的余额不足，请充值!</span>
+                            <input type="hidden" v-model="funds" value="<%= money %>">
                         </div>
                     </div>
 

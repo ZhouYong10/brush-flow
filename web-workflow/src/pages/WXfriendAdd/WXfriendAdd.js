@@ -9,7 +9,8 @@ new Vue({
     data: {
         myPrice: '',
         num: '',
-        count: 0
+        count: 0,
+        funds: ''
     },
     methods: {
         total: function() {
@@ -26,6 +27,9 @@ new Vue({
         },
         min100: function(val) {
             return parseInt(val) >= 100;
+        },
+        maxprice: function(num) {
+            return this.myPrice * num <= this.funds;
         }
     }
 });
