@@ -447,7 +447,7 @@ router.get('/WX/friend/wait', function (req, res) {
             res.render('adminWXfriendWait', {
                 title: '微信任务管理 / 待处理微信个人好友任务',
                 money: 10.01,
-                orders: results
+                orders: results.reverse()
             });
         });
 });
