@@ -93,6 +93,10 @@ router.get('/fans/add', function (req, res) {
         });
 });
 
+router.post('/fans/add', function (req, res) {
+    console.log(req.body);
+});
+
 router.get('/share', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {

@@ -34,7 +34,7 @@
                 </div>
 
                 <validator name="wxReply">
-                <form class="am-form am-form-horizontal">
+                <form class="am-form am-form-horizontal" method="post" action="/wx/fans/add">
                     <div class="am-form-group">
                         <label for="fansID" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>微信账号</label>
                         <div class="am-u-sm-8 am-u-lg-10">
@@ -127,7 +127,7 @@
                     <div class="am-form-group">
                         <label for="s1" class="am-u-sm-4 am-u-lg-2 am-form-label">指定国家</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="s1" class="am-radius am-input-sm" name="city"></select>
+                            <select id="s1" class="am-radius am-input-sm" name="country"></select>
                         </div>
                     </div>
 
@@ -177,7 +177,7 @@
                     <div class="am-form-group">
                         <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <textarea id="fansRemark" class="am-radius" rows="3" placeholder="添加任务备注"></textarea>
+                            <textarea id="fansRemark" class="am-radius" rows="3" placeholder="添加任务备注" name="remark"></textarea>
                         </div>
                     </div>
 
