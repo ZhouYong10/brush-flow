@@ -28,7 +28,7 @@ new Vue({
             return this.fansPrice * this.num + this.replyPrice * this.replyNum <= this.funds;
         },
         minnum: function(val) {
-            return val <= this.num;
+            return val - this.num <= 0;
         }
     }
 });
