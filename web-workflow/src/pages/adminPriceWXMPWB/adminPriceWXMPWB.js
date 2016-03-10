@@ -18,8 +18,13 @@ var wbSmallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
     '<option value="like">高级赞</option> ' +
     '<option value="vote">投票</option> ' +
-    '<option value="fens">顶级粉</option> ' +
+    '<option value="fens">粉丝</option> ' +
+    '<option value="fens20">粉丝20%</option> ' +
+    '<option value="fens80">粉丝80%</option> ' +
     '<option value="forward">转发</option> ' +
+    '<option value="forward20">转发20%</option> ' +
+    '<option value="forward80">转发80%</option> ' +
+    '<option value="comment">评论</option> ' +
     '</select> ' +
     '</td> ';
 var mpSmallType = '<td> ' +
