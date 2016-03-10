@@ -72,17 +72,23 @@ router.get('/fans', function (req, res) {
 router.get('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'wx', smallType: 'friend'})
-                .then(function(result) {
-                    var product = Product.wrapToInstance(result);
-                    var myPrice = product.getPriceByRole(user.role);
-                    res.render('WXfansAdd', {
-                        title: '添加微信公众粉丝任务',
-                        money: user.funds,
-                        username: user.username,
-                        role: user.role,
-                        price: myPrice
-                    });
+            Product.open().findOne({type: 'wx', smallType: 'fans'})
+                .then(function(fans) {
+                    var fansIns = Product.wrapToInstance(fans);
+                    var myFansPrice = fansIns.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'wx', smallType: 'reply'})
+                        .then(function(reply) {
+                            var replyIns = Product.wrapToInstance(reply);
+                            var myReplyPrice = replyIns.getPriceByRole(user.role);
+                            res.render('WXfansAdd', {
+                                title: '添加微信公众粉丝任务',
+                                money: user.funds,
+                                username: user.username,
+                                role: user.role,
+                                fansPrice: myFansPrice,
+                                replyPrice: myReplyPrice
+                            });
+                        });
                 });
         });
 });

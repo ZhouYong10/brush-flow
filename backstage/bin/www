@@ -95,9 +95,7 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-Number.prototype.toFixed = function(d)
-
-{
+Number.prototype.toFixed = function(d) {
 
   var s=this+"";if(!d)d=0;
 

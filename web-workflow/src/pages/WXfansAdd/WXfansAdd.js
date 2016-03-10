@@ -7,14 +7,16 @@ Vue.use(require('vue-validator'));
 new Vue({
     el: '#wxReply',
     data: {
-        myPrice: '',
+        fansPrice: '',
+        replyPrice: '',
         num: '',
+        replyNum: '',
         count: 0,
         funds: ''
     },
     methods: {
         total: function() {
-            this.count = this.myPrice * this.num;
+            this.count = this.fansPrice * this.num + this.replyPrice * this.replyNum;
         }
     },
     validators: {
@@ -28,11 +30,11 @@ new Vue({
         min20: function(val) {
             return parseInt(val) >= 20;
         },
-        maxprice: function(num) {
-            return this.myPrice * num <= this.funds;
+        maxprice: function() {
+            return this.fansPrice * this.num + this.replyPrice * this.replyNum <= this.funds;
         },
         minnum: function(val) {
-            return true;
+            return val <= this.num;
         }
     }
 });
