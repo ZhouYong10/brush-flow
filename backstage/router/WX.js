@@ -60,12 +60,16 @@ router.post('/friend/add', function (req, res) {
 router.get('/fans', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WXfans', {
-                title: '微信公众粉丝',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'wx', smallType: 'reply'})
+                .then(function (results) {
+                    res.render('WXfans', {
+                        title: '微信公众粉丝',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                });
         });
 });
 
