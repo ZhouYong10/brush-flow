@@ -10,86 +10,95 @@ var router = require('express').Router();
 var bcrypt = require('bcryptjs');
 
 router.get('/recharge', function (req, res) {
-    var user = req.session.user;
-    res.render('recharge', {
-        title: '在线充值',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    })
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('recharge', {
+                title: '在线充值',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            })
+        });
 });
 
 router.post('/recharge', function (req, res) {
-    AlipayRecord.open().findOne(req.body)
-        .then(function (result) {
-            if(result) {
-                if(result.status !== 1) {
-                    Recharge.open().insert({
-                        username: req.session.username,
-                        userId: req.session.passport.user,
-                        funds: result.funds,
-                        time: result.createTime,
-                        orderNum: result.orderNum
-                    }).then(function (recharge) {
-                        req.session.funds = parseFloat(req.session.funds) + parseFloat(result.funds);
-                        User.open().updateById(req.session.passport.user, {$set: {funds: req.session.funds}});
-                        AlipayRecord.open().updateById(result._id, {$set: {status: 1}});
-                        res.send({
-                            isOK: true,
-                            path: '/user/recharge/history'
-                        });
-                    }, function (error) {
-                        console.log('充值失败：' + error);
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            AlipayRecord.open().findOne(req.body)
+                .then(function (result) {
+                    if(result) {
+                        if(result.status !== 1) {
+                            Recharge.open().insert({
+                                username: user.username,
+                                userId: user._id,
+                                funds: result.funds,
+                                time: result.createTime,
+                                orderNum: result.orderNum
+                            }).then(function (recharge) {
+                                var fundsNow = parseFloat(user.funds) + parseFloat(result.funds);
+                                User.open().updateById(user._id, {$set: {funds: fundsNow}});
+                                AlipayRecord.open().updateById(result._id, {$set: {status: 1}});
+                                res.send({
+                                    isOK: true,
+                                    path: '/user/recharge/history'
+                                });
+                            }, function (error) {
+                                console.log('充值失败：' + error);
+                                res.send({
+                                    isOK: false,
+                                    message: '充值失败：' + error
+                                });
+                            });
+                        }else {
+                            res.send({
+                                isOK: false,
+                                message: '该交易号已充值成功，能不重复充值！'
+                            });
+                        }
+                    }else {
                         res.send({
                             isOK: false,
-                            message: '充值失败：' + error
+                            message: '请核对交易号是否正确！'
                         });
-                    });
-                }else {
+                    }
+                }, function (error) {
+                    console.log('查询交易记录失败：' + error);
                     res.send({
                         isOK: false,
-                        message: '该交易号已充值成功，能不重复充值！'
+                        message: '查询交易记录失败：' + error
                     });
-                }
-            }else {
-                res.send({
-                    isOK: false,
-                    message: '请核对交易号是否正确！'
                 });
-            }
-        }, function (error) {
-            console.log('查询交易记录失败：' + error);
-            res.send({
-                isOK: false,
-                message: '查询交易记录失败：' + error
-            });
         });
 });
 
 router.get('/recharge/history', function (req, res) {
-    var user = req.session.user;
-    Recharge.open().find({userId: req.session.passport.user})
-        .then(function (recharges) {
-            res.render('rechargeHistory', {
-                title: '充值记录',
-                money: req.session.funds,
-                recharges: recharges,
-                username: user.username,
-                role: user.role
-            });
-        }, function (error) {
-            res.send('查询充值记录失败： ' + error);
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Recharge.open().find({userId: user._id})
+                .then(function (recharges) {
+                    res.render('rechargeHistory', {
+                        title: '充值记录',
+                        money: user.funds,
+                        recharges: recharges,
+                        username: user.username,
+                        role: user.role
+                    });
+                }, function (error) {
+                    res.send('查询充值记录失败： ' + error);
+                });
         });
 });
 
 router.get('/consume/history', function (req, res) {
-    var user = req.session.user;
-    res.render('consumeHistory', {
-        title: '消费记录',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    })
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('consumeHistory', {
+                title: '消费记录',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            })
+        });
 });
 
 router.get('/info', function (req, res) {
@@ -97,7 +106,7 @@ router.get('/info', function (req, res) {
         .then(function (user) {
             res.render('userInfo', {
                 title: '我的详细信息',
-                money: req.session.funds,
+                money: user.funds,
                 user: user,
                 username: user.username,
                 role: user.role
@@ -128,13 +137,15 @@ router.get('/logout', function(req, res){
 });
 
 router.get('/changePwd', function (req, res) {
-    var user = req.session.user;
-    res.render('changePassword', {
-        title: '修改账号密码',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    });
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('changePassword', {
+                title: '修改账号密码',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            });
+        });
 });
 
 router.post('/changePwd', function (req, res) {
@@ -198,13 +209,15 @@ router.post('/username/notrepeat', function (req, res) {
 });
 
 router.get('/addLowerUser', function (req, res) {
-    var user = req.session.user;
-    res.render('addLowerUser', {
-        title: '添加下级用户',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    });
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('addLowerUser', {
+                title: '添加下级用户',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            });
+        });
 });
 
 router.post('/addLowerUser', function (req, res) {
@@ -220,7 +233,6 @@ router.post('/addLowerUser', function (req, res) {
                 User.open().updateById(parent._id, {
                     $set: parent
                 }).then(function (result) {
-                    req.session.user = parent;
                     res.redirect('/user/lowerUser');
                 }, function(error) {
                     throw (new Error(error));
@@ -241,7 +253,7 @@ router.get('/lowerUser', function (req, res) {
                     .then(function(children) {
                         res.render('lowerUser', {
                             title: '我的下级用户',
-                            money: req.session.funds,
+                            money: parent.funds,
                             users: children,
                             username: parent.username,
                             role: parent.role
@@ -252,7 +264,7 @@ router.get('/lowerUser', function (req, res) {
             }else {
                 res.render('lowerUser', {
                     title: '我的下级用户',
-                    money: req.session.funds,
+                    money: parent.funds,
                     users: [],
                     username: parent.username,
                     role: parent.role
@@ -268,29 +280,33 @@ router.get('/removeLowerUser', function (req, res) {
 });
 
 router.get('/feedback', function (req, res) {
-    var user = req.session.user;
-    Feedback.open().find()
-        .then(function (feedbacks) {
-            res.render('feedback', {
-                title: '问题反馈',
-                money: req.session.funds,
-                feedbacks: feedbacks,
-                username: user.username,
-                role: user.role
-            });
-        }, function (error) {
-            res.send('获取反馈列表失败： ' + error);
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Feedback.open().find()
+                .then(function (feedbacks) {
+                    res.render('feedback', {
+                        title: '问题反馈',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        feedbacks: feedbacks
+                    });
+                }, function (error) {
+                    res.send('获取反馈列表失败： ' + error);
+                });
         });
 });
 
 router.get('/feedback/add', function (req, res) {
-    var user = req.session.user;
-    res.render('feedbackAdd', {
-        title: '问题反馈 / 我要提意见',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    });
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('feedbackAdd', {
+                title: '问题反馈 / 我要提意见',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            });
+        });
 });
 
 router.post('/feedback/add', function (req, res) {
@@ -309,33 +325,39 @@ router.post('/feedback/add', function (req, res) {
 });
 
 router.get('/withdraw', function (req, res) {
-    var user = req.session.user;
-    res.render('withdraw', {
-        title: '我要提现',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    });
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('withdraw', {
+                title: '我要提现',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            });
+        });
 });
 
 router.get('/withdraw/add', function (req, res) {
-    var user = req.session.user;
-    res.render('withdrawAdd', {
-        title: '申请提现',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    });
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('withdrawAdd', {
+                title: '申请提现',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            });
+        });
 });
 
 router.get('/errorSummary', function (req, res) {
-    var user = req.session.user;
-    res.render('errorSummary', {
-        title: '错误信息汇总',
-        money: req.session.funds,
-        username: user.username,
-        role: user.role
-    });
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('errorSummary', {
+                title: '错误信息汇总',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            });
+        });
 });   
 
 module.exports = router;

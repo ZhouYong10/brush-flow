@@ -105,14 +105,11 @@ app.post('/login', function(req, res, next) {
       if (err) {
         return next(err);
       }
-
-      User.open().update({
-        username: user.username
-      }, {
+      User.open().updateById(user._id, {
         $set: {
           lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
         }
-      }).then(function (user) {
+      }).then(function () {
         var userIns = User.wrapToInstance(user);
         if(userIns.isAdmin()) {
           res.send({
@@ -120,9 +117,6 @@ app.post('/login', function(req, res, next) {
             path: '/admin/home'
           });
         }else{
-          req.session.funds = userIns.funds;
-          req.session.username = userIns.username;
-          req.session.user = user;
           res.send({
             isOK: true,
             path: '/client/home'
@@ -148,18 +142,20 @@ app.use(function(req, res, next) {
 });
 
 app.get('/client/home', function (req, res) {
-  var user = req.session.user;
-  Placard.open().find()
-      .then(function (placards) {
-        res.render('clientHome', {
-          title: '系统公告',
-          money: req.session.funds,
-          placards: placards,
-          username: user.username,
-          role: user.role
-        });
-      }, function (error) {
-        res.send('获取公告列表失败： ' + error);
+  User.open().findById(req.session.passport.user)
+      .then(function (user) {
+        Placard.open().find()
+            .then(function (placards) {
+              res.render('clientHome', {
+                title: '系统公告',
+                money: user.funds,
+                placards: placards,
+                username: user.username,
+                role: user.role
+              });
+            }, function (error) {
+              res.send('获取公告列表失败： ' + error);
+            });
       });
 });
 
