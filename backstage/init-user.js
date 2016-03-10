@@ -33,8 +33,7 @@ exports.initUser = function(User) {
                 delete user._id;
             }
             User.findAndModify({
-                username: user.username,
-                role: user.role
+                username: user.username
             }, [], {$set: user}, {
                 new: true,
                 upsert: true
