@@ -129,7 +129,6 @@ Order.include({
         if(user.parentID) {
             User.open().findById(user.parentID)
                 .then(function(parent) {
-                    console.log(parent, '=======================');
                     switch (parent.role) {
                         case '管理员':
                             name = 'adminProfit';
@@ -152,7 +151,6 @@ Order.include({
                     var profit1 = selfPrice1 - parentPrice1;
                     var profit2 = selfPrice2 - parentPrice2;
                     self[name] = (profit1 * self.num + profit2 * self.fansNum).toFixed(4);
-                    console.log(self[name], '------------------------');
                     self.countParentProfitTow(parent, product1, product2, callback);
                 })
         }else {

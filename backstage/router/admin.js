@@ -434,7 +434,14 @@ router.get('/WX/like/already', function (req, res) {
 });
 
 router.get('/WX/reply/wait', function (req, res) {
-    res.render('adminWXreplyWait', {title: '微信任务管理 / 待处理公众粉丝回复任务', money: 10.01})
+    Order.open().find({type: 'wx', smallType: 'reply'})
+        .then(function (results) {
+            res.render('adminWXreplyWait', {
+                title: '微信任务管理 / 待处理公众粉丝回复任务',
+                money: 10.01,
+                orders: results.reverse()
+            });
+        });
 });
 
 router.get('/WX/reply/already', function (req, res) {

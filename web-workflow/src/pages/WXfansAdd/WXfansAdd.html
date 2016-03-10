@@ -97,7 +97,7 @@
                     <div class="am-form-group">
                         <label for="fansSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">加粉限速</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="fansSpeed" class="am-radius am-input-sm" type="text" name="spped"
+                            <input id="fansSpeed" class="am-radius am-input-sm" type="text" name="fansSpeed"
                                    placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个粉丝，输入100即可"
                                    v-validate:spped="{isnum: true}" name="days">
                             <span class="tips" v-if="$wxReply.spped.isnum">必须为正整数!</span>
@@ -107,7 +107,7 @@
                     <div class="am-form-group">
                         <label for="replySpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">回复限速</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="replySpeed" class="am-radius am-input-sm" type="text" name="replySpeed"
+                            <input id="replySpeed" class="am-radius am-input-sm" type="text" name="speed"
                                    placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个回复，输入100即可"
                                    v-validate:replyspeed="{isnum: true}" name="days">
                             <span class="tips" v-if="$wxReply.replyspeed.isnum">必须为正整数!</span>
