@@ -44,7 +44,11 @@ Order.include({
                     self.countParentProfit(user, product, function(obj) {
                         Order.open().insert(obj)
                             .then(function () {
-                                resolve(obj);
+                                user.funds -= obj.totalPrice;
+                                User.open().updateById(user._id, {$set: {funds: user.funds}})
+                                    .then(function () {
+                                        resolve();
+                                    });
                             });
                     });
                 });
