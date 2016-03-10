@@ -44,7 +44,7 @@ Order.include({
                     self.countParentProfit(user, product, function(obj) {
                         Order.open().insert(obj)
                             .then(function () {
-                                user.funds -= obj.totalPrice;
+                                user.funds = (user.funds - obj.totalPrice).toFixed(4);
                                 User.open().updateById(user._id, {$set: {funds: user.funds}})
                                     .then(function () {
                                         resolve();
@@ -76,7 +76,7 @@ Order.include({
                     }
                     var selfPrice = product.getPriceByRole(user.role);
                     var parentPrice = product.getPriceByRole(parent.role);
-                    var profit = selfPrice - parentPrice;
+                    var profit = (selfPrice - parentPrice).toFixed(4);
                     self[name] = profit * self.num;
                     self.countParentProfit(parent, product, callback);
                 })

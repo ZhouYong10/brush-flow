@@ -35,7 +35,7 @@ router.post('/recharge', function (req, res) {
                                 time: result.createTime,
                                 orderNum: result.orderNum
                             }).then(function (recharge) {
-                                var fundsNow = parseFloat(user.funds) + parseFloat(result.funds);
+                                var fundsNow = (parseFloat(user.funds) + parseFloat(result.funds)).toFixed(4);
                                 User.open().updateById(user._id, {$set: {funds: fundsNow}});
                                 AlipayRecord.open().updateById(result._id, {$set: {status: 1}});
                                 res.send({
