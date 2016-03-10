@@ -4,6 +4,8 @@
 var Vue = require('vue');
 Vue.use(require('vue-validator'));
 
+var Utils = require('utils');
+
 new Vue({
     el: '#wxFans',
     data: {
@@ -14,20 +16,12 @@ new Vue({
     },
     methods: {
         total: function() {
-            this.count = this.myPrice * this.num;
+            this.count = (this.myPrice * this.num).toFixed(4);
         }
     },
     validators: {
-        isnum: function(val) {
-            if(val == ''){
-                return true;
-            }else{
-                return /^[0-9]*[1-9][0-9]*$/.test(val);
-            }
-        },
-        min100: function(val) {
-            return parseInt(val) >= 100;
-        },
+        isnum: Utils.isNum,
+        min100: Utils.min100,
         maxprice: function(num) {
             return this.myPrice * num <= this.funds;
         }
