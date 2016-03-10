@@ -5,6 +5,7 @@ var wxSmallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
     '<option value="article">原文</option> ' +
     '<option value="like">阅读点赞</option> ' +
+    '<option value="fans">公众粉丝</option> ' +
     '<option value="reply">公众粉丝回复</option> ' +
     '<option value="friend">个人好友</option> ' +
     '<option value="code">好友地区扫码</option> ' +
