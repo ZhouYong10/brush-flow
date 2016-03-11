@@ -42,5 +42,8 @@ module.exports = {
     },
     min20: function(val) {
         return parseInt(val) >= 20;
+    },
+    min30: function(val) {
+        return parseInt(val) >= 30;
     }
 };
