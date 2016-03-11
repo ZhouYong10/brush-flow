@@ -29,7 +29,7 @@ Order.include({
                     var product = Product.wrapToInstance(result);
                     var myPrice = product.getPriceByRole(user.role);
                     self.totalPrice = (myPrice * self.num).toFixed(4);
-                    if(self.totalPrice > user.funds) {
+                    if((self.totalPrice - user.funds) > 0) {
                         return reject();
                     }
                     self.price = myPrice;
@@ -65,12 +65,12 @@ Order.include({
                             var product2 = Product.wrapToInstance(result2);
                             var myPrice1 = product1.getPriceByRole(user.role);
                             var myPrice2 = product2.getPriceByRole(user.role);
-                            self.totalPrice = (myPrice1 * self.num + myPrice2 * self.fansNum).toFixed(4);
-                            if (self.totalPrice > user.funds) {
+                            self.totalPrice = (myPrice1 * self.num + myPrice2 * self.num2).toFixed(4);
+                            if ((self.totalPrice - user.funds) > 0) {
                                 return reject();
                             }
                             self.price = myPrice1;
-                            self.fansPrice = myPrice2;
+                            self.price2 = myPrice2;
                             self.user = user.username;
                             self.userId = user._id;
                             self.type = product1.type;
@@ -150,7 +150,7 @@ Order.include({
 
                     var profit1 = selfPrice1 - parentPrice1;
                     var profit2 = selfPrice2 - parentPrice2;
-                    self[name] = (profit1 * self.num + profit2 * self.fansNum).toFixed(4);
+                    self[name] = (profit1 * self.num + profit2 * self.num2).toFixed(4);
                     self.countParentProfitTow(parent, product1, product2, callback);
                 })
         }else {

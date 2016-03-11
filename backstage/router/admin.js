@@ -95,13 +95,13 @@ router.get('/update/header/nav', function (req, res) {
                                         break;
                                     case 'wx':
                                         switch (result.smallType) {
-                                            case 'article':
+                                            case 'article': case 'share': case 'collect':
                                                 updateNav.wxArticle += 1;
                                                 break;
-                                            case 'like':
+                                            case 'read': case 'like':
                                                 updateNav.wxLike += 1;
                                                 break;
-                                            case 'reply':
+                                            case 'fans': case 'fansReply':
                                                 updateNav.wxReply += 1;
                                                 break;
                                             case 'friend':
@@ -434,7 +434,7 @@ router.get('/WX/like/already', function (req, res) {
 });
 
 router.get('/WX/reply/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: 'reply'})
+    Order.open().find({type: 'wx', smallType: 'fans'})
         .then(function (results) {
             res.render('adminWXreplyWait', {
                 title: '微信任务管理 / 待处理公众粉丝回复任务',

@@ -60,7 +60,7 @@ router.post('/friend/add', function (req, res) {
 router.get('/fans', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wx', smallType: 'reply'})
+            Order.open().find({userId: user._id, type: 'wx', smallType: 'fans'})
                 .then(function (results) {
                     res.render('WXfans', {
                         title: '微信公众粉丝',
@@ -80,7 +80,7 @@ router.get('/fans/add', function (req, res) {
                 .then(function(fans) {
                     var fansIns = Product.wrapToInstance(fans);
                     var myFansPrice = fansIns.getPriceByRole(user.role);
-                    Product.open().findOne({type: 'wx', smallType: 'reply'})
+                    Product.open().findOne({type: 'wx', smallType: 'fansReply'})
                         .then(function(reply) {
                             var replyIns = Product.wrapToInstance(reply);
                             var myReplyPrice = replyIns.getPriceByRole(user.role);
@@ -101,7 +101,7 @@ router.post('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSaveTwo(user, {type: 'wx', smallType: 'reply'}, {type: 'wx', smallType: 'fans'})
+            order.createAndSaveTwo(user, {type: 'wx', smallType: 'fans'}, {type: 'wx', smallType: 'fansReply'})
                 .then(function () {
                     socketIO.emit('updateNav', {'wxReply': 1});
                     res.redirect('/wx/fans');
