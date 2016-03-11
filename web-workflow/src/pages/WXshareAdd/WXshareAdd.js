@@ -3,18 +3,29 @@
  */
 var Vue = require('vue');
 Vue.use(require('vue-validator'));
+Vue.use(require('vue-resource'));
 
 var Utils = require('utils');
 
 new Vue({
     el: '#wxshare',
     data: {
-        myPrice: '',
+        type: '',
+        price: '',
+        articleTitle: '',
+        totalPrice: 0,
         num: '',
         count: 0,
         funds: ''
     },
     methods: {
+        selectType: function() {
+            var self = this;
+            this.$http.get('/wx/get/price/by/type', {type: this.type})
+                .then(function (res) {
+                    self.price = res.data.price;
+                });
+        },
         total: function() {
             this.count = (this.myPrice * this.num).toFixed(4);
         }

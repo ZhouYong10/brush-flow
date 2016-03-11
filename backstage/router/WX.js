@@ -135,6 +135,18 @@ router.get('/share/add', function (req, res) {
         });
 });
 
+router.get('/get/price/by/type', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: req.query.type})
+                .then(function(result) {
+                    var productIns = Product.wrapToInstance(result);
+                    var myPrice = productIns.getPriceByRole(user.role);
+                    res.send({price: myPrice});
+                });
+        });
+});
+
 router.get('/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
