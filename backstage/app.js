@@ -165,6 +165,7 @@ app.use('/flow', require('./router/flow.js'));
 app.use('/WX', require('./router/WX.js'));
 app.use('/MP', require('./router/MP.js'));
 app.use('/WB', require('./router/WB.js'));
+app.use('/parse', require('./router/parse-address.js'));
 
 app.use('/admin', require('./router/admin.js'));
 

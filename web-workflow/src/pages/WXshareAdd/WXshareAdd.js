@@ -12,6 +12,7 @@ new Vue({
     data: {
         type: '',
         price: '',
+        address: '',
         articleTitle: '',
         totalPrice: 0,
         num: '',
@@ -25,6 +26,16 @@ new Vue({
                 .then(function (res) {
                     self.price = res.data.price;
                 });
+        },
+        parseAddress: function() {
+            var self = this;
+            Utils.parseAddress(self.$http, self.address)
+                .then(function(title) {
+                    self.articleTitle = title;
+                    console.log(title, '==================');
+                },function(message) {
+                    alert(message);
+                })
         },
         total: function() {
             this.count = (this.myPrice * this.num).toFixed(4);
