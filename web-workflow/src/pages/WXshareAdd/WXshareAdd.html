@@ -33,12 +33,12 @@
                 <!--</div>-->
 
                 <validator name="wxshare">
-                <form class="am-form am-form-horizontal">
+                <form class="am-form am-form-horizontal" method="post" action="/wx/share/add">
                     <div class="am-form-group">
                         <label for="taskType" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务类型</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <select id="taskType" class="am-radius am-input-sm" v-validate:type="{required: true}"
-                                    v-model="type" @change="selectType">
+                                    v-model="type" @change="selectType" name="smallType">
                                 <option value="">--选择任务类型--</option>
                                 <option value="article">微信原文任务</option>
                                 <option value="share">微信分享任务</option>
@@ -98,7 +98,7 @@
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="taskSpeed" class="am-radius am-input-sm" type="text"
                                    placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个粉丝，输入100即可"
-                            v-validate:speed="{isnum: true}">
+                            v-validate:speed="{isnum: true}" name="speed">
                             <span class="tips" v-if="$wxshare.speed.isnum">必须是正整数!</span>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                     <div class="am-form-group">
                         <label for="taskRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <textarea id="taskRemark" class="am-radius" rows="3" placeholder="添加任务备注"></textarea>
+                            <textarea id="taskRemark" class="am-radius" rows="3" placeholder="添加任务备注" name="remark"></textarea>
                         </div>
                     </div>
 

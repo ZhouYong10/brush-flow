@@ -135,6 +135,10 @@ router.get('/share/add', function (req, res) {
         });
 });
 
+router.post('/share/add', function (req, res) {
+    console.log(req.body, '==============================');
+});
+
 router.get('/get/price/by/type', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
