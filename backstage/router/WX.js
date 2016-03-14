@@ -136,7 +136,18 @@ router.get('/share/add', function (req, res) {
 });
 
 router.post('/share/add', function (req, res) {
-    console.log(req.body, '==============================');
+    var orderInfo = req.body;
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var order = Order.wrapToInstance(orderInfo);
+            order.createAndSave(user, {type: 'wx', smallType: orderInfo.smallType})
+                .then(function () {
+                    socketIO.emit('updateNav', {'wxArticle': 1});
+                    res.redirect('/wx/share');
+                }, function() {
+                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                });
+        });
 });
 
 router.get('/get/price/by/type', function (req, res) {

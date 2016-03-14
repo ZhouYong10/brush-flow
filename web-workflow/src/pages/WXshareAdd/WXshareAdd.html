@@ -59,7 +59,7 @@
                         <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务地址</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写任务地址" name="address"
-                            v-validate:address="{required: true, isaddress: true}" v-model="address" @change="parseAddress">
+                            v-validate:address="{required: true, isaddress: true}" v-model="address" @blur="parseAddress">
                             <span class="tips" v-if="$wxshare.address.required">任务地址不能为空!</span>
                             <span class="tips" v-if="$wxshare.address.isaddress">请填写合法的地址!</span>
                         </div>
