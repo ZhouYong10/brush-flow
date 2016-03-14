@@ -77,7 +77,7 @@
                         <label for="taskNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="taskNum" class="am-radius am-input-sm" type="text" placeholder="需要添加的数量，最低30起" name="num"
-                            v-validate:num="{required: true, isnum: true, min30: true}">
+                            v-validate:num="{required: true, isnum: true, min30: true, maxprice: true}" v-model="num" @keyup="total" @change="total">
                             <span class="tips" v-if="$wxshare.num.required">任务数量不能为空!</span>
                             <span class="tips" v-if="$wxshare.num.isnum">数量必须是正整数!</span>
                             <span class="tips" v-if="$wxshare.num.min30">任务数量最低不能小于30!</span>
@@ -88,6 +88,8 @@
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <p class="disable">￥ {{totalPrice}}</p>
+                            <span class="tips" v-if="$wxshare.num.maxprice">您的余额不足，请充值!</span>
+                            <input type="hidden" v-model="funds" value="<%= money %>">
                         </div>
                     </div>
 

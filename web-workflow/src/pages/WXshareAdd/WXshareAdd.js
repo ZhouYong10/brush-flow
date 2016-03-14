@@ -16,7 +16,6 @@ new Vue({
         articleTitle: '',
         totalPrice: 0,
         num: '',
-        count: 0,
         funds: ''
     },
     methods: {
@@ -38,7 +37,9 @@ new Vue({
                 })
         },
         total: function() {
-            this.count = (this.myPrice * this.num).toFixed(4);
+            console.log(this.price);
+            console.log(this.num);
+            this.totalPrice = (this.price * this.num).toFixed(4);
         }
     },
     validators: {
@@ -48,7 +49,7 @@ new Vue({
         isnum: Utils.isNum,
         min30: Utils.min30,
         maxprice: function(num) {
-            return this.myPrice * num <= this.funds;
+            return this.price * num <= this.funds;
         }
     }
 });
