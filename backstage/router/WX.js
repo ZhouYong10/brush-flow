@@ -114,12 +114,18 @@ router.post('/fans/add', function (req, res) {
 router.get('/share', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WXshare', {
-                title: '微信原文/分享/收藏',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'wx', smallType: {$in: ['article', 'share', 'collect']}})
+                .then(function (results) {
+                    console.log(user, '==================================');
+                    console.log(results, '==========================');
+                    res.render('WXshare', {
+                        title: '微信原文/分享/收藏',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    });
+                });
         });
 });
 
