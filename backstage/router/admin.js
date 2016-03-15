@@ -488,7 +488,14 @@ router.get('/WX/code/already', function (req, res) {
 
 
 router.get('/MP/wait', function (req, res) {
-    res.render('adminMPWait', {title: '美拍任务管理 / 待处理订单', money: 10.01})
+    Order.open().find({type: 'mp', smallType: {$in: ['like', 'comment', 'attention', 'forward']}})
+        .then(function (results) {
+            res.render('adminMPWait', {
+                title: '美拍任务管理 / 待处理订单',
+                money: 10.01,
+                orders: results.reverse()
+            });
+        });
 });
 
 router.get('/MP/already', function (req, res) {
