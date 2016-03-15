@@ -19,7 +19,7 @@
 
     <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
+        <div id="wxLike" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
@@ -38,54 +38,74 @@
                     </div>
                 </div>
 
+                <validator name="wxlike">
                 <form class="am-form am-form-horizontal">
 
                     <div class="am-form-group">
                         <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>图文地址</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="">
+                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写图文地址" name="address"
+                                   v-validate:address="{required: true, isaddress: true}" v-model="address" @change="parseAddress">
+                            <span class="tips" v-if="$wxlike.address.required">任务地址不能为空!</span>
+                            <span class="tips" v-if="$wxlike.address.isaddress">请填写合法的地址!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="taskTitle" class="am-u-sm-4 am-u-lg-2 am-form-label">任务标题</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务标题</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskTitle" class="am-radius am-input-sm" type="text" disabled>
+                            <p class="disable">{{title}}</p>
+                            <input type="hidden" name="title" value="{{articleTitle}}">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="taskPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskPrice" class="am-radius am-input-sm" type="text" value="微信阅读0.0087/个,微信点赞0.0012/个" disabled>
+                            <p class="disable">微信阅读￥ {{price}}/个,微信点赞￥ {{price2}}/个</p>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>阅读数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的图文阅读数量,最低30起">
+                            <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的图文阅读数量,最低30起"
+                                   v-on:keyup="total" v-on:change="total" v-model="num"
+                                   v-validate:num="{required: true, min30: true, isnum: true, maxprice: true}">
+                            <span class="tips" v-if="$wxlike.num.required">需要添加的阅读数量不能为空!</span>
+                            <span class="tips" v-if="$wxlike.num.isnum">数量必须为正整数!</span>
+                            <span class="tips" v-if="$wxlike.num.min30">数量最低30起!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label">点赞数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="如果不填则系统默认赠送 0.5% 的赞，如果不需要赠送请写 0。">
+                            <input id="likeNum" class="am-radius am-input-sm" type="text"
+                                   placeholder="如果不填则系统默认赠送 0.5% 的赞，如果不需要赠送请写 0。"
+                                   v-model="num2" v-on:keyup="total" v-on:change="total"
+                                   v-validate:replynum="{minnum: true, isnum: true, maxprice: true}">
+                            <span class="tips" v-if="$wxlike.replynum.isnum">数量必须为正整数!</span>
+                            <span class="tips" v-if="$wxlike.replynum.minnum">回复数量不能大于粉丝数量!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="totalPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="totalPrice" class="am-radius am-input-sm" type="text" disabled>
+                            <p class="disable">￥ {{totalPrice}}/个</p>
+                            <span class="tips" v-if="$wxlike.num.maxprice">您的余额不足，请充值!</span>
+                            <input type="hidden" v-model="funds" value="<%= money %>">
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="taskSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">阅读限速</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskSpeed" class="am-radius am-input-sm" type="text" placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个阅读，输入100即可">
+                            <input id="taskSpeed" class="am-radius am-input-sm" type="text"
+                                   placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个阅读，输入100即可"
+                                   v-validate:spped="{isnum: true}">
+                            <span class="tips" v-if="$wxlike.spped.isnum">必须为正整数!</span>
                         </div>
                     </div>
 
@@ -114,10 +134,11 @@
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$wxlike.valid">提交任务</button>
                         </div>
                     </div>
                 </form>
+                </validator>
 
             </div>
         </div>
@@ -128,6 +149,10 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+
+<script>
+    require('WXlikeAdd');
+</script>
 
 </body>
 </html>
