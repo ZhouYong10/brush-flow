@@ -418,7 +418,7 @@ router.get('/flow/already', function (req, res) {
 
 
 router.get('/WX/article/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: {$in: ['article', 'share', 'collect']}})
+    Order.open().find({type: 'wx', smallType: {$in: ['article', 'share', 'collect']}, status: '未处理'})
         .then(function (results) {
             res.render('adminWXarticleWait', {
                 title: '微信任务管理 / 待处理微信原文任务',
@@ -433,7 +433,7 @@ router.get('/WX/article/already', function (req, res) {
 });
 
 router.get('/WX/like/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: {$in: ['read', 'like']}})
+    Order.open().find({type: 'wx', smallType: {$in: ['read', 'like']}, status: '未处理'})
         .then(function (results) {
             res.render('adminWXlikeWait', {
                 title: '微信任务管理 / 待处理微信阅读点赞任务',
@@ -448,7 +448,7 @@ router.get('/WX/like/already', function (req, res) {
 });
 
 router.get('/WX/reply/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: 'fans'})
+    Order.open().find({type: 'wx', smallType: 'fans', status: '未处理'})
         .then(function (results) {
             res.render('adminWXreplyWait', {
                 title: '微信任务管理 / 待处理公众粉丝回复任务',
@@ -463,7 +463,7 @@ router.get('/WX/reply/already', function (req, res) {
 });
 
 router.get('/WX/friend/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: 'friend'})
+    Order.open().find({type: 'wx', smallType: 'friend', status: '未处理'})
         .then(function (results) {
             res.render('adminWXfriendWait', {
                 title: '微信任务管理 / 待处理微信个人好友任务',
@@ -488,7 +488,7 @@ router.get('/WX/code/already', function (req, res) {
 
 
 router.get('/MP/wait', function (req, res) {
-    Order.open().find({type: 'mp', smallType: {$in: ['like', 'comment', 'attention', 'forward']}})
+    Order.open().find({type: 'mp', smallType: {$in: ['like', 'comment', 'attention', 'forward']}, status: '未处理'})
         .then(function (results) {
             res.render('adminMPWait', {
                 title: '美拍任务管理 / 待处理订单',
