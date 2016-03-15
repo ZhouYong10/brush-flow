@@ -116,8 +116,6 @@ router.get('/share', function (req, res) {
         .then(function (user) {
             Order.open().find({userId: user._id, type: 'wx', smallType: {$in: ['article', 'share', 'collect']}})
                 .then(function (results) {
-                    console.log(user, '==================================');
-                    console.log(results, '==========================');
                     res.render('WXshare', {
                         title: '微信原文/分享/收藏',
                         money: user.funds,
