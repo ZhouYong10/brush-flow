@@ -13,7 +13,6 @@ new Vue({
         price: '',
         price2: '',
         address: '',
-        title: '',
         articleTitle: '',
         totalPrice: 0,
         num: '',
@@ -25,7 +24,7 @@ new Vue({
             var self = this;
             Utils.parseAddress(self.$http, self.address)
                 .then(function(title) {
-                    self.title = title;
+                    self.articleTitle = title;
                 },function(message) {
                     alert(message);
                 })

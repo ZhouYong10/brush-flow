@@ -39,7 +39,7 @@
                 </div>
 
                 <validator name="wxlike">
-                <form class="am-form am-form-horizontal">
+                <form class="am-form am-form-horizontal" method="post" action="/wx/like/add">
 
                     <div class="am-form-group">
                         <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>图文地址</label>
@@ -54,7 +54,7 @@
                     <div class="am-form-group">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务标题</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable">{{title}}</p>
+                            <p class="disable">{{articleTitle}}</p>
                             <input type="hidden" name="title" value="{{articleTitle}}">
                         </div>
                     </div>
@@ -62,7 +62,9 @@
                     <div class="am-form-group">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable">微信阅读￥ {{price}}/个,微信点赞￥ {{price2}}/个</p>
+                            <p class="disable">微信阅读￥ <%= price %>/个, 微信点赞￥ <%= price2 %>/个</p>
+                            <input type="hidden" value="<%= price %>" v-model="price">
+                            <input type="hidden" value="<%= price2 %>" v-model="price2">
                         </div>
                     </div>
 
@@ -70,7 +72,7 @@
                         <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>阅读数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的图文阅读数量,最低30起"
-                                   v-on:keyup="total" v-on:change="total" v-model="num"
+                                   v-on:keyup="total" v-on:change="total" v-model="num" name="num"
                                    v-validate:num="{required: true, min30: true, isnum: true, maxprice: true}">
                             <span class="tips" v-if="$wxlike.num.required">需要添加的阅读数量不能为空!</span>
                             <span class="tips" v-if="$wxlike.num.isnum">数量必须为正整数!</span>
@@ -83,7 +85,7 @@
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="likeNum" class="am-radius am-input-sm" type="text"
                                    placeholder="如果不填则系统默认赠送 0.5% 的赞，如果不需要赠送请写 0。"
-                                   v-model="num2" v-on:keyup="total" v-on:change="total"
+                                   v-model="num2" v-on:keyup="total" v-on:change="total" name="num2"
                                    v-validate:replynum="{minnum: true, isnum: true, maxprice: true}">
                             <span class="tips" v-if="$wxlike.replynum.isnum">数量必须为正整数!</span>
                             <span class="tips" v-if="$wxlike.replynum.minnum">回复数量不能大于粉丝数量!</span>
@@ -93,7 +95,7 @@
                     <div class="am-form-group">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable">￥ {{totalPrice}}/个</p>
+                            <p class="disable">￥ {{totalPrice}}</p>
                             <span class="tips" v-if="$wxlike.num.maxprice">您的余额不足，请充值!</span>
                             <input type="hidden" v-model="funds" value="<%= money %>">
                         </div>
@@ -102,7 +104,7 @@
                     <div class="am-form-group">
                         <label for="taskSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">阅读限速</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskSpeed" class="am-radius am-input-sm" type="text"
+                            <input id="taskSpeed" class="am-radius am-input-sm" type="text" name="speed"
                                    placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个阅读，输入100即可"
                                    v-validate:spped="{isnum: true}">
                             <span class="tips" v-if="$wxlike.spped.isnum">必须为正整数!</span>
@@ -112,7 +114,7 @@
                     <div class="am-form-group">
                         <label for="taskRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <textarea id="taskRemark" class="am-radius" rows="3" placeholder="添加任务备注"></textarea>
+                            <textarea id="taskRemark" class="am-radius" rows="3" placeholder="添加任务备注" name="remark"></textarea>
                         </div>
                     </div>
 

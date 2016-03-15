@@ -181,13 +181,29 @@ router.get('/like', function (req, res) {
 router.get('/like/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WXlikeAdd', {
-                title: '添加微信图文点赞任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Product.open().findOne({type: 'wx', smallType: 'read'})
+                .then(function(read) {
+                    var readIns = Product.wrapToInstance(read);
+                    var myReadPrice = readIns.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'wx', smallType: 'like'})
+                        .then(function(like) {
+                            var likeIns = Product.wrapToInstance(like);
+                            var myLikePrice = likeIns.getPriceByRole(user.role);
+                            res.render('WXlikeAdd', {
+                                title: '添加微信图文点赞任务',
+                                money: user.funds,
+                                username: user.username,
+                                role: user.role,
+                                price: myReadPrice,
+                                price2: myLikePrice
+                            });
+                        });
+                });
         });
+});
+
+router.post('/like/add', function (req, res) {
+    console.log(req.body,'=======================================');
 });
 
 module.exports = router;
