@@ -3,6 +3,7 @@
  */
 var User = require('../models/User');
 var Product = require('../models/Product');
+var Order = require('../models/Order');
 
 var router = require('express').Router();
 
@@ -37,7 +38,17 @@ router.get('/like/add', function (req, res) {
 });
 
 router.post('/like/add', function (req, res) {
-    console.log(req.body, '===================================');
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var order = Order.wrapToInstance(req.body);
+            order.createAndSave(user, {type: 'mp', smallType: 'like'})
+                .then(function () {
+                    socketIO.emit('updateNav', {'mp': 1});
+                    res.redirect('/mp/like');
+                }, function() {
+                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                });
+        });
 });
 
 router.get('/comment', function (req, res) {
