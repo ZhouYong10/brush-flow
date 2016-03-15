@@ -36,6 +36,10 @@ router.get('/like/add', function (req, res) {
         });
 });
 
+router.post('/like/add', function (req, res) {
+    console.log(req.body, '===================================');
+});
+
 router.get('/comment', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {

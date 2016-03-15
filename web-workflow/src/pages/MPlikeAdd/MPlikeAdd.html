@@ -39,7 +39,7 @@
                 <!--</div>-->
 
                 <validator name="mplike">
-                <form class="am-form am-form-horizontal">
+                <form class="am-form am-form-horizontal" method="post" action="/mp/like/add">
 
                     <div class="am-form-group">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
@@ -91,7 +91,7 @@
                     <div class="am-form-group">
                         <label for="setSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">速度设置</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="setSpeed" class="am-radius am-input-sm">
+                            <select id="setSpeed" class="am-radius am-input-sm" name="speedUnit">
                                 <option value="">无要求 </option>
                                 <option value="每秒">每秒 </option>
                                 <option value="每分钟">每分钟 </option>
@@ -104,7 +104,7 @@
                         <label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label">速度数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="需要定期增加的数量"
-                                   v-validate:spped="{isnum: true}">
+                                   v-validate:spped="{isnum: true}" name="speed">
                             <span class="tips" v-if="$mplike.spped.isnum">必须为正整数!</span>
                         </div>
                     </div>
