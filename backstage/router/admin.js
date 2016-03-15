@@ -433,7 +433,14 @@ router.get('/WX/article/already', function (req, res) {
 });
 
 router.get('/WX/like/wait', function (req, res) {
-    res.render('adminWXlikeWait', {title: '微信任务管理 / 待处理微信阅读点赞任务', money: 10.01})
+    Order.open().find({type: 'wx', smallType: {$in: ['read', 'like']}})
+        .then(function (results) {
+            res.render('adminWXlikeWait', {
+                title: '微信任务管理 / 待处理微信阅读点赞任务',
+                money: 10.01,
+                orders: results.reverse()
+            });
+        });
 });
 
 router.get('/WX/like/already', function (req, res) {
