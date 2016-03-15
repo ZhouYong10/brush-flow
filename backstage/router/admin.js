@@ -418,7 +418,14 @@ router.get('/flow/already', function (req, res) {
 
 
 router.get('/WX/article/wait', function (req, res) {
-    res.render('adminWXarticleWait', {title: '微信任务管理 / 待处理微信原文任务', money: 10.01})
+    Order.open().find({type: 'wx', smallType: {$in: ['article', 'share', 'collect']}})
+        .then(function (results) {
+            res.render('adminWXarticleWait', {
+                title: '微信任务管理 / 待处理微信原文任务',
+                money: 10.01,
+                orders: results.reverse()
+            });
+        });
 });
 
 router.get('/WX/article/already', function (req, res) {
