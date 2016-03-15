@@ -169,12 +169,16 @@ router.get('/get/price/by/type', function (req, res) {
 router.get('/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WXlike', {
-                title: '图文阅读/点赞',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'wx', smallType: 'read'})
+                .then(function (results) {
+                    res.render('WXlike', {
+                        title: '图文阅读/点赞',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                });
         });
 });
 
