@@ -58,12 +58,16 @@ router.post('/like/add', function (req, res) {
 router.get('/comment', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('MPcomment', {
-                title: '美拍评论任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'mp', smallType: 'comment'})
+                .then(function(results) {
+                    res.render('MPcomment', {
+                        title: '美拍评论任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                })
         });
 });
 
