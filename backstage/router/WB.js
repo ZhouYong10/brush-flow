@@ -2,6 +2,7 @@
  * Created by zhouyong10 on 1/24/16.
  */
 var User = require('../models/User');
+var Product = require('../models/Product');
 
 
 var router = require('express').Router();
@@ -21,12 +22,18 @@ router.get('/like', function (req, res) {
 router.get('/like/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WBlikeAdd', {
-                title: '添加微博高级点赞任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            })
+            Product.open().findOne({type: 'wb', smallType: 'like'})
+                .then(function(result) {
+                    var resultIns = Product.wrapToInstance(result);
+                    var myPrice = resultIns.getPriceByRole(user.role);
+                    res.render('WBlikeAdd', {
+                        title: '添加微博高级点赞任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        price: myPrice
+                    });
+                });
         });
 });
 
