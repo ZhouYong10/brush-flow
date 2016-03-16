@@ -51,38 +51,26 @@
                         <thead>
                         <tr>
                             <th>#</th>
+                            <th>消费时间</th>
                             <th>类型	</th>
                             <th>消费金额</th>
                             <th>余额	</th>
                             <th>描述	</th>
-                            <th>消费时间</th>
                         </tr>
                         </thead>
                         <tbody>
+
+                        <% for(var i = 0; i < orders.length; i++){ %>
                         <tr>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td class="am-text-middle">http://amazeui.org</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle"><%= i + 1 %></td>
+                            <td class="am-text-middle"><%= orders[i].createTime %></td>
+                            <td class="am-text-middle"><%= orders[i].typeName %><%= orders[i].smallTypeName %></td>
+                            <td class="am-text-middle">￥ <%= orders[i].totalPrice %></td>
+                            <td class="am-text-middle">￥ <%= orders[i].funds %></td>
+                            <td class="am-text-middle"><%= orders[i].description %></td>
                         </tr>
-                        <tr>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td class="am-text-middle">http://amazeui.org</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                        </tr>
-                        <tr>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td class="am-text-middle">http://amazeui.org</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                            <td class="am-text-middle">2012-10-01</td>
-                        </tr>
+                        <% } %>
+
                         </tbody>
                     </table>
                 </div>

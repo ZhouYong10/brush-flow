@@ -2,6 +2,7 @@
  * Created by zhouyong10 on 1/24/16.
  */
 var User = require('../models/User');
+var Order = require('../models/Order');
 var Feedback = require('../models/Feedback');
 var AlipayRecord = require('../models/AlipayRecord');
 var Recharge = require('../models/Recharge');
@@ -92,12 +93,16 @@ router.get('/recharge/history', function (req, res) {
 router.get('/consume/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('consumeHistory', {
-                title: '消费记录',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            })
+            Order.open().find({userId: user._id})
+                .then(function(orders) {
+                    res.render('consumeHistory', {
+                        title: '消费记录',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: orders.reverse()
+                    })
+                })
         });
 });
 
