@@ -505,7 +505,16 @@ router.get('/MP/already', function (req, res) {
 
 
 router.get('/WB/wait', function (req, res) {
-    res.render('adminWBWait', {title: '微博任务管理 / 待处理订单', money: 10.01})
+    Order.open().find({type: 'wb', smallType: {
+        $in: ['like', 'vote', 'fens', 'fens20', 'fens80', 'forward', 'forward20', 'forward80', 'comment']
+    }, status: '未处理'})
+        .then(function (results) {
+            res.render('adminWBWait', {
+                title: '微博任务管理 / 待处理订单',
+                money: 10.01,
+                orders: results.reverse()
+            });
+        });
 });
 
 router.get('/WB/already', function (req, res) {
