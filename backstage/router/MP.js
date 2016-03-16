@@ -166,12 +166,18 @@ router.get('/forward', function (req, res) {
 router.get('/forward/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('MPforwardAdd', {
-                title: '添加美拍转发任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Product.open().findOne({type: 'mp', smallType: 'forward'})
+                .then(function(forward) {
+                    var forwardIns = Product.wrapToInstance(forward);
+                    var myForwardPrice = forwardIns.getPriceByRole(user.role);
+                    res.render('MPforwardAdd', {
+                        title: '添加美拍转发任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        price: myForwardPrice
+                    });
+                });
         });
 });
 module.exports = router;
