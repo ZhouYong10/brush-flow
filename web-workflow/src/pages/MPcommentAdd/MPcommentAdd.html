@@ -40,7 +40,7 @@
 
 
                 <validator name="mpcomment">
-                <form class="am-form am-form-horizontal">
+                <form class="am-form am-form-horizontal" method="post" action="/mp/comment/add">
 
                     <div class="am-form-group">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
@@ -102,18 +102,18 @@
                     <div class="am-form-group">
                         <label for="contentSelf" class="am-u-sm-4 am-u-lg-2 am-form-label">自定义评论内容</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <textarea id="contentSelf" class="am-radius" rows="3"></textarea>
+                            <textarea id="contentSelf" class="am-radius" rows="3" name="content"></textarea>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <label for="setSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">速度设置</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="setSpeed" class="am-radius am-input-sm">
+                            <select id="setSpeed" class="am-radius am-input-sm" name="speedUnit">
                                 <option value="">无要求 </option>
-                                <option value="">每秒 </option>
-                                <option value="">每分钟 </option>
-                                <option value="">每小时 </option>
+                                <option value="每秒">每秒 </option>
+                                <option value="每分钟">每分钟 </option>
+                                <option value="每小时">每小时 </option>
                             </select>
                         </div>
                     </div>
