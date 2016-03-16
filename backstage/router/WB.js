@@ -123,19 +123,12 @@ router.get('/fans', function (req, res) {
 router.get('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'wb', smallType: 'fans'})
-                .then(function(result) {
-                    console.log(result, '=========================');
-                    var resultIns = Product.wrapToInstance(result);
-                    var myPrice = resultIns.getPriceByRole(user.role);
-                    res.render('WBfansAdd', {
-                        title: '添加微博粉丝任务',
-                        money: user.funds,
-                        username: user.username,
-                        role: user.role,
-                        price: myPrice
-                    });
-                });
+            res.render('WBfansAdd', {
+                title: '添加微博粉丝任务',
+                money: user.funds,
+                username: user.username,
+                role: user.role
+            });
         });
 });
 
