@@ -19,11 +19,11 @@ var wbSmallType = '<td> ' +
     '<option value="like">高级赞</option> ' +
     '<option value="vote">投票</option> ' +
     '<option value="fans">粉丝</option> ' +
-    '<option value="fans20">粉丝20%</option> ' +
-    '<option value="fans80">粉丝80%</option> ' +
+    '<option value="fansTwo">粉丝20%</option> ' +
+    '<option value="fansEight">粉丝80%</option> ' +
     '<option value="forward">转发</option> ' +
-    '<option value="forward20">转发20%</option> ' +
-    '<option value="forward80">转发80%</option> ' +
+    '<option value="forwardTwo">转发20%</option> ' +
+    '<option value="forwardEight">转发80%</option> ' +
     '<option value="comment">评论</option> ' +
     '</select> ' +
     '</td> ';
