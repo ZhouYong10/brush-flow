@@ -59,12 +59,16 @@ router.post('/like/add', function (req, res) {
 router.get('/vote', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WBvote', {
-                title: '微博投票任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'wb', smallType: 'vote'})
+                .then(function(results) {
+                    res.render('WBvote', {
+                        title: '微博投票任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                })
         });
 });
 
