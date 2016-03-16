@@ -19,7 +19,7 @@
 
     <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
+        <div id="mpAttention" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
@@ -38,59 +38,74 @@
                     <!--</div>-->
                 <!--</div>-->
 
+                <validator name="mpattention">
                 <form class="am-form am-form-horizontal">
+
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable">美拍关注￥ <%= price %>/个</p>
+                            <input type="hidden" value="<%= price %>" v-model="price">
+                        </div>
+                    </div>
 
                     <div class="am-form-group">
                         <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务地址</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="">
+                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写评论地址" name="address"
+                                   v-validate:address="{required: true, isaddress: true}" v-model="address" @change="parseAddress">
+                            <span class="tips" v-if="$mpattention.address.required">任务地址不能为空!</span>
+                            <span class="tips" v-if="$mpattention.address.isaddress">请填写合法的地址!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="taskTitle" class="am-u-sm-4 am-u-lg-2 am-form-label">任务标题</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务标题</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskTitle" class="am-radius am-input-sm" type="text" disabled>
+                            <p class="disable">{{articleTitle}}</p>
+                            <input type="hidden" name="title" value="{{articleTitle}}">
                         </div>
                     </div>
-
-                    <!--<div class="am-form-group">-->
-                        <!--<label for="taskPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>-->
-                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                            <!--<input id="taskPrice" class="am-radius am-input-sm" type="text" value="微信阅读0.0087/个,微信点赞0.0012/个" disabled>-->
-                        <!--</div>-->
-                    <!--</div>-->
 
                     <div class="am-form-group">
                         <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的任务数量">
+                            <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的任务数量,最低30起."
+                                   v-on:keyup="total" v-on:change="total" v-model="num" name="num"
+                                   v-validate:num="{required: true, min30: true, isnum: true, maxprice: true}">
+                            <span class="tips" v-if="$mpattention.num.required">需要添加的阅读数量不能为空!</span>
+                            <span class="tips" v-if="$mpattention.num.isnum">数量必须为正整数!</span>
+                            <span class="tips" v-if="$mpattention.num.min30">数量最低30起!</span>
                         </div>
                     </div>
 
-                    <!--<div class="am-form-group">-->
-                    <!--<label for="totalPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>-->
-                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                    <!--<input id="totalPrice" class="am-radius am-input-sm" type="text" disabled>-->
-                    <!--</div>-->
-                    <!--</div>-->
+                    <div class="am-form-group">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                        <div class="am-u-sm-8 am-u-lg-10">
+                            <p class="disable">￥ {{totalPrice}}</p>
+                            <span class="tips" v-if="$mplike.num.maxprice">您的余额不足，请充值!</span>
+                            <input type="hidden" v-model="funds" value="<%= money %>">
+                        </div>
+                    </div>
 
                     <div class="am-form-group">
-                        <label for="setSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>速度设置</label>
+                        <label for="setSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">速度设置</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="setSpeed" class="am-radius am-input-sm">
+                            <select id="setSpeed" class="am-radius am-input-sm" name="speedUnit">
                                 <option value="">无要求 </option>
-                                <option value="">每秒 </option>
-                                <option value="">每分钟 </option>
-                                <option value="">每小时 </option>
+                                <option value="每秒">每秒 </option>
+                                <option value="每分钟">每分钟 </option>
+                                <option value="每小时">每小时 </option>
                             </select>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>速度数量</label>
+                        <label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label">速度数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="需要定期增加的数量">
+                            <input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="需要定期增加的数量"
+                                   v-validate:spped="{isnum: true}" name="speed">
+                            <span class="tips" v-if="$mpattention.spped.isnum">必须为正整数!</span>
                         </div>
                     </div>
 
@@ -119,10 +134,11 @@
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$mpattention.valid">提交任务</button>
                         </div>
                     </div>
                 </form>
+                </validator>
 
             </div>
         </div>
@@ -133,6 +149,10 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+
+<script>
+    require('MPattentionAdd');
+</script>
 
 </body>
 </html>

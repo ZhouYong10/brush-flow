@@ -118,12 +118,18 @@ router.get('/attention', function (req, res) {
 router.get('/attention/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('MPattentionAdd', {
-                title: '添加美拍关注任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Product.open().findOne({type: 'mp', smallType: 'attention'})
+                .then(function(attention) {
+                    var attentionIns = Product.wrapToInstance(attention);
+                    var myAttentionPrice = attentionIns.getPriceByRole(user.role);
+                    res.render('MPattentionAdd', {
+                        title: '添加美拍关注任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        price: myAttentionPrice
+                    });
+                });
         });
 });
 
