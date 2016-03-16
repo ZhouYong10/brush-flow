@@ -161,12 +161,16 @@ router.get('/get/price/by/type', function (req, res) {
 router.get('/forward', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WBforward', {
-                title: '微博转发任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'wb', smallType: {$in: ['forward', 'forwardTwo', 'forwardEight']}})
+                .then(function(results) {
+                    res.render('WBforward', {
+                        title: '微博转发任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                })
         });
 });
 
