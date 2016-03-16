@@ -154,12 +154,16 @@ router.post('/attention/add', function (req, res) {
 router.get('/forward', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('MPforward', {
-                title: '美拍转发任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'mp', smallType: 'forward'})
+                .then(function(results) {
+                    res.render('MPforward', {
+                        title: '美拍转发任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                })
         });
 });
 
