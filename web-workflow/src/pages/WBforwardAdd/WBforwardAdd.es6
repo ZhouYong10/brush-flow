@@ -1,21 +1,38 @@
-$(function () {
-    var commentContent = $('.commentContent');
-    var forwardTip = $('.forwardTip');
-    var commentTip = $('<span class="tips priceTip">(＊提示：目前评论较容易被屏蔽，建议您选择纯转发，选择评论被屏蔽不负责补发)</span>');
-    $('#commentForward').click(function () {
-        console.log($(this).prop('checked'));
-        if ($(this).prop('checked')) {
-            forwardTip.remove();
-            commentContent.css('display', 'block');
-            $(this).next().after(commentTip);
-        }
-    });
+var Vue = require('vue');
+Vue.use(require('vue-validator'));
+Vue.use(require('vue-resource'));
 
-    $('#forward').click(function () {
-        if ($(this).prop('checked')) {
-            commentTip.remove();
-            commentContent.css('display', 'none');
-            $('#commentForward').next().after(forwardTip);
+var Utils = require('utils');
+
+new Vue({
+    el: '#wbForward',
+    data: {
+        price: '',
+        totalPrice: 0,
+        num: '',
+        funds: 0
+    },
+    methods: {
+        selectType: function() {
+            var self = this;
+            this.$http.get('/wb/get/price/by/type', {type: this.type})
+                .then(function (res) {
+                    self.price = res.data.price;
+                    self.totalPrice = (self.price * self.num).toFixed(4);
+                });
+        },
+        total: function() {
+            this.totalPrice = (this.price * this.num).toFixed(4);
         }
-    });
+    },
+    validators: {
+        isaddress: function(val) {
+            return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(val);
+        },
+        isnum: Utils.isNum,
+        min100: Utils.min100,
+        maxprice: function(num) {
+            return parseFloat(this.price * num) <= parseFloat(this.funds);
+        }
+    }
 });
