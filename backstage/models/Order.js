@@ -41,11 +41,12 @@ Order.include({
                     self.smallTypeName = product.smallTypeName;
                     self.status = '未处理';
                     self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                    self.funds = (user.funds - self.totalPrice).toFixed(4);
+                    self.description = self.typeName + self.smallTypeName + '执行' + self.num;
                     self.countParentProfit(user, product, function(obj) {
                         Order.open().insert(obj)
                             .then(function () {
-                                user.funds = (user.funds - obj.totalPrice).toFixed(4);
-                                User.open().updateById(user._id, {$set: {funds: user.funds}})
+                                User.open().updateById(user._id, {$set: {funds: obj.funds}})
                                     .then(function () {
                                         resolve();
                                     });
@@ -79,11 +80,14 @@ Order.include({
                             self.smallTypeName = product1.smallTypeName;
                             self.status = '未处理';
                             self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                            self.funds = (user.funds - self.totalPrice).toFixed(4);
+                            self.description = self.typeName + self.smallTypeName + '执行' + self.num + '; ' +
+                                               product2.typeName + product2.smallTypeName + '执行' + self.num2;
+
                             self.countParentProfitTow(user, product1, product2, function(obj) {
                                 Order.open().insert(obj)
                                     .then(function () {
-                                        user.funds = (user.funds - obj.totalPrice).toFixed(4);
-                                        User.open().updateById(user._id, {$set: {funds: user.funds}})
+                                        User.open().updateById(user._id, {$set: {funds: obj.funds}})
                                             .then(function () {
                                                 resolve();
                                             });
