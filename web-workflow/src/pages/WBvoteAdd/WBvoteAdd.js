@@ -7,7 +7,7 @@ Vue.use(require('vue-validator'));
 var Utils = require('utils');
 
 new Vue({
-    el: '#wbLike',
+    el: '#wbVote',
     data: {
         price: '',
         totalPrice: 0,

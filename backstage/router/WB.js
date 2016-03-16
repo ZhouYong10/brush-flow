@@ -71,12 +71,18 @@ router.get('/vote', function (req, res) {
 router.get('/vote/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WBvoteAdd', {
-                title: '添加微博投票任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Product.open().findOne({type: 'wb', smallType: 'vote'})
+                .then(function(result) {
+                    var resultIns = Product.wrapToInstance(result);
+                    var myPrice = resultIns.getPriceByRole(user.role);
+                    res.render('WBvoteAdd', {
+                        title: '添加微博投票任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        price: myPrice
+                    });
+                });
         });
 });
 

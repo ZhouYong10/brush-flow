@@ -19,7 +19,7 @@
 
     <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
+        <div id="wbVote" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
@@ -34,84 +34,104 @@
                     </div>
                 </div>
 
-                <form class="am-form am-form-horizontal">
+                <validator name="wbvote">
+                    <form class="am-form am-form-horizontal">
 
-                    <div class="am-form-group">
-                        <label for="taskPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskPrice" class="am-radius am-input-sm" type="text" value="微博投票任务价格为170币/万" disabled>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <p class="disable">微博投票￥ <%= price %>/个</p>
+                                <input type="hidden" value="<%= price %>" v-model="price">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="am-form-group">
-                        <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>投票地址</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="例如：http://vote.weibo.com/poll/432863或者432863">
+                        <div class="am-form-group">
+                            <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>投票地址</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写评论地址" name="address"
+                                       v-validate:address="{required: true, isaddress: true}">
+                                <span class="tips" v-if="$wbvote.address.required">任务地址不能为空!</span>
+                                <span class="tips" v-if="$wbvote.address.isaddress">请填写合法的地址!</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="am-form-group">
-                        <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>本次数量</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="价格说明：刷100次起步，不足100按100计算 ">
+                        <div class="am-form-group">
+                            <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务数量</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="刷100次起步，不足100按100计算."
+                                       v-on:keyup="total" v-on:change="total" v-model="num" name="num"
+                                       v-validate:num="{required: true, min100: true, isnum: true, maxprice: true}">
+                                <span class="tips" v-if="$wbvote.num.required">需要添加的阅读数量不能为空!</span>
+                                <span class="tips" v-if="$wbvote.num.isnum">数量必须为正整数!</span>
+                                <span class="tips" v-if="$wbvote.num.min100">数量最低100起!</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="am-form-group">
-                        <label for="taskRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">本次备注</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <textarea id="taskRemark" class="am-radius" rows="3" placeholder="备注信息,防止混淆 "></textarea>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <p class="disable">￥ {{totalPrice}}</p>
+                                <span class="tips" v-if="$wbvote.num.maxprice">您的余额不足，请充值!</span>
+                                <input type="hidden" v-model="funds" value="<%= money %>">
+                            </div>
                         </div>
-                    </div>
 
-                    <!--<div class="am-form-group">-->
-                    <!--<label for="totalPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>-->
-                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                    <!--<input id="totalPrice" class="am-radius am-input-sm" type="text" disabled>-->
-                    <!--</div>-->
-                    <!--</div>-->
+                        <div class="am-form-group">
+                            <label for="taskRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">备注</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <textarea id="taskRemark" class="am-radius" rows="3" placeholder="备注信息,防止混淆" name="remark"></textarea>
+                            </div>
+                        </div>
 
-                    <!--<div class="am-form-group">-->
+                        <!--<div class="am-form-group">-->
+                        <!--<label for="totalPrice" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                        <!--<input id="totalPrice" class="am-radius am-input-sm" type="text" disabled>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<div class="am-form-group">-->
                         <!--<label for="setSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>速度设置</label>-->
                         <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                            <!--<select id="setSpeed" class="am-radius am-input-sm">-->
-                                <!--<option value="">无要求 </option>-->
-                                <!--<option value="">每秒 </option>-->
-                                <!--<option value="">每分钟 </option>-->
-                                <!--<option value="">每小时 </option>-->
-                            <!--</select>-->
+                        <!--<select id="setSpeed" class="am-radius am-input-sm">-->
+                        <!--<option value="">无要求 </option>-->
+                        <!--<option value="">每秒 </option>-->
+                        <!--<option value="">每分钟 </option>-->
+                        <!--<option value="">每小时 </option>-->
+                        <!--</select>-->
                         <!--</div>-->
-                    <!--</div>-->
+                        <!--</div>-->
 
-                    <!--<div class="am-form-group">-->
+                        <!--<div class="am-form-group">-->
                         <!--<label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>速度数量</label>-->
                         <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                            <!--<input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="需要定期增加的数量">-->
+                        <!--<input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="需要定期增加的数量">-->
                         <!--</div>-->
-                    <!--</div>-->
+                        <!--</div>-->
 
-                    <!--<div class="am-form-group">-->
-                    <!--<label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>计划时间</label>-->
-                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                    <!--<input id="planTime" class="am-radius am-input-sm" type="text" placeholder="首次开始任务的时间">-->
-                    <!--</div>-->
-                    <!--</div>-->
+                        <!--<div class="am-form-group">-->
+                        <!--<label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>计划时间</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                        <!--<input id="planTime" class="am-radius am-input-sm" type="text" placeholder="首次开始任务的时间">-->
+                        <!--</div>-->
+                        <!--</div>-->
 
-                    <!--<div class="am-form-group">-->
-                    <!--<label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>-->
-                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                    <!--<input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行">-->
-                    <!--</div>-->
-                    <!--</div>-->
+                        <!--<div class="am-form-group">-->
+                        <!--<label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                        <!--<input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行">-->
+                        <!--</div>-->
+                        <!--</div>-->
 
 
 
-                    <div class="am-form-group">
-                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                        <div class="am-form-group">
+                            <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
+                                <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$wbvote.valid">提交任务</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </validator>
 
             </div>
         </div>
@@ -122,6 +142,10 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+
+<script>
+    require('WBvoteAdd');
+</script>
 
 </body>
 </html>
