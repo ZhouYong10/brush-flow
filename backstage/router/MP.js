@@ -106,12 +106,16 @@ router.post('/comment/add', function (req, res) {
 router.get('/attention', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('MPattention', {
-                title: '美拍关注任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'mp', smallType: 'attention'})
+                .then(function(results) {
+                    res.render('MPattention', {
+                        title: '美拍关注任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                })
         });
 });
 
