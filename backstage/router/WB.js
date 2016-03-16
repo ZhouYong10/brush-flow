@@ -107,12 +107,16 @@ router.post('/vote/add', function (req, res) {
 router.get('/fans', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WBfans', {
-                title: '微博粉丝任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Order.open().find({userId: user._id, type: 'wb', smallType: {$in: ['fans', 'fansTwo', 'fansEight']}})
+                .then(function(results) {
+                    res.render('WBfans', {
+                        title: '微博粉丝任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                })
         });
 });
 

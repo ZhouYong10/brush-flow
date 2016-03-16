@@ -506,7 +506,7 @@ router.get('/MP/already', function (req, res) {
 
 router.get('/WB/wait', function (req, res) {
     Order.open().find({type: 'wb', smallType: {
-        $in: ['like', 'vote', 'fens', 'fens20', 'fens80', 'forward', 'forward20', 'forward80', 'comment']
+        $in: ['like', 'vote', 'fans', 'fansTwo', 'fansEight', 'forward', 'forwardTwo', 'forwardEight', 'comment']
     }, status: '未处理'})
         .then(function (results) {
             res.render('adminWBWait', {
