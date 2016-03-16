@@ -70,12 +70,18 @@ router.get('/comment', function (req, res) {
 router.get('/comment/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('MPcommentAdd', {
-                title: '添加美拍评论任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Product.open().findOne({type: 'mp', smallType: 'comment'})
+                .then(function(comment) {
+                    var commentIns = Product.wrapToInstance(comment);
+                    var myCommentPrice = commentIns.getPriceByRole(user.role);
+                    res.render('MPcommentAdd', {
+                        title: '添加美拍评论任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        price: myCommentPrice
+                    });
+                });
         });
 });
 
