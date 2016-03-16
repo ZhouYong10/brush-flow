@@ -11,12 +11,16 @@ var router = require('express').Router();
 router.get('/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WBlike', {
-                title: '微博高级点赞任务',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            })
+            Order.open().find({userId: user._id, type: 'wb', smallType: 'like'})
+                .then(function(results) {
+                    res.render('WBlike', {
+                        title: '微博高级点赞任务',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        orders: results.reverse()
+                    })
+                })
         });
 });
 
