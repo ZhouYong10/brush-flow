@@ -84,7 +84,7 @@
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <p class="disable">￥ {{totalPrice}}</p>
-                            <span class="tips" v-if="$mplike.num.maxprice">您的余额不足，请充值!</span>
+                            <span class="tips" v-if="$mpcomment.num.maxprice">您的余额不足，请充值!</span>
                             <input type="hidden" v-model="funds" value="<%= money %>">
                         </div>
                     </div>
