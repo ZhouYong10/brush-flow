@@ -43,7 +43,7 @@ new Vue({
         isnum: Utils.isNum,
         min30: Utils.min30,
         maxprice: function() {
-            return this.price * this.num + this.price2 * this.num2 <= this.funds;
+            return parseFloat(this.price * this.num + this.price2 * this.num2) <= parseFloat(this.funds);
         }
     }
 });

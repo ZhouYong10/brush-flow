@@ -25,7 +25,7 @@ new Vue({
         isnum: Utils.isNum,
         min20: Utils.min20,
         maxprice: function() {
-            return this.fansPrice * this.num + this.replyPrice * this.replyNum <= this.funds;
+            return parseFloat(this.fansPrice * this.num + this.replyPrice * this.replyNum) <= parseFloat(this.funds);
         },
         minnum: function(val) {
             return val - this.num <= 0;
