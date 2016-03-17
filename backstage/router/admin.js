@@ -452,7 +452,7 @@ router.get('/WX/article/already', function (req, res) {
                 title: '微信任务管理 / 已处理微信原文任务',
                 money: 10.01,
                 orders: results.reverse(),
-                path: '/admin/WX/article/wait'
+                path: '/admin/WX/article/already'
             });
         });
 });
