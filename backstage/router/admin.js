@@ -548,7 +548,17 @@ router.get('/WB/wait', function (req, res) {
 });
 
 router.get('/WB/already', function (req, res) {
-    res.render('adminWBAlre', {title: '微博任务管理 / 已处理订单', money: 10.01})
+    Order.open().find({type: 'wb', smallType: {
+            $in: ['like', 'vote', 'fans', 'fansTwo', 'fansEight', 'forward', 'forwardTwo', 'forwardEight', 'comment']
+        }, status: {$ne: '未处理'}})
+        .then(function (results) {
+            res.render('adminWBAlre', {
+                title: '微博任务管理 / 已处理订单',
+                money: 10.01,
+                orders: results.reverse(),
+                path: '/admin/WB/already'
+            });
+        });
 });
 
 
