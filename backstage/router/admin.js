@@ -520,7 +520,15 @@ router.get('/MP/wait', function (req, res) {
 });
 
 router.get('/MP/already', function (req, res) {
-    res.render('adminMPAlre', {title: '美拍任务管理 / 已处理订单', money: 10.01})
+    Order.open().find({type: 'mp', smallType: {$in: ['like', 'comment', 'attention', 'forward']}, status: {$ne: '未处理'}})
+        .then(function (results) {
+            res.render('adminMPAlre', {
+                title: '美拍任务管理 / 已处理订单',
+                money: 10.01,
+                orders: results.reverse(),
+                path: '/admin/MP/already'
+            });
+        });
 });
 
 
