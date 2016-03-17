@@ -470,7 +470,15 @@ router.get('/WX/like/wait', function (req, res) {
 });
 
 router.get('/WX/like/already', function (req, res) {
-    res.render('adminWXlikeAlre', {title: '微信任务管理 / 已处理微信阅读点赞任务', money: 10.01})
+    Order.open().find({type: 'wx', smallType: {$in: ['read', 'like']}, status: {$ne: '未处理'}})
+        .then(function (results) {
+            res.render('adminWXlikeAlre', {
+                title: '微信任务管理 / 已处理微信阅读点赞任务',
+                money: 10.01,
+                orders: results.reverse(),
+                path: '/admin/WX/like/already'
+            });
+        });
 });
 
 router.get('/WX/reply/wait', function (req, res) {
@@ -486,7 +494,15 @@ router.get('/WX/reply/wait', function (req, res) {
 });
 
 router.get('/WX/reply/already', function (req, res) {
-    res.render('adminWXreplyAlre', {title: '微信任务管理 / 已处理公众粉丝回复任务', money: 10.01})
+    Order.open().find({type: 'wx', smallType: 'fans', status: {$ne: '未处理'}})
+        .then(function (results) {
+            res.render('adminWXreplyAlre', {
+                title: '微信任务管理 / 已处理公众粉丝回复任务',
+                money: 10.01,
+                orders: results.reverse(),
+                path: '/admin/WX/reply/already'
+            });
+        });
 });
 
 router.get('/WX/friend/wait', function (req, res) {

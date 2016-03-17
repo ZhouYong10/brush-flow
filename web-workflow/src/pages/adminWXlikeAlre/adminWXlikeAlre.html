@@ -40,54 +40,40 @@
                             <th>点赞数量</th>
                             <th>速度限制</th>
                             <th>价格</th>
+                            <th>备注</th>
                             <th>返还A</th>
                             <th>返还B</th>
                             <th>返还C</th>
+                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
+
+                        <% for(var i = 0; i < orders.length; i++){ %>
                         <tr>
-                            <td class="am-text-middle">3</td>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
+                            <td class="am-text-middle"><%= i + 1  %></td>
+                            <td class="am-text-middle"><%= orders[i].user %></td>
+                            <td class="am-text-middle"><%= orders[i].createTime %></td>
+                            <td class="am-text-middle">
+                                <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                   title="<%= orders[i].address %>"
+                                   data-clipboard-text="<%= orders[i].address %>">复制</a>
+                            </td>
+                            <td class="am-text-middle"><%= orders[i].title %></td>
+                            <td class="am-text-middle"><%= orders[i].num %></td>
+                            <td class="am-text-middle"><%= orders[i].num2 %></td>
+                            <td class="am-text-middle"><%= orders[i].speed %></td>
+                            <td class="am-text-middle"><%= orders[i].totalPrice %></td>
+                            <td class="am-text-middle"><%= orders[i].remark %></td>
+                            <td class="am-text-middle"><%= orders[i].adminProfit %></td>
+                            <td class="am-text-middle"><%= orders[i].topProfit %></td>
+                            <td class="am-text-middle"><%= orders[i].superProfit %></td>
+                            <td class="am-text-middle">
+                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">退款</button>
+                            </td>
                         </tr>
-                        <tr>
-                            <td class="am-text-middle">3</td>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                        </tr>
-                        <tr>
-                            <td class="am-text-middle">3</td>
-                            <td class="am-text-middle">Amaze UI</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                            <td  class="am-text-middle">2012-10-01</td>
-                        </tr>
+                        <% } %>
+
                         </tbody>
                     </table>
 
@@ -100,10 +86,23 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/js/clipboard.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
 
 <script>
     require('adminMenuContent');
+
+    $(function() {
+        var clip = new Clipboard('.clipboard');
+        clip.on('success', function(e) {
+            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
+            layer.msg('复制成功！', {
+                time: 1000
+            });
+        })
+    })
 </script>
+
 
 </body>
 </html>
