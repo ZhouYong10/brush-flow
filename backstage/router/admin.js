@@ -393,6 +393,22 @@ router.get('/placard/add', function (req, res) {
 
 
 
+/*
+* order complete
+* */
+router.get('/order/complete', function (req, res) {
+    var orderId = req.query.id;
+    var url = req.query.url;
+    Order.open().findById(orderId)
+        .then(function(order) {
+            var orderIns = Order.wrapToInstance(order);
+            orderIns.complete(function() {
+                res.redirect(url);
+            });
+        })
+});
+
+
 
 /*
  * manage order form
@@ -423,7 +439,8 @@ router.get('/WX/article/wait', function (req, res) {
             res.render('adminWXarticleWait', {
                 title: '微信任务管理 / 待处理微信原文任务',
                 money: 10.01,
-                orders: results.reverse()
+                orders: results.reverse(),
+                path: '/admin/WX/article/wait'
             });
         });
 });
@@ -438,7 +455,8 @@ router.get('/WX/like/wait', function (req, res) {
             res.render('adminWXlikeWait', {
                 title: '微信任务管理 / 待处理微信阅读点赞任务',
                 money: 10.01,
-                orders: results.reverse()
+                orders: results.reverse(),
+                path: '/admin/WX/like/wait'
             });
         });
 });
@@ -453,7 +471,8 @@ router.get('/WX/reply/wait', function (req, res) {
             res.render('adminWXreplyWait', {
                 title: '微信任务管理 / 待处理公众粉丝回复任务',
                 money: 10.01,
-                orders: results.reverse()
+                orders: results.reverse(),
+                path: '/admin/WX/reply/wait'
             });
         });
 });
@@ -468,7 +487,8 @@ router.get('/WX/friend/wait', function (req, res) {
             res.render('adminWXfriendWait', {
                 title: '微信任务管理 / 待处理微信个人好友任务',
                 money: 10.01,
-                orders: results.reverse()
+                orders: results.reverse(),
+                path: '/admin/WX/friend/wait'
             });
         });
 });
@@ -493,7 +513,8 @@ router.get('/MP/wait', function (req, res) {
             res.render('adminMPWait', {
                 title: '美拍任务管理 / 待处理订单',
                 money: 10.01,
-                orders: results.reverse()
+                orders: results.reverse(),
+                path: '/admin/MP/wait'
             });
         });
 });
@@ -512,7 +533,8 @@ router.get('/WB/wait', function (req, res) {
             res.render('adminWBWait', {
                 title: '微博任务管理 / 待处理订单',
                 money: 10.01,
-                orders: results.reverse()
+                orders: results.reverse(),
+                path: '/admin/WB/wait'
             });
         });
 });

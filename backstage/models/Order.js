@@ -4,6 +4,7 @@
 var db = require('../dbWrap');
 var User = require('./User');
 var Product = require('./Product');
+var Profit = require('./Profit');
 
 var Class = require('./Class');
 
@@ -160,8 +161,62 @@ Order.include({
         }else {
             callback(self);
         }
+    },
+    complete: function(callback) {
+        var self = this;
+        User.open().findById(self.userId)
+            .then(function(user) {
+                self.profitToParent(user, user, function(order) {
+                    Order.open().updateById(self._id, {$set: {status: '已处理'}})
+                        .then(function () {
+                            callback();
+                        });
+                });
+            })
+    },
+    profitToParent: function(orderUser, child, callback) {
+        var self = this;
+        var name = '';
+        if(child.parentID) {
+            User.open().findById(child.parentID)
+                .then(function(parent) {
+                    switch (parent.role) {
+                        case '管理员':
+                            name = 'adminProfit';
+                            break;
+                        case '顶级代理':
+                            name = 'topProfit';
+                            break;
+                        case '超级代理':
+                            name = 'superProfit';
+                            break;
+                        case '金牌代理':
+                            name = 'goldProfit';
+                            break;
+                    }
+                    parent.funds = (parseFloat(self[name]) + parseFloat(parent.funds)).toFixed(4);
+                    User.open().updateById(parent._id, {$set: {funds: parent.funds}})
+                        .then(function () {
+                            Profit.open().insert({
+                                userId: parent._id,
+                                username: parent.username,
+                                orderUserId: orderUser._id,
+                                orderUsername: orderUser.username,
+                                typeName: self.typeName,
+                                smallTypeName: self.smallTypeName,
+                                profit: self[name],
+                                orderId: self._id,
+                                createTime: self.createTime
+                            }).then(function (profit) {
+                                console.log(profit, '============================');
+                                self.profitToParent(orderUser, parent, callback);
+                            })
+                        });
+                })
+        }else {
+            callback(self);
+        }
     }
-
 });
 
 
