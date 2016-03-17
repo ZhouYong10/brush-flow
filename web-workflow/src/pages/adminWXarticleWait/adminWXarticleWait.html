@@ -55,7 +55,11 @@
                             <td class="am-text-middle"><%= orders[i].user %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
-                            <td class="am-text-middle"><%= orders[i].address %></td>
+                            <td class="am-text-middle">
+                                <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                   title="<%= orders[i].address %>"
+                                   data-clipboard-text="<%= orders[i].address %>">复制</a>
+                            </td>
                             <td class="am-text-middle"><%= orders[i].title %></td>
                             <td class="am-text-middle"><%= orders[i].num %></td>
                             <td class="am-text-middle"><%= orders[i].speed %></td>
@@ -65,7 +69,8 @@
                             <td class="am-text-middle"><%= orders[i].topProfit %></td>
                             <td class="am-text-middle"><%= orders[i].superProfit %></td>
                             <td class="am-text-middle">
-                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">报告错误</button>
+                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">执行</button>
+                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">拒绝</button>
                             </td>
                         </tr>
                         <% } %>
@@ -82,9 +87,21 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/js/clipboard.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
 
 <script>
     require('adminMenuContent');
+
+    $(function() {
+        var clip = new Clipboard('.clipboard');
+        clip.on('success', function(e) {
+            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
+            layer.msg('复制成功！', {
+                time: 1000
+            });
+        })
+    })
 </script>
 
 </body>
