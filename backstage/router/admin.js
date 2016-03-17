@@ -502,7 +502,15 @@ router.get('/WX/friend/wait', function (req, res) {
 });
 
 router.get('/WX/friend/already', function (req, res) {
-    res.render('adminWXfriendAlre', {title: '微信任务管理 / 已处理微信个人好友任务', money: 10.01})
+    Order.open().find({type: 'wx', smallType: 'friend', status: {$ne: '未处理'}})
+        .then(function (results) {
+            res.render('adminWXfriendAlre', {
+                title: '微信任务管理 / 已处理微信个人好友任务',
+                money: 10.01,
+                orders: results.reverse(),
+                path: '/admin/WX/friend/already'
+            });
+        });
 });
 
 router.get('/WX/code/wait', function (req, res) {
