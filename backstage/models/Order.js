@@ -208,7 +208,6 @@ Order.include({
                                 orderId: self._id,
                                 createTime: self.createTime
                             }).then(function (profit) {
-                                console.log(profit, '============================');
                                 self.profitToParent(orderUser, parent, callback);
                             })
                         });
