@@ -37,16 +37,12 @@
                             <th>微信账号</th>
                             <th>国/省/市</th>
                             <th>性别</th>
-                            <th>粉丝数量</th>
-                            <th>速度限制</th>
+                            <th>数量/速度</th>
                             <th>模式</th>
-                            <th>开始时间</th>
-                            <th>持续时间</th>
+                            <th>开始时间/持续</th>
                             <th>价格</th>
                             <th>备注</th>
-                            <th>返还A</th>
-                            <th>返还B</th>
-                            <th>返还C</th>
+                            <th>返利</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -64,16 +60,26 @@
                             </td>
                             <td class="am-text-middle"><%= orders[i].country %>/<%= orders[i].province %>/<%= orders[i].city %></td>
                             <td class="am-text-middle"><%= orders[i].gender %></td>
-                            <td class="am-text-middle"><%= orders[i].num %></td>
-                            <td class="am-text-middle"><%= orders[i].speed %></td>
+                            <td class="am-text-middle">
+                                数量: <%= orders[i].num %> <br/>
+                                速度: <%= orders[i].speed %>/分
+                            </td>
                             <td class="am-text-middle"><%= orders[i].mode %></td>
-                            <td class="am-text-middle"><%= orders[i].startTime %></td>
-                            <td class="am-text-middle"><%= orders[i].days %></td>
+                            <td class="am-text-middle">
+                                开始: <%= orders[i].startTime %> <br/>
+                                持续: <%= orders[i].days %> 天
+                            </td>
                             <td class="am-text-middle"><%= orders[i].totalPrice %></td>
-                            <td class="am-text-middle"><%= orders[i].remark %></td>
-                            <td class="am-text-middle"><%= orders[i].adminProfit %></td>
-                            <td class="am-text-middle"><%= orders[i].topProfit %></td>
-                            <td class="am-text-middle"><%= orders[i].superProfit %></td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
+                                    <%= orders[i].remark %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                A: <%= orders[i].adminProfit %><br/>
+                                B: <%= orders[i].topProfit %><br/>
+                                C: <%= orders[i].superProfit %><br/>
+                            </td>
                             <td class="am-text-middle">
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs"
                                    href="/admin/order/complete?id=<%= orders[i]._id %>&url=<%= path %>">完成 </a>
@@ -114,7 +120,7 @@
             extend: 'extend/layer.ext.js'
         });
 
-        $('.orderRefund').click(function(e) {
+        $('.orderRefund').click(function (e) {
             e.stopPropagation();
             e.preventDefault();
             var href = $(this).attr('href');
@@ -122,11 +128,16 @@
                 formType: 2,
                 title: '请输入拒绝接单的理由！',
                 offset: '6%'
-            }, function(value, index){
+            }, function (value, index) {
                 href += '&info=' + value;
                 layer.close(index);
                 $('<a href=' + href + '></a>').get(0).click();
             });
+        });
+
+        $('.text-break').click(function() {
+            var self = this;
+            layer.alert($(self).text());
         })
     })
 </script>

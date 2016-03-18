@@ -36,14 +36,10 @@
                             <th>下单日期</th>
                             <th>地址</th>
                             <th>标题</th>
-                            <th>阅读数量</th>
-                            <th>点赞数量</th>
-                            <th>速度限制</th>
+                            <th>数量/速度</th>
                             <th>价格</th>
                             <th>备注</th>
-                            <th>返还A</th>
-                            <th>返还B</th>
-                            <th>返还C</th>
+                            <th>返利</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -59,23 +55,35 @@
                                    title="<%= orders[i].address %>"
                                    data-clipboard-text="<%= orders[i].address %>">复制</a>
                             </td>
-                            <td class="am-text-middle"><%= orders[i].title %></td>
-                            <td class="am-text-middle"><%= orders[i].num %></td>
-                            <td class="am-text-middle"><%= orders[i].num2 %></td>
-                            <td class="am-text-middle"><%= orders[i].speed %></td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
+                                    <%= orders[i].title %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                阅读数量: <%= orders[i].num %> <br/>
+                                点赞数量: <%= orders[i].num2 %> <br/>
+                                速度: <%= orders[i].speed %>/分
+                            </td>
                             <td class="am-text-middle"><%= orders[i].totalPrice %></td>
-                            <td class="am-text-middle"><%= orders[i].remark %></td>
-                            <td class="am-text-middle"><%= orders[i].adminProfit %></td>
-                            <td class="am-text-middle"><%= orders[i].topProfit %></td>
-                            <td class="am-text-middle"><%= orders[i].superProfit %></td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
+                                    <%= orders[i].remark %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle">
+                                A: <%= orders[i].adminProfit %><br/>
+                                B: <%= orders[i].topProfit %><br/>
+                                C: <%= orders[i].superProfit %><br/>
+                            </td>
                             <td class="am-text-middle">
                                 <% if(orders[i].status == '已处理'){ %>
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
                                    href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
                                 <% }else{ %>
-                                <div>
+                                <a class="am-text-truncate text-break" title="<%= orders[i].refundInfo %>">
                                     <%= orders[i].refundInfo %>
-                                </div>
+                                </a>
                                 <% } %>
                             </td>
                         </tr>
@@ -112,7 +120,7 @@
             extend: 'extend/layer.ext.js'
         });
 
-        $('.refundProfit').click(function(e) {
+        $('.refundProfit').click(function (e) {
             e.stopPropagation();
             e.preventDefault();
             var href = $(this).attr('href');
@@ -120,11 +128,16 @@
                 formType: 2,
                 title: '请输入退款理由！',
                 offset: '6%'
-            }, function(value, index){
+            }, function (value, index) {
                 href += '&info=' + value;
                 layer.close(index);
                 $('<a href=' + href + '></a>').get(0).click();
             });
+        });
+
+        $('.text-break').click(function() {
+            var self = this;
+            layer.alert($(self).text());
         })
     })
 </script>
