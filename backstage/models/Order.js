@@ -215,6 +215,22 @@ Order.include({
         }else {
             callback(self);
         }
+    },
+    refund: function(info, callback) {
+        var self = this;
+        self.status = '已退款';
+        self.refundInfo = info;
+        Order.open().updateById(self._id, self)
+            .then(function () {
+                User.open().findById(self.userId)
+                    .then(function (user) {
+                        user.funds = (parseFloat(self.totalPrice) + parseFloat(user.funds)).toFixed(4);
+                        User.open().updateById(user._id, {$set: {funds: user.funds}})
+                            .then(function () {
+                                callback();
+                            });
+                    });
+            });
     }
 });
 

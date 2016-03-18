@@ -408,6 +408,17 @@ router.get('/order/complete', function (req, res) {
         })
 });
 
+router.get('/order/refund', function (req, res) {
+    var msg = req.query;
+    Order.open().findById(msg.id)
+        .then(function(order) {
+            var orderIns = Order.wrapToInstance(order);
+            orderIns.refund(msg.info, function() {
+                res.redirect(msg.url);
+            });
+        })
+});
+
 
 
 /*
