@@ -28,7 +28,7 @@
                 <div class="am-panel-hd"><%= title %></div>
                 <div class="am-panel-bd am-scrollable-horizontal am-text-center">
 
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                    <table class="am-table am-table-bordered am-table-radius am-text-nowrap">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -48,7 +48,7 @@
                         <tbody>
 
                         <% for(var i = 0; i < orders.length; i++){ %>
-                        <tr>
+                        <tr class="<% if(orders[i].status == '已处理'){ %> am-primary <% }else if(orders[i].status == '已退款'){ %> am-danger <% } %>">
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].user %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
