@@ -116,12 +116,10 @@
             extend: 'extend/layer.ext.js'
         });
 
-        var refundBtn = $('.orderRefund');
-        var href = refundBtn.attr('href');
-        refundBtn.click(function(e) {
-            var self = this;
+        $('.orderRefund').click(function(e) {
             e.stopPropagation();
             e.preventDefault();
+            var href = $(this).attr('href');
             layer.prompt({
                 formType: 2,
                 title: '请输入拒绝接单的理由！',
