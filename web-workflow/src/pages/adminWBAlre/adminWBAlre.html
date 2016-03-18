@@ -75,7 +75,13 @@
                             <td class="am-text-middle"><%= orders[i].topProfit %></td>
                             <td class="am-text-middle"><%= orders[i].superProfit %></td>
                             <td class="am-text-middle">
+                                <% if(orders[i].status == '已处理'){ %>
                                 <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">退款</button>
+                                <% }else{ %>
+                                <div>
+                                    <%= orders[i].refundInfo %>
+                                </div>
+                                <% } %>
                             </td>
                         </tr>
                         <% } %>
