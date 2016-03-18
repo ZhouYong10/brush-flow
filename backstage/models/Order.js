@@ -231,6 +231,25 @@ Order.include({
                             });
                     });
             });
+    },
+    refundProfit: function(info, callback) {
+        var self = this;
+        self.refund(info, function() {
+            Profit.open().find({orderId: self._id})
+                .then(function(profits) {
+                    profits.forEach(function(profit) {
+                        User.open().findById(profit.userId)
+                            .then(function(user) {
+                                user.funds = (parseFloat(user.funds) - parseFloat(profit.profit)).toFixed(4);
+                                User.open().updateById(user._id, {$set: {funds: user.funds}})
+                                    .then(function() {
+                                        Profit.open().updateById(profit._id, {$set: {status: 'refund'}});
+                                    })
+                            })
+                    });
+                    callback();
+                })
+        })
     }
 });
 
