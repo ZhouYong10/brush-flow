@@ -206,6 +206,7 @@ Order.include({
                                 smallTypeName: self.smallTypeName,
                                 profit: self[name],
                                 orderId: self._id,
+                                status: 'success',
                                 createTime: self.createTime
                             }).then(function (profit) {
                                 self.profitToParent(orderUser, parent, callback);
