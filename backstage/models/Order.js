@@ -251,6 +251,12 @@ Order.include({
                     callback();
                 })
         })
+    },
+    orderError: function(info, callback) {
+        Order.open().updateById(this._id, {$set: {error: '未处理', errorInfo: info}})
+            .then(function() {
+                callback();
+            })
     }
 });
 

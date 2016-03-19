@@ -19,7 +19,8 @@ router.get('/friend', function (req, res) {
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse()
+                        orders: results.reverse(),
+                        path: '/WX/friend'
                     })
                 })
         });
@@ -67,7 +68,8 @@ router.get('/fans', function (req, res) {
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse()
+                        orders: results.reverse(),
+                        path: '/WX/fans'
                     })
                 });
         });
@@ -121,7 +123,8 @@ router.get('/share', function (req, res) {
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse()
+                        orders: results.reverse(),
+                        path: '/WX/share'
                     });
                 });
         });
@@ -176,7 +179,8 @@ router.get('/like', function (req, res) {
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse()
+                        orders: results.reverse(),
+                        path: '/WX/like'
                     })
                 });
         });

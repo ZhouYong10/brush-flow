@@ -73,9 +73,9 @@ router.get('/update/header/nav', function (req, res) {
         if (withdraws) {
             updateNav.withdraw = withdraws.length;
         }
-        Error.open().find({status: '未处理'}).then(function (errors) {
-            if (errors) {
-                updateNav.error = errors.length;
+        Order.open().find({error: '未处理'}).then(function (errorOrders) {
+            if (errorOrders) {
+                updateNav.error = errorOrders.length;
             }
             Feedback.open().find({status: '未处理'}).then(function (feedbacks) {
                 if (feedbacks) {

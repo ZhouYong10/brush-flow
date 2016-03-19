@@ -97,7 +97,9 @@
                             <td class="am-text-middle"><%= orders[i].status %></td>
                             <td class="am-text-middle">
                                 <% if(orders[i].status == '已处理'){ %>
-                                <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs">报错</button>
+                                <a class="am-btn am-btn-primary am-radius am-btn-xs orderError"
+                                   href="/user/order/error?id=<%= orders[i]._id %>&url=<%= path %>">报错</a>
+                                <%= orders[i].errorInfo %>
                                 <% }else{ %>
                                 <a class="am-text-truncate text-break" title="<%= orders[i].refundInfo %>">
                                     <%= orders[i].refundInfo %>
@@ -124,6 +126,25 @@
 
 <script>
     $(function() {
+        layer.config({
+            extend: 'extend/layer.ext.js'
+        });
+
+        $('.orderError').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var href = $(this).attr('href');
+            layer.prompt({
+                formType: 2,
+                title: '请输入错误原因！',
+                offset: '6%'
+            }, function (value, index) {
+                href += '&info=' + value;
+                layer.close(index);
+                $('<a href=' + href + '></a>').get(0).click();
+            });
+        });
+
         $('.text-break').click(function() {
             var self = this;
             layer.alert($(self).text());

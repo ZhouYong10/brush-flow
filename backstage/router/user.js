@@ -363,6 +363,18 @@ router.get('/errorSummary', function (req, res) {
                 role: user.role
             });
         });
-});   
+});
+
+router.get('/order/error', function (req, res) {
+    var msg = req.query;
+    Order.open().findById(msg.id)
+        .then(function(order) {
+            var orderIns = Order.wrapToInstance(order);
+            orderIns.orderError(msg.info, function() {
+                socketIO.emit('updateNav', {'error': 1});
+                res.redirect(msg.url);
+            });
+        })
+});
 
 module.exports = router;
