@@ -38,20 +38,24 @@
                             <th>支付宝账户</th>
                             <th>支付宝昵称</th>
                             <th>状态</th>
-                            <th>备注</th>
+                            <th>失败反馈</th>
                         </tr>
                         </thead>
                         <tbody>
+
+                        <% for(var i = 0; i < withdraws.length; i++){ %>
                         <tr>
-                            <td>#</td>
-                            <td>提现人</td>
-                            <td>申请日期</td>
-                            <td>提现金额</td>
-                            <td>支付宝账户</td>
-                            <td>支付宝昵称</td>
-                            <td>备注</td>
-                            <td>操作</td>
+                            <td><%= i + 1 %></td>
+                            <td><%= withdraws[i].user %></td>
+                            <td><%= withdraws[i].createTime %></td>
+                            <td><%= withdraws[i].funds %></td>
+                            <td><%= withdraws[i].alipayCount %></td>
+                            <td><%= withdraws[i].alipayName %></td>
+                            <td><%= withdraws[i].status %></td>
+                            <td><%= withdraws[i].refuseInfo %></td>
                         </tr>
+                        <% } %>
+
                         </tbody>
                     </table>
 

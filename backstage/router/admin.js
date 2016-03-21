@@ -152,7 +152,14 @@ router.get('/withdraw/wait', function (req, res) {
 });
 
 router.get('/withdraw/already', function (req, res) {
-    res.render('adminWithdrawAlre', {title: '资金管理 / 提现管理 / 已处理', money: 10.01})
+    Withdraw.open().find({status: {$in: ['成功', '失败']}})
+        .then(function (withdraws) {
+            res.render('adminWithdrawAlre', {
+                title: '资金管理 / 提现管理 / 已处理',
+                money: 10.01,
+                withdraws: withdraws.reverse()
+            });
+        });
 });
 
 
