@@ -614,12 +614,17 @@ router.get('/MP/wait', function (req, res) {
 });
 
 router.get('/MP/already', function (req, res) {
-    Order.open().find({type: 'mp', smallType: {$in: ['like', 'comment', 'attention', 'forward']}, status: {$ne: '未处理'}})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'mp',
+        smallType: {$in: ['like', 'comment', 'attention', 'forward']},
+        status: {$ne: '未处理'}
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminMPAlre', {
                 title: '美拍任务管理 / 已处理订单',
                 money: 10.01,
-                orders: results.reverse(),
+                pages: obj.pages,
+                orders: obj.results.reverse(),
                 path: '/admin/MP/already'
             });
         });

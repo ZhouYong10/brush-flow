@@ -54,11 +54,32 @@ module.exports = {
             haveCollection(function () {
                 collection.find(userObj)
                     .toArray(function (error, result) {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                })
+            }, reject);
+        })
+    },
+    findPages: function(obj, page) {
+        var userObj = obj ? obj : null;
+        return new Promise(function(resolve, reject) {
+            haveCollection(function () {
+                collection.count(userObj, function(err, total) {
+                    collection.find(userObj, {
+                        skip: ((page ? page : 1) - 1) *2,
+                        limit: (page ? 2 : 0)
+                    }).toArray(function (error, result) {
                         if (error) {
                             reject(error);
                         }
-                        resolve(result);
+                        resolve({
+                            results: result,
+                            pages: total / 2
+                        });
                     })
+                })
             }, reject);
         })
     },
