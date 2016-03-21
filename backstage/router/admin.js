@@ -141,7 +141,14 @@ router.get('/recharge/history', function (req, res) {
 });
 
 router.get('/withdraw/wait', function (req, res) {
-    res.render('adminWithdrawWait', {title: '资金管理 / 提现管理 / 待处理', money: 10.01})
+    Withdraw.open().find({status: '未处理'})
+        .then(function(withdraws) {
+            res.render('adminWithdrawWait', {
+                title: '资金管理 / 提现管理 / 待处理',
+                money: 10.01,
+                withdraws: withdraws.reverse()
+            });
+        })
 });
 
 router.get('/withdraw/already', function (req, res) {
