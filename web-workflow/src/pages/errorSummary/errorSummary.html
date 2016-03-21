@@ -60,16 +60,53 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Amaze UI</td>
-                            <td>http://amazeui.org</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
+
+                        <% for(var i = 0; i < orders.length; i++){ %>
+                        <tr class="<% if(orders[i].error == '未处理'){ %> am-active
+                        <% }else if(orders[i].error == '已处理'){ %> am-primary <% } %>">
+                            <td class="am-text-middle"><%= i + 1 %></td>
+                            <td class="am-text-middle"><%= orders[i].user %></td>
+                            <td class="am-text-middle"><%= orders[i].createTime %></td>
+                            <td class="am-text-middle">
+                                <%= orders[i].typeName %> / <%= orders[i].smallTypeName %>
+                            </td>
+                            <td class="am-text-middle">
+                                <% if(orders[i].address){ %>
+                                <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                   title="<%= orders[i].address %>"
+                                   data-clipboard-text="<%= orders[i].address %>">复制</a>
+                                <% } %>
+                            </td>
+                            <td class="am-text-middle">
+                                <a class="am-text-truncate text-break" title="<%= orders[i].errorInfo %>">
+                                    <%= orders[i].errorInfo %>
+                                </a>
+                            </td>
+                            <td class="am-text-middle"><%= orders[i].error %></td>
+                            <td class="am-text-middle">
+
+                                <% if(orders[i].errorDealInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-primary am-radius"
+                                       title="<%= orders[i].errorDealInfo %>">
+                                        <%= orders[i].errorDealInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% if(orders[i].refundInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-danger am-radius"
+                                       title="<%= orders[i].refundInfo %>">
+                                        <%= orders[i].refundInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                            </td>
                         </tr>
+                        <% } %>
+
                         </tbody>
                     </table>
                 </div>
@@ -83,6 +120,26 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/js/clipboard.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
+
+<script>
+    $(function() {
+        var clip = new Clipboard('.clipboard');
+        clip.on('success', function (e) {
+            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
+            layer.msg('复制成功！', {
+                time: 1000
+            });
+        });
+
+
+        $('.text-break').click(function() {
+            var self = this;
+            layer.alert($(self).text());
+        })
+    })
+</script>
 
 </body>
 </html>

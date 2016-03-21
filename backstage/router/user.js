@@ -356,11 +356,18 @@ router.get('/withdraw/add', function (req, res) {
 router.get('/errorSummary', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('errorSummary', {
-                title: '错误信息汇总',
-                money: user.funds,
-                username: user.username,
-                role: user.role
+            Order.open().find({
+                userId: user._id,
+                error: {$in: ['未处理', '已处理']}
+            }).then(function (orders) {
+                res.render('errorSummary', {
+                    title: '错误信息汇总',
+                    money: user.funds,
+                    username: user.username,
+                    role: user.role,
+                    orders: orders.reverse(),
+                    path: '/user/errorSummary'
+                });
             });
         });
 });
