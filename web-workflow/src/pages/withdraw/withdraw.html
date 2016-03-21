@@ -28,7 +28,7 @@
                     我要提现
                 </a>
                 <div class="am-scrollable-horizontal am-text-center withdraw-content">
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                    <table class="am-table am-table-bordered am-table-radius am-text-nowrap">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -37,19 +37,24 @@
                             <th>支付宝账户</th>
                             <th>支付宝昵称</th>
                             <th>状态</th>
-                            <th>备注</th>
+                            <th>失败反馈</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Amaze UI</td>
-                            <td>http://amazeui.org</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
-                            <td>2012-10-01</td>
+
+                        <% for(var i = 0; i < withdraws.length; i++){ %>
+                        <tr class="<% if(withdraws[i].status ==  '成功'){ %> am-primary
+                         <% }else if(withdraws[i].status ==  '失败'){ %> am-danger <% } %>">
+                            <td><%= i + 1 %></td>
+                            <td><%= withdraws[i].createTime %></td>
+                            <td><%= withdraws[i].funds %></td>
+                            <td><%= withdraws[i].alipayCount %></td>
+                            <td><%= withdraws[i].alipayName %></td>
+                            <td><%= withdraws[i].status %></td>
+                            <td><%= withdraws[i].refuseInfo %></td>
                         </tr>
+                        <% } %>
+
                         </tbody>
                     </table>
                 </div>

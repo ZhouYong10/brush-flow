@@ -6,6 +6,7 @@ var Order = require('../models/Order');
 var Feedback = require('../models/Feedback');
 var AlipayRecord = require('../models/AlipayRecord');
 var Recharge = require('../models/Recharge');
+var Withdraw = require('../models/Withdraw');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
@@ -332,12 +333,16 @@ router.post('/feedback/add', function (req, res) {
 router.get('/withdraw', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('withdraw', {
-                title: '我要提现',
-                money: user.funds,
-                username: user.username,
-                role: user.role
-            });
+            Withdraw.open().find({userId: user._id})
+                .then(function(withdraws) {
+                    res.render('withdraw', {
+                        title: '我要提现',
+                        money: user.funds,
+                        username: user.username,
+                        role: user.role,
+                        withdraws: withdraws.reverse()
+                    });
+                })
         });
 });
 
@@ -351,6 +356,13 @@ router.get('/withdraw/add', function (req, res) {
                 role: user.role
             });
         });
+});
+
+router.post('/withdraw/add', function (req, res) {
+    Withdraw.saveOne(req.body, req.session.passport.user)
+        .then(function() {
+            res.redirect('/user/withdraw');
+        })
 });
 
 router.get('/errorSummary', function (req, res) {

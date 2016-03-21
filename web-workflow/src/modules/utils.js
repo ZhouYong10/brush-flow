@@ -59,5 +59,8 @@ module.exports = {
     },
     min30: function(val) {
         return parseInt(val) >= 30;
+    },
+    isfloat: function(val) {
+        return /^\d+(\.\d+)?$/.test(val);
     }
 };
