@@ -191,7 +191,7 @@
                 title: '请输入退款理由！',
                 offset: '6%'
             }, function (value, index) {
-                href += '&info=' + value;
+                href += '&info=' + value.replace(/\r\n/g,"").replace(/\n/g,"");
                 layer.close(index);
                 $('<a href=' + href + '></a>').get(0).click();
             });
@@ -206,7 +206,7 @@
                 title: '请输入错误处理信息！',
                 offset: '6%'
             }, function (value, index) {
-                href += '&info=' + value;
+                href += '&info=' + value.replace(/\r\n/g,"").replace(/\n/g,"");
                 layer.close(index);
                 $('<a href=' + href + '></a>').get(0).click();
             });
