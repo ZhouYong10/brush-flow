@@ -430,6 +430,28 @@ router.get('/order/refundProfit', function (req, res) {
         })
 });
 
+router.get('/order/refundProfit', function (req, res) {
+    var msg = req.query;
+    Order.open().findById(msg.id)
+        .then(function(order) {
+            var orderIns = Order.wrapToInstance(order);
+            orderIns.refundProfit(msg.info, function() {
+                res.redirect(msg.url);
+            });
+        })
+});
+
+router.get('/order/dealError', function (req, res) {
+    var msg = req.query;
+    Order.open().findById(msg.id)
+        .then(function(order) {
+            var orderIns = Order.wrapToInstance(order);
+            orderIns.dealError(msg.info, function() {
+                res.redirect(msg.url);
+            });
+        })
+});
+
 
 
 /*

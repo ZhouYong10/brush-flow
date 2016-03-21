@@ -17,7 +17,8 @@ router.get('/like', function (req, res) {
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse()
+                        orders: results.reverse(),
+                        path: '/MP/like'
                     })
                 })
         });
@@ -65,7 +66,8 @@ router.get('/comment', function (req, res) {
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse()
+                        orders: results.reverse(),
+                        path: '/MP/comment'
                     })
                 })
         });
@@ -113,7 +115,8 @@ router.get('/attention', function (req, res) {
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse()
+                        orders: results.reverse(),
+                        path: '/MP/attention'
                     })
                 })
         });
@@ -161,7 +164,8 @@ router.get('/forward', function (req, res) {
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse()
+                        orders: results.reverse(),
+                        path: '/MP/forward'
                     })
                 })
         });

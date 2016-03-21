@@ -50,7 +50,9 @@
                         <tbody>
 
                         <% for(var i = 0; i < orders.length; i++){ %>
-                        <tr class="<% if(orders[i].status == '已处理'){ %> am-primary <% }else if(orders[i].status == '已退款'){ %> am-danger <% } %>">
+                        <tr class="<% if(orders[i].status == '已处理' && orders[i].error == undefined){ %> am-primary
+                        <% }else if(orders[i].status == '已退款'){ %> am-danger
+                        <% }else if(orders[i].status == '已处理' && orders[i].error != undefined){ %> am-active <% } %>">
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].user %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
@@ -89,13 +91,73 @@
                                 C: <%= orders[i].superProfit %><br/>
                             </td>
                             <td class="am-text-middle">
-                                <% if(orders[i].status == '已处理'){ %>
+                                <% if(orders[i].status == '已处理' && orders[i].error == undefined){ %>
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
                                    href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
-                                <% }else{ %>
-                                <a class="am-text-truncate text-break" title="<%= orders[i].refundInfo %>">
-                                    <%= orders[i].refundInfo %>
-                                </a>
+                                <% }else if(orders[i].status == '已处理' && orders[i].error != undefined){ %>
+
+                                <% if(orders[i].errorInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-warning am-radius"
+                                       title="<%= orders[i].errorInfo %>">
+                                        <%= orders[i].errorInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% if(orders[i].errorDealInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-primary am-radius"
+                                       title="<%= orders[i].errorDealInfo %>">
+                                        <%= orders[i].errorDealInfo %>
+                                    </a>
+                                </div>
+                                <div class="operation">
+                                    <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
+                                       href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                </div>
+                                <% } %>
+
+                                <% if(orders[i].errorDealInfo == undefined){ %>
+                                <div class="operation">
+                                    <a class="am-btn am-btn-primary am-radius am-btn-xs dealError"
+                                       href="/admin/order/dealError?id=<%= orders[i]._id %>&url=<%= path %>">处理</a>
+                                </div>
+                                <div class="operation">
+                                    <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
+                                       href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                </div>
+                                <% } %>
+
+                                <% }else if(orders[i].status == '已退款'){ %>
+
+                                <% if(orders[i].errorInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-warning am-radius"
+                                       title="<%= orders[i].errorInfo %>">
+                                        <%= orders[i].errorInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% if(orders[i].errorDealInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-primary am-radius"
+                                       title="<%= orders[i].errorDealInfo %>">
+                                        <%= orders[i].errorDealInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
+                                <% if(orders[i].refundInfo != undefined){ %>
+                                <div class="operation">
+                                    <a class="am-text-truncate text-break am-badge-danger am-radius"
+                                       title="<%= orders[i].refundInfo %>">
+                                        <%= orders[i].refundInfo %>
+                                    </a>
+                                </div>
+                                <% } %>
+
                                 <% } %>
                             </td>
                         </tr>
@@ -139,6 +201,21 @@
             layer.prompt({
                 formType: 2,
                 title: '请输入退款理由！',
+                offset: '6%'
+            }, function (value, index) {
+                href += '&info=' + value;
+                layer.close(index);
+                $('<a href=' + href + '></a>').get(0).click();
+            });
+        });
+
+        $('.dealError').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var href = $(this).attr('href');
+            layer.prompt({
+                formType: 2,
+                title: '请输入错误处理信息！',
                 offset: '6%'
             }, function (value, index) {
                 href += '&info=' + value;
