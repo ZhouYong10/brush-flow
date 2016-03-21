@@ -640,7 +640,14 @@ router.get('/error/wait', function (req, res) {
 });
 
 router.get('/error/already', function (req, res) {
-    res.render('adminErrorAlre', {title: '错误信息管理 / 待处理错误报告', money: 10.01})
+    Order.open().find({error: '已处理'}).then(function (results) {
+        res.render('adminErrorAlre', {
+            title: '错误信息管理 / 待处理错误报告',
+            money: 10.01,
+            orders: results.reverse(),
+            path: '/admin/error/already'
+        })
+    });
 });
 
 

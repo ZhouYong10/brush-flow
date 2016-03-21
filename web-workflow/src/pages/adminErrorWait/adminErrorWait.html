@@ -63,7 +63,6 @@
                                 </a>
                             </td>
                             <td class="am-text-middle">
-                                <% if(orders[i].error == '未处理'){ %>
                                 <div class="operation">
                                     <a class="am-btn am-btn-primary am-radius am-btn-xs dealError"
                                        href="/admin/order/dealError?id=<%= orders[i]._id %>&url=<%= path %>">处理</a>
@@ -72,7 +71,6 @@
                                     <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
                                        href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
                                 </div>
-                                <% } %>
                             </td>
                         </tr>
                         <% } %>
