@@ -146,7 +146,8 @@ router.get('/withdraw/wait', function (req, res) {
             res.render('adminWithdrawWait', {
                 title: '资金管理 / 提现管理 / 待处理',
                 money: 10.01,
-                withdraws: withdraws.reverse()
+                withdraws: withdraws.reverse(),
+                path: '/admin/withdraw/wait'
             });
         })
 });
@@ -157,12 +158,26 @@ router.get('/withdraw/already', function (req, res) {
             res.render('adminWithdrawAlre', {
                 title: '资金管理 / 提现管理 / 已处理',
                 money: 10.01,
-                withdraws: withdraws.reverse()
+                withdraws: withdraws.reverse(),
+                path: '/admin/withdraw/already'
             });
         });
 });
 
+router.get('/withdraw/complete', function (req, res) {
+    Withdraw.complete(req.query.id)
+        .then(function() {
+            res.redirect(req.query.url);
+        })
+});
 
+router.get('/withdraw/refused', function (req, res) {
+    var obj = req.query;
+    Withdraw.refused(obj.id, obj.info, obj.funds, obj.userId)
+        .then(function() {
+            res.redirect(obj.url);
+        })
+});
 
 
 /*

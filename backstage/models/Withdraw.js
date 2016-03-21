@@ -39,6 +39,34 @@ Withdraw.extend({
                             })
                 })
         });
+    },
+    complete: function(id) {
+       return new Promise(function(resolve, reject) {
+           Withdraw.open().updateById(id, {$set: {
+               status: '成功',
+               endTime: moment().format('YYYY-MM-DD HH:mm:ss')
+           }}).then(function() {
+               resolve();
+           })
+       })
+    },
+    refused: function(id, info, funds, userId) {
+        return new Promise(function(resolve, reject) {
+            Withdraw.open().updateById(id, {$set: {
+                status: '失败',
+                endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                refuseInfo: info
+            }}).then(function() {
+                User.open().findById(userId)
+                    .then(function (user) {
+                        var userFunds = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                        User.open().updateById(user._id, {$set: {funds: userFunds}})
+                            .then(function () {
+                                resolve();
+                            });
+                    });
+            })
+        })
     }
 });
 
