@@ -48,10 +48,18 @@
                             <td><%= i + 1 %></td>
                             <td><%= withdraws[i].createTime %></td>
                             <td><%= withdraws[i].funds %></td>
-                            <td><%= withdraws[i].alipayCount %></td>
+                            <td>
+                                <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                   title="<%= withdraws[i].alipayCount %>"
+                                   data-clipboard-text="<%= withdraws[i].alipayCount %>">复制</a>
+                            </td>
                             <td><%= withdraws[i].alipayName %></td>
                             <td><%= withdraws[i].status %></td>
-                            <td><%= withdraws[i].refuseInfo %></td>
+                            <td>
+                                <a class="am-text-truncate text-break" title="<%= withdraws[i].refuseInfo %>">
+                                    <%= withdraws[i].refuseInfo %>
+                                </a>
+                            </td>
                         </tr>
                         <% } %>
 
@@ -68,6 +76,25 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/js/clipboard.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
+
+<script>
+    $(function() {
+        var clip = new Clipboard('.clipboard');
+        clip.on('success', function (e) {
+            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
+            layer.msg('复制成功！', {
+                time: 1000
+            });
+        });
+
+        $('.text-break').click(function() {
+            var self = this;
+            layer.alert($(self).text());
+        })
+    })
+</script>
 
 </body>
 </html>
