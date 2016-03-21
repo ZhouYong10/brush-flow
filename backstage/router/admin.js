@@ -430,17 +430,6 @@ router.get('/order/refundProfit', function (req, res) {
         })
 });
 
-router.get('/order/refundProfit', function (req, res) {
-    var msg = req.query;
-    Order.open().findById(msg.id)
-        .then(function(order) {
-            var orderIns = Order.wrapToInstance(order);
-            orderIns.refundProfit(msg.info, function() {
-                res.redirect(msg.url);
-            });
-        })
-});
-
 router.get('/order/dealError', function (req, res) {
     var msg = req.query;
     Order.open().findById(msg.id)
@@ -640,7 +629,14 @@ router.get('/WB/already', function (req, res) {
 
 
 router.get('/error/wait', function (req, res) {
-    res.render('adminErrorWait', {title: '错误信息管理 / 待处理错误报告', money: 10.01})
+    Order.open().find({error: '未处理'}).then(function (results) {
+        res.render('adminErrorWait', {
+            title: '错误信息管理 / 待处理错误报告',
+            money: 10.01,
+            orders: results.reverse(),
+            path: '/admin/error/wait'
+        });
+    });
 });
 
 router.get('/error/already', function (req, res) {
