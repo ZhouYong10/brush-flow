@@ -365,8 +365,7 @@ router.get('/errorSummary', function (req, res) {
                     money: user.funds,
                     username: user.username,
                     role: user.role,
-                    orders: orders.reverse(),
-                    path: '/user/errorSummary'
+                    orders: orders.reverse()
                 });
             });
         });
