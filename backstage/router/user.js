@@ -361,6 +361,7 @@ router.get('/withdraw/add', function (req, res) {
 router.post('/withdraw/add', function (req, res) {
     Withdraw.saveOne(req.body, req.session.passport.user)
         .then(function() {
+            socketIO.emit('updateNav', {'withdraw': 1});
             res.redirect('/user/withdraw');
         })
 });
