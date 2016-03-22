@@ -64,10 +64,12 @@ module.exports = {
     },
     findPages: function(obj, page) {
         var userObj = obj ? obj : null;
-        var pageCont = 1;
+        var pageCont = 10;
         return new Promise(function(resolve, reject) {
             haveCollection(function () {
                 collection.count(userObj, function(err, total) {
+                    console.log(total);
+                    console.log(parseInt(total / pageCont) + ((total % pageCont > 0) ? 1 : 0), '====================');
                     collection.find(userObj, {
                         skip: ((page ? page : 1) - 1) * pageCont,
                         limit: (page ? pageCont : 0)
@@ -77,7 +79,7 @@ module.exports = {
                         }
                         resolve({
                             results: result,
-                            pages: total / pageCont + ((total % pageCont > 0) ? 1 : 0)
+                            pages: parseInt(total / pageCont) + ((total % pageCont > 0) ? 1 : 0)
                         });
                     })
                 })
