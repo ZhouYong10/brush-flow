@@ -496,96 +496,136 @@ router.get('/flow/already', function (req, res) {
 
 
 router.get('/WX/article/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: {$in: ['article', 'share', 'collect']}, status: '未处理'})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: {$in: ['article', 'share', 'collect']},
+        status: '未处理'
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWXarticleWait', {
                 title: '微信任务管理 / 待处理微信原文任务',
                 money: 10.01,
-                orders: results.reverse(),
+                orders: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/WX/article/wait'
             });
         });
 });
 
 router.get('/WX/article/already', function (req, res) {
-    Order.open().find({type: 'wx', smallType: {$in: ['article', 'share', 'collect']}, status: {$ne: '未处理'}})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: {$in: ['article', 'share', 'collect']},
+        status: {$ne: '未处理'}
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWXarticleAlre', {
                 title: '微信任务管理 / 已处理微信原文任务',
                 money: 10.01,
-                orders: results.reverse(),
+                orders: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/WX/article/already'
             });
         });
 });
 
 router.get('/WX/like/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: {$in: ['read', 'like']}, status: '未处理'})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: {$in: ['read', 'like']},
+        status: '未处理'
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWXlikeWait', {
                 title: '微信任务管理 / 待处理微信阅读点赞任务',
                 money: 10.01,
-                orders: results.reverse(),
+                orders: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/WX/like/wait'
             });
         });
 });
 
 router.get('/WX/like/already', function (req, res) {
-    Order.open().find({type: 'wx', smallType: {$in: ['read', 'like']}, status: {$ne: '未处理'}})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: {$in: ['read', 'like']},
+        status: {$ne: '未处理'}
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWXlikeAlre', {
                 title: '微信任务管理 / 已处理微信阅读点赞任务',
                 money: 10.01,
-                orders: results.reverse(),
+                orders: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/WX/like/already'
             });
         });
 });
 
 router.get('/WX/reply/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: 'fans', status: '未处理'})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: 'fans',
+        status: '未处理'
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWXreplyWait', {
                 title: '微信任务管理 / 待处理公众粉丝回复任务',
                 money: 10.01,
-                orders: results.reverse(),
+                orders: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/WX/reply/wait'
             });
         });
 });
 
 router.get('/WX/reply/already', function (req, res) {
-    Order.open().find({type: 'wx', smallType: 'fans', status: {$ne: '未处理'}})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: 'fans',
+        status: {$ne: '未处理'}
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWXreplyAlre', {
                 title: '微信任务管理 / 已处理公众粉丝回复任务',
                 money: 10.01,
-                orders: results.reverse(),
+                orders: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/WX/reply/already'
             });
         });
 });
 
 router.get('/WX/friend/wait', function (req, res) {
-    Order.open().find({type: 'wx', smallType: 'friend', status: '未处理'})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: 'friend',
+        status: '未处理'
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWXfriendWait', {
                 title: '微信任务管理 / 待处理微信个人好友任务',
                 money: 10.01,
-                orders: results.reverse(),
+                orders: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/WX/friend/wait'
             });
         });
 });
 
 router.get('/WX/friend/already', function (req, res) {
-    Order.open().find({type: 'wx', smallType: 'friend', status: {$ne: '未处理'}})
-        .then(function (results) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: 'friend',
+        status: {$ne: '未处理'}
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWXfriendAlre', {
                 title: '微信任务管理 / 已处理微信个人好友任务',
                 money: 10.01,
-                orders: results.reverse(),
+                orders: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/WX/friend/already'
             });
         });
