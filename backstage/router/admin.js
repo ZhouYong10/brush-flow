@@ -259,14 +259,18 @@ router.post('/manage/user/add', function (req, res) {
 
 
 
-
 /*
  * manage price
  * */
 router.get('/price/forum', function (req, res) {
-    Product.open().find({type: 'forum'})
-        .then(function (products) {
-            res.render('adminPriceForum', {title: '价格&状态管理 / 论坛模块', money: 10.01, products: products.reverse()});
+    Product.open().findPages({type: 'forum'}, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminPriceForum', {
+                title: '价格&状态管理 / 论坛模块',
+                money: 10.01,
+                products: obj.results.reverse(),
+                pages: obj.pages
+            });
         });
 });
 
@@ -328,9 +332,14 @@ router.post('/price/forum/img/remove', function (req, res) {
 
 
 router.get('/price/flow', function (req, res) {
-    Product.open().find({type: 'flow'})
-        .then(function (products) {
-            res.render('adminPriceFlow', {title: '价格&状态管理 / 流量模块', money: 10.01, products: products.reverse()});
+    Product.open().findPages({type: 'flow'}, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminPriceFlow', {
+                title: '价格&状态管理 / 流量模块',
+                money: 10.01,
+                products: obj.results.reverse(),
+                pages: obj.pages
+            });
         });
 });
 
@@ -359,9 +368,14 @@ router.post('/price/flow/delete', function (req, res) {
 
 
 router.get('/price/WX/MP/WB', function (req, res) {
-    Product.open().find({type: {$in: ['wx', 'wb', 'mp']}})
-        .then(function (products) {
-            res.render('adminPriceWXMPWB', {title: '价格&状态管理 / 微信、美拍、微博', money: 10.01, products: products.reverse()});
+    Product.open().findPages({type: {$in: ['wx', 'wb', 'mp']}}, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminPriceWXMPWB', {
+                title: '价格&状态管理 / 微信、美拍、微博',
+                money: 10.01,
+                products: obj.results.reverse(),
+                pages: obj.pages
+            });
         });
 });
 
