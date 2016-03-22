@@ -76,12 +76,13 @@ router.post('/recharge', function (req, res) {
 router.get('/recharge/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Recharge.open().find({userId: user._id})
-                .then(function (recharges) {
+            Recharge.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
                     res.render('rechargeHistory', {
                         title: '充值记录',
                         money: user.funds,
-                        recharges: recharges,
+                        recharges: obj.results.reverse(),
+                        pages: obj.pages,
                         username: user.username,
                         role: user.role
                     });
@@ -94,14 +95,15 @@ router.get('/recharge/history', function (req, res) {
 router.get('/consume/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id})
-                .then(function(orders) {
+            Order.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('consumeHistory', {
                         title: '消费记录',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: orders.reverse()
+                        orders: obj.results.reverse(),
+                        pages: obj.pages
                     })
                 })
         });
@@ -255,12 +257,13 @@ router.get('/lowerUser', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (parent) {
             if(parent.children && parent.children.length > 0){
-                User.open().find({_id: {$in: parent.children}})
-                    .then(function(children) {
+                User.open().findPages({_id: {$in: parent.children}}, (req.query.page ? req.query.page : 1))
+                    .then(function(obj) {
                         res.render('lowerUser', {
                             title: '我的下级用户',
                             money: parent.funds,
-                            users: children,
+                            users: obj.results.reverse(),
+                            pages: obj.pages,
                             username: parent.username,
                             role: parent.role
                         });
@@ -272,6 +275,7 @@ router.get('/lowerUser', function (req, res) {
                     title: '我的下级用户',
                     money: parent.funds,
                     users: [],
+                    pages: 1,
                     username: parent.username,
                     role: parent.role
                 });
@@ -288,14 +292,15 @@ router.get('/removeLowerUser', function (req, res) {
 router.get('/feedback', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Feedback.open().find()
-                .then(function (feedbacks) {
+            Feedback.open().findPages(null, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
                     res.render('feedback', {
                         title: '问题反馈',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        feedbacks: feedbacks
+                        feedbacks: obj.results.reverse(),
+                        pages: obj.pages
                     });
                 }, function (error) {
                     res.send('获取反馈列表失败： ' + error);
@@ -333,14 +338,15 @@ router.post('/feedback/add', function (req, res) {
 router.get('/withdraw', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Withdraw.open().find({userId: user._id})
-                .then(function(withdraws) {
+            Withdraw.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('withdraw', {
                         title: '我要提现',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        withdraws: withdraws.reverse()
+                        withdraws: obj.results.reverse(),
+                        pages: obj.pages
                     });
                 })
         });
@@ -369,16 +375,18 @@ router.post('/withdraw/add', function (req, res) {
 router.get('/errorSummary', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({
+            Order.open().findPages({
                 userId: user._id,
                 error: {$in: ['未处理', '已处理']}
-            }).then(function (orders) {
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
                 res.render('errorSummary', {
                     title: '错误信息汇总',
                     money: user.funds,
                     username: user.username,
                     role: user.role,
-                    orders: orders.reverse()
+                    orders: obj.results.reverse(),
+                    pages: obj.pages
                 });
             });
         });

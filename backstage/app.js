@@ -144,12 +144,13 @@ app.use(function(req, res, next) {
 app.get('/client/home', function (req, res) {
   User.open().findById(req.session.passport.user)
       .then(function (user) {
-        Placard.open().find()
-            .then(function (placards) {
+        Placard.open().findPages(null, (req.query.page ? req.query.page : 1))
+            .then(function (obj) {
               res.render('clientHome', {
                 title: '系统公告',
                 money: user.funds,
-                placards: placards,
+                placards: obj.results.reverse(),
+                pages: obj.pages,
                 username: user.username,
                 role: user.role
               });
