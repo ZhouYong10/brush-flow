@@ -425,9 +425,14 @@ router.post('/placard/send', function (req, res) {
 });
 
 router.get('/placard/history', function (req, res) {
-    Placard.open().find()
-        .then(function (placards) {
-            res.render('adminPlacardHistory', {title: '公告管理 / 历史公告', money: 10.01, placards: placards});
+    Placard.open().findPages(null, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminPlacardHistory', {
+                title: '公告管理 / 历史公告',
+                money: 10.01,
+                placards: obj.results.reverse(),
+                pages: obj.pages
+            });
         }, function (error) {
             return res.send('获取公告列表失败： ' + error);
         });
