@@ -191,9 +191,14 @@ router.get('/withdraw/refused', function (req, res) {
  * manage user
  * */
 router.get('/manage/user', function (req, res) {
-    User.open().find()
-        .then(function (users) {
-            res.render('adminManageUser', {title: '设置 / 用户管理 / 所有用户', money: 10.01, users: users});
+    User.open().findPages(null, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminManageUser', {
+                title: '设置 / 用户管理 / 所有用户',
+                money: 10.01,
+                users: obj.results.reverse(),
+                pages: obj.pages
+            });
         }, function (error) {
             res.send('获取用户列表失败： ' + error);
         });
