@@ -132,33 +132,40 @@ router.get('/update/header/nav', function (req, res) {
  * manage funds
  * */
 router.get('/recharge/history', function (req, res) {
-    Recharge.open().find()
-        .then(function(results) {
-            res.render('adminRechargeHistory', {title: '资金管理 / 充值记录', money: 10.01, recharges: results});
+    Recharge.open().findPages(null, (req.query.page ? req.query.page : 1))
+        .then(function(obj) {
+            res.render('adminRechargeHistory', {
+                title: '资金管理 / 充值记录',
+                money: 10.01,
+                recharges: obj.results.reverse(),
+                pages: obj.pages
+            });
         }, function(error) {
             res.send('查询充值记录失败： ' + error);
         })
 });
 
 router.get('/withdraw/wait', function (req, res) {
-    Withdraw.open().find({status: '未处理'})
-        .then(function(withdraws) {
+    Withdraw.open().findPages({status: '未处理'}, (req.query.page ? req.query.page : 1))
+        .then(function(obj) {
             res.render('adminWithdrawWait', {
                 title: '资金管理 / 提现管理 / 待处理',
                 money: 10.01,
-                withdraws: withdraws.reverse(),
+                withdraws: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/withdraw/wait'
             });
         })
 });
 
 router.get('/withdraw/already', function (req, res) {
-    Withdraw.open().find({status: {$in: ['成功', '失败']}})
-        .then(function (withdraws) {
+    Withdraw.open().findPages({status: {$in: ['成功', '失败']}}, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
             res.render('adminWithdrawAlre', {
                 title: '资金管理 / 提现管理 / 已处理',
                 money: 10.01,
-                withdraws: withdraws.reverse(),
+                withdraws: obj.results.reverse(),
+                pages: obj.pages,
                 path: '/admin/withdraw/already'
             });
         });
