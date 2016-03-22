@@ -712,22 +712,26 @@ router.get('/WB/already', function (req, res) {
 
 
 router.get('/error/wait', function (req, res) {
-    Order.open().find({error: '未处理'}).then(function (results) {
+    Order.open().findPages({error: '未处理'}, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
         res.render('adminErrorWait', {
             title: '错误信息管理 / 待处理错误报告',
             money: 10.01,
-            orders: results.reverse(),
+            orders: obj.results.reverse(),
+            pages: obj.pages,
             path: '/admin/error/wait'
         });
     });
 });
 
 router.get('/error/already', function (req, res) {
-    Order.open().find({error: '已处理'}).then(function (results) {
+    Order.open().findPages({error: '已处理'}, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
         res.render('adminErrorAlre', {
             title: '错误信息管理 / 待处理错误报告',
             money: 10.01,
-            orders: results.reverse(),
+            orders: obj.results.reverse(),
+            pages: obj.pages,
             path: '/admin/error/already'
         })
     });
@@ -736,13 +740,15 @@ router.get('/error/already', function (req, res) {
 
 
 router.get('/feedback/wait', function (req, res) {
-    Feedback.open().find({
+    Feedback.open().findPages({
         status: '未处理'
-    }).then(function(feedbacks) {
+    }, (req.query.page ? req.query.page : 1))
+        .then(function(obj) {
         res.render('adminFeedbackWait', {
             title: '问题反馈信息管理 / 待处理问题反馈信息',
             money: 10.01,
-            feedbacks: feedbacks
+            feedbacks: obj.results.reverse(),
+            pages: obj.pages
         });
     })
 });
@@ -754,13 +760,15 @@ router.post('/feedback/wait/handle', function (req, res) {
 });
 
 router.get('/feedback/already', function (req, res) {
-    Feedback.open().find({
+    Feedback.open().findPages({
         status: '已处理'
-    }).then(function (feedbacks) {
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
         res.render('adminFeedbackAlre', {
             title: '问题反馈信息管理 / 已处理问题反馈信息',
             money: 10.01,
-            feedbacks: feedbacks
+            feedbacks: obj.results.reverse(),
+            pages: obj.pages
         });
     });
 });
