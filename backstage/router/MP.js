@@ -10,14 +10,15 @@ var router = require('express').Router();
 router.get('/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'mp', smallType: 'like'})
-                .then(function(results) {
+            Order.open().findPages({userId: user._id, type: 'mp', smallType: 'like'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('MPlike', {
                         title: '美拍点赞任务',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/MP/like'
                     })
                 })
@@ -59,14 +60,15 @@ router.post('/like/add', function (req, res) {
 router.get('/comment', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'mp', smallType: 'comment'})
-                .then(function(results) {
+            Order.open().findPages({userId: user._id, type: 'mp', smallType: 'comment'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('MPcomment', {
                         title: '美拍评论任务',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/MP/comment'
                     })
                 })
@@ -108,14 +110,15 @@ router.post('/comment/add', function (req, res) {
 router.get('/attention', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'mp', smallType: 'attention'})
-                .then(function(results) {
+            Order.open().findPages({userId: user._id, type: 'mp', smallType: 'attention'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('MPattention', {
                         title: '美拍关注任务',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/MP/attention'
                     })
                 })
@@ -157,14 +160,15 @@ router.post('/attention/add', function (req, res) {
 router.get('/forward', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'mp', smallType: 'forward'})
-                .then(function(results) {
+            Order.open().findPages({userId: user._id, type: 'mp', smallType: 'forward'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('MPforward', {
                         title: '美拍转发任务',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/MP/forward'
                     })
                 })

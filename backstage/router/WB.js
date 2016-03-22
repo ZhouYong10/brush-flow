@@ -11,14 +11,15 @@ var router = require('express').Router();
 router.get('/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wb', smallType: 'like'})
-                .then(function(results) {
+            Order.open().findPages({userId: user._id, type: 'wb', smallType: 'like'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('WBlike', {
                         title: '微博高级点赞任务',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/WB/like'
                     })
                 })
@@ -60,14 +61,15 @@ router.post('/like/add', function (req, res) {
 router.get('/vote', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wb', smallType: 'vote'})
-                .then(function(results) {
+            Order.open().findPages({userId: user._id, type: 'wb', smallType: 'vote'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('WBvote', {
                         title: '微博投票任务',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/WB/vote'
                     })
                 })
@@ -109,14 +111,19 @@ router.post('/vote/add', function (req, res) {
 router.get('/fans', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wb', smallType: {$in: ['fans', 'fansTwo', 'fansEight']}})
-                .then(function(results) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wb',
+                smallType: {$in: ['fans', 'fansTwo', 'fansEight']}
+            }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('WBfans', {
                         title: '微博粉丝任务',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/WB/fans'
                     })
                 })
@@ -164,14 +171,19 @@ router.get('/get/price/by/type', function (req, res) {
 router.get('/forward', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wb', smallType: {$in: ['forward', 'forwardTwo', 'forwardEight']}})
-                .then(function(results) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wb',
+                smallType: {$in: ['forward', 'forwardTwo', 'forwardEight']}
+            }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('WBforward', {
                         title: '微博转发任务',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/WB/forward'
                     })
                 })
