@@ -81,7 +81,7 @@ app.use(passport.session());
 
 
 app.get('/', function (req, res) {
-  res.render('index', {title: '网络营销系统'});
+  res.render('index', {title: '网络营销--系统登陆'});
 });
 
 app.get('/securityImg', function (req, res) {
