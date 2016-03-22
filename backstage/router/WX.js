@@ -12,14 +12,19 @@ var router = require('express').Router();
 router.get('/friend', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wx', smallType: 'friend'})
-                .then(function(results) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wx',
+                smallType: 'friend'
+            }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
                     res.render('WXfriend', {
                         title: '微信个人好友',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/WX/friend'
                     })
                 })
@@ -61,14 +66,19 @@ router.post('/friend/add', function (req, res) {
 router.get('/fans', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wx', smallType: 'fans'})
-                .then(function (results) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wx',
+                smallType: 'fans'
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
                     res.render('WXfans', {
                         title: '微信公众粉丝',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/WX/fans'
                     })
                 });
@@ -116,14 +126,19 @@ router.post('/fans/add', function (req, res) {
 router.get('/share', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wx', smallType: {$in: ['article', 'share', 'collect']}})
-                .then(function (results) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wx',
+                smallType: {$in: ['article', 'share', 'collect']}
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
                     res.render('WXshare', {
                         title: '微信原文/分享/收藏',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/WX/share'
                     });
                 });
@@ -172,14 +187,19 @@ router.get('/get/price/by/type', function (req, res) {
 router.get('/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().find({userId: user._id, type: 'wx', smallType: 'read'})
-                .then(function (results) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wx',
+                smallType: 'read'
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
                     res.render('WXlike', {
                         title: '图文阅读/点赞',
                         money: user.funds,
                         username: user.username,
                         role: user.role,
-                        orders: results.reverse(),
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
                         path: '/WX/like'
                     })
                 });
