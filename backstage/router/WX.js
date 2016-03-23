@@ -22,6 +22,7 @@ router.get('/friend', function (req, res) {
                         title: '微信个人好友',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -42,6 +43,7 @@ router.get('/friend/add', function (req, res) {
                         title: '添加微信粉丝',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         price: myPrice
                     })
@@ -76,6 +78,7 @@ router.get('/fans', function (req, res) {
                         title: '微信公众粉丝',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -100,6 +103,7 @@ router.get('/fans/add', function (req, res) {
                                 title: '添加微信公众粉丝任务',
                                 money: user.funds,
                                 username: user.username,
+                                userStatus: user.status,
                                 role: user.role,
                                 fansPrice: myFansPrice,
                                 replyPrice: myReplyPrice
@@ -136,6 +140,7 @@ router.get('/share', function (req, res) {
                         title: '微信原文/分享/收藏',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -152,6 +157,7 @@ router.get('/share/add', function (req, res) {
                 title: '添加微信原文/分享/收藏任务',
                 money: user.funds,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             });
         });
@@ -197,6 +203,7 @@ router.get('/like', function (req, res) {
                         title: '图文阅读/点赞',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -221,6 +228,7 @@ router.get('/like/add', function (req, res) {
                                 title: '添加微信图文点赞任务',
                                 money: user.funds,
                                 username: user.username,
+                                userStatus: user.status,
                                 role: user.role,
                                 price: myReadPrice,
                                 price2: myLikePrice

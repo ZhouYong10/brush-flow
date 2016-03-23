@@ -16,6 +16,7 @@ router.get('/like', function (req, res) {
                         title: '美拍点赞任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -36,6 +37,7 @@ router.get('/like/add', function (req, res) {
                         title: '添加美拍点赞任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         price: myLikePrice
                     });
@@ -66,6 +68,7 @@ router.get('/comment', function (req, res) {
                         title: '美拍评论任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -86,6 +89,7 @@ router.get('/comment/add', function (req, res) {
                         title: '添加美拍评论任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         price: myCommentPrice
                     });
@@ -116,6 +120,7 @@ router.get('/attention', function (req, res) {
                         title: '美拍关注任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -136,6 +141,7 @@ router.get('/attention/add', function (req, res) {
                         title: '添加美拍关注任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         price: myAttentionPrice
                     });
@@ -166,6 +172,7 @@ router.get('/forward', function (req, res) {
                         title: '美拍转发任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -186,6 +193,7 @@ router.get('/forward/add', function (req, res) {
                         title: '添加美拍转发任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         price: myForwardPrice
                     });

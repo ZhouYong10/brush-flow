@@ -17,6 +17,7 @@ router.get('/like', function (req, res) {
                         title: '微博高级点赞任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -37,6 +38,7 @@ router.get('/like/add', function (req, res) {
                         title: '添加微博高级点赞任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         price: myPrice
                     });
@@ -67,6 +69,7 @@ router.get('/vote', function (req, res) {
                         title: '微博投票任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -87,6 +90,7 @@ router.get('/vote/add', function (req, res) {
                         title: '添加微博投票任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         price: myPrice
                     });
@@ -121,6 +125,7 @@ router.get('/fans', function (req, res) {
                         title: '微博粉丝任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -137,6 +142,7 @@ router.get('/fans/add', function (req, res) {
                 title: '添加微博粉丝任务',
                 money: user.funds,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             });
         });
@@ -181,6 +187,7 @@ router.get('/forward', function (req, res) {
                         title: '微博转发任务',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages,
@@ -197,6 +204,7 @@ router.get('/forward/add', function (req, res) {
                 title: '添加微博转发任务',
                 money: user.funds,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             });
         });

@@ -18,6 +18,7 @@ router.get('/recharge', function (req, res) {
                 title: '在线充值',
                 money: user.funds,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             })
         });
@@ -84,6 +85,7 @@ router.get('/recharge/history', function (req, res) {
                         recharges: obj.results.reverse(),
                         pages: obj.pages,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role
                     });
                 }, function (error) {
@@ -101,6 +103,7 @@ router.get('/consume/history', function (req, res) {
                         title: '消费记录',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         orders: obj.results.reverse(),
                         pages: obj.pages
@@ -117,6 +120,7 @@ router.get('/info', function (req, res) {
                 money: user.funds,
                 user: user,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             });
         }, function (error) {
@@ -151,6 +155,7 @@ router.get('/changePwd', function (req, res) {
                 title: '修改账号密码',
                 money: user.funds,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             });
         });
@@ -223,6 +228,7 @@ router.get('/addLowerUser', function (req, res) {
                 title: '添加下级用户',
                 money: user.funds,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             });
         });
@@ -265,6 +271,7 @@ router.get('/lowerUser', function (req, res) {
                             users: obj.results.reverse(),
                             pages: obj.pages,
                             username: parent.username,
+                            userStatus: parent.status,
                             role: parent.role
                         });
                     }, function(error) {
@@ -277,6 +284,7 @@ router.get('/lowerUser', function (req, res) {
                     users: [],
                     pages: 1,
                     username: parent.username,
+                    userStatus: parent.status,
                     role: parent.role
                 });
             }
@@ -300,6 +308,7 @@ router.get('/feedback', function (req, res) {
                         title: '问题反馈',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         feedbacks: obj.results.reverse(),
                         pages: obj.pages
@@ -317,6 +326,7 @@ router.get('/feedback/add', function (req, res) {
                 title: '问题反馈 / 我要提意见',
                 money: user.funds,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             });
         });
@@ -346,6 +356,7 @@ router.get('/withdraw', function (req, res) {
                         title: '我要提现',
                         money: user.funds,
                         username: user.username,
+                        userStatus: user.status,
                         role: user.role,
                         withdraws: obj.results.reverse(),
                         pages: obj.pages
@@ -361,6 +372,7 @@ router.get('/withdraw/add', function (req, res) {
                 title: '申请提现',
                 money: user.funds,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
             });
         });
@@ -386,6 +398,7 @@ router.get('/errorSummary', function (req, res) {
                     title: '错误信息汇总',
                     money: user.funds,
                     username: user.username,
+                    userStatus: user.status,
                     role: user.role,
                     orders: obj.results.reverse(),
                     pages: obj.pages

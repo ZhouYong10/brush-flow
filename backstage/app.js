@@ -152,6 +152,7 @@ app.get('/client/home', function (req, res) {
                 placards: obj.results.reverse(),
                 pages: obj.pages,
                 username: user.username,
+                userStatus: user.status,
                 role: user.role
               });
             }, function (error) {

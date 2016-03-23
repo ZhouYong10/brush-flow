@@ -38,7 +38,7 @@
                             <i class="am-icon-search"></i>
                             搜索
                         </button>&nbsp;&nbsp;
-                        <a href="/WB/forward/add" class="am-btn am-btn-primary am-radius am-btn-sm">
+                        <a href="/WB/forward/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
                             <i class="am-icon-plus-circle"></i>
                             新增任务
                         </a>
@@ -213,6 +213,14 @@
                 }
             }
         });
+
+        $('.addTask').click(function(e) {
+            if($('#userStatus').val() == '冻结'){
+                e.stopPropagation();
+                e.preventDefault();
+                layer.msg('对不起，您的账户已被冻结，请联系管理员！', {time: 3000});
+            }
+        })
     })
 </script>
 
