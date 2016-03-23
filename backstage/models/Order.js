@@ -26,10 +26,10 @@ Order.extend({
         for(var i in orders) {
             var order = orders[i];
             if(order.status == '已处理'){
-                var createTime = order.createTime, num = order.num,
+                var dealTime = order.dealTime, num = order.num,
                     delay = 3 * 60 * 1000, speed = order.speed;
                 var allTimes = (parseInt(num / speed) + ((num % speed == 0) ? 0 : 1)) * 60 * 1000;
-                var currentTimes = new Date().getTime() - new Date(createTime).getTime() - delay;
+                var currentTimes = new Date().getTime() - new Date(dealTime).getTime() - delay;
 
                 if(currentTimes > 0) {
                     var percent = (currentTimes / allTimes).toFixed(4);
@@ -196,8 +196,12 @@ Order.include({
         User.open().findById(self.userId)
             .then(function(user) {
                 self.profitToParent(user, user, function(order) {
-                    Order.open().updateById(self._id, {$set: {status: '已处理'}})
-                        .then(function () {
+                    Order.open().updateById(self._id, {
+                        $set: {
+                            status: '已处理',
+                            dealTime:  moment().format('YYYY-MM-DD HH:mm:ss')
+                        }
+                    }).then(function () {
                             callback();
                         });
                 });
