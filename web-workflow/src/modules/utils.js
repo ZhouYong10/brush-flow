@@ -62,5 +62,63 @@ module.exports = {
     },
     isfloat: function(val) {
         return /^\d+(\.\d+)?$/.test(val);
+    },
+    layPage: function(id, pagesCount) {
+        laypage({
+            cont: id ? id : 'laypage',
+            pages: pagesCount ? pagesCount : $('#pages').val(), //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
+            skin: 'molv', //皮肤
+            skip: true, //是否开启跳页
+            groups: 3, //连续显示分页数
+            last: pagesCount ? pagesCount : $('#pages').val(),
+            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
+                var page = location.search.match(/page=(\d+)/);
+                return page ? page[1] : 1;
+            }(),
+            jump: function(e, first){ //触发分页后的回调
+                if(!first){ //一定要加此判断，否则初始时会无限刷新
+                    location.href = '?page='+e.curr;
+                }
+            }
+        });
+    },
+    isFreeze: function (cla) {
+        var clas = cla ? cla : '.addTask';
+        $(clas).click(function(e) {
+            if($('#userStatus').val() == '冻结'){
+                e.stopPropagation();
+                e.preventDefault();
+                layer.msg('对不起，您的账户已被冻结，请联系管理员！', {time: 3000});
+            }
+        })
+    },
+    breakText: function(cla) {
+        var clas = cla ? cla : '.text-break';
+        $(clas).click(function () {
+            var self = this;
+            layer.alert($(self).text());
+        });
+    },
+    layPrompt: function(title, cla) {
+        var clas = cla ? cla : '.orderError';
+
+        layer.config({
+            extend: 'extend/layer.ext.js'
+        });
+
+        $(clas).click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var href = $(this).attr('href');
+            layer.prompt({
+                formType: 2,
+                title: title,
+                offset: '6%'
+            }, function (value, index) {
+                href += '&info=' + value.replace(/\r\n/g,"").replace(/\n/g,"");
+                layer.close(index);
+                $('<a href=' + href + '></a>').get(0).click();
+            });
+        });
     }
 };

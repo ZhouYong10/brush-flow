@@ -64,7 +64,7 @@ module.exports = {
     },
     findPages: function(obj, page) {
         var userObj = obj ? obj : null;
-        var pageCont = 10;
+        var pageCont = 1;
         return new Promise(function(resolve, reject) {
             haveCollection(function () {
                 collection.count(userObj, function(err, total) {

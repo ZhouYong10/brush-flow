@@ -90,6 +90,31 @@ router.get('/fans', function (req, res) {
         });
 });
 
+router.post('/account/search/fans', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'fans',
+                    account: req.body.account
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WXfans', {
+                        title: '微信公众粉丝',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/WX/fans'
+                    })
+                });
+        });
+});
+
 router.get('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -255,5 +280,6 @@ router.post('/like/add', function (req, res) {
                 });
         });
 });
+
 
 module.exports = router;
