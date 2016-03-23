@@ -13,6 +13,7 @@ router.get('/like', function (req, res) {
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'wb', smallType: 'like'}, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
+                    Order.addSchedule(obj.results);
                     res.render('WBlike', {
                         title: '微博高级点赞任务',
                         money: user.funds,
@@ -65,6 +66,7 @@ router.get('/vote', function (req, res) {
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'wb', smallType: 'vote'}, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
+                    Order.addSchedule(obj.results);
                     res.render('WBvote', {
                         title: '微博投票任务',
                         money: user.funds,
@@ -121,6 +123,7 @@ router.get('/fans', function (req, res) {
                 smallType: {$in: ['fans', 'fansTwo', 'fansEight']}
             }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
+                    Order.addSchedule(obj.results);
                     res.render('WBfans', {
                         title: '微博粉丝任务',
                         money: user.funds,
@@ -183,6 +186,7 @@ router.get('/forward', function (req, res) {
                 smallType: {$in: ['forward', 'forwardTwo', 'forwardEight']}
             }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
+                    Order.addSchedule(obj.results);
                     res.render('WBforward', {
                         title: '微博转发任务',
                         money: user.funds,

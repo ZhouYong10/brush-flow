@@ -19,7 +19,6 @@ router.get('/friend', function (req, res) {
             }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
-
                     res.render('WXfriend', {
                         title: '微信个人好友',
                         money: user.funds,
@@ -76,6 +75,7 @@ router.get('/fans', function (req, res) {
                 smallType: 'fans'
             }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
+                    Order.addSchedule(obj.results);
                     res.render('WXfans', {
                         title: '微信公众粉丝',
                         money: user.funds,
@@ -138,6 +138,7 @@ router.get('/share', function (req, res) {
                 smallType: {$in: ['article', 'share', 'collect']}
             }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
+                    Order.addSchedule(obj.results);
                     res.render('WXshare', {
                         title: '微信原文/分享/收藏',
                         money: user.funds,
@@ -201,6 +202,7 @@ router.get('/like', function (req, res) {
                 smallType: 'read'
             }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
+                    Order.addSchedule(obj.results);
                     res.render('WXlike', {
                         title: '图文阅读/点赞',
                         money: user.funds,
