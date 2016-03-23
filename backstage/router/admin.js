@@ -201,7 +201,7 @@ router.get('/manage/user', function (req, res) {
             res.render('adminManageUser', {
                 title: '设置 / 用户管理 / 所有用户',
                 money: 10.01,
-                users: obj.results.reverse(),
+                users: obj.results,
                 pages: obj.pages
             });
         }, function (error) {
@@ -231,7 +231,9 @@ router.post('/manage/user/edit', function(req, res) {
 });
 
 router.get('/manage/user/del', function(req, res) {
-    User.removeUser(req, res, '/admin/manage/user');
+    User.removeUser(req.query.id).then(function () {
+        res.redirect('/admin/manage/user');
+    });
 });
 
 router.get('/manage/user/add', function (req, res) {

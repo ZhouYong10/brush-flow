@@ -286,7 +286,9 @@ router.get('/lowerUser', function (req, res) {
 });
 
 router.get('/removeLowerUser', function (req, res) {
-    User.removeUser(req, res, '/user/lowerUser');
+    User.removeUser(req.query.id).then(function () {
+        res.redirect('/user/lowerUser');
+    });
 });
 
 router.get('/feedback', function (req, res) {

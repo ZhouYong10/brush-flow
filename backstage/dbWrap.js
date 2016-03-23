@@ -68,8 +68,6 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             haveCollection(function () {
                 collection.count(userObj, function(err, total) {
-                    console.log(total);
-                    console.log(parseInt(total / pageCont) + ((total % pageCont > 0) ? 1 : 0), '====================');
                     collection.find(userObj, {
                         skip: ((page ? page : 1) - 1) * pageCont,
                         limit: (page ? pageCont : 0)

@@ -80,8 +80,8 @@
                                         <a type="button" class="am-btn am-btn-primary am-radius am-btn-xs"
                                         href="/admin/manage/user/edit?id=<%= users[i]._id %>">编辑</a>
                                         <a type="button" class="am-btn am-btn-primary am-radius am-btn-xs"
-                                           href="/admin/manage/user/del?id=<%= users[i]._id %>&parentID=<%= users[i].parentID %>"
-                                           onclick="return sureDelete();">删除</a>
+                                           href="/admin/manage/user/del?id=<%= users[i]._id %>"
+                                           onclick="return confirm('确认删除该用户吗？');">删除</a>
                                     </td>
                                 </tr>
                             <% } %>
@@ -129,9 +129,6 @@
         });
     });
 
-    function sureDelete() {
-        return confirm('确认删除该用户吗？');
-    }
 </script>
 
 </body>

@@ -29,42 +29,61 @@ User.extend({
             reject(error);
         })
     },
-    removeUser: function(req, res, path) {
-        if(req.query.parentID) {
-            User.open().findById(req.query.parentID)
-                .then(function (result) {
-                    var parent = User.wrapToInstance(result);
-                    parent.removeChild(req.query.id);
-                    User.open().updateById(parent._id, {$set: parent})
-                        .then(function () {
-                            remove(req.query.id);
-                        }, function(error) {
-                            throw new Error('更新父用户信息失败： ' + error);
+    removeUser: function(id) {
+        return new Promise(function(resolve, reject) {
+            //获取被删除用户
+            User.open().findById(id).then(function(delUser) {
+                //如果存在父用户，则获取父用户
+                if(delUser.parentID) {
+                    User.open().findById(delUser.parentID).then(function(parentUser) {
+                        //将被删除用户从父用户中移除
+                        var parent = User.wrapToInstance(parentUser);
+                        parent.removeChild(id);
+                        //如果存在子用户，则将所有被删除用户的子用户添加到被删除用户的父用户中
+                        if(delUser.childNum > 0) {
+                            parent.children = parent.children.concat(delUser.children);
+                            parent.childNum = parent.children.length;
+                            for(var i = 0; i < delUser.children.length; i++) {
+                                User.open().updateById(delUser.children[i], {
+                                    $set: {
+                                        parent: parent.username,
+                                        parentID: parent._id
+                                    }
+                                });
+                            }
+                        }
+                        User.open().updateById(parent._id, {$set: parent})
+                            .then(function() {
+                                User.open().removeById(delUser._id)
+                                    .then(function() {
+                                        resolve();
+                                    })
+                            })
+                    })
+                }else {
+                    if(delUser.childNum > 0) {
+                        for(var i = 0; i < delUser.children.length; i++) {
+                            User.open().updateById(delUser.children[i], {
+                                $unset: {
+                                    parent:'',
+                                    parentID: ''
+                                }
+                            });
+                        }
+                    }
+                    User.open().removeById(delUser._id)
+                        .then(function() {
+                            resolve();
                         })
-                }, function(error) {
-                    res.send(error);
-                });
-        }else{
-            remove(req.query.id);
-        }
-
-        function remove(id) {
-            User.open().removeById(req.query.id)
-                .then(function (user) {
-                    res.redirect(path);
-                }, function (error) {
-                    throw new Error('删除用户失败： ' + error);
-                });
-        }
+                }
+            })
+        })
     }
 });
 
 User.include({
     isAdmin: function() {
-        if(this.role === '管理员'){
-            return true;
-        }
-        return false;
+        return this.role === '管理员';
     },
     samePwd: function(pwd) {
         return bcrypt.compareSync(pwd, this.password);
@@ -88,13 +107,13 @@ User.include({
         this.childNum = this.children.length;
     },
     removeChild: function(id) {
-        var index;
+        var index = -1;
         for(var i = 0; i < this.children.length; i++) {
             if(this.children[i] == id) {
                 index = i;
             }
         }
-        if(index != undefined) {
+        if(index != -1) {
             this.children.splice(index, 1);
             this.childNum = this.children.length;
         }
