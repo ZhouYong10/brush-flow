@@ -128,23 +128,23 @@
                         </div>
                     </div>
 
-                    <div class="am-form-group">
-                        <label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划时间</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="planTime" class="am-radius am-input-sm" type="text" placeholder="单击选择首次开始任务的时间"
-                                   onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm', min: laydate.now()})"
-                                   name="startTime" readonly>
-                        </div>
-                    </div>
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划时间</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<input id="planTime" class="am-radius am-input-sm" type="text" placeholder="单击选择首次开始任务的时间"-->
+                                   <!--onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm', min: laydate.now()})"-->
+                                   <!--name="startTime" readonly>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="am-form-group">
-                        <label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行"
-                            v-validate:days="{isnum: true}" name="days">
-                            <span class="tips" v-if="$wxFans.days.isnum">天数必须为正整数!</span>
-                        </div>
-                    </div>
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行"-->
+                            <!--v-validate:days="{isnum: true}" name="days">-->
+                            <!--<span class="tips" v-if="$wxFans.days.isnum">天数必须为正整数!</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
                     <div class="am-form-group">
                         <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>

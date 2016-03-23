@@ -88,22 +88,22 @@
                         </div>
                     </div>
 
-                    <div class="am-form-group">
-                        <label for="setSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">速度设置</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="setSpeed" class="am-radius am-input-sm" name="speedUnit" v-model="speedunit">
-                                <option value="">无要求 </option>
-                                <option value="秒">每秒 </option>
-                                <option value="分">每分钟 </option>
-                                <option value="时">每小时 </option>
-                            </select>
-                        </div>
-                    </div>
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="setSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">速度设置</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<select id="setSpeed" class="am-radius am-input-sm" name="speedUnit" v-model="speedunit">-->
+                                <!--<option value="">无要求 </option>-->
+                                <!--<option value="秒">每秒 </option>-->
+                                <!--<option value="分">每分钟 </option>-->
+                                <!--<option value="时">每小时 </option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="am-form-group" v-if="speedunit">
-                        <label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label">速度数量</label>
+                    <div class="am-form-group">
+                        <label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label">限速</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="需要定期增加的数量"
+                            <input id="likeNum" class="am-radius am-input-sm" type="text" placeholder="每分钟增加的数量"
                                    v-validate:spped="{isnum: true}" name="speed">
                             <span class="tips" v-if="$mpattention.spped.isnum">必须为正整数!</span>
                         </div>

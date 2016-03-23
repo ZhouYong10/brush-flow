@@ -18,6 +18,8 @@ router.get('/friend', function (req, res) {
                 smallType: 'friend'
             }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
+                    Order.addSchedule(obj.results);
+
                     res.render('WXfriend', {
                         title: '微信个人好友',
                         money: user.funds,

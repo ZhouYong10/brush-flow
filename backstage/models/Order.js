@@ -21,6 +21,35 @@ Order.open = function() {
     return Order.openCollection('Order');
 };
 
+Order.extend({
+    addSchedule: function(orders) {
+        for(var i in orders) {
+            var order = orders[i];
+            if(order.status == '已处理'){
+                var createTime = order.createTime, num = order.num,
+                    delay = 3 * 60 * 1000, speed = order.speed;
+                var allTimes = (parseInt(num / speed) + ((num % speed == 0) ? 0 : 1)) * 60 * 1000;
+                var currentTimes = new Date().getTime() - new Date(createTime).getTime() - delay;
+
+                if(currentTimes > 0) {
+                    var percent = (currentTimes / allTimes).toFixed(4);
+                    if(percent < 1) {
+                        percent = (percent * 100).toFixed(2) + '%';
+                        order.status = '执行中';
+                    }else {
+                        percent = '100%';
+                        order.status = '已完成';
+                    }
+                    order.schedule = percent;
+                }else {
+                    order.status = '未处理';
+                }
+            }
+        }
+        return orders;
+    }
+});
+
 Order.include({
     createAndSave: function(user, info) {
         var self = this;
