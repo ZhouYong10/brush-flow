@@ -65,9 +65,9 @@
                         <tbody>
 
                         <% for(var i = 0; i < orders.length; i++){ %>
-                        <tr class="<% if(orders[i].status == '执行中' || orders[i].status == '已完成' && orders[i].error == undefined){ %> am-primary
+                        <tr class="<% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %> am-primary
                         <% }else if(orders[i].status == '已退款'){ %> am-danger
-                        <% }else if(orders[i].status == '执行中' || orders[i].status == '已完成' && orders[i].error != undefined){ %> am-active <% } %>">
+                        <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %> am-active <% } %>">
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle">
@@ -90,10 +90,10 @@
                             <td class="am-text-middle"><%= orders[i].schedule %></td>
                             <td class="am-text-middle"><%= orders[i].status %></td>
                             <td class="am-text-middle">
-                                <% if(orders[i].status == '执行中' || orders[i].status == '已完成' && orders[i].error == undefined){ %>
+                                <% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %>
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs orderError"
                                    href="/user/order/error?id=<%= orders[i]._id %>&url=<%= path %>">报错</a>
-                                <% }else if(orders[i].status == '执行中' || orders[i].status == '已完成' && orders[i].error != undefined){ %>
+                                <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %>
 
                                 <% if(orders[i].errorInfo != undefined){ %>
                                 <div class="operation">
