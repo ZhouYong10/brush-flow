@@ -97,7 +97,10 @@ router.get('/recharge/history', function (req, res) {
 router.get('/consume/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
+            Order.open().findPages({
+                userId: user._id,
+                status: {$in: ['已处理', '已退款']}
+            }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('consumeHistory', {
                         title: '消费记录',

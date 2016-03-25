@@ -61,11 +61,18 @@
                         <tbody>
 
                         <% for(var i = 0; i < orders.length; i++){ %>
-                        <tr>
+                        <tr class="<% if(orders[i].status == '已处理'){ %> am-primary
+                        <% }else if(orders[i].status == '已退款'){ %> am-danger <% } %>">
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].typeName %><%= orders[i].smallTypeName %></td>
-                            <td class="am-text-middle">￥ <%= orders[i].totalPrice %></td>
+                            <% if(orders[i].status == '已处理'){ %>
+                            <td class="am-text-middle">￥ -<%= orders[i].totalPrice %></td>
+                            <% } %>
+
+                            <% if(orders[i].status == '已退款'){ %>
+                            <td class="am-text-middle">￥ +<%= orders[i].totalPrice %></td>
+                            <% } %>
                             <td class="am-text-middle">￥ <%= orders[i].funds %></td>
                             <td class="am-text-middle"><%= orders[i].description %></td>
                         </tr>
