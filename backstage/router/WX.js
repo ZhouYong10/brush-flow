@@ -33,6 +33,31 @@ router.get('/friend', function (req, res) {
         });
 });
 
+router.get('/account/search/friend', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'friend',
+                    account: req.query.account
+                }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WXfriend', {
+                        title: '微信个人好友',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/WX/friend'
+                    })
+                })
+        });
+});
+
 router.get('/friend/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -90,14 +115,14 @@ router.get('/fans', function (req, res) {
         });
 });
 
-router.post('/account/search/fans', function (req, res) {
+router.get('/account/search/fans', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wx',
                     smallType: 'fans',
-                    account: req.body.account
+                    account: req.query.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
@@ -178,6 +203,31 @@ router.get('/share', function (req, res) {
         });
 });
 
+router.get('/account/search/share', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: {$in: ['article', 'share', 'collect']},
+                    address: req.query.account
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WXshare', {
+                        title: '微信原文/分享/收藏',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/WX/share'
+                    });
+                });
+        });
+});
+
 router.get('/share/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -226,6 +276,31 @@ router.get('/like', function (req, res) {
                 type: 'wx',
                 smallType: 'read'
             }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WXlike', {
+                        title: '图文阅读/点赞',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/WX/like'
+                    })
+                });
+        });
+});
+
+router.get('/account/search/like', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'read',
+                    address: req.query.account
+                }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
                     res.render('WXlike', {

@@ -28,6 +28,31 @@ router.get('/like', function (req, res) {
         });
 });
 
+router.get('/task/search/like', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wb',
+                smallType: 'like',
+                address: req.query.account
+            }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WBlike', {
+                        title: '微博高级点赞任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/WB/like'
+                    })
+                })
+        });
+});
+
 router.get('/like/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -65,6 +90,31 @@ router.get('/vote', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'wb', smallType: 'vote'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WBvote', {
+                        title: '微博投票任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/WB/vote'
+                    })
+                })
+        });
+});
+
+router.get('/task/search/vote', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wb',
+                smallType: 'vote',
+                address: req.query.account
+            }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
                     res.render('WBvote', {
@@ -138,6 +188,31 @@ router.get('/fans', function (req, res) {
         });
 });
 
+router.get('/task/search/fans', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wb',
+                    smallType: {$in: ['fans', 'fansTwo', 'fansEight']},
+                    address: req.query.account
+                }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WBfans', {
+                        title: '微博粉丝任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/WB/fans'
+                    })
+                })
+        });
+});
+
 router.get('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -185,6 +260,31 @@ router.get('/forward', function (req, res) {
                 type: 'wb',
                 smallType: {$in: ['forward', 'forwardTwo', 'forwardEight']}
             }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WBforward', {
+                        title: '微博转发任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/WB/forward'
+                    })
+                })
+        });
+});
+
+router.get('/task/search/forward', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wb',
+                    smallType: {$in: ['forward', 'forwardTwo', 'forwardEight']},
+                    address: req.query.account
+                }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
                     res.render('WBforward', {

@@ -30,7 +30,7 @@
                             微信账号
                         </label>
                         <div class="am-u-sm-9 taskTypeWrap">
-                            <form id="search" method="post" action="/WX/account/search/fans">
+                            <form id="search" method="get" action="/WX/account/search/fans">
                                 <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
                                        name="account" placeholder="请输入微信账号"
                                 v-validate:account="{required: true}">

@@ -27,6 +27,31 @@ router.get('/like', function (req, res) {
         });
 });
 
+router.get('/task/search/like', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'mp',
+                smallType: 'like',
+                address: req.query.account
+            }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('MPlike', {
+                        title: '美拍点赞任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/MP/like'
+                    })
+                })
+        });
+});
+
 router.get('/like/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -64,6 +89,31 @@ router.get('/comment', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'mp', smallType: 'comment'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('MPcomment', {
+                        title: '美拍评论任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/MP/comment'
+                    })
+                })
+        });
+});
+
+router.get('/task/search/comment', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'mp',
+                smallType: 'comment',
+                address: req.query.account
+            }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
                     res.render('MPcomment', {
@@ -133,6 +183,31 @@ router.get('/attention', function (req, res) {
         });
 });
 
+router.get('/task/search/attention', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'mp',
+                smallType: 'attention',
+                address: req.query.account
+            }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('MPattention', {
+                        title: '美拍关注任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/MP/attention'
+                    })
+                })
+        });
+});
+
 router.get('/attention/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -170,6 +245,31 @@ router.get('/forward', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'mp', smallType: 'forward'}, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('MPforward', {
+                        title: '美拍转发任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages,
+                        path: '/MP/forward'
+                    })
+                })
+        });
+});
+
+router.get('/task/search/forward', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'mp',
+                smallType: 'forward',
+                address: req.query.account
+            }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
                     res.render('MPforward', {
