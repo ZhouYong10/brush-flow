@@ -459,6 +459,32 @@ router.get('/errorSummary', function (req, res) {
         });
 });
 
+router.get('/search/error', function (req, res) {
+    var types = req.query.type.split('-');
+    var type = types.shift();
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var query = {
+                userId: user._id,
+                type: type,
+                smallType: {$in: types},
+                error: {$in: ['未处理', '已处理']}
+            };
+            Order.open().findPages(query, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    res.render('errorSummary', {
+                        title: '错误信息汇总',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages
+                    });
+                });
+        });
+});
+
 router.get('/order/error', function (req, res) {
     var msg = req.query;
     Order.open().findById(msg.id)

@@ -23,26 +23,44 @@
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
-                <div class="am-form am-form-inline">
-                    <div class="am-form-group am-form-group-sm search-title">
-                        <label for="errorType" class="am-u-sm-5 am-form-label errorTypeLabel">问题错误类型</label>
-                        <div class="am-u-sm-7 errorTypeWrap">
-                            <select id="errorType" class="am-form-field am-input-sm am-radius">
-                                <option value="">添加了</option>
-                                <option value="">添加了  xcv</option>
-                                <option value="">添加了</option>
-                                <option value="">添 o发的地方地方d加了</option>
-                                <option value="">添加了</option>
-                            </select>
-                        </div>
-                    </div>
+                <div  id="searchForm" class="am-form am-form-inline">
+                    <validator name="search">
+                        <form id="search" method="get" action="/user/search/error">
+                            <div class="am-form-group am-form-group-sm search-title">
+                                <label for="errorType" class="am-u-sm-2 am-form-label errorTypeLabel">类型</label>
+                                <div class="am-u-sm-10 errorTypeWrap">
+                                    <select id="errorType" class="am-form-field am-input-sm am-radius" name="type"
+                                    v-validate:type="{required: true}">
+                                        <option value="">== 选择类型 ==</option>
+                                        <option value="wx-friend">微信个人好友</option>
+                                        <option value="wx-fans-fansReply">微信公众粉丝/回复</option>
+                                        <option value="wx-article-share-collect">微信原文/分享/收藏</option>
+                                        <option value="wx-read-like">微信阅读/点赞</option>
+                                        <option value="mp-like">美拍点赞</option>
+                                        <option value="mp-comment">美拍评论</option>
+                                        <option value="mp-attention">美拍关注</option>
+                                        <option value="mp-forward">美拍转发</option>
+                                        <option value="wb-like">微博高级赞</option>
+                                        <option value="wb-vote">微博投票</option>
+                                        <option value="wb-fans">微博粉丝</option>
+                                        <option value="wb-fansTwo">微博粉丝达人20%</option>
+                                        <option value="wb-fansEight">微博粉丝达人80%</option>
+                                        <option value="wb-forward">微博转发</option>
+                                        <option value="wb-forwardTwo">微博转发达人20%</option>
+                                        <option value="wb-forwardEight">微博转发达人80%</option>
+                                        <option value="wb-comment">微博评论</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                    <div class="am-form-group am-form-group-sm">
-                        <button class="am-btn am-btn-success am-radius am-btn-sm">
-                            <i class="am-icon-search"></i>
-                            搜索
-                        </button>
-                    </div>
+                            <div class="am-form-group am-form-group-sm">
+                                <button class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
+                                    <i class="am-icon-search"></i>
+                                    搜索
+                                </button>
+                            </div>
+                        </form>
+                    </validator>
                 </div>
 
                 <div class="am-scrollable-horizontal am-text-center errorSummary-content">
@@ -128,39 +146,7 @@
 <script src="/static/plugins/laypage/laypage.js"></script>
 
 <script>
-    $(function() {
-        var clip = new Clipboard('.clipboard');
-        clip.on('success', function (e) {
-            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
-            layer.msg('复制成功！', {
-                time: 1000
-            });
-        });
-
-
-        $('.text-break').click(function () {
-            var self = this;
-            layer.alert($(self).text());
-        });
-
-        laypage({
-            cont: 'laypage',
-            pages: $('#pages').val(), //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
-            skin: 'molv', //皮肤
-            skip: true, //是否开启跳页
-            groups: 3, //连续显示分页数
-            last: $('#pages').val(),
-            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
-                var page = location.search.match(/page=(\d+)/);
-                return page ? page[1] : 1;
-            }(),
-            jump: function(e, first){ //触发分页后的回调
-                if(!first){ //一定要加此判断，否则初始时会无限刷新
-                    location.href = '?page='+e.curr;
-                }
-            }
-        });
-    })
+    require('errorSummary');
 </script>
 
 </body>

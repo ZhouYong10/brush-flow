@@ -125,5 +125,15 @@ module.exports = {
                 $('<a href=' + href + '></a>').get(0).click();
             });
         });
+    },
+    clipboard: function(cla) {
+        var clas = cla ? cla : '.clipboard';
+        var clip = new Clipboard(clas);
+        clip.on('success', function (e) {
+            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
+            layer.msg('复制成功！', {
+                time: 1000
+            });
+        });
     }
 };
