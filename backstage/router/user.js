@@ -115,6 +115,28 @@ router.get('/consume/history', function (req, res) {
         });
 });
 
+router.get('/search/consume', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    status: {$in: ['已处理', '已退款']},
+                    createTime: new RegExp(req.query.createTime)
+                }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    res.render('consumeHistory', {
+                        title: '消费记录',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results.reverse(),
+                        pages: obj.pages
+                    })
+                })
+        });
+});
+
 router.get('/info', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
