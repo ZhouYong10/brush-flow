@@ -209,6 +209,22 @@ router.get('/manage/user', function (req, res) {
         });
 });
 
+router.get('/search/user', function (req, res) {
+    User.open().findPages({
+        username: req.query.username
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminManageUser', {
+                title: '设置 / 用户管理 / 所有用户',
+                money: 10.01,
+                users: obj.results,
+                pages: obj.pages
+            });
+        }, function (error) {
+            res.send('获取用户列表失败： ' + error);
+        });
+});
+
 router.get('/manage/user/edit', function(req, res) {
     User.open().findById(req.query.id)
         .then(function (user) {
