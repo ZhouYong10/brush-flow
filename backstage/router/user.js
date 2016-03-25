@@ -94,6 +94,33 @@ router.get('/recharge/history', function (req, res) {
         });
 });
 
+router.get('/search/recharge', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var query = {userId: user._id};
+            if(req.query.funds) {
+                query.funds = req.query.funds;
+            }
+            if(req.query.createTime) {
+                query.createTime = new RegExp(req.query.createTime);
+            }
+            Recharge.open().findPages(query, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    res.render('rechargeHistory', {
+                        title: '充值记录',
+                        money: user.funds,
+                        recharges: obj.results.reverse(),
+                        pages: obj.pages,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role
+                    });
+                }, function (error) {
+                    res.send('查询充值记录失败： ' + error);
+                });
+        });
+});
+
 router.get('/consume/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
