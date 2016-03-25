@@ -22,7 +22,7 @@ new Vue({
     methods: {
         parseAddress: function() {
             var self = this;
-            Utils.parseAddress(self.$http, self.address)
+            Utils.wxParseAddress(self.$http, self.address)
                 .then(function(title) {
                     self.articleTitle = title;
                 },function(message) {

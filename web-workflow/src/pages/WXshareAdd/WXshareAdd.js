@@ -28,10 +28,9 @@ new Vue({
         },
         parseAddress: function() {
             var self = this;
-            Utils.parseAddress(self.$http, self.address)
+            Utils.wxParseAddress(self.$http, self.address)
                 .then(function(title) {
                     self.articleTitle = title;
-                    console.log(title, '==================');
                 },function(message) {
                     alert(message);
                 })

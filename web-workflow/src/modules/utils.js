@@ -30,11 +30,23 @@ Number.prototype.toFixed = function(d) {
 };
 
 module.exports = {
+    wxParseAddress: function(httpObj,address) {
+        return new Promise(function(resolve, reject) {
+            httpObj.post('/parse/wx/title/by/address', {address: address})
+                .then(function (res) {
+                    var result = res.data;
+                    if(result.isOk) {
+                        resolve(result.title);
+                    }else {
+                        reject(result.message);
+                    }
+                });
+        });
+    },
     parseAddress: function(httpObj,address) {
         return new Promise(function(resolve, reject) {
-            httpObj.get('/parse/title/by/address', {address: address})
+            httpObj.post('/parse/title/by/address', {address: address})
                 .then(function (res) {
-                    console.log(res, '=============================');
                     var result = res.data;
                     if(result.isOk) {
                         resolve(result.title);
