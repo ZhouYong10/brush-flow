@@ -88,7 +88,7 @@
                                    v-model="num2" v-on:keyup="total" v-on:change="total" name="num2"
                                    v-validate:replynum="{minnum: true, isnum: true, maxprice: true}">
                             <span class="tips" v-if="$wxlike.replynum.isnum">数量必须为正整数!</span>
-                            <span class="tips" v-if="$wxlike.replynum.minnum">回复数量不能大于粉丝数量!</span>
+                            <span class="tips" v-if="$wxlike.replynum.minnum">点赞数量不能大于阅读数量的10%!</span>
                         </div>
                     </div>
 

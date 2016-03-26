@@ -42,11 +42,11 @@
                         <div class="am-u-sm-5">
                             <input type="text" class="am-form-field am-radius" v-model="securityCode"
                                    placeholder="区分大小写" v-validate:security-code="{ required: true}">
+                            <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
                         </div>
                         <div class="am-u-sm-7">
                             <img class="am-img-responsive am-radius getSecurityCode" src="/securityImg" @click.stop.prevent="changeImg"/>
                         </div>
-                        <span class="tips" v-if="$login.securityCode.required">验证码不能为空!</span>
                     </div>
                 </div>
 

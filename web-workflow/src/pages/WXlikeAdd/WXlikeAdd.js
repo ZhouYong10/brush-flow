@@ -38,7 +38,9 @@ new Vue({
             return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(val);
         },
         minnum: function(val) {
-            return val <= this.num;
+            var like = val ? val : 0;
+            var read = this.num ? this.num : 0;
+            return parseInt(like) <= parseInt(read/10);
         },
         isnum: Utils.isNum,
         min30: Utils.min30,
