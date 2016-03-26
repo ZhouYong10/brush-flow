@@ -35,7 +35,7 @@ passport.use(new LocalStrategy({
   passReqToCallback: true
 }, function(req, username, password, done) {
   //判断验证码
-  if(req.body.securityCode != req.session.securityCode) {
+  if(req.body.securityCode != req.session.securityCode.toLowerCase()) {
     return done(null, false, '验证码错误！');
   }
 
@@ -86,7 +86,7 @@ app.get('/', function (req, res) {
 
 app.get('/securityImg', function (req, res) {
   var ary = ccap.get();
-  req.session.securityCode = ary[0];
+  req.session.securityCode = ary[0].toLowerCase();
   res.end(ary[1]);
 });
 
