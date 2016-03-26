@@ -35,9 +35,9 @@ passport.use(new LocalStrategy({
   passReqToCallback: true
 }, function(req, username, password, done) {
   //判断验证码
-  //if(req.body.securityCode != req.session.securityCode) {
-  //  return done(null, false, '验证码错误！');
-  //}
+  if(req.body.securityCode != req.session.securityCode) {
+    return done(null, false, '验证码错误！');
+  }
 
   //实现用户名或邮箱登录
   //这里判断提交上的username是否含有@，来决定查询的字段是哪一个
@@ -81,7 +81,7 @@ app.use(passport.session());
 
 
 app.get('/', function (req, res) {
-  res.render('index', {title: '网络营销--系统登陆'});
+  res.render('index', {title: '用户登陆'});
 });
 
 app.get('/securityImg', function (req, res) {

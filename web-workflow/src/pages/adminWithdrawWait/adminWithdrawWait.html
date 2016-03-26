@@ -49,6 +49,7 @@
                             <td><%= withdraws[i].createTime %></td>
                             <td><%= withdraws[i].funds %></td>
                             <td>
+                                <input type="text" value="<%= withdraws[i].alipayCount %>" style="width: 56px;"><br/>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                    title="<%= withdraws[i].alipayCount %>"
                                    data-clipboard-text="<%= withdraws[i].alipayCount %>">复制</a>

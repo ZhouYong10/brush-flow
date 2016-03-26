@@ -53,6 +53,7 @@
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
                             <td class="am-text-middle">
+                                <input type="text" value="<%= orders[i].address %>" style="width: 56px;"><br/>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                    title="<%= orders[i].address %>"
                                    data-clipboard-text="<%= orders[i].address %>">复制</a>
@@ -68,6 +69,7 @@
                             </td>
                             <td class="am-text-middle">
                                 <% if(orders[i].content != undefined && orders[i].content != ''){ %>
+                                <input type="text" value="<%= orders[i].content %>" style="width: 56px;"><br/>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                    title="<%= orders[i].content %>"
                                    data-clipboard-text="<%= orders[i].content %>">复制</a>

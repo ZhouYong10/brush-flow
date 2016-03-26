@@ -12,7 +12,7 @@ router.get('/like', function (req, res) {
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'mp', smallType: 'like'}, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
-                    Order.addSchedule(obj.results);
+                    Order.addSchedule(obj.results, 50);
                     res.render('MPlike', {
                         title: '美拍点赞任务',
                         money: user.funds,
@@ -90,7 +90,7 @@ router.get('/comment', function (req, res) {
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'mp', smallType: 'comment'}, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
-                    Order.addSchedule(obj.results);
+                    Order.addSchedule(obj.results, 50);
                     res.render('MPcomment', {
                         title: '美拍评论任务',
                         money: user.funds,
@@ -168,7 +168,7 @@ router.get('/attention', function (req, res) {
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'mp', smallType: 'attention'}, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
-                    Order.addSchedule(obj.results);
+                    Order.addSchedule(obj.results, 50);
                     res.render('MPattention', {
                         title: '美拍关注任务',
                         money: user.funds,
@@ -246,7 +246,7 @@ router.get('/forward', function (req, res) {
         .then(function (user) {
             Order.open().findPages({userId: user._id, type: 'mp', smallType: 'forward'}, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
-                    Order.addSchedule(obj.results);
+                    Order.addSchedule(obj.results, 50);
                     res.render('MPforward', {
                         title: '美拍转发任务',
                         money: user.funds,

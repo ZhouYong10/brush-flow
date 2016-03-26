@@ -55,6 +55,7 @@
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
                             <td class="am-text-middle">
+                                <input type="text" value="<%= orders[i].address %>" style="width: 56px;"><br/>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                    title="<%= orders[i].address %>"
                                    data-clipboard-text="<%= orders[i].address %>">复制</a>

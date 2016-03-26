@@ -22,12 +22,12 @@ Order.open = function() {
 };
 
 Order.extend({
-    addSchedule: function(orders) {
+    addSchedule: function(orders, speedNum) {
         for(var i in orders) {
             var order = orders[i];
             if(order.status == '已处理'){
                 var dealTime = order.dealTime, num = order.num,
-                    delay = 3 * 60 * 1000, speed = order.speed ? order.speed : 50;
+                    delay = 3 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
                 var allTimes = (parseInt(num / speed) + ((num % speed == 0) ? 0 : 1)) * 60 * 1000;
                 var currentTimes = new Date().getTime() - new Date(dealTime).getTime() - delay;
 

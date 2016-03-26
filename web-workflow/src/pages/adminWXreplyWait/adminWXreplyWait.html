@@ -35,12 +35,12 @@
                             <th>用户</th>
                             <th>下单日期</th>
                             <th>微信账号</th>
-                            <th>国/省/市</th>
-                            <th>性别</th>
+                            <!--<th>国/省/市</th>-->
+                            <!--<th>性别</th>-->
                             <th>数量</th>
                             <th>回复信息</th>
                             <th>限速</th>
-                            <th>模式</th>
+                            <!--<th>模式</th>-->
                             <th>总价</th>
                             <th>备注</th>
                             <th>返利</th>
@@ -55,18 +55,20 @@
                             <td class="am-text-middle"><%= orders[i].user %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle">
+                                <input type="text" value="<%= orders[i].account %>" style="width: 56px;"><br/>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                    title="<%= orders[i].account %>"
                                    data-clipboard-text="<%= orders[i].account %>">复制</a>
                             </td>
-                            <td class="am-text-middle"><%= orders[i].country %>/<%= orders[i].province %>/<%= orders[i].city %></td>
-                            <td class="am-text-middle"><%= orders[i].gender %></td>
+                            <!--<td class="am-text-middle"><%= orders[i].country %>/<%= orders[i].province %>/<%= orders[i].city %></td>-->
+                            <!--<td class="am-text-middle"><%= orders[i].gender %></td>-->
                             <td class="am-text-middle">
                                 粉丝: <%= orders[i].num %> <br/>
                                 回复: <%= orders[i].num2 %> <br/>
                             </td>
                             <td class="am-text-middle">
                                 <% if(orders[i].replyInfo != undefined && orders[i].replyInfo != ''){ %>
+                                <input type="text" value="<%= orders[i].replyInfo %>" style="width: 56px;"><br/>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                    title="<%= orders[i].replyInfo %>"
                                    data-clipboard-text="<%= orders[i].replyInfo %>">复制</a>
@@ -76,7 +78,7 @@
                                 粉丝: <%= orders[i].fansSpeed %>/分 <br/>
                                 回复: <%= orders[i].speed %>/分
                             </td>
-                            <td class="am-text-middle"><%= orders[i].mode %></td>
+                            <!--<td class="am-text-middle"><%= orders[i].mode %></td>-->
                             <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                             <td class="am-text-middle">
                                 <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
