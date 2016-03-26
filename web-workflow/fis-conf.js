@@ -103,34 +103,41 @@ fis.media('prod')
         useHash: true,
         optimizer: fis.plugin('uglify-js')
     })
+    .match('/static/plugins/**.js', {
+        useHash: false
+    })
     .match('/{src,static}/(**.{css,scss})', {
         useHash: true,
         optimizer: fis.plugin('clean-css'),
         useSprite: true
     })
+    .match('/static/plugins/**.css', {
+        useHash: false
+    })
     .match('/{src,static}/(**.{png,jpg,gif})', {
         useHash: true
     })
-    .match('/src/pages/**.html', {
-        optimizer: fis.plugin('htmlmin', {
-            removeCommentsFromCDATA: true,
-            removeCDATASectionsFromCDATA: true,
-            collapseWhitespace: true,
-            //conservativeCollapse: false,
-            //preserveLineBreaks: false,
-            collapseBooleanAttributes: true,
-            removeEmptyAttributes: true,
-            //removeOptionalTags: true,
-            //removeEmptyElements: true,
-            minifyJS: true,
-            minifyCSS: true
-        })
-    })
+    //.match('/src/pages/**.html', {
+    //    optimizer: fis.plugin('htmlmin', {
+    //        removeCommentsFromCDATA: true,
+    //        //removeCDATASectionsFromCDATA: true,
+    //        //collapseWhitespace: true,
+    //        //conservativeCollapse: false,
+    //        //preserveLineBreaks: false,
+    //        collapseBooleanAttributes: true,
+    //        removeEmptyAttributes: true,
+    //        //removeOptionalTags: true,
+    //        //removeEmptyElements: true,
+    //        //minifyJS: true,
+    //        minifyCSS: true
+    //    })
+    //})
     .match('::packager', {
         postpackager: fis.plugin('loader', {
             allInOne: {
                 css: '/static/pak/${filepath}_aio.css',
-                js: '/static/pak/${filepath}_aio.js'
+                js: '/static/pak/${filepath}_aio.js',
+                ignore: '/static/plugins/**.js'
             },
             useInlineMap: true
         }),

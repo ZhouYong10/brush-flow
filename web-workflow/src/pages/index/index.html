@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-validate="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="description" content="">
@@ -19,8 +19,8 @@
                 <legend><%= title %></legend>
 
                 <div class="am-form-group am-form-group-sm">
-                    <label for="login-username" class="am-u-sm-2 am-form-label"><i class="am-icon-user am-icon-sm"></i> </label>
-                    <div class="am-u-sm-10">
+                    <label for="login-username" class="am-u-sm-1 am-u-lg-2 am-form-label"><i class="am-icon-user am-icon-sm"></i> </label>
+                    <div class="am-u-sm-11 am-u-lg-9 am-u-end">
                         <input type="text" id="login-username" class="am-form-field am-radius"  v-model="username"
                                placeholder="请输入账户名" v-validate:username="{ required: true}">
                         <span class="tips" v-if="$login.username.required">账户名不能为空!</span>
@@ -28,8 +28,8 @@
                 </div>
 
                 <div class="am-form-group am-form-group-sm">
-                    <label for="login-password" class="am-u-sm-2 am-form-label"><i class="am-icon-key am-icon-sm"></i> </label>
-                    <div class="am-u-sm-10">
+                    <label for="login-password" class="am-u-sm-1 am-u-lg-2 am-form-label"><i class="am-icon-key am-icon-sm"></i> </label>
+                    <div class="am-u-sm-11 am-u-lg-9 am-u-end">
                         <input type="password" id="login-password" class="am-form-field am-radius" v-model="password"
                                placeholder="请输入密码" v-validate:password="{ required: true}">
                         <span class="tips" v-if="$login.password.required">密码不能为空!</span>
@@ -37,8 +37,8 @@
                 </div>
 
                 <div class="am-form-group am-form-group-sm">
-                    <label for="login-password" class="am-u-sm-2 am-form-label"><i class="am-icon-refresh am-icon-sm"></i> </label>
-                    <div class="am-u-sm-10 am-g-collapse">
+                    <label for="login-password" class="am-u-sm-1 am-u-lg-2 am-form-label"><i class="am-icon-refresh am-icon-sm"></i> </label>
+                    <div class="am-u-sm-11 am-u-lg-9 am-u-end am-g-collapse">
                         <div class="am-u-sm-5">
                             <input type="text" class="am-form-field am-radius" v-model="securityCode"
                                    placeholder="区分大小写" v-validate:security-code="{ required: true}">
