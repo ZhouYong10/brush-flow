@@ -43,12 +43,8 @@
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <input id="fansNum" class="am-radius am-input-sm" type="text"
                                        placeholder="请填写要提现的支付宝账户，务必核对正确！" name="alipayCount"
-                                       v-validate:alipaycount="{required: true, minlength: 28, maxlength: 32}">
+                                       v-validate:alipaycount="{required: true}">
                                 <span class="tips" v-if="$withdraw.alipaycount.required">支付宝账户不能为空!</span>
-                                <span class="tips"
-                                      v-if="$withdraw.alipaycount.minlength || $withdraw.alipaycount.maxlength">
-                                    请输入合法的支付宝交易号!
-                                </span>
                             </div>
                         </div>
 

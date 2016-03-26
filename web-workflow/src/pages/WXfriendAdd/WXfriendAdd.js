@@ -21,7 +21,7 @@ new Vue({
     },
     validators: {
         isnum: Utils.isNum,
-        min100: Utils.min100,
+        min1000: Utils.min1000,
         maxprice: function(num) {
             return parseFloat(this.myPrice * num) <= parseFloat(this.funds);
         }

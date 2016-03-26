@@ -54,12 +54,12 @@
                     <div class="am-form-group">
                         <label for="fansNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>粉丝数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="fansNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的粉丝数量，最低100起"
-                            v-validate:num="{required: true, isnum: true, min100: true, maxprice: true}"
+                            <input id="fansNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的粉丝数量，最低1000起"
+                            v-validate:num="{required: true, isnum: true, min1000: true, maxprice: true}"
                                    name="num" v-model="num" v-on:keyup="total" v-on:change="total">
                             <span class="tips" v-if="$wxFans.num.required">需要添加的粉丝数量不能为空!</span>
                             <span class="tips" v-if="$wxFans.num.isnum">数量必须为正整数!</span>
-                            <span class="tips" v-if="$wxFans.num.min100">需要增加的粉丝数量，最低100起!</span>
+                            <span class="tips" v-if="$wxFans.num.min1000">需要增加的粉丝数量，最低1000起!</span>
                         </div>
                     </div>
 
@@ -82,51 +82,51 @@
                         </div>
                     </div>
 
-                    <div class="am-form-group">
-                        <label for="fansType" class="am-u-sm-4 am-u-lg-2 am-form-label">指定模式</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="fansType" class="am-radius am-input-sm" name="mode">
-                                <option value="">-- 选择模式 --</option>
-                                <option value="宽松匹配">宽松匹配</option>
-                            </select>
-                        </div>
-                    </div>
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="fansType" class="am-u-sm-4 am-u-lg-2 am-form-label">指定模式</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<select id="fansType" class="am-radius am-input-sm" name="mode">-->
+                                <!--<option value="">&#45;&#45; 选择模式 &#45;&#45;</option>-->
+                                <!--<option value="宽松匹配">宽松匹配</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="am-form-group">
-                        <label for="s1" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝国家</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="s1" class="am-radius am-input-sm" name="country"></select>
-                        </div>
-                    </div>
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="s1" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝国家</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<select id="s1" class="am-radius am-input-sm" name="country"></select>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="am-form-group">
-                        <label for="s2" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝省份</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="s2" class="am-radius am-input-sm" name="province"></select>
-                        </div>
-                    </div>
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="s2" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝省份</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<select id="s2" class="am-radius am-input-sm" name="province"></select>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="am-form-group">
-                        <label for="s3" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝城市</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <select id="s3" class="am-radius am-input-sm" name="city"></select>
-                        </div>
-                    </div>
+                    <!--<div class="am-form-group">-->
+                        <!--<label for="s3" class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝城市</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<select id="s3" class="am-radius am-input-sm" name="city"></select>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝性别</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <label class="am-radio-inline">
-                                <input type="radio"  value="随机" name="gender" checked> 随机
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio"  value="男" name="gender"> 男
-                            </label>
-                            <label class="am-radio-inline">
-                                <input type="radio" value="女" name="gender"> 女
-                            </label>
-                        </div>
-                    </div>
+                    <!--<div class="am-form-group">-->
+                        <!--<label class="am-u-sm-4 am-u-lg-2 am-form-label">粉丝性别</label>-->
+                        <!--<div class="am-u-sm-8 am-u-lg-10">-->
+                            <!--<label class="am-radio-inline">-->
+                                <!--<input type="radio"  value="随机" name="gender" checked> 随机-->
+                            <!--</label>-->
+                            <!--<label class="am-radio-inline">-->
+                                <!--<input type="radio"  value="男" name="gender"> 男-->
+                            <!--</label>-->
+                            <!--<label class="am-radio-inline">-->
+                                <!--<input type="radio" value="女" name="gender"> 女-->
+                            <!--</label>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
                     <!--<div class="am-form-group">-->
                         <!--<label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划时间</label>-->
@@ -171,13 +171,13 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
-<script src="/static/js/city.js"></script>
+<!--<script src="/static/js/city.js"></script>-->
 <script src="/static/plugins/laydate/laydate.js"></script>
 
 
 <script>
     require('WXfriendAdd');
-    init();
+//    init();
 </script>
 
 </body>

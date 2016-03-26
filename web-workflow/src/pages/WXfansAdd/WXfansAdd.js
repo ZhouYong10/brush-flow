@@ -23,7 +23,7 @@ new Vue({
     },
     validators: {
         isnum: Utils.isNum,
-        min20: Utils.min20,
+        min100: Utils.min100,
         maxprice: function() {
             return parseFloat(this.fansPrice * this.num + this.replyPrice * this.replyNum) <= parseFloat(this.funds);
         },

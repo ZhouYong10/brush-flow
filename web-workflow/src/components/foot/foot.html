@@ -11,3 +11,13 @@
 <script src="/static/js/amazeui.js"></script>
 
 <script src="/static/js/mod.js"></script>
+
+<script>
+    $(function() {
+        $('.develop').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            alert('开发维护中，敬请期待！！！');
+        });
+    })
+</script>
