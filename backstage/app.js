@@ -4,7 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var ccap = require('ccap')();
+var ccapOld = require('ccap')();
+var ccap = require('ccap')({
+  width: 216,
+  height: 76,
+  offset: 56,
+  quality: 28,
+  fontsize: 56,
+  generate: function() {
+    return ccapOld.get()[0].substr(0, 4);
+  }
+});
 var moment = require('moment');
 var bcrypt = require('bcryptjs');
 
