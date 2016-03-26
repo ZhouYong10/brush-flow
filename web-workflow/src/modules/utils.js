@@ -57,7 +57,7 @@ module.exports = {
         });
     },
     isNum: function(val) {
-        if(val == ''){
+        if(val == '' || val == 0){
             return true;
         }else{
             return /^[0-9]*[1-9][0-9]*$/.test(val);
