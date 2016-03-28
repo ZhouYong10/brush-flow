@@ -68,18 +68,32 @@ module.exports = {
         return new Promise(function(resolve, reject) {
             haveCollection(function () {
                 collection.count(userObj, function(err, total) {
-                    collection.find(userObj, {
-                        skip: ((page ? page : 1) - 1) * pageCont,
-                        limit: (page ? pageCont : 0)
-                    }).toArray(function (error, result) {
-                        if (error) {
-                            reject(error);
-                        }
-                        resolve({
-                            results: result,
-                            pages: parseInt(total / pageCont) + ((total % pageCont > 0) ? 1 : 0)
+                    collection.find(userObj)
+                        .sort({'_id': -1})
+                        .skip(((page ? page : 1) - 1) * pageCont)
+                        .limit((page ? pageCont : 0))
+                        .toArray(function (error, result) {
+                            if (error) {
+                                reject(error);
+                            }
+                            resolve({
+                                results: result,
+                                pages: parseInt(total / pageCont) + ((total % pageCont > 0) ? 1 : 0)
+                            });
                         });
-                    })
+
+                    //collection.find(userObj, {
+                    //    skip: ((page ? page : 1) - 1) * pageCont,
+                    //    limit: (page ? pageCont : 0)
+                    //}).toArray(function (error, result) {
+                    //    if (error) {
+                    //        reject(error);
+                    //    }
+                    //    resolve({
+                    //        results: result,
+                    //        pages: parseInt(total / pageCont) + ((total % pageCont > 0) ? 1 : 0)
+                    //    });
+                    //})
                 })
             }, reject);
         })
