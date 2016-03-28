@@ -169,7 +169,7 @@ router.post('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSaveTwo(user, {type: 'wx', smallType: 'fans'}, {type: 'wx', smallType: 'fansReply'})
+            order.createAndSave(user, {type: 'wx', smallType: 'fans'})
                 .then(function () {
                     socketIO.emit('updateNav', {'wxReply': 1});
                     res.redirect('/wx/fans');

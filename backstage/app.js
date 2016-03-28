@@ -4,8 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var ccapOld = require('ccap')();
-var ccap = require('ccap')({
+var CCAP = require('ccap');
+var ccapOld = CCAP();
+var ccap = CCAP({
   width: 216,
   height: 76,
   offset: 56,
