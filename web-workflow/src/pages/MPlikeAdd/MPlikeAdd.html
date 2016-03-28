@@ -70,12 +70,12 @@
                     <div class="am-form-group">
                         <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的任务数量,最少100起."
+                            <input id="readNum" class="am-radius am-input-sm" type="text" placeholder="需要增加的任务数量,最少1000起."
                                    v-on:keyup="total" v-on:change="total" v-model="num" name="num"
-                                   v-validate:num="{required: true, min100: true, isnum: true, maxprice: true}">
+                                   v-validate:num="{required: true, min1000: true, isnum: true, maxprice: true}">
                             <span class="tips" v-if="$mplike.num.required">需要添加的阅读数量不能为空!</span>
                             <span class="tips" v-if="$mplike.num.isnum">数量必须为正整数!</span>
-                            <span class="tips" v-if="$mplike.num.min100">数量最低100起!</span>
+                            <span class="tips" v-if="$mplike.num.min1000">数量最低1000起!</span>
                         </div>
                     </div>
 

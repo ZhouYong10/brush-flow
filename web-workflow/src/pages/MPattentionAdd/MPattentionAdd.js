@@ -36,7 +36,7 @@ new Vue({
             return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(val);
         },
         isnum: Utils.isNum,
-        min100: Utils.min100,
+        min1000: Utils.min1000,
         maxprice: function() {
             return parseFloat(this.price * this.num) <= parseFloat(this.funds);
         }
