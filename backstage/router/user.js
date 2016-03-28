@@ -82,7 +82,7 @@ router.get('/recharge/history', function (req, res) {
                     res.render('rechargeHistory', {
                         title: '充值记录',
                         money: user.funds,
-                        recharges: obj.results.reverse(),
+                        recharges: obj.results,
                         pages: obj.pages,
                         username: user.username,
                         userStatus: user.status,
@@ -109,7 +109,7 @@ router.get('/search/recharge', function (req, res) {
                     res.render('rechargeHistory', {
                         title: '充值记录',
                         money: user.funds,
-                        recharges: obj.results.reverse(),
+                        recharges: obj.results,
                         pages: obj.pages,
                         username: user.username,
                         userStatus: user.status,
@@ -135,7 +135,7 @@ router.get('/consume/history', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages
                     })
                 })
@@ -157,7 +157,7 @@ router.get('/search/consume', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages
                     })
                 })
@@ -320,7 +320,7 @@ router.get('/lowerUser', function (req, res) {
                         res.render('lowerUser', {
                             title: '我的下级用户',
                             money: parent.funds,
-                            users: obj.results.reverse(),
+                            users: obj.results,
                             pages: obj.pages,
                             username: parent.username,
                             userStatus: parent.status,
@@ -362,7 +362,7 @@ router.get('/feedback', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        feedbacks: obj.results.reverse(),
+                        feedbacks: obj.results,
                         pages: obj.pages
                     });
                 }, function (error) {
@@ -410,7 +410,7 @@ router.get('/withdraw', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        withdraws: obj.results.reverse(),
+                        withdraws: obj.results,
                         pages: obj.pages
                     });
                 })
@@ -452,7 +452,7 @@ router.get('/errorSummary', function (req, res) {
                     username: user.username,
                     userStatus: user.status,
                     role: user.role,
-                    orders: obj.results.reverse(),
+                    orders: obj.results,
                     pages: obj.pages
                 });
             });
@@ -478,7 +478,7 @@ router.get('/search/error', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages
                     });
                 });

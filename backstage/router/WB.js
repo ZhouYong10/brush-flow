@@ -20,7 +20,7 @@ router.get('/like', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WB/like'
                     })
@@ -45,7 +45,7 @@ router.get('/task/search/like', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WB/like'
                     })
@@ -98,7 +98,7 @@ router.get('/vote', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WB/vote'
                     })
@@ -123,7 +123,7 @@ router.get('/task/search/vote', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WB/vote'
                     })
@@ -180,7 +180,7 @@ router.get('/fans', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WB/fans'
                     })
@@ -205,7 +205,7 @@ router.get('/task/search/fans', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WB/fans'
                     })
@@ -268,7 +268,7 @@ router.get('/forward', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WB/forward'
                     })
@@ -293,7 +293,7 @@ router.get('/task/search/forward', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WB/forward'
                     })

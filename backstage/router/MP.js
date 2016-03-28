@@ -19,7 +19,7 @@ router.get('/like', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/MP/like'
                     })
@@ -44,7 +44,7 @@ router.get('/task/search/like', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/MP/like'
                     })
@@ -97,7 +97,7 @@ router.get('/comment', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/MP/comment'
                     })
@@ -122,7 +122,7 @@ router.get('/task/search/comment', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/MP/comment'
                     })
@@ -175,7 +175,7 @@ router.get('/attention', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/MP/attention'
                     })
@@ -200,7 +200,7 @@ router.get('/task/search/attention', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/MP/attention'
                     })
@@ -253,7 +253,7 @@ router.get('/forward', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/MP/forward'
                     })
@@ -278,7 +278,7 @@ router.get('/task/search/forward', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/MP/forward'
                     })

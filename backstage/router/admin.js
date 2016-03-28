@@ -47,7 +47,7 @@ router.get('/home', function (req, res) {
             res.render('adminHome', {
                 title: '管理员公告',
                 money: 10.01,
-                placards: obj.results.reverse(),
+                placards: obj.results,
                 pages: obj.pages
             });
         }, function (error) {
@@ -142,7 +142,7 @@ router.get('/recharge/history', function (req, res) {
             res.render('adminRechargeHistory', {
                 title: '资金管理 / 充值记录',
                 money: 10.01,
-                recharges: obj.results.reverse(),
+                recharges: obj.results,
                 pages: obj.pages
             });
         }, function(error) {
@@ -156,7 +156,7 @@ router.get('/withdraw/wait', function (req, res) {
             res.render('adminWithdrawWait', {
                 title: '资金管理 / 提现管理 / 待处理',
                 money: 10.01,
-                withdraws: obj.results.reverse(),
+                withdraws: obj.results,
                 pages: obj.pages,
                 path: '/admin/withdraw/wait'
             });
@@ -169,7 +169,7 @@ router.get('/withdraw/already', function (req, res) {
             res.render('adminWithdrawAlre', {
                 title: '资金管理 / 提现管理 / 已处理',
                 money: 10.01,
-                withdraws: obj.results.reverse(),
+                withdraws: obj.results,
                 pages: obj.pages,
                 path: '/admin/withdraw/already'
             });
@@ -299,7 +299,7 @@ router.get('/price/forum', function (req, res) {
             res.render('adminPriceForum', {
                 title: '价格&状态管理 / 论坛模块',
                 money: 10.01,
-                products: obj.results.reverse(),
+                products: obj.results,
                 pages: obj.pages
             });
         });
@@ -368,7 +368,7 @@ router.get('/price/flow', function (req, res) {
             res.render('adminPriceFlow', {
                 title: '价格&状态管理 / 流量模块',
                 money: 10.01,
-                products: obj.results.reverse(),
+                products: obj.results,
                 pages: obj.pages
             });
         });
@@ -404,7 +404,7 @@ router.get('/price/WX/MP/WB', function (req, res) {
             res.render('adminPriceWXMPWB', {
                 title: '价格&状态管理 / 微信、美拍、微博',
                 money: 10.01,
-                products: obj.results.reverse(),
+                products: obj.results,
                 pages: obj.pages
             });
         });
@@ -461,7 +461,7 @@ router.get('/placard/history', function (req, res) {
             res.render('adminPlacardHistory', {
                 title: '公告管理 / 历史公告',
                 money: 10.01,
-                placards: obj.results.reverse(),
+                placards: obj.results,
                 pages: obj.pages
             });
         }, function (error) {
@@ -567,7 +567,7 @@ router.get('/WX/article/wait', function (req, res) {
             res.render('adminWXarticleWait', {
                 title: '微信任务管理 / 待处理微信原文任务',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/article/wait'
             });
@@ -584,7 +584,7 @@ router.get('/WX/article/already', function (req, res) {
             res.render('adminWXarticleAlre', {
                 title: '微信任务管理 / 已处理微信原文任务',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/article/already'
             });
@@ -601,7 +601,7 @@ router.get('/WX/like/wait', function (req, res) {
             res.render('adminWXlikeWait', {
                 title: '微信任务管理 / 待处理微信阅读点赞任务',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/like/wait'
             });
@@ -618,7 +618,7 @@ router.get('/WX/like/already', function (req, res) {
             res.render('adminWXlikeAlre', {
                 title: '微信任务管理 / 已处理微信阅读点赞任务',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/like/already'
             });
@@ -635,7 +635,7 @@ router.get('/WX/reply/wait', function (req, res) {
             res.render('adminWXreplyWait', {
                 title: '微信任务管理 / 待处理公众粉丝回复任务',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/reply/wait'
             });
@@ -652,7 +652,7 @@ router.get('/WX/reply/already', function (req, res) {
             res.render('adminWXreplyAlre', {
                 title: '微信任务管理 / 已处理公众粉丝回复任务',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/reply/already'
             });
@@ -669,7 +669,7 @@ router.get('/WX/friend/wait', function (req, res) {
             res.render('adminWXfriendWait', {
                 title: '微信任务管理 / 待处理微信个人好友任务',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/friend/wait'
             });
@@ -686,7 +686,7 @@ router.get('/WX/friend/already', function (req, res) {
             res.render('adminWXfriendAlre', {
                 title: '微信任务管理 / 已处理微信个人好友任务',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/friend/already'
             });
@@ -713,7 +713,7 @@ router.get('/MP/wait', function (req, res) {
             res.render('adminMPWait', {
                 title: '美拍任务管理 / 待处理订单',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/MP/wait'
             });
@@ -730,7 +730,7 @@ router.get('/MP/already', function (req, res) {
             res.render('adminMPAlre', {
                 title: '美拍任务管理 / 已处理订单',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/MP/already'
             });
@@ -748,7 +748,7 @@ router.get('/WB/wait', function (req, res) {
             res.render('adminWBWait', {
                 title: '微博任务管理 / 待处理订单',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WB/wait'
             });
@@ -764,7 +764,7 @@ router.get('/WB/already', function (req, res) {
             res.render('adminWBAlre', {
                 title: '微博任务管理 / 已处理订单',
                 money: 10.01,
-                orders: obj.results.reverse(),
+                orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WB/already'
             });
@@ -779,7 +779,7 @@ router.get('/error/wait', function (req, res) {
         res.render('adminErrorWait', {
             title: '错误信息管理 / 待处理错误报告',
             money: 10.01,
-            orders: obj.results.reverse(),
+            orders: obj.results,
             pages: obj.pages,
             path: '/admin/error/wait'
         });
@@ -792,7 +792,7 @@ router.get('/error/already', function (req, res) {
         res.render('adminErrorAlre', {
             title: '错误信息管理 / 待处理错误报告',
             money: 10.01,
-            orders: obj.results.reverse(),
+            orders: obj.results,
             pages: obj.pages,
             path: '/admin/error/already'
         })
@@ -809,7 +809,7 @@ router.get('/feedback/wait', function (req, res) {
         res.render('adminFeedbackWait', {
             title: '问题反馈信息管理 / 待处理问题反馈信息',
             money: 10.01,
-            feedbacks: obj.results.reverse(),
+            feedbacks: obj.results,
             pages: obj.pages
         });
     })
@@ -829,7 +829,7 @@ router.get('/feedback/already', function (req, res) {
         res.render('adminFeedbackAlre', {
             title: '问题反馈信息管理 / 已处理问题反馈信息',
             money: 10.01,
-            feedbacks: obj.results.reverse(),
+            feedbacks: obj.results,
             pages: obj.pages
         });
     });

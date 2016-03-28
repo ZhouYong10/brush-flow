@@ -25,7 +25,7 @@ router.get('/friend', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WX/friend'
                     })
@@ -50,7 +50,7 @@ router.get('/account/search/friend', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WX/friend'
                     })
@@ -107,7 +107,7 @@ router.get('/fans', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WX/fans'
                     })
@@ -132,7 +132,7 @@ router.get('/account/search/fans', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WX/fans'
                     })
@@ -195,7 +195,7 @@ router.get('/share', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WX/share'
                     });
@@ -220,7 +220,7 @@ router.get('/account/search/share', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WX/share'
                     });
@@ -284,7 +284,7 @@ router.get('/like', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WX/like'
                     })
@@ -309,7 +309,7 @@ router.get('/account/search/like', function (req, res) {
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
-                        orders: obj.results.reverse(),
+                        orders: obj.results,
                         pages: obj.pages,
                         path: '/WX/like'
                     })
