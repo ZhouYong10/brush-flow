@@ -78,6 +78,17 @@ User.extend({
                 }
             })
         })
+    },
+    resetPassword: function(id) {
+       return new Promise(function(resolve) {
+           User.open().updateById(id, {
+               $set: {
+                   password: bcrypt.hashSync('123456', bcrypt.genSaltSync(10))
+               }
+           }).then(function() {
+               resolve();
+           })
+       })
     }
 });
 

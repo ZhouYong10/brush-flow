@@ -246,6 +246,14 @@ router.post('/manage/user/edit', function(req, res) {
         });
 });
 
+router.get('/user/edit/reset/password', function (req, res) {
+    console.log(req.query.id,'================================');
+    User.resetPassword(req.query.id)
+        .then(function() {
+            res.end();
+        })
+});
+
 router.get('/manage/user/del', function(req, res) {
     User.removeUser(req.query.id).then(function () {
         res.redirect('/admin/manage/user');

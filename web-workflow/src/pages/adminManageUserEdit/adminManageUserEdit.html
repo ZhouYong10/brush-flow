@@ -38,6 +38,12 @@
                             </div>
                         </div>
                         <div class="am-form-group">
+                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">密码</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <button class="am-btn am-btn-primary am-radius am-btn-xs" id="resetPassword">重置</button>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
                             <label class="am-u-sm-4 am-u-lg-2 am-form-label">账户余额</label>
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <p class="disable">￥ <%= user.funds %></p>
@@ -127,10 +133,11 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 
 <script>
     require('adminMenuContent');
-    require('adminManageUserAdd');
+    require('adminManageUserEdit');
 </script>
 
 </body>
