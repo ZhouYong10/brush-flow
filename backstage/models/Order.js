@@ -27,7 +27,7 @@ Order.extend({
             var order = orders[i];
             if(order.status == '已处理'){
                 var dealTime = order.dealTime, num = order.num,
-                    delay = 3 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
+                    delay = 0 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
                 var allTimes = (parseInt(num / speed) + ((num % speed == 0) ? 0 : 1)) * 60 * 1000;
                 var currentTimes = new Date().getTime() - new Date(dealTime).getTime() - delay;
 
@@ -253,6 +253,7 @@ Order.include({
     refund: function(info, callback) {
         var self = this;
         self.status = '已退款';
+        self.error = '已处理';
         self.refundInfo = info;
         Order.open().updateById(self._id, self)
             .then(function () {
