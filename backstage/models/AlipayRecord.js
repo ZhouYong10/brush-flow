@@ -4,6 +4,7 @@
 var db = require('../dbWrap');
 var Class = require('./Class');
 
+var moment = require('moment');
 
 
 var AlipayRecord = new Class();
@@ -11,9 +12,22 @@ var AlipayRecord = new Class();
 
 AlipayRecord.extend(db);
 
-AlipayRecord.open = function() {
-    return AlipayRecord.openCollection('AlipayRecord');
-};
+
+AlipayRecord.extend({
+    open: function() {
+        return AlipayRecord.openCollection('AlipayRecord');
+    },
+    record: function(record) {
+        return new Promise(function(resolve, reject) {
+            record.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+            AlipayRecord.open().insert(record)
+                .then(function(result) {
+                    resolve(result);
+                })
+        })
+    }
+});
+
 
 AlipayRecord.include({
 

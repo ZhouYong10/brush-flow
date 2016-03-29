@@ -91,8 +91,28 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-app.get('/user/recharge', function (req, res) {
+var AlipayRecord = require('./models/AlipayRecord');
+var Recharge = require('./models/Recharge');
+app.get('/auto/recharge', function (req, res) {
+  var ALIPAY_AUTH_KEY = 'zhouyong';
+  var caseValue = req.query.a;
+  switch (caseValue) {
+    case "getsn":
+      AlipayRecord.open().find()
+          .then(function (results) {
+            var alipayIds = [];
+            for (var i in results) {
+              var result = results[i];
+              alipayIds.push(result.alipayId);
+            }
+            var sendStr = 'id:' + alipayIds.join(',');
+            res.end(sendStr);
+          });
+      break;
+    case "report":
 
+      break;
+  }
   //var key = req.query.key;
   //console.log(key, '--------------------------------');
   //var alipay = {
