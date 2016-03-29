@@ -92,15 +92,17 @@ app.use(passport.session());
 
 
 app.get('/user/recharge', function (req, res) {
-  var key = req.query.key;
-  console.log(key, '--------------------------------');
-  var alipay = {
-    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-    orderNum: req.query.tradeno,
-    name: req.query.name,
-    funds: req.query.money
-  };
-  console.log(alipay, '===========================================');
+
+  //var key = req.query.key;
+  //console.log(key, '--------------------------------');
+  //var alipay = {
+  //  createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+  //  orderNum: req.query.tradeno,
+  //  name: req.query.name,
+  //  funds: req.query.money
+  //};
+  console.log(req.query, 'req.query  ===========================================');
+  console.log(req.body, 'req.body    ===========================================');
   res.end('1');
 });
 
