@@ -44,9 +44,10 @@
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">账户余额</label>
+                            <label for="funds" class="am-u-sm-4 am-u-lg-2 am-form-label">账户余额</label>
                             <div class="am-u-sm-8 am-u-lg-10">
-                                <p class="disable">￥ <%= user.funds %></p>
+                                <!--<p class="disable">￥ <%= user.funds %></p>-->
+                                <input class="am-radius am-input-sm" type="text" id="funds" name="funds" value="<%= user.funds %>">
                             </div>
                         </div>
                         <div class="am-form-group">
@@ -61,16 +62,11 @@
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="role" class="am-u-sm-4 am-u-lg-2 am-form-label">
+                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">
                                 等级
                             </label>
                             <div class="am-u-sm-8 am-u-lg-10">
-                                <select id="role" class="am-radius am-input-sm" name="role">
-                                    <option value="管理员" <% if(user.role === '管理员'){ %> selected <% } %>>管理员</option>
-                                    <option value="顶级代理" <% if(user.role === '顶级代理'){ %> selected <% } %>>顶级代理</option>
-                                    <option value="超级代理" <% if(user.role === '超级代理'){ %> selected <% } %>>超级代理</option>
-                                    <option value="金牌代理" <% if(user.role === '金牌代理'){ %> selected <% } %>>金牌代理</option>
-                                </select>
+                                <p class="disable"><%= user.role %></p>
                             </div>
                         </div>
                         <div class="am-form-group">
