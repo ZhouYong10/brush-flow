@@ -5,32 +5,23 @@ var Vue = require('vue');
 Vue.use(require('vue-validator'));
 Vue.use(require('vue-resource'));
 
+
 new Vue({
     el: '#recharge',
     data: {
         num: ''
+    },
+    methods: {
+        commit: function() {
+            console.log(this.num);
+            this.$http.post('/user/recharge', {
+                alipayId: this.num
+            }).then(function(res) {
+                layer.msg(res.data.message);
+                if(res.data.isOK) {
+                    this.num = '';
+                }
+            });
+        }
     }
 });
-
-
-
-//new Vue({
-//    el: '#recharge',
-//    data: {
-//        num: ''
-//    },
-//    methods: {
-//        commit: function() {
-//            console.log(this.num);
-//            this.$http.post('/user/recharge', {
-//                orderNum: this.num
-//            }).then(function(res) {
-//                if(res.data.isOK) {
-//                    $('<a href="' + res.data.path + '" ></a>').get(0).click();
-//                }else{
-//                    layer.msg(res.data.message);
-//                }
-//            });
-//        }
-//    }
-//});

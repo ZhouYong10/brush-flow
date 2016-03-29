@@ -26,15 +26,27 @@ router.get('/recharge', function (req, res) {
 
 router.post('/recharge', function (req, res) {
     var alipayInfo = req.body;
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            alipayInfo.username = user.username;
-            alipayInfo.userId = user._id;
-            AlipayRecord.record(alipayInfo)
-                .then(function(record) {
-                    console.log(record, '=================================');
-                    res.redirect('/user/recharge');
-                })
+    AlipayRecord.open().findOne({alipayId: alipayInfo.alipayId})
+        .then(function (result) {
+            if (result) {
+                res.send({
+                    isOK: false,
+                    message: '该交易号已充值成功，不能重复充值！'
+                });
+            } else {
+                User.open().findById(req.session.passport.user)
+                    .then(function (user) {
+                        alipayInfo.username = user.username;
+                        alipayInfo.userId = user._id;
+                        AlipayRecord.record(alipayInfo)
+                            .then(function(record) {
+                                res.send({
+                                    isOK: true,
+                                    message: '系统正在充值，请稍后...'
+                                });
+                            })
+                    });
+            }
         });
 });
 

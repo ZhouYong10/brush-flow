@@ -93,10 +93,12 @@ app.use(passport.session());
 
 var AlipayRecord = require('./models/AlipayRecord');
 var Recharge = require('./models/Recharge');
+var MD5 = require('md5');
 app.get('/auto/recharge', function (req, res) {
   console.log(req.query, 'req.query  ===========================================');
   console.log(req.body, 'req.body    ===========================================');
-  var ALIPAY_AUTH_KEY = 'zhouyong';
+  var ALIPAY_AUTH_KEY = MD5('c7a4ec69faed7e1a99c9752d6b5a21a9');
+  console.log(ALIPAY_AUTH_KEY, '            00000000000000000');
   var caseValue = req.query.a;
   switch (caseValue) {
     case "getsn":

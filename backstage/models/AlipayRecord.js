@@ -20,6 +20,7 @@ AlipayRecord.extend({
     record: function(record) {
         return new Promise(function(resolve, reject) {
             record.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+            record.isRecharge = false;
             AlipayRecord.open().insert(record)
                 .then(function(result) {
                     resolve(result);
