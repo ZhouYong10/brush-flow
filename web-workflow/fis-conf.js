@@ -29,6 +29,7 @@ fis.match('/{src,static,test,mock}/**.es6', {
 });
 
 fis.match('/{src,static}/(**.{js,es6})', {
+    optimizer: fis.plugin('uglify-js'),
     release: '/static/js/$1'
 });
 
@@ -45,6 +46,7 @@ fis.match('/{src,static}/**.scss', {
 });
 
 fis.match('/{src,static}/(**.{css,scss})', {
+    optimizer: fis.plugin('clean-css'),
     postprocessor: fis.plugin('autoprefixer', {
         "browsers": ["last 30 versions"],
         "cascade": true,
