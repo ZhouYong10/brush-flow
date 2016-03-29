@@ -94,6 +94,8 @@ app.use(passport.session());
 var AlipayRecord = require('./models/AlipayRecord');
 var Recharge = require('./models/Recharge');
 app.get('/auto/recharge', function (req, res) {
+  console.log(req.query, 'req.query  ===========================================');
+  console.log(req.body, 'req.body    ===========================================');
   var ALIPAY_AUTH_KEY = 'zhouyong';
   var caseValue = req.query.a;
   switch (caseValue) {
@@ -106,11 +108,12 @@ app.get('/auto/recharge', function (req, res) {
               alipayIds.push(result.alipayId);
             }
             var sendStr = 'id:' + alipayIds.join(',');
-            res.end(sendStr);
+            console.log(sendStr, 'sendStr ---------------------------');
+            res.send(sendStr);
           });
       break;
     case "report":
-
+      console.log('report,----------------------------------------');
       break;
   }
   //var key = req.query.key;
@@ -121,9 +124,9 @@ app.get('/auto/recharge', function (req, res) {
   //  name: req.query.name,
   //  funds: req.query.money
   //};
-  console.log(req.query, 'req.query  ===========================================');
-  console.log(req.body, 'req.body    ===========================================');
-  res.end('1');
+  //console.log(req.query, 'req.query  ===========================================');
+  //console.log(req.body, 'req.body    ===========================================');
+  //res.end('1');
 });
 
 app.get('/', function (req, res) {
