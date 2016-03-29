@@ -39,11 +39,13 @@ Recharge.extend({
                         alipayIds.push(result.alipayId);
                     }
                     var sendStr = 'id:' + alipayIds.join(',');
+                    console.log(sendStr, 'sendStr------------------------------');
                     resolve(sendStr);
                 });
         })
     },
     updateRecord: function(result) {
+        console.log(result, 'result  ------------------------------');
         return new Promise(function(resolve, reject) {
             var ALIPAY_AUTH_KEY = 'c7a4ec69faed7e1a99c9752d6b5a21a9';
             /*
@@ -64,6 +66,7 @@ Recharge.extend({
                                 status: '失败'
                             }
                         }).then(function () {
+                            console.log('NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN');
                             resolve();
                         });
                         break;
@@ -74,13 +77,16 @@ Recharge.extend({
                                 status: '失败'
                             }
                         }).then(function () {
+                            console.log('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
                             resolve();
                         });
                         break;
                     case "S":
                         Recharge.open().findOne({alipayId: aliplayId})
                             .then(function (record) {
+                                console.log(record, 'record  ===================================');
                                 if(record.isRecharge) {
+                                    console.log('已经充值过了还来，滚犊子...');
                                     resolve('已经充值过了还来，滚犊子...');
                                 }else {
                                     Recharge.open().updateById(record._id, {
@@ -94,11 +100,13 @@ Recharge.extend({
                                         User.open().findById(record.userId)
                                             .then(function (user) {
                                                 var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                                                console.log(fundsNow, 'fundsNow  -------------------------------');
                                                 User.open().updateById(user._id, {
                                                     $set: {
                                                         funds: fundsNow
                                                     }
                                                 }).then(function () {
+                                                    console.log('充值成功了，哈哈哈哈哈哈');
                                                     resolve();
                                                 });
                                             });
