@@ -288,6 +288,7 @@ router.get('/addLowerUser', function (req, res) {
 
 router.post('/addLowerUser', function (req, res) {
     var userInfo = req.body;
+    userInfo.username = userInfo.username.replace(/(^\s*)|(\s*$)/g, "");
     User.open().findById(req.session.passport.user)
         .then(function (result) {
             var parent = User.wrapToInstance(result);

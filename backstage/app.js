@@ -44,7 +44,8 @@ passport.use(new LocalStrategy({
   usernameField: 'username' ,
   passwordField: 'password',
   passReqToCallback: true
-}, function(req, username, password, done) {
+}, function(req, uname, password, done) {
+  var username = uname.replace(/(^\s*)|(\s*$)/g, "");
   //判断验证码
   if(req.body.securityCode != req.session.securityCode.toLowerCase()) {
     return done(null, false, '验证码错误！');
@@ -90,6 +91,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+app.get('/user/recharge', function (req, res) {
+  console.log(req.query, '============================');
+  res.end('1');
+});
 
 app.get('/', function (req, res) {
   res.render('index', {title: '用户登陆'});

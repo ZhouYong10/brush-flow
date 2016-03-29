@@ -24,6 +24,7 @@ Object.defineProperty(global, 'logoDir', {
     configurable: false
 });
 
+
 //拦截非管理员登录
 router.use(function(req, res, next) {
     User.open().findById(req.session.passport.user)
@@ -247,7 +248,6 @@ router.post('/manage/user/edit', function(req, res) {
 });
 
 router.get('/user/edit/reset/password', function (req, res) {
-    console.log(req.query.id,'================================');
     User.resetPassword(req.query.id)
         .then(function() {
             res.end();
@@ -266,6 +266,7 @@ router.get('/manage/user/add', function (req, res) {
 
 router.post('/manage/user/add', function (req, res) {
     var userInfo = req.body;
+    userInfo.username = userInfo.username.replace(/(^\s*)|(\s*$)/g, "");
     User.open().findById(req.session.passport.user)
         .then(function(result) {
             var parent = User.wrapToInstance(result);
