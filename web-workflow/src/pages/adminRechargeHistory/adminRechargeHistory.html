@@ -44,9 +44,11 @@
                         <tr>
                             <td  class="am-text-middle"><%= i + 1 %></td>
                             <td  class="am-text-middle"><%= recharges[i].username %></td>
-                            <td  class="am-text-middle"><%= recharges[i].time %></td>
-                            <td  class="am-text-middle"><%= recharges[i].orderNum %></td>
+                            <td  class="am-text-middle"><%= recharges[i].createTime %></td>
+                            <td  class="am-text-middle"><%= recharges[i].alipayId %></td>
                             <td  class="am-text-middle">￥ <%= recharges[i].funds %></td>
+                            <td  class="am-text-middle">￥ <%= recharges[i].status %></td>
+                            <td  class="am-text-middle">￥ <%= recharges[i].dec %></td>
                         </tr>
                         <% } %>
 
