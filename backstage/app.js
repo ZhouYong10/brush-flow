@@ -91,45 +91,23 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-var AlipayRecord = require('./models/AlipayRecord');
 var Recharge = require('./models/Recharge');
-var MD5 = require('md5');
 app.get('/auto/recharge', function (req, res) {
-  console.log(req.query, 'req.query  ===========================================');
-  console.log(req.body, 'req.body    ===========================================');
-  var ALIPAY_AUTH_KEY = MD5('c7a4ec69faed7e1a99c9752d6b5a21a9');
-  console.log(ALIPAY_AUTH_KEY, '            00000000000000000');
   var caseValue = req.query.a;
   switch (caseValue) {
     case "getsn":
-      AlipayRecord.open().find()
-          .then(function (results) {
-            console.log(results, 'results   ===============================');
-            var alipayIds = [];
-            for (var i = 0, len = results.length; i < len; i++) {
-              var result = results[i];
-              alipayIds.push(result.alipayId);
-            }
-            var sendStr = 'id:' + alipayIds.join(',');
-            console.log(sendStr, 'sendStr ---------------------------');
-            res.send(sendStr);
+      Recharge.getAlipayIds()
+          .then(function (ids) {
+            res.send(ids);
           });
       break;
     case "report":
-      console.log('report,----------------------------------------');
+      Recharge.updateRecord(req.query.result)
+          .then(function (msg) {
+            res.end(msg);
+          });
       break;
   }
-  //var key = req.query.key;
-  //console.log(key, '--------------------------------');
-  //var alipay = {
-  //  createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-  //  orderNum: req.query.tradeno,
-  //  name: req.query.name,
-  //  funds: req.query.money
-  //};
-  //console.log(req.query, 'req.query  ===========================================');
-  //console.log(req.body, 'req.body    ===========================================');
-  //res.end('1');
 });
 
 app.get('/', function (req, res) {

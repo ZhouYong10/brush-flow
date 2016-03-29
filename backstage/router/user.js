@@ -4,7 +4,6 @@
 var User = require('../models/User');
 var Order = require('../models/Order');
 var Feedback = require('../models/Feedback');
-var AlipayRecord = require('../models/AlipayRecord');
 var Recharge = require('../models/Recharge');
 var Withdraw = require('../models/Withdraw');
 var router = require('express').Router();
@@ -26,7 +25,7 @@ router.get('/recharge', function (req, res) {
 
 router.post('/recharge', function (req, res) {
     var alipayInfo = req.body;
-    AlipayRecord.open().findOne({alipayId: alipayInfo.alipayId})
+    Recharge.open().findOne({alipayId: alipayInfo.alipayId})
         .then(function (result) {
             if (result) {
                 res.send({
@@ -38,11 +37,11 @@ router.post('/recharge', function (req, res) {
                     .then(function (user) {
                         alipayInfo.username = user.username;
                         alipayInfo.userId = user._id;
-                        AlipayRecord.record(alipayInfo)
+                        Recharge.record(alipayInfo)
                             .then(function(record) {
                                 res.send({
                                     isOK: true,
-                                    message: '系统正在充值，请稍后...'
+                                    path: '/user/recharge/history'
                                 });
                             })
                     });
@@ -50,60 +49,12 @@ router.post('/recharge', function (req, res) {
         });
 });
 
-//router.post('/recharge', function (req, res) {
-//    User.open().findById(req.session.passport.user)
-//        .then(function (user) {
-//            AlipayRecord.open().findOne(req.body)
-//                .then(function (result) {
-//                    if(result) {
-//                        if(result.status !== 1) {
-//                            Recharge.open().insert({
-//                                username: user.username,
-//                                userId: user._id,
-//                                funds: result.funds,
-//                                time: result.createTime,
-//                                orderNum: result.orderNum
-//                            }).then(function (recharge) {
-//                                var fundsNow = (parseFloat(user.funds) + parseFloat(result.funds)).toFixed(4);
-//                                User.open().updateById(user._id, {$set: {funds: fundsNow}});
-//                                AlipayRecord.open().updateById(result._id, {$set: {status: 1}});
-//                                res.send({
-//                                    isOK: true,
-//                                    path: '/user/recharge/history'
-//                                });
-//                            }, function (error) {
-//                                console.log('充值失败：' + error);
-//                                res.send({
-//                                    isOK: false,
-//                                    message: '充值失败：' + error
-//                                });
-//                            });
-//                        }else {
-//                            res.send({
-//                                isOK: false,
-//                                message: '该交易号已充值成功，能不重复充值！'
-//                            });
-//                        }
-//                    }else {
-//                        res.send({
-//                            isOK: false,
-//                            message: '请核对交易号是否正确！'
-//                        });
-//                    }
-//                }, function (error) {
-//                    console.log('查询交易记录失败：' + error);
-//                    res.send({
-//                        isOK: false,
-//                        message: '查询交易记录失败：' + error
-//                    });
-//                });
-//        });
-//});
-
 router.get('/recharge/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Recharge.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
+            Recharge.open().findPages({
+                userId: user._id
+            }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     res.render('rechargeHistory', {
                         title: '充值记录',

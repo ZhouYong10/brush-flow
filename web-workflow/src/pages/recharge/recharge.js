@@ -17,9 +17,10 @@ new Vue({
             this.$http.post('/user/recharge', {
                 alipayId: this.num
             }).then(function(res) {
-                layer.msg(res.data.message);
                 if(res.data.isOK) {
-                    this.num = '';
+                    $('<a href="' + res.data.path + '" ></a>').get(0).click();
+                }else{
+                    layer.msg(res.data.message);
                 }
             });
         }
