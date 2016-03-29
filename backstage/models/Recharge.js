@@ -47,7 +47,7 @@ Recharge.extend({
     updateRecord: function(result) {
         console.log(result, 'result  ------------------------------');
         return new Promise(function(resolve, reject) {
-            var ALIPAY_AUTH_KEY = 'c7a4ec69faed7e1a99c9752d6b5a21a9';
+            var ALIPAY_AUTH_KEY = '828bb4924f978cb86055afe28930fe58';
             /*
              * 结果的格式中有’N’,’F’,’S’等状态,现在顺带做个说明。
              201304180000100089005XXX6446|N|0         不存在这个交易号
