@@ -102,8 +102,9 @@ app.get('/auto/recharge', function (req, res) {
     case "getsn":
       AlipayRecord.open().find()
           .then(function (results) {
+            console.log(results, 'results   ===============================');
             var alipayIds = [];
-            for (var i in results) {
+            for (var i = 0, len = results.length; i < len; i++) {
               var result = results[i];
               alipayIds.push(result.alipayId);
             }
