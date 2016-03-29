@@ -39,15 +39,12 @@ Recharge.extend({
                         alipayIds.push(result.alipayId);
                     }
                     var sendStr = 'id:' + alipayIds.join(',');
-                    console.log(sendStr, 'sendStr------------------------------');
                     resolve(sendStr);
                 });
         })
     },
     updateRecord: function(result) {
-        console.log(result, 'result  ------------------------------');
         return new Promise(function(resolve, reject) {
-            var ALIPAY_AUTH_KEY = '828bb4924f978cb86055afe28930fe58';
             /*
              * 结果的格式中有’N’,’F’,’S’等状态,现在顺带做个说明。
              201304180000100089005XXX6446|N|0         不存在这个交易号
@@ -56,67 +53,57 @@ Recharge.extend({
              * */
             var checkInfo = result.split('|'), aliplayId = checkInfo[0],
                 status = checkInfo[1], funds = checkInfo[2], key = checkInfo[3];
-            if(key === ALIPAY_AUTH_KEY) {
-                switch (status) {
-                    case "N":
-                        Recharge.open().update({alipayId: aliplayId}, {
-                            $set: {
-                                dec: '交易号不存在，请转账后再充值!',
-                                isRecharge: true,
-                                status: '失败'
-                            }
-                        }).then(function () {
-                            console.log('NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN');
-                            resolve();
-                        });
-                        break;
-                    case "F":
-                        Recharge.open().update({alipayId: aliplayId}, {
-                            $set: {
-                                dec: '充值失败，请联系管理员!',
-                                status: '失败'
-                            }
-                        }).then(function () {
-                            console.log('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
-                            resolve();
-                        });
-                        break;
-                    case "S":
-                        Recharge.open().findOne({alipayId: aliplayId})
-                            .then(function (record) {
-                                console.log(record, 'record  ===================================');
-                                if(record.isRecharge) {
-                                    console.log('已经充值过了还来，滚犊子...');
-                                    resolve('已经充值过了还来，滚犊子...');
-                                }else {
-                                    Recharge.open().updateById(record._id, {
-                                        $set: {
-                                            funds: funds,
-                                            isRecharge: true,
-                                            dec: '充值成功!',
-                                            status: '成功'
-                                        }
-                                    }).then(function () {
-                                        User.open().findById(record.userId)
-                                            .then(function (user) {
-                                                var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
-                                                console.log(fundsNow, 'fundsNow  -------------------------------');
-                                                User.open().updateById(user._id, {
-                                                    $set: {
-                                                        funds: fundsNow
-                                                    }
-                                                }).then(function () {
-                                                    console.log('充值成功了，哈哈哈哈哈哈');
-                                                    resolve();
-                                                });
+            switch (status) {
+                case "N":
+                    Recharge.open().update({alipayId: aliplayId}, {
+                        $set: {
+                            dec: '交易号不存在，请转账后再充值!',
+                            isRecharge: true,
+                            status: '失败'
+                        }
+                    }).then(function () {
+                        resolve();
+                    });
+                    break;
+                case "F":
+                    Recharge.open().update({alipayId: aliplayId}, {
+                        $set: {
+                            dec: '充值失败，请联系管理员!',
+                            status: '失败'
+                        }
+                    }).then(function () {
+                        resolve();
+                    });
+                    break;
+                case "S":
+                    Recharge.open().findOne({alipayId: aliplayId})
+                        .then(function (record) {
+                            if(record.isRecharge) {
+                                resolve('已经充值过了还来，滚犊子...');
+                            }else {
+                                Recharge.open().updateById(record._id, {
+                                    $set: {
+                                        funds: funds,
+                                        isRecharge: true,
+                                        dec: '充值成功!',
+                                        status: '成功'
+                                    }
+                                }).then(function () {
+                                    User.open().findById(record.userId)
+                                        .then(function (user) {
+                                            var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                                            User.open().updateById(user._id, {
+                                                $set: {
+                                                    funds: fundsNow
+                                                }
+                                            }).then(function () {
+                                                resolve();
                                             });
-                                    });
-                                }
-                            });
-                        break;
-                }
-            }else {
-                resolve('滚犊子。。。');
+                                        });
+                                });
+                            }
+                        });
+                    break;
             }
         })
     }

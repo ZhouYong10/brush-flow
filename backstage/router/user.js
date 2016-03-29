@@ -9,6 +9,7 @@ var Withdraw = require('../models/Withdraw');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
+var moment = require('moment');
 
 router.get('/recharge', function (req, res) {
     User.open().findById(req.session.passport.user)
@@ -24,29 +25,37 @@ router.get('/recharge', function (req, res) {
 });
 
 router.post('/recharge', function (req, res) {
-    var alipayInfo = req.body;
-    Recharge.open().findOne({alipayId: alipayInfo.alipayId})
-        .then(function (result) {
-            if (result) {
-                res.send({
-                    isOK: false,
-                    message: '该交易号已充值成功，不能重复充值！'
-                });
-            } else {
-                User.open().findById(req.session.passport.user)
-                    .then(function (user) {
-                        alipayInfo.username = user.username;
-                        alipayInfo.userId = user._id;
-                        Recharge.record(alipayInfo)
-                            .then(function(record) {
-                                res.send({
-                                    isOK: true,
-                                    path: '/user/recharge/history'
-                                });
-                            })
-                    });
-            }
+    var alipayInfo = req.body, alipayDate = alipayInfo.alipayId.substr(0, 8),
+        today = moment().format('YYYYMMDD');
+    if(alipayDate < (today)) {
+        res.send({
+            isOK: false,
+            message: '该交易号已经过期！'
         });
+    }else {
+        Recharge.open().findOne({alipayId: alipayInfo.alipayId})
+            .then(function (result) {
+                if (result) {
+                    res.send({
+                        isOK: false,
+                        message: '该交易号已充值成功，不能重复充值！'
+                    });
+                } else {
+                    User.open().findById(req.session.passport.user)
+                        .then(function (user) {
+                            alipayInfo.username = user.username;
+                            alipayInfo.userId = user._id;
+                            Recharge.record(alipayInfo)
+                                .then(function(record) {
+                                    res.send({
+                                        isOK: true,
+                                        path: '/user/recharge/history'
+                                    });
+                                })
+                        });
+                }
+            });
+    }
 });
 
 router.get('/recharge/history', function (req, res) {
