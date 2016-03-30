@@ -142,6 +142,19 @@ module.exports = {
     },
     remove: function(obj) {
         return remove(obj);
+    },
+    aggregate: function(arrObj) {
+        return new Promise(function(resolve, reject) {
+            haveCollection(function () {
+                collection.aggregate(arrObj, function(error, result) {
+                    if(error) {
+                        reject(error);
+                    }else {
+                        resolve(result);
+                    }
+                })
+            }, reject);
+        })
     }
 };
 
