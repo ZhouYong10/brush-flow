@@ -53,7 +53,8 @@ passport.use(new LocalStrategy({
 
   //实现用户名或邮箱登录
   //这里判断提交上的username是否含有@，来决定查询的字段是哪一个
-  var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username};
+  //var criteria = (username.indexOf('@') === -1) ? {username: username} : {email: username};
+  var criteria = {username: username};
   User.open().findOne(criteria)
       .then(function (user) {
         if (!user){
