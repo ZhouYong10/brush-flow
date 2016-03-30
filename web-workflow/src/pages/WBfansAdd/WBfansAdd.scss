@@ -18,6 +18,8 @@
   padding-top: 8px;
 }
 
-form{
-  padding-right: 88px;
+@media (min-width: 800px) {
+  form{
+    padding-right: 88px;
+  }
 }
