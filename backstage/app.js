@@ -47,7 +47,7 @@ passport.use(new LocalStrategy({
 }, function(req, uname, password, done) {
   var username = uname.replace(/(^\s*)|(\s*$)/g, "");
   //判断验证码
-  if(req.body.securityCode != req.session.securityCode.toLowerCase()) {
+  if(req.body.securityCode.toLowerCase() != req.session.securityCode) {
     return done(null, false, '验证码错误！');
   }
 
