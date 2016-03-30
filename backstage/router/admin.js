@@ -495,6 +495,7 @@ router.get('/order/complete', function (req, res) {
         .then(function(order) {
             var orderIns = Order.wrapToInstance(order);
             orderIns.complete(function() {
+                socketIO.emit('reloadPage');
                 res.redirect(url);
             });
         })
@@ -506,6 +507,7 @@ router.get('/order/refund', function (req, res) {
         .then(function(order) {
             var orderIns = Order.wrapToInstance(order);
             orderIns.refund(msg.info, function() {
+                socketIO.emit('reloadPage');
                 res.redirect(msg.url);
             });
         })
@@ -517,6 +519,7 @@ router.get('/order/refundProfit', function (req, res) {
         .then(function(order) {
             var orderIns = Order.wrapToInstance(order);
             orderIns.refundProfit(msg.info, function() {
+                socketIO.emit('reloadPage');
                 res.redirect(msg.url);
             });
         })
@@ -528,6 +531,7 @@ router.get('/order/dealError', function (req, res) {
         .then(function(order) {
             var orderIns = Order.wrapToInstance(order);
             orderIns.dealError(msg.info, function() {
+                socketIO.emit('reloadPage');
                 res.redirect(msg.url);
             });
         })
@@ -818,6 +822,7 @@ router.get('/feedback/wait', function (req, res) {
 
 router.post('/feedback/wait/handle', function (req, res) {
     Feedback.handleFeedback(req.body, function(result) {
+        socketIO.emit('reloadPage');
         res.redirect('/admin/feedback/wait');
     });
 });

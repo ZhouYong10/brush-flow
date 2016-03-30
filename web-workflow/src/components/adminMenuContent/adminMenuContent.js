@@ -7,9 +7,13 @@ $(function () {
     });
 
     var socket = io();
-    socket.on('updateNav', function(obj) {
+    socket.on('updateNav', function (obj) {
         updateNav(obj, true);
-    })
+    });
+
+    socket.on('reloadPage', function () {
+        location.reload();
+    });
 });
 
 function updateNav(obj, isAdd) {
