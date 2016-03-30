@@ -20,6 +20,14 @@ new Vue({
                         self.notrepeat = false;
                     }
                 });
+        },
+        isYanshi: function(e) {
+            var username = $('#username').val();
+            if(username == 'yanshi'){
+                e.stopPropagation();
+                e.preventDefault();
+                layer.msg('演示账户不能添加下级用户！')
+            }
         }
     }
 });

@@ -72,7 +72,7 @@
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
                             <button type="submit" class="am-btn am-btn-primary am-radius am-btn-sm"
-                                    v-if="$addLowerUser.valid && notrepeat">添加子用户</button>
+                                    v-if="$addLowerUser.valid && notrepeat" @click="isYanshi">添加子用户</button>
                         </div>
                     </div>
                 </form>
@@ -87,6 +87,7 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 
 <script>
     require('addLowerUser');
