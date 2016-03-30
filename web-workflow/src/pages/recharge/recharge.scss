@@ -8,6 +8,8 @@
   font-weight:bold;
 }
 
-form{
-  padding-right: 88px;
+@media (min-width: 800px) {
+  form{
+    padding-right: 88px;
+  }
 }
