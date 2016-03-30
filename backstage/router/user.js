@@ -332,6 +332,43 @@ router.get('/lowerUser', function (req, res) {
         });
 });
 
+router.get('/search/lowerUser', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (parent) {
+            if(parent.children && parent.children.length > 0){
+                User.open().findPages({
+                    _id: {$in: parent.children},
+                    username: new RegExp(req.query.username)
+                }, (req.query.page ? req.query.page : 1))
+                    .then(function(obj) {
+                        res.render('lowerUser', {
+                            title: '我的下级用户',
+                            money: parent.funds,
+                            users: obj.results,
+                            pages: obj.pages,
+                            username: parent.username,
+                            userStatus: parent.status,
+                            role: parent.role
+                        });
+                    }, function(error) {
+                        throw new Error('查询下级用户信息失败： ' + error)
+                    })
+            }else {
+                res.render('lowerUser', {
+                    title: '我的下级用户',
+                    money: parent.funds,
+                    users: [],
+                    pages: 1,
+                    username: parent.username,
+                    userStatus: parent.status,
+                    role: parent.role
+                });
+            }
+        }, function(error) {
+            res.send(error);
+        });
+});
+
 router.get('/removeLowerUser', function (req, res) {
     User.removeUser(req.query.id).then(function () {
         res.redirect('/user/lowerUser');

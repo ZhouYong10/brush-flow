@@ -180,7 +180,7 @@ app.get('/client/home', function (req, res) {
               res.render('clientHome', {
                 title: '系统公告',
                 money: user.funds,
-                placards: obj.results.reverse(),
+                placards: obj.results,
                 pages: obj.pages,
                 username: user.username,
                 userStatus: user.status,
