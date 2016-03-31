@@ -49,6 +49,19 @@ Recharge.extend({
                 });
         })
     },
+    handRefuse: function(id, info) {
+        return new Promise(function(resolve, reject) {
+            Recharge.open().updateById(id, {
+                $set: {
+                    dec: info,
+                    isRecharge: true,
+                    status: '失败'
+                }
+            }).then(function () {
+                resolve();
+            });
+        })
+    },
     record: function(record) {
         return new Promise(function(resolve, reject) {
             record.createTime = moment().format('YYYY-MM-DD HH:mm:ss');

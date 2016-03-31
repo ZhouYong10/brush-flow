@@ -115,7 +115,7 @@
                 title: '请输入充值金额！',
                 offset: '6%'
             }, function (value, index) {
-                href += '&funds=' + value.replace(/\r\n/g,"").replace(/\n/g,"");
+                href += '&funds=' + value.replace(/(^\s*)|(\s*$)/g,"");
                 layer.close(index);
                 $('<a href=' + href + '></a>').get(0).click();
             });

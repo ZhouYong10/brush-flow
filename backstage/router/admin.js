@@ -164,12 +164,23 @@ router.get('/recharge/history', function (req, res) {
 
 router.get('/hand/recharge', function (req, res) {
     var msg = req.query;
-    Recharge.hand(msg.id, msg.funds).then(function(backInfo) {
-        if(backInfo) {
-            res.send(backInfo);
-        }else {
-            res.redirect(msg.url);
-        }
+    if(isNaN(msg.funds)) {
+        res.send('充值金额必须是数字。。。。。。');
+    }else {
+        Recharge.hand(msg.id, msg.funds).then(function(backInfo) {
+            if(backInfo) {
+                res.send(backInfo);
+            }else {
+                res.redirect(msg.url);
+            }
+        })
+    }
+});
+
+router.get('/hand/recharge/refuse', function (req, res) {
+    var msg = req.query;
+    Recharge.handRefuse(msg.id, msg.info).then(function() {
+        res.redirect(msg.url);
     })
 });
 
