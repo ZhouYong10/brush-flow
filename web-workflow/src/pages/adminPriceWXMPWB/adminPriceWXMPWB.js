@@ -3,8 +3,8 @@
  */
 var wxSmallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
-    '<option value="friend">个人好友</option> ' +
-    '<option value="fans">公众粉丝</option> ' +
+    '<option value="friend">公众粉丝(1000以上)</option> ' +
+    '<option value="fans">公众粉丝(1000以下)</option> ' +
     '<option value="fansReply">公众粉丝回复</option> ' +
     '<option value="article">原文</option> ' +
     '<option value="share">分享</option> ' +
