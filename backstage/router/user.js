@@ -469,7 +469,7 @@ router.get('/errorSummary', function (req, res) {
             Order.open().findPages({
                 userId: user._id,
                 error: {$in: ['未处理', '已处理']}
-            }, (req.query.page ? req.query.page : 1))
+            }, (req.query.page ? req.query.page : 1), {'errorTime': -1})
                 .then(function (obj) {
                 res.render('errorSummary', {
                     title: '错误信息汇总',
@@ -495,7 +495,7 @@ router.get('/search/error', function (req, res) {
                 smallType: {$in: types},
                 error: {$in: ['未处理', '已处理']}
             };
-            Order.open().findPages(query, (req.query.page ? req.query.page : 1))
+            Order.open().findPages(query, (req.query.page ? req.query.page : 1), {'errorTime': -1})
                 .then(function (obj) {
                     res.render('errorSummary', {
                         title: '错误信息汇总',
