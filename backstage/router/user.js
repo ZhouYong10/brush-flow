@@ -378,7 +378,7 @@ router.get('/removeLowerUser', function (req, res) {
 router.get('/feedback', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Feedback.open().findPages(null, (req.query.page ? req.query.page : 1))
+            Feedback.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     res.render('feedback', {
                         title: '问题反馈',
@@ -413,6 +413,7 @@ router.post('/feedback/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             feedback.user = user.username;
+            feedback.userId = user._id;
             Feedback.createFeedback(feedback)
                 .then(function (result) {
                     socketIO.emit('updateNav', {'feedback': 1});
