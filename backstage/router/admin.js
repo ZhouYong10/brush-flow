@@ -831,7 +831,7 @@ router.get('/WB/already', function (req, res) {
 
 
 router.get('/error/wait', function (req, res) {
-    Order.open().findPages({error: '未处理'}, (req.query.page ? req.query.page : 1))
+    Order.open().findPages({error: '未处理'}, (req.query.page ? req.query.page : 1), {'errorTime': -1})
         .then(function (obj) {
         res.render('adminErrorWait', {
             title: '错误信息管理 / 待处理错误报告',
@@ -844,7 +844,7 @@ router.get('/error/wait', function (req, res) {
 });
 
 router.get('/error/already', function (req, res) {
-    Order.open().findPages({error: '已处理'}, (req.query.page ? req.query.page : 1))
+    Order.open().findPages({error: '已处理'}, (req.query.page ? req.query.page : 1), {'errorTime': -1})
         .then(function (obj) {
         res.render('adminErrorAlre', {
             title: '错误信息管理 / 待处理错误报告',

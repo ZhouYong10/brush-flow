@@ -287,10 +287,15 @@ Order.include({
         })
     },
     orderError: function(info, callback) {
-        Order.open().updateById(this._id, {$set: {error: '未处理', errorInfo: info}})
-            .then(function() {
-                callback();
-            })
+        Order.open().updateById(this._id, {
+            $set: {
+                error: '未处理',
+                errorInfo: info,
+                errorTime: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+        }).then(function() {
+            callback();
+        })
     },
     dealError: function(info, callback) {
         Order.open().updateById(this._id, {$set: {error: '已处理', errorDealInfo: info}})

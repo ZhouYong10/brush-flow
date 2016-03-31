@@ -34,6 +34,7 @@
                             <th>#</th>
                             <th>用户</th>
                             <th>提交日期</th>
+                            <th>报错日期</th>
                             <th>错误类别</th>
                             <th>地址|账号</th>
                             <th>问题描述</th>
@@ -50,6 +51,7 @@
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].user %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
+                            <td class="am-text-middle"><%= orders[i].errorTime %></td>
                             <td class="am-text-middle">
                                 <%= orders[i].typeName %> / <%= orders[i].smallTypeName %>
                             </td>

@@ -62,14 +62,15 @@ module.exports = {
             }, reject);
         })
     },
-    findPages: function(obj, page) {
+    findPages: function(obj, page, sortObj) {
+        var sortBy = sortObj ? sortObj : {'_id': -1};
         var userObj = obj ? obj : null;
         var pageCont = 10;
         return new Promise(function(resolve, reject) {
             haveCollection(function () {
                 collection.count(userObj, function(err, total) {
                     collection.find(userObj)
-                        .sort({'_id': -1})
+                        .sort(sortBy)
                         .skip(((page ? page : 1) - 1) * pageCont)
                         .limit((page ? pageCont : 0))
                         .toArray(function (error, result) {
