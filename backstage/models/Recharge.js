@@ -18,6 +18,37 @@ Recharge.extend({
     open: function() {
         return Recharge.openCollection('Recharge');
     },
+    hand: function(id, funds) {
+        return new Promise(function(resolve, reject) {
+            Recharge.open().findById(id)
+                .then(function (record) {
+                    if(record.isRecharge) {
+                        resolve('已经充值过了还来，滚犊子...');
+                    }else {
+                        Recharge.open().updateById(record._id, {
+                            $set: {
+                                funds: funds,
+                                isRecharge: true,
+                                dec: '充值成功!',
+                                status: '成功'
+                            }
+                        }).then(function () {
+                            User.open().findById(record.userId)
+                                .then(function (user) {
+                                    var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                                    User.open().updateById(user._id, {
+                                        $set: {
+                                            funds: fundsNow
+                                        }
+                                    }).then(function () {
+                                        resolve();
+                                    });
+                                });
+                        });
+                    }
+                });
+        })
+    },
     record: function(record) {
         return new Promise(function(resolve, reject) {
             record.createTime = moment().format('YYYY-MM-DD HH:mm:ss');

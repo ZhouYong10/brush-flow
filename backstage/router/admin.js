@@ -154,11 +154,23 @@ router.get('/recharge/history', function (req, res) {
                 title: '资金管理 / 充值记录',
                 money: req.session.systemFunds,
                 recharges: obj.results,
-                pages: obj.pages
+                pages: obj.pages,
+                path: '/admin/recharge/history'
             });
         }, function(error) {
             res.send('查询充值记录失败： ' + error);
         })
+});
+
+router.get('/hand/recharge', function (req, res) {
+    var msg = req.query;
+    Recharge.hand(msg.id, msg.funds).then(function(backInfo) {
+        if(backInfo) {
+            res.send(backInfo);
+        }else {
+            res.redirect(msg.url);
+        }
+    })
 });
 
 router.get('/withdraw/wait', function (req, res) {
