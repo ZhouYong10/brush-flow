@@ -20,7 +20,7 @@ router.get('/friend', function (req, res) {
                 .then(function(obj) {
                     Order.addSchedule(obj.results, 10);
                     res.render('WXfriend', {
-                        title: '微信个人好友',
+                        title: '公众粉丝(1000以上)',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -45,7 +45,7 @@ router.get('/account/search/friend', function (req, res) {
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
                     res.render('WXfriend', {
-                        title: '微信个人好友',
+                        title: '公众粉丝(1000以上)',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -66,7 +66,7 @@ router.get('/friend/add', function (req, res) {
                     var product = Product.wrapToInstance(result);
                     var myPrice = product.getPriceByRole(user.role);
                     res.render('WXfriendAdd', {
-                        title: '添加微信粉丝',
+                        title: '添加公众粉丝(1000以上)',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -102,7 +102,7 @@ router.get('/fans', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 10);
                     res.render('WXfans', {
-                        title: '微信公众粉丝',
+                        title: '公众粉丝(1000以下)',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -127,7 +127,7 @@ router.get('/account/search/fans', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
                     res.render('WXfans', {
-                        title: '微信公众粉丝',
+                        title: '公众粉丝(1000以下)',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -152,7 +152,7 @@ router.get('/fans/add', function (req, res) {
                             var replyIns = Product.wrapToInstance(reply);
                             var myReplyPrice = replyIns.getPriceByRole(user.role);
                             res.render('WXfansAdd', {
-                                title: '添加微信公众粉丝任务',
+                                title: '添加公众粉丝(1000以下)',
                                 money: user.funds,
                                 username: user.username,
                                 userStatus: user.status,
