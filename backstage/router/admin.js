@@ -510,10 +510,14 @@ router.get('/order/complete', function (req, res) {
     var url = req.query.url;
     Order.open().findById(orderId)
         .then(function(order) {
-            var orderIns = Order.wrapToInstance(order);
-            orderIns.complete(function() {
+            if(order.status != '已处理'){
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.complete(function() {
+                    res.redirect(url);
+                });
+            }else {
                 res.redirect(url);
-            });
+            }
         })
 });
 
@@ -521,10 +525,14 @@ router.get('/order/refund', function (req, res) {
     var msg = req.query;
     Order.open().findById(msg.id)
         .then(function(order) {
-            var orderIns = Order.wrapToInstance(order);
-            orderIns.refund(msg.info, function() {
+            if(order.status != '已退款'){
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.refund(msg.info, function() {
+                    res.redirect(msg.url);
+                });
+            }else {
                 res.redirect(msg.url);
-            });
+            }
         })
 });
 
@@ -532,10 +540,14 @@ router.get('/order/refundProfit', function (req, res) {
     var msg = req.query;
     Order.open().findById(msg.id)
         .then(function(order) {
-            var orderIns = Order.wrapToInstance(order);
-            orderIns.refundProfit(msg.info, function() {
+            if(order.status != '已退款'){
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.refundProfit(msg.info, function() {
+                    res.redirect(msg.url);
+                });
+            }else {
                 res.redirect(msg.url);
-            });
+            }
         })
 });
 
@@ -543,10 +555,14 @@ router.get('/order/dealError', function (req, res) {
     var msg = req.query;
     Order.open().findById(msg.id)
         .then(function(order) {
-            var orderIns = Order.wrapToInstance(order);
-            orderIns.dealError(msg.info, function() {
+            if(order.error != '已处理'){
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.dealError(msg.info, function() {
+                    res.redirect(msg.url);
+                });
+            }else {
                 res.redirect(msg.url);
-            });
+            }
         })
 });
 
