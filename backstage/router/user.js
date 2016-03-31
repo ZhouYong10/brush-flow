@@ -6,6 +6,7 @@ var Order = require('../models/Order');
 var Feedback = require('../models/Feedback');
 var Recharge = require('../models/Recharge');
 var Withdraw = require('../models/Withdraw');
+var Profit = require('../models/Profit');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
@@ -153,14 +154,18 @@ router.get('/search/consume', function (req, res) {
 router.get('/info', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('userInfo', {
-                title: '我的详细信息',
-                money: user.funds,
-                user: user,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
-            });
+            Profit.getProfitByUserId(user._id)
+                .then(function (profit) {
+                    user.profit = profit;
+                    res.render('userInfo', {
+                        title: '我的详细信息',
+                        money: user.funds,
+                        user: user,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role
+                    });
+                });
         }, function (error) {
             res.send('获取用户详细信息失败： ' + error);
         });

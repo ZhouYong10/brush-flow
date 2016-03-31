@@ -14,9 +14,22 @@ var Profit = new Class();
 
 Profit.extend(db);
 
-Profit.open = function() {
-    return Profit.openCollection('Profit');
-};
+Profit.extend({
+    open: function() {
+        return Profit.openCollection('Profit');
+    },
+    getProfitByUserId: function(id) {
+        return new Promise(function(resolve, reject) {
+            Profit.open().find({userId: id}).then(function(results) {
+                var count = 0;
+                results.forEach(function (result) {
+                    count += parseFloat(result.profit);
+                });
+                resolve(count.toFixed(4));
+            })
+        })
+    }
+});
 
 Profit.include({
 
