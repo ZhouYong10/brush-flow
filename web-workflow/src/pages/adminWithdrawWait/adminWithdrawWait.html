@@ -35,6 +35,7 @@
                             <th>用户</th>
                             <th>申请日期</th>
                             <th>提现金额</th>
+                            <th>账户余额</th>
                             <th>支付宝账户</th>
                             <th>支付宝昵称</th>
                             <th>操作</th>
@@ -48,6 +49,7 @@
                             <td><%= withdraws[i].user %></td>
                             <td><%= withdraws[i].createTime %></td>
                             <td><%= withdraws[i].funds %></td>
+                            <td><%= withdraws[i].userFunds %></td>
                             <td>
                                 <input type="text" value="<%= withdraws[i].alipayCount %>" style="width: 56px;"><br/>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"

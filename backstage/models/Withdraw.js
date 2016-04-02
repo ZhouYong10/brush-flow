@@ -24,19 +24,23 @@ Withdraw.extend({
         return new Promise(function(resolve, reject) {
             User.open().findById(userId)
                 .then(function(user) {
+                    var userFunds = parseFloat(user.funds) - parseFloat(withdraw.funds);
                     withdraw.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                     withdraw.status = '未处理';
                     withdraw.user = user.username;
                     withdraw.userId = user._id;
+                    withdraw.userFunds = userFunds;
+                    if(userFunds >= 0){
                         Withdraw.open().insert(withdraw)
                             .then(function(results) {
-                                var result = results[0];
-                                var userFunds = parseFloat(user.funds) - parseFloat(result.funds);
                                 User.open().updateById(user._id, {$set: {funds: userFunds}})
                                     .then(function() {
                                         resolve();
                                     })
                             })
+                    }else {
+                        resolve('请不要跳过页面验证提现，你的余额不足仍然不能提现哦。。。。');
+                    }
                 })
         });
     },
