@@ -50,7 +50,9 @@
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].errorTime %></td>
                             <td class="am-text-middle">
-                                <%= orders[i].typeName %> / <%= orders[i].smallTypeName %>
+                                <a href="/admin/redirect/aim/order?id=<%= orders[i]._id %>&type=<%= orders[i].type %>&smallType=<%= orders[i].smallType %>">
+                                    <%= orders[i].typeName %> / <%= orders[i].smallTypeName %>
+                                </a>
                             </td>
                             <td class="am-text-middle">
                                 <% if(orders[i].address){ %>

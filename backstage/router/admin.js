@@ -856,7 +856,56 @@ router.get('/error/already', function (req, res) {
     });
 });
 
+router.get('/redirect/aim/order', function (req, res) {
+    var orderId = req.query.id, type = req.query.type, smallType = req.query.smallType,
+        render = '', title = '', money = req.session.systemFunds, pages = 1, path = '/admin/error/wait';
+    Order.open().findById(orderId).then(function(result) {
+        var arr = [];
+        arr.push(result);
+        switch (type) {
+            case 'wx':
+                switch (smallType) {
+                    case 'article': case 'share': case 'collect':
+                    render = 'adminWXarticleAlre';
+                    title = '微信任务管理 / 已处理微信原文任务';
+                    break;
+                    case 'read': case 'like':
+                    render = 'adminWXlikeAlre';
+                    title = '微信任务管理 / 已处理微信阅读点赞任务';
+                        break;
+                    case 'fans':
+                        render = 'adminWXreplyAlre';
+                        title = '微信任务管理 / 已处理公众粉丝回复任务';
+                        break;
+                    case 'friend':
+                        render = 'adminWXfriendAlre';
+                        title = '微信任务管理 / 已处理微信个人好友任务';
+                        break;
+                    case 'code':
+                        render = 'adminWXcodeAlre';
+                        title = '微信任务管理 / 已处理微信好友地区扫码';
+                        break;
+                }
+                break;
+            case 'mp':
+                render = 'adminMPAlre';
+                title = '美拍任务管理 / 已处理订单';
+                break;
+            case 'wb':
+                render = 'adminWBAlre';
+                title = '微博任务管理 / 已处理订单';
+                break;
+        }
+        res.render(render, {
+            title: title,
+            money: money,
+            orders: arr,
+            pages: pages,
+            path: path
+        });
+    })
 
+});
 
 router.get('/feedback/wait', function (req, res) {
     Feedback.open().findPages({
