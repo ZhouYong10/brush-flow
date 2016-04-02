@@ -58,13 +58,13 @@
                             <th>#</th>
                             <th>创建时间</th>
                             <th>微信账号</th>
-                            <th>国/省/市</th>
-                            <th>粉丝性别</th>
+                            <!--<th>国/省/市</th>-->
+                            <!--<th>粉丝性别</th>-->
                             <th>数量</th>
                             <th>限速</th>
-                            <th>回复信息</th>
+                            <!--<th>回复信息</th>-->
 
-                            <th>模式</th>
+                            <!--<th>模式</th>-->
                             <th>总价</th>
                             <th>备注</th>
                             <th>进度</th>
@@ -81,25 +81,28 @@
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].account %></td>
+                            <!--<td class="am-text-middle">-->
+                                <!--<%= orders[i].country %> <br/>-->
+                                <!--<%= orders[i].province %> <br/>-->
+                                <!--<%= orders[i].city %></td>-->
+                            <!--<td class="am-text-middle"><%= orders[i].gender %></td>-->
                             <td class="am-text-middle">
-                                <%= orders[i].country %> <br/>
-                                <%= orders[i].province %> <br/>
-                                <%= orders[i].city %></td>
-                            <td class="am-text-middle"><%= orders[i].gender %></td>
-                            <td class="am-text-middle">
-                                粉丝: <%= orders[i].num %> <br/>
-                                回复: <%= orders[i].num2 %>
+                                <%= orders[i].num %>
                             </td>
+                            <!--<td class="am-text-middle">-->
+                                <!--粉丝: <%= orders[i].num %> <br/>-->
+                                <!--回复: <%= orders[i].num2 %>-->
+                            <!--</td>-->
                             <td class="am-text-middle">
                                 <%= orders[i].fansSpeed %> <br/>
                                 <!--回复: <%= orders[i].speed %>-->
                             </td>
-                            <td class="am-text-middle">
-                                <a class="am-text-truncate text-break" title="<%= orders[i].replyInfo %>">
-                                    <%= orders[i].replyInfo %>
-                                </a>
-                            </td>
-                            <td class="am-text-middle"><%= orders[i].mode %></td>
+                            <!--<td class="am-text-middle">-->
+                                <!--<a class="am-text-truncate text-break" title="<%= orders[i].replyInfo %>">-->
+                                    <!--<%= orders[i].replyInfo %>-->
+                                <!--</a>-->
+                            <!--</td>-->
+                            <!--<td class="am-text-middle"><%= orders[i].mode %></td>-->
                             <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                             <td class="am-text-middle">
                                 <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
