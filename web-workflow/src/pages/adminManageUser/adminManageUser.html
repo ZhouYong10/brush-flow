@@ -77,7 +77,11 @@
                                     <td class="am-text-middle"><%= users[i].role %></td>
                                     <td  class="am-text-middle"><%= users[i].username %></td>
                                     <td  class="am-text-middle"><%= users[i].status %></td>
-                                    <td  class="am-text-middle">￥ <%= users[i].funds %></td>
+                                    <td  class="am-text-middle">
+                                        <a href="/admin/search/user/recharge?userId=<%= users[i]._id %>">
+                                            ￥ <%= users[i].funds %>
+                                        </a>
+                                    </td>
                                     <td  class="am-text-middle"><%= users[i].parent %></td>
                                     <td  class="am-text-middle"><%= users[i].childNum %></td>
                                     <td  class="am-text-middle"><%= users[i].lastLoginTime %></td>

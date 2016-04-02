@@ -45,7 +45,7 @@ router.post('/recharge', function (req, res) {
                     User.open().findById(req.session.passport.user)
                         .then(function (user) {
                             alipayInfo.username = user.username;
-                            alipayInfo.userId = user._id;
+                            alipayInfo.userId = user._id + '';
                             Recharge.record(alipayInfo)
                                 .then(function(record) {
                                     res.send({
@@ -63,7 +63,7 @@ router.get('/recharge/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Recharge.open().findPages({
-                userId: user._id
+                userId: user._id + ''
             }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     res.render('rechargeHistory', {

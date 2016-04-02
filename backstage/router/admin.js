@@ -162,6 +162,24 @@ router.get('/recharge/history', function (req, res) {
         })
 });
 
+router.get('/search/user/recharge', function (req, res) {
+    if(req.query.userId){
+        req.session.searchRecharge = req.query.userId;
+    }
+    Recharge.open().findPages({userId: req.session.searchRecharge}, (req.query.page ? req.query.page : 1))
+        .then(function(obj) {
+            res.render('adminRechargeHistory', {
+                title: '资金管理 / 充值记录',
+                money: req.session.systemFunds,
+                recharges: obj.results,
+                pages: obj.pages,
+                path: '/admin/recharge/history'
+            });
+        }, function(error) {
+            res.send('查询充值记录失败： ' + error);
+        })
+});
+
 router.get('/hand/recharge', function (req, res) {
     var msg = req.query;
     if(isNaN(msg.funds)) {
