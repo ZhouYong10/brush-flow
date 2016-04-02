@@ -24,7 +24,7 @@ Withdraw.extend({
         return new Promise(function(resolve, reject) {
             User.open().findById(userId)
                 .then(function(user) {
-                    var userFunds = parseFloat(user.funds) - parseFloat(withdraw.funds);
+                    var userFunds = (parseFloat(user.funds) - parseFloat(withdraw.funds)).toFixed(4);
                     withdraw.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                     withdraw.status = '未处理';
                     withdraw.user = user.username;
