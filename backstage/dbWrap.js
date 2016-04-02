@@ -38,6 +38,9 @@ function remove(obj) {
 }
 
 module.exports = {
+    toObjectID: function(id) {
+        return db.toObjectID(id);
+    },
     openCollection: function(colName) {
         collection = db.getCollection((colName));
         return this;

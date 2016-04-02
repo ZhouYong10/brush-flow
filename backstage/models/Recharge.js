@@ -150,6 +150,16 @@ Recharge.extend({
                     break;
             }
         })
+    },
+    findRechargeByUserId: function(userId, page) {
+        return new Promise(function(resolve, reject) {
+            Recharge.open().findPages({userId: db.toObjectID(userId)}, page)
+                .then(function(obj) {
+                    resolve(obj);
+                }, function(error) {
+                    reject(error);
+                })
+        })
     }
 });
 
