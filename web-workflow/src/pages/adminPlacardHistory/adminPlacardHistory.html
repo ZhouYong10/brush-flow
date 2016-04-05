@@ -44,7 +44,11 @@
                             <td><%= i+1 %></td>
                             <td><%= placards[i].placardName %></td>
                             <td><%= placards[i].sendTime %></td>
-                            <td><%= placards[i].placardContent %></td>
+                            <td>
+                                <a class="am-text-truncate text-break" title="<%= placards[i].placardContent %>">
+                                    <%= placards[i].placardContent %>
+                                </a>
+                            </td>
                             <td>
                                 <a type="button" href="/admin/placard/history/del?id=<%= placards[i]._id%>" class="am-btn am-btn-primary am-radius am-btn-xs">删除</a>
                             </td>
@@ -64,6 +68,7 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 <script src="/static/plugins/laypage/laypage.js"></script>
 
 <script>
@@ -86,6 +91,11 @@
                     location.href = '?page='+e.curr;
                 }
             }
+        });
+
+        $('.text-break').click(function () {
+            var self = this;
+            layer.alert($(self).text());
         });
     })
 </script>
