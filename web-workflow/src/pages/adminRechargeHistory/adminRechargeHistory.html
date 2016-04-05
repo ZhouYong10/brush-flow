@@ -26,48 +26,75 @@
         <div class="am-u-lg-10 am-u-md-9">
             <div class="am-panel am-panel-primary">
                 <div class="am-panel-hd"><%= title %></div>
-                <div class="am-panel-bd am-scrollable-horizontal am-text-center">
+                <div class="am-panel-bd am-scrollable-horizontal">
 
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>用户</th>
-                            <th>充值日期</th>
-                            <th>支付宝交易号</th>
-                            <th>金额</th>
-                            <th>状态</th>
-                            <th>描述</th>
-                            <th>手动充值</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                    <div id="searchForm" class="am-form am-form-inline">
+                        <validator name="search">
+                            <form method="get" action="/admin/search/recharge/by/alipayId">
+                                <div class="am-form-group am-form-group-sm search-title">
+                                    <label for="taskName" class="am-u-sm-3 am-form-label taskTypeLabel">
+                                        交易号
+                                    </label>
+                                    <div class="am-u-sm-9 taskTypeWrap">
+                                        <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
+                                               placeholder="请输入交易号" name="alipayId"
+                                               v-validate:alipayid="{required: true}">
+                                    </div>
+                                </div>
 
-                        <% for(var i = 0; i < recharges.length; i++){ %>
-                        <tr>
-                            <td  class="am-text-middle"><%= i + 1 %></td>
-                            <td  class="am-text-middle"><%= recharges[i].username %></td>
-                            <td  class="am-text-middle"><%= recharges[i].createTime %></td>
-                            <td  class="am-text-middle"><%= recharges[i].alipayId %></td>
-                            <td  class="am-text-middle"><%= recharges[i].funds %></td>
-                            <td  class="am-text-middle"><%= recharges[i].status %></td>
-                            <td  class="am-text-middle"><%= recharges[i].dec %></td>
-                            <td class="am-text-middle">
-                            <% if(!recharges[i].isRecharge){ %>
-                            <a class="am-btn am-btn-primary am-radius am-btn-xs handRecharge"
-                               href="/admin/hand/recharge?id=<%= recharges[i]._id %>&url=<%= path %>">充值</a>
-                                <a class="am-btn am-btn-primary am-radius am-btn-xs refuseRecharge"
-                                   href="/admin/hand/recharge/refuse?id=<%= recharges[i]._id %>&url=<%= path %>">拒绝</a>
+                                <div class="am-form-group am-form-group-sm">
+                                    <button class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
+                                        <i class="am-icon-search"></i>
+                                        搜索
+                                    </button>
+                                </div>
+                            </form>
+                        </validator>
+                    </div>
+
+                    <div class="am-scrollable-horizontal am-text-center recharge-content">
+                        <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>用户</th>
+                                <th>充值日期</th>
+                                <th>支付宝交易号</th>
+                                <th>金额</th>
+                                <th>状态</th>
+                                <th>描述</th>
+                                <th>手动充值</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i = 0; i < recharges.length; i++){ %>
+                            <tr>
+                                <td  class="am-text-middle"><%= i + 1 %></td>
+                                <td  class="am-text-middle"><%= recharges[i].username %></td>
+                                <td  class="am-text-middle"><%= recharges[i].createTime %></td>
+                                <td  class="am-text-middle"><%= recharges[i].alipayId %></td>
+                                <td  class="am-text-middle"><%= recharges[i].funds %></td>
+                                <td  class="am-text-middle"><%= recharges[i].status %></td>
+                                <td  class="am-text-middle"><%= recharges[i].dec %></td>
+                                <td class="am-text-middle">
+                                    <% if(!recharges[i].isRecharge){ %>
+                                    <a class="am-btn am-btn-primary am-radius am-btn-xs handRecharge"
+                                       href="/admin/hand/recharge?id=<%= recharges[i]._id %>&url=<%= path %>">充值</a>
+                                    <a class="am-btn am-btn-primary am-radius am-btn-xs refuseRecharge"
+                                       href="/admin/hand/recharge/refuse?id=<%= recharges[i]._id %>&url=<%= path %>">拒绝</a>
+                                    <% } %>
+                                </td>
+                            </tr>
                             <% } %>
-                            </td>
-                        </tr>
-                        <% } %>
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
 
-                    <input type="hidden" value="<%= pages %>" id="pages">
-                    <div id="laypage"></div>
+                        <input type="hidden" value="<%= pages %>" id="pages">
+                        <div id="laypage"></div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -82,60 +109,7 @@
 
 <script>
     require('adminMenuContent');
-
-    $(function() {
-
-        laypage({
-            cont: 'laypage',
-            pages: $('#pages').val(), //可以叫服务端把总页数放在某一个隐藏域，再获取。假设我们获取到的是18
-            skin: 'molv', //皮肤
-            skip: true, //是否开启跳页
-            groups: 3, //连续显示分页数
-            last: $('#pages').val(),
-            curr: function(){ //通过url获取当前页，也可以同上（pages）方式获取
-                var page = location.search.match(/page=(\d+)/);
-                return page ? page[1] : 1;
-            }(),
-            jump: function(e, first){ //触发分页后的回调
-                if(!first){ //一定要加此判断，否则初始时会无限刷新
-                    location.href = '?page='+e.curr;
-                }
-            }
-        });
-
-        layer.config({
-            extend: 'extend/layer.ext.js'
-        });
-
-        $('.handRecharge').click(function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            var href = $(this).attr('href');
-            layer.prompt({
-                title: '请输入充值金额！',
-                offset: '6%'
-            }, function (value, index) {
-                href += '&funds=' + value.replace(/(^\s*)|(\s*$)/g,"");
-                layer.close(index);
-                $('<a href=' + href + '></a>').get(0).click();
-            });
-        });
-
-        $('.refuseRecharge').click(function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            var href = $(this).attr('href');
-            layer.prompt({
-                formType: 2,
-                title: '请输入充值失败原因！',
-                offset: '6%'
-            }, function (value, index) {
-                href += '&info=' + value.replace(/\r\n/g,"").replace(/\n/g,"");
-                layer.close(index);
-                $('<a href=' + href + '></a>').get(0).click();
-            });
-        });
-    })
+    require('adminRechargeHistory');
 </script>
 
 </body>

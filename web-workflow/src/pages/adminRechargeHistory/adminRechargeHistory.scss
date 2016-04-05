@@ -1,4 +1,12 @@
 
+.taskTypeLabel{
+  padding: 7px 3px 0;
+}
+
+.search-title{
+  overflow: hidden;
+}
+
 th{
   text-align: center;
 }
@@ -6,4 +14,8 @@ th{
 
 .title-text, .title-url{
   line-height: 11px;
+}
+
+.recharge-content{
+  padding-top: 12px;
 }
