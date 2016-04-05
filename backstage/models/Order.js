@@ -331,51 +331,49 @@ setInterval(function() {
         var $ = cheerio.load(body);
         post_key = $('#post_key').val();
         console.log(post_key, '-----------------------------------');
-        Order.open().find({status: '未处理'}).then(function (results) {
-            if (results.length > 0) {
-                results.forEach(function (result) {
-                    request.post({
-                        url:'http://120.25.203.122/tuike_sys.php',
-                        headers:{
-                            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                            "Accept-Encoding": 'gzip, deflate, sdch',
-                            "Accept-Language": 'zh-CN,zh;q=0.8',
-                            "Cache-Control": 'max-age=0',
-                            "Connection": 'keep-alive',
-                            "Cookie": 'PHPSESSID=rrk21m5gqgbdmbd3lsjs312o10',
-                            "Host": '120.25.203.122',
-                            "Referer": 'http://120.25.203.122/tuike_sys.php',
-                            "Upgrade-Insecure-Requests": 1,
-                            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-                        },
-                        formData: {
-                            url: result.address,
-                            speed: result.speed,
-                            read_cnt: result.num,
-                            post_key: post_key,
-                            like_cnt: result.num2,
-                            like: (result.num2 / result.num).toFixed(3)
+        Order.open().findOne({status: '未处理'}).then(function (result) {
+            if (result) {
+                request.post({
+                    url:'http://120.25.203.122/tuike_sys.php',
+                    headers:{
+                        "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                        "Accept-Encoding": 'gzip, deflate, sdch',
+                        "Accept-Language": 'zh-CN,zh;q=0.8',
+                        "Cache-Control": 'max-age=0',
+                        "Connection": 'keep-alive',
+                        "Cookie": 'PHPSESSID=rrk21m5gqgbdmbd3lsjs312o10',
+                        "Host": '120.25.203.122',
+                        "Referer": 'http://120.25.203.122/tuike_sys.php',
+                        "Upgrade-Insecure-Requests": 1,
+                        "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+                    },
+                    formData: {
+                        url: result.address,
+                        speed: result.speed,
+                        read_cnt: result.num,
+                        post_key: post_key,
+                        like_cnt: result.num2,
+                        like: (result.num2 / result.num).toFixed(3)
+                    }
+                },function(err,res,body){
+                    if(err) {
+                        return console.log(err);
+                    }
+                    var $ = cheerio.load(body);
+                    $('tbody a').each(function (i, e) {
+                        var taskHref = $(e).attr('href');
+                        if(taskHref == result.address) {
+                            var resultInstance = Order.wrapToInstance(result);
+                            resultInstance.complete(function() {
+                                console.log('自动处理订单完成了, href = ' + result.address);
+                            })
                         }
-                    },function(err,res,body){
-                        if(err) {
-                            return console.log(err);
-                        }
-                        var $ = cheerio.load(body);
-                        $('tbody a').each(function (i, e) {
-                            var taskHref = $(e).attr('href');
-                            if(taskHref == result.address) {
-                                var resultInstance = Order.wrapToInstance(result);
-                                resultInstance.complete(function() {
-                                    console.log('自动处理订单完成了, href = ' + result.address);
-                                })
-                            }
-                        });
                     });
                 });
             }
         });
     });
-}, 1000*60);
+}, 1000*30);
 
 
 module.exports = Order;
