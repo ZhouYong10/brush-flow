@@ -309,7 +309,10 @@ Order.include({
 
 
 var post_key = '';
+var task_time = 1000 * 30;
 setInterval(function() {
+    var random = (Math.random() / 4 * 100).toFixed(0);
+    task_time = random >= 5 ? random * 1000 : 5 * 1000;
     if(post_key == ''){
         request.get({
             url:'http://120.25.203.122/tuike_sys.php',
@@ -420,9 +423,7 @@ setInterval(function() {
             }
         });
     }
-
-
-}, 1000*30);
+}, task_time);
 
 
 module.exports = Order;
