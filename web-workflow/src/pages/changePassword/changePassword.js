@@ -19,17 +19,22 @@ new Vue({
     },
     methods: {
         submit: function() {
-            this.$http.post('/user/changePwd', {
-                oldpwd: this.oldpwd,
-                newpwd: this.newpwd,
-                repeatpwd: this.repeatpwd
-            }).then(function(res) {
-                if(res.data.isOK) {
-                    $('<a href="' + res.data.url + '" ></a>').get(0).click();
-                }else{
-                    layer.msg(res.data.info);
-                }
-            });
+            var username = $('#username').val();
+            if(username == 'yanshi'){
+                layer.msg('演示账户不能不能修改密码！')
+            }else {
+                this.$http.post('/user/changePwd', {
+                    oldpwd: this.oldpwd,
+                    newpwd: this.newpwd,
+                    repeatpwd: this.repeatpwd
+                }).then(function(res) {
+                    if(res.data.isOK) {
+                        $('<a href="' + res.data.url + '" ></a>').get(0).click();
+                    }else{
+                        layer.msg(res.data.info);
+                    }
+                });
+            }
         }
     }
 });
