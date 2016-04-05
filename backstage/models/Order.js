@@ -349,7 +349,7 @@ setInterval(function() {
                     },
                     formData: {
                         url: result.address,
-                        speed: result.speed,
+                        speed: result.speed ? result.speed : 100,
                         read_cnt: result.num,
                         post_key: post_key,
                         like_cnt: result.num2,
