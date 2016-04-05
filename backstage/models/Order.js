@@ -309,13 +309,13 @@ Order.include({
 
 
 var post_key = '';
-var task_time = 1000 * 30;
+var task_time = 1000 * 20;
 var valIndex = startInterval();
 
 function startInterval() {
+    var random = (Math.random() / 3 * 100).toFixed(0);
+    task_time = random >= 5 ? random * 1000 : 5 * 1000;
     return setInterval(function() {
-        var random = (Math.random() / 3 * 100).toFixed(0);
-        task_time = random >= 5 ? random * 1000 : 5 * 1000;
         if(post_key == ''){
             noKey(clearTime);
         }else {
