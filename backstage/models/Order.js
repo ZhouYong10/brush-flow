@@ -334,7 +334,6 @@ setInterval(function() {
             }
             var $ = cheerio.load(body);
             post_key = $('#post_key').val();
-            console.log(post_key, '-----------------------------------');
             Order.open().findOne({status: '未处理'}).then(function (result) {
                 if (result) {
                     request.post({
@@ -372,6 +371,8 @@ setInterval(function() {
                                 resultInstance.complete(function() {
                                     console.log('自动处理订单完成了, href = ' + result.address);
                                 })
+                            }else {
+                                post_key = '';
                             }
                         });
                     });
@@ -379,7 +380,6 @@ setInterval(function() {
             });
         });
     }else {
-        console.log(post_key, '-----------------------------------');
         Order.open().findOne({status: '未处理'}).then(function (result) {
             if (result) {
                 request.post({
@@ -417,6 +417,8 @@ setInterval(function() {
                             resultInstance.complete(function() {
                                 console.log('自动处理订单完成了, href = ' + result.address);
                             })
+                        }else {
+                            post_key = '';
                         }
                     });
                 });
