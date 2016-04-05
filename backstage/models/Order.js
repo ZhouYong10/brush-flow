@@ -377,7 +377,7 @@ function yesKey(callback) {
                 },
                 formData: {
                     url: result.address,
-                    speed: result.speed ? result.speed : 100,
+                    speed: result.speed ? result.speed : 167,
                     read_cnt: result.num,
                     post_key: post_key,
                     like_cnt: result.num2 ? result.num2 : 0,
@@ -403,6 +403,9 @@ function yesKey(callback) {
                     }
                 });
             });
+        }else {
+            post_key = '';
+            callback();
         }
     });
 }
