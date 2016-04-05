@@ -355,7 +355,11 @@ function noKey(callback) {
 }
 
 function yesKey(callback) {
-    Order.open().findOne({status: '未处理'}).then(function (result) {
+    Order.open().findOne({
+        status: '未处理',
+        type: 'wx',
+        smallType: {$in: ['read', 'like']}
+    }).then(function (result) {
         if (result) {
             request.post({
                 url:'http://120.25.203.122/tuike_sys.php',
@@ -376,7 +380,7 @@ function yesKey(callback) {
                     speed: result.speed ? result.speed : 100,
                     read_cnt: result.num,
                     post_key: post_key,
-                    like_cnt: result.num2,
+                    like_cnt: result.num2 ? result.num2 : 0,
                     like: (result.num2 / result.num).toFixed(3)
                 }
             },function(err,res,body){
