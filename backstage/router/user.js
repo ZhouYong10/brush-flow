@@ -46,6 +46,7 @@ router.post('/recharge', function (req, res) {
                         .then(function (user) {
                             alipayInfo.username = user.username;
                             alipayInfo.userId = user._id;
+                            alipayInfo.userOldFunds = user.funds;
                             Recharge.record(alipayInfo)
                                 .then(function(record) {
                                     res.send({

@@ -25,26 +25,27 @@ Recharge.extend({
                     if(record.isRecharge) {
                         resolve('已经充值过了还来，滚犊子...');
                     }else {
-                        Recharge.open().updateById(record._id, {
-                            $set: {
-                                funds: funds,
-                                isRecharge: true,
-                                dec: '充值成功!',
-                                status: '成功'
-                            }
-                        }).then(function () {
-                            User.open().findById(record.userId)
-                                .then(function (user) {
-                                    var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
-                                    User.open().updateById(user._id, {
+                        User.open().findById(record.userId)
+                            .then(function (user) {
+                                var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                                User.open().updateById(user._id, {
+                                    $set: {
+                                        funds: fundsNow
+                                    }
+                                }).then(function () {
+                                    Recharge.open().updateById(record._id, {
                                         $set: {
-                                            funds: fundsNow
+                                            funds: funds,
+                                            isRecharge: true,
+                                            dec: '充值成功!',
+                                            status: '成功',
+                                            userNowFunds: fundsNow
                                         }
                                     }).then(function () {
                                         resolve();
                                     });
                                 });
-                        });
+                            });
                     }
                 });
         })
@@ -125,26 +126,51 @@ Recharge.extend({
                             if(record.isRecharge) {
                                 resolve('已经充值过了还来，滚犊子...');
                             }else {
-                                Recharge.open().updateById(record._id, {
-                                    $set: {
-                                        funds: funds,
-                                        isRecharge: true,
-                                        dec: '充值成功!',
-                                        status: '成功'
-                                    }
-                                }).then(function () {
-                                    User.open().findById(record.userId)
-                                        .then(function (user) {
-                                            var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
-                                            User.open().updateById(user._id, {
+                                User.open().findById(record.userId)
+                                    .then(function (user) {
+                                        var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                                        User.open().updateById(user._id, {
+                                            $set: {
+                                                funds: fundsNow
+                                            }
+                                        }).then(function () {
+                                            Recharge.open().updateById(record._id, {
                                                 $set: {
-                                                    funds: fundsNow
+                                                    funds: funds,
+                                                    isRecharge: true,
+                                                    dec: '充值成功!',
+                                                    status: '成功',
+                                                    userNowFunds: fundsNow
                                                 }
                                             }).then(function () {
                                                 resolve();
                                             });
                                         });
-                                });
+                                    });
+
+
+
+
+                                //Recharge.open().updateById(record._id, {
+                                //    $set: {
+                                //        funds: funds,
+                                //        isRecharge: true,
+                                //        dec: '充值成功!',
+                                //        status: '成功'
+                                //    }
+                                //}).then(function () {
+                                //    User.open().findById(record.userId)
+                                //        .then(function (user) {
+                                //            var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                                //            User.open().updateById(user._id, {
+                                //                $set: {
+                                //                    funds: fundsNow
+                                //                }
+                                //            }).then(function () {
+                                //                resolve();
+                                //            });
+                                //        });
+                                //});
                             }
                         });
                     break;
