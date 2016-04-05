@@ -316,11 +316,7 @@ function startInterval() {
     var random = (Math.random() / 3 * 100).toFixed(0);
     task_time = random >= 5 ? random * 1000 : 5 * 1000;
     return setInterval(function() {
-        if(post_key == ''){
-            noKey(clearTime);
-        }else {
-            yesKey(clearTime);
-        }
+        noKey(clearTime);
     }, task_time);
 }
 
@@ -399,8 +395,6 @@ function yesKey(callback) {
                     }
                 });
             });
-        }else {
-            
         }
     });
 }
