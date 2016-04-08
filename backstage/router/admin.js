@@ -693,7 +693,8 @@ router.get('/WX/like/wait', function (req, res) {
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/WX/like/wait'
+                path: '/admin/WX/like/wait',
+                wxReadIsOpen: Order.wxReadIsOpen()
             });
         });
 });
@@ -714,6 +715,18 @@ router.get('/WX/like/already', function (req, res) {
             });
         });
 });
+
+router.get('/open/wx/read/like', function (req, res) {
+    Order.openWXReadAuto(req.query.cookie);
+    res.end('ok');
+});
+
+router.get('/close/wx/read/like', function (req, res) {
+    Order.closeWXReadAuto();
+    res.end('ok');
+});
+
+
 
 router.get('/WX/reply/wait', function (req, res) {
     Order.open().findPages({
