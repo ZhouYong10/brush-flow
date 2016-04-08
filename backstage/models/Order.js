@@ -308,107 +308,179 @@ Order.include({
 });
 
 
-var post_key = '';
-var task_time = 1000 * 20;
-var valIndex = startInterval();
+/*
+* wx fans
+* */
+//setInterval(function() {
+//    Order.open().findOne({
+//        status: '未处理',
+//        type: 'wx',
+//        smallType: {$in: ['friend', 'fans']}
+//    }).then(function(result) {
+//        if(result) {
+//            request.post({
+//                url:'http://178.rocks:88/weixin/user?page=guanzhu',
+//                headers:{
+//                    "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+//                    "Accept-Encoding": 'gzip, deflate',
+//                    "Accept-Language": 'zh-CN,zh;q=0.8',
+//                    "Cache-Control": 'max-age=0',
+//                    "Connection": 'keep-alive',
+//                    "Content-Type": 'application/x-www-form-urlencoded',
+//                    "Cookie": 'CNZZDATA1257735939=1315353245-1459915037-%7C1460080684; session=.eJxVUctuwjAQ_BXL5yjyIwTHEgcEpQLJoLZBiFxQSEwe5IGcBEoQ_14ToIKbd2d2Zmd9gaNYBvtRGUrILxBsIYeijYj4Ggzg1YBJcUxquQle8bU7ywSZpzc8K6OkgLxWjTRgneSahS0bIUYtQk3qOAZsKqluszslZXvDKXHMvtPT4qGuECL200fzsNb0q3oT-vXdUXPgRCUGQAwMDwoQhG2AEacORw74FG63hjzKDHJLv9JNXhbyDDmzegiZqGtVcdmcE8if9W_ilzupGww7ds-kzO4_sgRlU9SQU1trPYQwQZbJMKMGPPhVdSpV-H8Lz_04rVffqWj3aLGaxXM3i9f5LJu7XibGS-ql05OXRpYgy-6eSkbqPdtPUxiAMDCR20e2Psc2x-yZ7W33qu5m8f2shZ-_fJsbkcV4aol2SEUaaLvr9Q_tY4wM.Ceisbw.JOkzfMJO8DqE0HS6cZHast23aNw',
+//                    "Host": '178.rocks:88',
+//                    "Origin": 'http://178.rocks:88',
+//                    "Referer": 'http://178.rocks:88/weixin/user?page=guanzhu',
+//                    "Upgrade-Insecure-Requests": 1,
+//                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+//                },
+//                formData: {
+//                    gongzh: result.account,
+//                    guanzhusl: result.num,
+//                    immediate: 1,
+//                    method: 0
+//                }
+//            },function(err,res,body){
+//                if(err) {
+//                    return console.log(err);
+//                }
+//                var $ = cheerio.load(body);
+//                var aimItem = $('tbody').children().last();
+//                var account = aimItem.children().first().next().text();
+//                var num = aimItem.children().first().next().next().text();
+//                if(account == result.account && num == result.num){
+//                    var resultInstance = Order.wrapToInstance(result);
+//                    resultInstance.complete(function() {
+//                        console.log('自动处理订单完成了, account = ' + result.account);
+//                        callback();
+//                    })
+//                }
+//
+//                $('tbody a').each(function (i, e) {
+//                    var taskHref = $(e).attr('href');
+//                    if(taskHref == result.address) {
+//                        var resultInstance = Order.wrapToInstance(result);
+//                        resultInstance.complete(function() {
+//                            console.log('自动处理订单完成了, href = ' + result.address);
+//                            callback();
+//                        })
+//                    }else {
+//                        post_key = '';
+//                        callback();
+//                    }
+//                });
+//            });
+//        }else {
+//
+//        }
+//    })
+//}, 1000 * 60);
 
-function startInterval() {
-    var random = (Math.random() / 3 * 100).toFixed(0);
-    task_time = random >= 5 ? random * 1000 : 5 * 1000;
-    return setInterval(function() {
-        if(post_key == ''){
-            noKey(clearTime);
-        }else {
-            yesKey(clearTime);
-        }
-    }, task_time);
-}
 
-function clearTime() {
-    clearInterval(valIndex);
-    valIndex = startInterval();
-}
-
-function noKey(callback) {
-    request.get({
-        url:'http://120.25.203.122/tuike_sys.php',
-        headers:{
-            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            "Accept-Encoding": 'gzip, deflate, sdch',
-            "Accept-Language": 'zh-CN,zh;q=0.8',
-            "Cache-Control": 'max-age=0',
-            "Connection": 'keep-alive',
-            "Cookie": 'PHPSESSID=rrk21m5gqgbdmbd3lsjs312o10',
-            "Host": '120.25.203.122',
-            "Referer": 'http://120.25.203.122/login.html',
-            "Upgrade-Insecure-Requests": 1,
-            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-        }
-    },function(err,res,body){
-        if(err) {
-            return console.log(err);
-        }
-        var $ = cheerio.load(body);
-        post_key = $('#post_key').val();
-        yesKey(callback);
-    });
-}
-
-function yesKey(callback) {
-    Order.open().findOne({
-        status: '未处理',
-        type: 'wx',
-        smallType: {$in: ['read', 'like']}
-    }).then(function (result) {
-        if (result) {
-            request.post({
-                url:'http://120.25.203.122/tuike_sys.php',
-                headers:{
-                    "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                    "Accept-Encoding": 'gzip, deflate, sdch',
-                    "Accept-Language": 'zh-CN,zh;q=0.8',
-                    "Cache-Control": 'max-age=0',
-                    "Connection": 'keep-alive',
-                    "Cookie": 'PHPSESSID=rrk21m5gqgbdmbd3lsjs312o10',
-                    "Host": '120.25.203.122',
-                    "Referer": 'http://120.25.203.122/tuike_sys.php',
-                    "Upgrade-Insecure-Requests": 1,
-                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-                },
-                formData: {
-                    url: result.address,
-                    speed: result.speed ? result.speed : 167,
-                    read_cnt: result.num,
-                    post_key: post_key,
-                    like_cnt: result.num2 ? result.num2 : 0,
-                    like: (result.num2 / result.num).toFixed(3)
-                }
-            },function(err,res,body){
-                if(err) {
-                    return console.log(err);
-                }
-                var $ = cheerio.load(body);
-                post_key = $('#post_key').val();
-                $('tbody a').each(function (i, e) {
-                    var taskHref = $(e).attr('href');
-                    if(taskHref == result.address) {
-                        var resultInstance = Order.wrapToInstance(result);
-                        resultInstance.complete(function() {
-                            console.log('自动处理订单完成了, href = ' + result.address);
-                            callback();
-                        })
-                    }else {
-                        post_key = '';
-                        callback();
-                    }
-                });
-            });
-        }else {
-            post_key = '';
-            callback();
-        }
-    });
-}
+/*
+* wx read and like
+* */
+//var post_key = '';
+//var task_time = 1000 * 20;
+//var valIndex = startInterval();
+//
+//function startInterval() {
+//    var random = (Math.random() / 3 * 100).toFixed(0);
+//    task_time = random >= 5 ? random * 1000 : 5 * 1000;
+//    return setInterval(function() {
+//        if(post_key == ''){
+//            noKey(clearTime);
+//        }else {
+//            yesKey(clearTime);
+//        }
+//    }, task_time);
+//}
+//
+//function clearTime() {
+//    clearInterval(valIndex);
+//    valIndex = startInterval();
+//}
+//
+//function noKey(callback) {
+//    request.get({
+//        url:'http://120.25.203.122/tuike_sys.php',
+//        headers:{
+//            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+//            "Accept-Encoding": 'gzip, deflate, sdch',
+//            "Accept-Language": 'zh-CN,zh;q=0.8',
+//            "Cache-Control": 'max-age=0',
+//            "Connection": 'keep-alive',
+//            "Cookie": 'PHPSESSID=rrk21m5gqgbdmbd3lsjs312o10',
+//            "Host": '120.25.203.122',
+//            "Referer": 'http://120.25.203.122/login.html',
+//            "Upgrade-Insecure-Requests": 1,
+//            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+//        }
+//    },function(err,res,body){
+//        if(err) {
+//            return console.log(err);
+//        }
+//        var $ = cheerio.load(body);
+//        post_key = $('#post_key').val();
+//        yesKey(callback);
+//    });
+//}
+//
+//function yesKey(callback) {
+//    Order.open().findOne({
+//        status: '未处理',
+//        type: 'wx',
+//        smallType: {$in: ['read', 'like']}
+//    }).then(function (result) {
+//        if (result) {
+//            request.post({
+//                url:'http://120.25.203.122/tuike_sys.php',
+//                headers:{
+//                    "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+//                    "Accept-Encoding": 'gzip, deflate, sdch',
+//                    "Accept-Language": 'zh-CN,zh;q=0.8',
+//                    "Cache-Control": 'max-age=0',
+//                    "Connection": 'keep-alive',
+//                    "Cookie": 'PHPSESSID=rrk21m5gqgbdmbd3lsjs312o10',
+//                    "Host": '120.25.203.122',
+//                    "Referer": 'http://120.25.203.122/tuike_sys.php',
+//                    "Upgrade-Insecure-Requests": 1,
+//                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+//                },
+//                formData: {
+//                    url: result.address,
+//                    speed: result.speed ? result.speed : 167,
+//                    read_cnt: result.num,
+//                    post_key: post_key,
+//                    like_cnt: result.num2 ? result.num2 : 0,
+//                    like: (result.num2 / result.num).toFixed(3)
+//                }
+//            },function(err,res,body){
+//                if(err) {
+//                    return console.log(err);
+//                }
+//                var $ = cheerio.load(body);
+//                post_key = $('#post_key').val();
+//                $('tbody a').each(function (i, e) {
+//                    var taskHref = $(e).attr('href');
+//                    if(taskHref == result.address) {
+//                        var resultInstance = Order.wrapToInstance(result);
+//                        resultInstance.complete(function() {
+//                            console.log('自动处理订单完成了, href = ' + result.address);
+//                            callback();
+//                        })
+//                    }else {
+//                        post_key = '';
+//                        callback();
+//                    }
+//                });
+//            });
+//        }else {
+//            post_key = '';
+//            callback();
+//        }
+//    });
+//}
 
 
 module.exports = Order;
