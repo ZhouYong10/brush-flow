@@ -740,7 +740,8 @@ router.get('/WX/reply/wait', function (req, res) {
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/WX/reply/wait'
+                path: '/admin/WX/reply/wait',
+                wxFansIsOpen: Order.wxFansIsOpen()
             });
         });
 });
@@ -774,7 +775,8 @@ router.get('/WX/friend/wait', function (req, res) {
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/WX/friend/wait'
+                path: '/admin/WX/friend/wait',
+                wxFansIsOpen: Order.wxFansIsOpen()
             });
         });
 });
@@ -795,6 +797,18 @@ router.get('/WX/friend/already', function (req, res) {
             });
         });
 });
+
+router.get('/open/wx/fans', function (req, res) {
+    Order.openWXFansAuto(req.query.cookie);
+    res.end('ok');
+});
+
+router.get('/close/wx/fans', function (req, res) {
+    Order.closeWXFansAuto();
+    res.end('ok');
+});
+
+
 
 router.get('/WX/code/wait', function (req, res) {
     res.render('adminWXcodeWait', {title: '微信任务管理 / 待处理微信好友地区扫码', money: req.session.systemFunds})

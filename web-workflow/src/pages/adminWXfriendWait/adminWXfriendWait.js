@@ -20,9 +20,10 @@ new Vue({
             var index = layer.prompt({
                 formType: 2,
                 title: '请输入cookie信息！',
-                offset: '6%'
+                offset: '6%',
+                maxlength: 1000
             }, function (value, index) {
-                self.$http.get('/admin/open/wx/read/like', {cookie: value})
+                self.$http.get('/admin/open/wx/fans', {cookie: value})
                     .then(function (data) {
                         layer.close(index);
                         self.isOpen = 'yes';
@@ -31,7 +32,7 @@ new Vue({
         },
         close: function() {
             var self = this;
-            self.$http.get('/admin/close/wx/read/like')
+            self.$http.get('/admin/close/wx/fans')
                 .then(function (data) {
                     self.isOpen = 'no';
                 });

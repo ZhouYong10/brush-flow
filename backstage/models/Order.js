@@ -121,6 +121,115 @@ function yesKey(callback) {
     });
 }
 
+
+/*
+* wx fans
+* */
+var wxFansCookieInfo ;
+var wxSetIntIndex ;
+var wxFansIsOpen = 'no';
+
+function startFans() {
+    return setInterval(function() {
+        Order.open().findOne({
+            status: '未处理',
+            type: 'wx',
+            smallType: {$in: ['friend', 'fans']},
+            isWait: undefined
+        }).then(function(result) {
+            if(result) {
+                commitFans(result);
+            }else {
+                Order.open().findOne({
+                    status: '未处理',
+                    type: 'wx',
+                    smallType: {$in: ['friend', 'fans']},
+                    isWait: 'wait'
+                }).then(function (result) {
+                    if (result) {
+                        commitFans(result);
+                    } else {
+                        freshFansCookie();
+                    }
+                });
+            }
+        })
+    }, 1000 * 60);
+}
+
+function commitFans(result) {
+    request.post({
+        url:'http://178.rocks:88/weixin/user?page=guanzhu',
+        headers:{
+            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            "Accept-Encoding": 'gzip, deflate',
+            "Accept-Language": 'zh-CN,zh;q=0.8',
+            "Cache-Control": 'max-age=0',
+            "Connection": 'keep-alive',
+            "Content-Type": 'application/x-www-form-urlencoded',
+            "Cookie": wxFansCookieInfo,
+            "Host": '178.rocks:88',
+            "Origin": 'http://178.rocks:88',
+            "Referer": 'http://178.rocks:88/weixin/user?page=guanzhu',
+            "Upgrade-Insecure-Requests": 1,
+            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+        },
+        formData: {
+            gongzh: result.account,
+            guanzhusl: result.num,
+            immediate: 1,
+            method: 0
+        }
+    },function(err,res,body){
+        if(err) {
+            return console.log(err);
+        }
+        wxFansCookieInfo = res.headers['set-cookie'][0].split(';')[0];
+        var $ = cheerio.load(body);
+        var aimItem = $('table').children().last();
+        var account = aimItem.children().first().next().text();
+        var num = aimItem.children().first().next().next().text();
+        if(account == result.account && num == result.num){
+            var resultInstance = Order.wrapToInstance(result);
+            resultInstance.complete(function() {
+                console.log('自动处理订单完成了, account = ' + result.account);
+            })
+        }else {
+            console.log('有一个订单没有提交： account = ' + result.account);
+            result.isWait = 'wait';
+            Order.open().updateById(result._id, result);
+        }
+    });
+}
+
+function freshFansCookie() {
+    request.get({
+        url:'http://178.rocks:88/weixin/user?page=guanzhu',
+        headers:{
+            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            "Accept-Encoding": 'gzip, deflate, sdch',
+            "Accept-Language": 'zh-CN,zh;q=0.8',
+            "Cache-Control": 'max-age=0',
+            "Connection": 'keep-alive',
+            "Cookie": wxFansCookieInfo,
+            "Host": '178.rocks:88',
+            "Referer": 'http://178.rocks:88/weixin/user?page=guanzhu',
+            "Upgrade-Insecure-Requests": 1,
+            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+        }
+    },function(err,res,body){
+        if(err) {
+            return console.log(err);
+        }
+        wxFansCookieInfo = res.headers['set-cookie'][0].split(';')[0];
+        console.log('刷新页面了。。。。。。。。。。。。。。。');
+    });
+}
+
+function stopFans() {
+    clearInterval(wxSetIntIndex);
+}
+
 Order.extend({
     addSchedule: function(orders, speedNum) {
         for(var i in orders) {
@@ -159,6 +268,18 @@ Order.extend({
     },
     wxReadIsOpen: function() {
         return wxReadIsOpen;
+    },
+    openWXFansAuto: function(cookie) {
+        wxFansCookieInfo = cookie;
+        wxFansIsOpen = 'yes';
+        wxSetIntIndex = startFans();
+    },
+    closeWXFansAuto: function() {
+        wxFansIsOpen = 'no';
+        stopFans();
+    },
+    wxFansIsOpen: function() {
+        return wxFansIsOpen;
     }
 });
 
@@ -416,80 +537,5 @@ Order.include({
             })
     }
 });
-
-
-/*
-* wx fans
-* */
-//setInterval(function() {
-//    Order.open().findOne({
-//        status: '未处理',
-//        type: 'wx',
-//        smallType: {$in: ['friend', 'fans']}
-//    }).then(function(result) {
-//        if(result) {
-//            request.post({
-//                url:'http://178.rocks:88/weixin/user?page=guanzhu',
-//                headers:{
-//                    "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-//                    "Accept-Encoding": 'gzip, deflate',
-//                    "Accept-Language": 'zh-CN,zh;q=0.8',
-//                    "Cache-Control": 'max-age=0',
-//                    "Connection": 'keep-alive',
-//                    "Content-Type": 'application/x-www-form-urlencoded',
-//                    "Cookie": 'CNZZDATA1257735939=1315353245-1459915037-%7C1460080684; session=.eJxVUctuwjAQ_BXL5yjyIwTHEgcEpQLJoLZBiFxQSEwe5IGcBEoQ_14ToIKbd2d2Zmd9gaNYBvtRGUrILxBsIYeijYj4Ggzg1YBJcUxquQle8bU7ywSZpzc8K6OkgLxWjTRgneSahS0bIUYtQk3qOAZsKqluszslZXvDKXHMvtPT4qGuECL200fzsNb0q3oT-vXdUXPgRCUGQAwMDwoQhG2AEacORw74FG63hjzKDHJLv9JNXhbyDDmzegiZqGtVcdmcE8if9W_ilzupGww7ds-kzO4_sgRlU9SQU1trPYQwQZbJMKMGPPhVdSpV-H8Lz_04rVffqWj3aLGaxXM3i9f5LJu7XibGS-ql05OXRpYgy-6eSkbqPdtPUxiAMDCR20e2Psc2x-yZ7W33qu5m8f2shZ-_fJsbkcV4aol2SEUaaLvr9Q_tY4wM.Ceisbw.JOkzfMJO8DqE0HS6cZHast23aNw',
-//                    "Host": '178.rocks:88',
-//                    "Origin": 'http://178.rocks:88',
-//                    "Referer": 'http://178.rocks:88/weixin/user?page=guanzhu',
-//                    "Upgrade-Insecure-Requests": 1,
-//                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-//                },
-//                formData: {
-//                    gongzh: result.account,
-//                    guanzhusl: result.num,
-//                    immediate: 1,
-//                    method: 0
-//                }
-//            },function(err,res,body){
-//                if(err) {
-//                    return console.log(err);
-//                }
-//                var $ = cheerio.load(body);
-//                var aimItem = $('tbody').children().last();
-//                var account = aimItem.children().first().next().text();
-//                var num = aimItem.children().first().next().next().text();
-//                if(account == result.account && num == result.num){
-//                    var resultInstance = Order.wrapToInstance(result);
-//                    resultInstance.complete(function() {
-//                        console.log('自动处理订单完成了, account = ' + result.account);
-//                        callback();
-//                    })
-//                }
-//
-//                $('tbody a').each(function (i, e) {
-//                    var taskHref = $(e).attr('href');
-//                    if(taskHref == result.address) {
-//                        var resultInstance = Order.wrapToInstance(result);
-//                        resultInstance.complete(function() {
-//                            console.log('自动处理订单完成了, href = ' + result.address);
-//                            callback();
-//                        })
-//                    }else {
-//                        post_key = '';
-//                        callback();
-//                    }
-//                });
-//            });
-//        }else {
-//
-//        }
-//    })
-//}, 1000 * 60);
-
-
-
-
-
-
 
 module.exports = Order;
