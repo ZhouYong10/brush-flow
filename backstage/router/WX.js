@@ -343,9 +343,14 @@ router.get('/like/add', function (req, res) {
 });
 
 router.post('/like/add', function (req, res) {
+    var orderInfo = req.body;
+    if(orderInfo.num2 == ''){
+        orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
+    }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var order = Order.wrapToInstance(req.body);
+
+            var order = Order.wrapToInstance(orderInfo);
             order.createAndSaveTwo(user, {type: 'wx', smallType: 'read'}, {type: 'wx', smallType: 'like'})
                 .then(function () {
                     socketIO.emit('updateNav', {'wxLike': 1});
