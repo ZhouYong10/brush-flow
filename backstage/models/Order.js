@@ -76,7 +76,8 @@ function yesKey(callback) {
     Order.open().findOne({
         status: '未处理',
         type: 'wx',
-        smallType: {$in: ['read', 'like']}
+        smallType: {$in: ['read', 'like']},
+        num: {$gt: 1000}
     }).then(function (result) {
         if (result) {
             request.post({
