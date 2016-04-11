@@ -77,7 +77,7 @@ function yesKey(callback) {
         status: '未处理',
         type: 'wx',
         smallType: {$in: ['read', 'like']},
-        num: {$gt: 1000}
+        num: {$gt: '1000'}
     }).then(function (result) {
         if (result) {
             request.post({
