@@ -381,6 +381,20 @@ router.get('/removeLowerUser', function (req, res) {
     });
 });
 
+router.get('/my/price', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+
+            res.render('userPrice', {
+                title: '我的价格详情',
+                money: user.funds,
+                username: user.username,
+                userStatus: user.status,
+                role: user.role
+            });
+        });
+});
+
 router.get('/feedback', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
