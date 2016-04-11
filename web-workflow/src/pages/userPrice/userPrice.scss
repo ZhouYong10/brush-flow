@@ -11,3 +11,20 @@ th{
   text-align: center;
 }
 
+.am-panel-default{
+  margin: 0;
+  ul{
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+  }
+
+  li{
+    padding: 10px 22px;
+    border-bottom: 1px solid #ddd;
+    list-style: none;
+  }
+}
+
+
+

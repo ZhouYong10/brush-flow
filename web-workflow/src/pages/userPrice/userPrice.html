@@ -23,34 +23,119 @@
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
-                <div class="am-scrollable-horizontal am-text-center">
-                    <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
-                        <thead>
-                        <tr>
-                            <th>账号</th>
-                            <th>创建时间</th>
-                            <th>等级</th>
-                            <th>余额</th>
-                            <th>下线/人</th>
-                            <th>最后登陆时间</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                <div class="am-panel am-panel-default">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">论坛回复</h3>
+                    </div>
+                    <ul>
+                        <% for(var i = 0; i < forums.length; i ++){ %>
+                            <li class="am-u-sm-2"><%= i + 1 %></li>
+                            <li class="am-u-sm-8 am-text-center"><%= forums[i].typeName %><%= forums[i].smallTypeName %></li>
+                            <% if(role == '顶级代理'){ %>
+                            <li class="am-u-sm-2"><%= forums[i].topPrice %></li>
+                            <% } %>
 
-                        <tr>
-                            <td>账号</td>
-                            <td>创建时间</td>
-                            <td>等级</td>
-                            <td>余额</td>
-                            <td>下线/人</td>
-                            <td>最后登陆时间</td>
-                            <td>操作</td>
-                        </tr>
+                            <% if(role == '超级代理'){ %>
+                            <li class="am-u-sm-2"><%= forums[i].superPrice %></li>
+                            <% } %>
 
-                        </tbody>
-                    </table>
+                            <% if(role == '金牌代理'){ %>
+                            <li class="am-u-sm-2"><%= forums[i].goldPrice %></li>
+                            <% } %>
+                        <% } %>
+                    </ul>
+                </div>
 
+                <div class="am-panel am-panel-default">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">流量业务</h3>
+                    </div>
+                    <ul>
+                        <% for(var i = 0; i < flows.length; i ++){ %>
+                        <li class="am-u-sm-2"><%= i + 1 %></li>
+                        <li class="am-u-sm-8 am-text-center"><%= flows[i].typeName %><%= flows[i].smallTypeName %></li>
+                        <% if(role == '顶级代理'){ %>
+                        <li class="am-u-sm-2"><%= flows[i].topPrice %></li>
+                        <% } %>
+
+                        <% if(role == '超级代理'){ %>
+                        <li class="am-u-sm-2"><%= flows[i].superPrice %></li>
+                        <% } %>
+
+                        <% if(role == '金牌代理'){ %>
+                        <li class="am-u-sm-2"><%= flows[i].goldPrice %></li>
+                        <% } %>
+                        <% } %>
+                    </ul>
+                </div>
+
+                <div class="am-panel am-panel-default">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">微信业务</h3>
+                    </div>
+                    <ul>
+                        <% for(var i = 0; i < wxs.length; i ++){ %>
+                        <li class="am-u-sm-2"><%= i + 1 %></li>
+                        <li class="am-u-sm-8 am-text-center"><%= wxs[i].typeName %><%= wxs[i].smallTypeName %></li>
+                        <% if(role == '顶级代理'){ %>
+                        <li class="am-u-sm-2"><%= wxs[i].topPrice %></li>
+                        <% } %>
+
+                        <% if(role == '超级代理'){ %>
+                        <li class="am-u-sm-2"><%= wxs[i].superPrice %></li>
+                        <% } %>
+
+                        <% if(role == '金牌代理'){ %>
+                        <li class="am-u-sm-2"><%= wxs[i].goldPrice %></li>
+                        <% } %>
+                        <% } %>
+                    </ul>
+                </div>
+
+                <div class="am-panel am-panel-default">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">美拍业务</h3>
+                    </div>
+                    <ul>
+                        <% for(var i = 0; i < mps.length; i ++){ %>
+                        <li class="am-u-sm-2"><%= i + 1 %></li>
+                        <li class="am-u-sm-8 am-text-center"><%= mps[i].typeName %><%= mps[i].smallTypeName %></li>
+                        <% if(role == '顶级代理'){ %>
+                        <li class="am-u-sm-2"><%= mps[i].topPrice %></li>
+                        <% } %>
+
+                        <% if(role == '超级代理'){ %>
+                        <li class="am-u-sm-2"><%= mps[i].superPrice %></li>
+                        <% } %>
+
+                        <% if(role == '金牌代理'){ %>
+                        <li class="am-u-sm-2"><%= mps[i].goldPrice %></li>
+                        <% } %>
+                        <% } %>
+                    </ul>
+                </div>
+
+                <div class="am-panel am-panel-default">
+                    <div class="am-panel-hd">
+                        <h3 class="am-panel-title">微博业务</h3>
+                    </div>
+                    <ul>
+                        <% for(var i = 0; i < wbs.length; i ++){ %>
+                        <li class="am-u-sm-2"><%= i + 1 %></li>
+                        <li class="am-u-sm-8 am-text-center"><%= wbs[i].typeName %><%= wbs[i].smallTypeName %></li>
+                        <% if(role == '顶级代理'){ %>
+                        <li class="am-u-sm-2"><%= wbs[i].topPrice %></li>
+                        <% } %>
+
+                        <% if(role == '超级代理'){ %>
+                        <li class="am-u-sm-2"><%= wbs[i].superPrice %></li>
+                        <% } %>
+
+                        <% if(role == '金牌代理'){ %>
+                        <li class="am-u-sm-2"><%= wbs[i].goldPrice %></li>
+                        <% } %>
+                        <% } %>
+                    </ul>
                 </div>
 
             </div>

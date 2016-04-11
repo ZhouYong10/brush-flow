@@ -7,6 +7,7 @@ var Feedback = require('../models/Feedback');
 var Recharge = require('../models/Recharge');
 var Withdraw = require('../models/Withdraw');
 var Profit = require('../models/Profit');
+var Product = require('../models/Product');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
@@ -385,13 +386,29 @@ router.get('/my/price', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
 
-            res.render('userPrice', {
-                title: '我的价格详情',
-                money: user.funds,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
-            });
+            var product = Product.open();
+            product.find({type: 'forum'}).then(function(forums) {
+                product.find({type: 'flow'}).then(function(flows) {
+                    product.find({type: 'wx'}).then(function(wxs) {
+                        product.find({type: 'mp'}).then(function(mps) {
+                            product.find({type: 'wb'}).then(function(wbs) {
+                                res.render('userPrice', {
+                                    title: '我的价格详情',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    forums: forums,
+                                    flows: flows,
+                                    wxs: wxs,
+                                    mps: mps,
+                                    wbs: wbs
+                                });
+                            })
+                        })
+                    })
+                })
+            })
         });
 });
 
