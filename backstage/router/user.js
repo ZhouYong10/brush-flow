@@ -156,7 +156,7 @@ router.get('/search/consume', function (req, res) {
 router.get('/info', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Profit.getProfitByUserId(user._id)
+            Profit.getProfitTotal({userId: user._id, status: 'success'})
                 .then(function (profit) {
                     user.profit = profit;
                     res.render('userInfo', {
@@ -409,6 +409,56 @@ router.get('/my/price', function (req, res) {
                     })
                 })
             })
+        });
+});
+
+router.get('/lowerUser/profit', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Profit.getProfitTotal({userId: user._id, status: 'success'})
+                .then(function(totalProfit) {
+                    Profit.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
+                        .then(function(obj) {
+                            res.render('lowerUserProfit', {
+                                title: '下级返利详情',
+                                money: user.funds,
+                                username: user.username,
+                                userStatus: user.status,
+                                role: user.role,
+                                profits: obj.results,
+                                pages: obj.pages,
+                                totalProfit: totalProfit
+                            });
+                        })
+                })
+        });
+});
+
+router.get('/search/lowerUser/profit', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Profit.getProfitTotal({
+                userId: user._id,
+                status: 'success',
+                createTime: new RegExp(req.query.createTime)
+            }).then(function(totalProfit) {
+                    Profit.open().findPages({
+                            userId: user._id,
+                            createTime: new RegExp(req.query.createTime)
+                        }, (req.query.page ? req.query.page : 1))
+                        .then(function(obj) {
+                            res.render('lowerUserProfit', {
+                                title: '下级返利详情',
+                                money: user.funds,
+                                username: user.username,
+                                userStatus: user.status,
+                                role: user.role,
+                                profits: obj.results,
+                                pages: obj.pages,
+                                totalProfit: totalProfit
+                            });
+                        })
+                })
         });
 });
 
