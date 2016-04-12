@@ -45,9 +45,28 @@
     </div>
 </div>
 
+<template>
+    <div style="padding: 0 8px; font-size: 1.4em;">
+        <ul class="am-list">
+
+            <% for(var i = 0; i < placards.length && i < 3; i++) { %>
+            <li>
+                <a>
+                    <span>【<%= placards[i].placardName %>】 </span>
+                    <span><%= placards[i].sendTime %> &nbsp;</span>
+                    <span><%= placards[i].placardContent %></span>
+                </a>
+            </li>
+            <% } %>
+
+        </ul>
+    </div>
+</template>
+
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 <script src="/static/plugins/laypage/laypage.js"></script>
 
 <script>
@@ -69,6 +88,16 @@
                 }
             }
         });
+
+        if(!location.search && $(window).width() > 600){
+            layer.open({
+                type: 1,
+                title: '最新公告',
+                offset: '16%',
+                area: '600px',
+                content: $('template').html()
+            })
+        }
     })
 </script>
 
