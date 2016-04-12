@@ -344,6 +344,7 @@ router.get('/like/add', function (req, res) {
 
 router.post('/like/add', function (req, res) {
     var orderInfo = req.body;
+    orderInfo.num = parseInt(orderInfo.num);
     if(orderInfo.num2 == ''){
         orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
     }
