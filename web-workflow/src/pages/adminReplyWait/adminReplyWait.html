@@ -71,9 +71,10 @@
                                 <%= orders[i].min %>至<%= orders[i].max %>分钟
                             </td>
                             <td class="am-text-middle">
-                                <a class="am-text-truncate text-break" title="<%= orders[i].content.split('\r\n').join(' 【&】 ') %>">
-                                    <%= orders[i].content.split('\r\n').join(' 【&】 ') %>
-                                </a>
+                                <input type="text" value="<%= orders[i].content %>" style="width: 56px;"><br/>
+                                <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                   title="<%= orders[i].content %>"
+                                   data-clipboard-text="<%= orders[i].content %>">复制</a>
                             </td>
                             <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                             <td class="am-text-middle">
