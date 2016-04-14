@@ -293,6 +293,11 @@ Order.include({
                     var product = Product.wrapToInstance(result);
                     var myPrice = product.getPriceByRole(user.role);
                     self.totalPrice = (myPrice * self.num).toFixed(4);
+                    if(product.type == 'forum'){
+                        if(self.totalPrice < 0.5) {
+                            self.totalPrice = 0.5;
+                        }
+                    }
                     if((self.totalPrice - user.funds) > 0) {
                         return reject();
                     }

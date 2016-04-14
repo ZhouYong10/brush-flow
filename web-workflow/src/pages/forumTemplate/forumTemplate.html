@@ -92,7 +92,7 @@
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <textarea id="contentSelf" class="am-radius" rows="3" placeholder="{{remark}}"
                                           v-validate:content="{required: true, maxprice: true}"
-                                          name="content" @keyup.enter="getTotalPrice" @blur="getTotalPrice"></textarea>
+                                          name="content" @keyup="getTotalPrice" @blur="getTotalPrice"></textarea>
                                 <span class="tips" v-if="$forumcomment.content.required">评论内容不能为空!</span>
                             </div>
                         </div>
@@ -100,7 +100,8 @@
                         <div class="am-form-group">
                             <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                             <div class="am-u-sm-8 am-u-lg-10">
-                                <p class="disable">￥ {{totalPrice}}</p>
+                                <span class="disable">￥ {{totalPrice}} ; 合计: {{num}} 条</span>
+                                <span class="tips">( 0.5金币起做,不足按0.5金币计算 )</span><br/>
                                 <span class="tips" v-if="$forumcomment.content.maxprice">您的余额不足，请充值!</span>
                                 <input type="hidden" v-model="funds" value="<%= money %>">
                             </div>

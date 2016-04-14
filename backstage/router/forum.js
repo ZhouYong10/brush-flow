@@ -78,7 +78,6 @@ router.get('/search/forum', function (req, res) {
             }
             Order.open().findPages(query, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    console.log(obj.results, '==============================');
                     Order.addSchedule(obj.results, 1);
                     res.render('forumTaskHistory', {
                         title: '论坛业务历史记录',

@@ -67,7 +67,6 @@ module.exports = {
                 type: 'forum',
                 address: new RegExp(mainUrl)
             }).then(function(result) {
-                console.log(result, '------------------------------');
                 if(result) {
                     if(result.condition == 'normal'){
                         request({

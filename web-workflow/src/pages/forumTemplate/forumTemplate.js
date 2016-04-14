@@ -38,7 +38,11 @@ new Vue({
             var self = this;
             self.num = $('#contentSelf').val().split('\n').length;
             var totalPrice = (self.price * self.num).toFixed(4);
-            self.totalPrice = totalPrice;
+            if(totalPrice < 0.5) {
+                self.totalPrice = 0.5;
+            }else {
+                self.totalPrice = totalPrice;
+            }
         }
     },
     validators: {
