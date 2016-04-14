@@ -12,3 +12,9 @@
 .prompt-content{
   color: #c62b26;
 }
+
+@media (min-width: 800px) {
+  form{
+    padding-right: 88px;
+  }
+}

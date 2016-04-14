@@ -628,11 +628,35 @@ router.get('/order/dealError', function (req, res) {
  * manage order form
  * */
 router.get('/reply/wait', function (req, res) {
-    res.render('adminReplyWait', {title: '回复任务管理 / 待处理订单', money: req.session.systemFunds})
+    Order.open().findPages({
+            type: 'forum',
+            status: '未处理'
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminReplyWait', {
+                title: '回复任务管理 / 待处理订单',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/reply/wait'
+            });
+        });
 });
 
 router.get('/reply/already', function (req, res) {
-    res.render('adminReplyAlre', {title: '回复任务管理 / 已处理订单', money: req.session.systemFunds})
+    Order.open().findPages({
+            type: 'forum',
+            status: {$ne: '未处理'}
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminReplyAlre', {
+                title: '回复任务管理 / 已处理订单',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/reply/already'
+            });
+        });
 });
 
 
@@ -923,6 +947,14 @@ router.get('/redirect/aim/order', function (req, res) {
         var arr = [];
         arr.push(result);
         switch (type) {
+            case 'forum':
+                render = 'adminReplyAlre';
+                title = '回复任务管理 / 已处理订单';
+                break;
+            case 'flow':
+                render = 'adminFlowAlre';
+                title = '流量任务管理 / 已处理订单';
+                break;
             case 'wx':
                 switch (smallType) {
                     case 'article': case 'share': case 'collect':

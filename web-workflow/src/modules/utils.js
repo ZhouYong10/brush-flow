@@ -56,6 +56,19 @@ module.exports = {
                 });
         });
     },
+    parseForumAddress: function(httpObj,address) {
+        return new Promise(function(resolve, reject) {
+            httpObj.post('/parse/forum/title/by/address', {address: address})
+                .then(function (res) {
+                    var result = res.data;
+                    if(result.isOk) {
+                        resolve(result);
+                    }else {
+                        reject(result.message);
+                    }
+                });
+        });
+    },
     isNum: function(val) {
         if(val == '' || val == 0){
             return true;

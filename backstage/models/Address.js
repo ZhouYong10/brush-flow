@@ -4,6 +4,8 @@
 var request = require('request');
 var cheerio = require('cheerio');
 
+var Product = require('./Product');
+
 module.exports = {
     parseWxTitle: function (address) {
         return new Promise(function (resolve, reject) {
@@ -54,6 +56,48 @@ module.exports = {
                     });
                 }
             });
+        })
+    },
+    parseForumTitle: function (address, userRole) {
+        return new Promise(function (resolve, reject) {
+            var arr = address.split('/')[2].split('.');
+            arr.shift();
+            var mainUrl = arr.join('.');
+            Product.open().findOne({
+                type: 'forum',
+                address: new RegExp(mainUrl)
+            }).then(function(result) {
+                console.log(result, '------------------------------');
+                if(result) {
+                    request({
+                        url: address
+                    }, function (err, obj, body) {
+                        if (err) {
+                            reject({
+                                isOk: false,
+                                message: '对不起，地址解析失败，请联系管理员！'
+                            });
+                        } else {
+                            var productIns = Product.wrapToInstance(result);
+                            var myPrice = productIns.getPriceByRole(userRole);
+                            var $ = cheerio.load(body);
+                            resolve({
+                                isOk: true,
+                                title: $('title').text(),
+                                price: myPrice,
+                                remark: result.remark,
+                                smallType: result.smallType,
+                                addName: result.name
+                            });
+                        }
+                    });
+                }else {
+                    reject({
+                        isOk: false,
+                        message: '对不起，暂时不支持该链接地址！'
+                    });
+                }
+            })
         })
     }
 };
