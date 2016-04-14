@@ -117,7 +117,7 @@ module.exports = {
     },
     breakText: function(cla) {
         var clas = cla ? cla : '.text-break';
-        $(clas).click(function () {
+        $(clas).off().click(function () {
             var self = this;
             layer.alert($(self).text());
         });

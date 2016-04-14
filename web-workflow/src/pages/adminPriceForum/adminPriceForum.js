@@ -1,6 +1,8 @@
 /**
  * Created by ubuntu64 on 3/5/16.
  */
+var Utils = require('utils');
+
 var smallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
     '<option value="video">视频站点</option> ' +
@@ -61,12 +63,15 @@ var priceItemText = '<tr> ' +
     '<td class="superPrice"> </td> ' +
     '<td class="goldPrice"> </td> ' +
     '<td class="condition"><span></span> <input type="hidden" value=""></td> ' +
-    '<td class="remark"> </td> ' +
+    '<td class="remark"><a class="am-text-truncate text-break" title=""></a></td> ' +
     '<td class="operation"> </td> ' +
     '</tr>';
 var $changeItemTr ;
 
 $(function () {
+    Utils.layPage();
+    Utils.breakText();
+
     registerEditDelete($('.priceForum tbody'));
 
     $('#addPrice').off().click(function () {
@@ -115,7 +120,7 @@ function registerEditDelete($tbody) {
         $newParentTr.find('.superPrice').val($parentTr.find('.superPrice').text());
         $newParentTr.find('.goldPrice').val($parentTr.find('.goldPrice').text());
         $newParentTr.find('.condition').val($parentTr.find('.condition input').val());
-        $newParentTr.find('.remark').val($parentTr.find('.remark').text());
+        $newParentTr.find('.remark').val($.trim($parentTr.find('.remark .text-break').text()));
 
         var $aim ;
         if(num == 1) {
@@ -129,6 +134,7 @@ function registerEditDelete($tbody) {
         }
         registerChangeSaveGiveUp($tbody);
         removeImg($tbody);
+        Utils.breakText();
     });
 
     $tbody.find('.delete').off().click(function () {
@@ -185,7 +191,8 @@ function registerChangeSaveGiveUp($tbody) {
             $priceItemText.find('.goldPrice').text(product.goldPrice);
             $priceItemText.find('.condition span').text(product.conditionName);
             $priceItemText.find('.condition input').val(product.condition);
-            $priceItemText.find('.remark').text(product.remark);
+            $priceItemText.find('.remark .text-break').text(product.remark);
+            $priceItemText.find('.remark .text-break').attr('title', product.remark);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + product.id + '">'));
 
             var $aim ;
@@ -199,6 +206,7 @@ function registerChangeSaveGiveUp($tbody) {
                 $aim.prepend($priceItemText);
             }
             registerEditDelete($tbody);
+            Utils.breakText();
         })
     });
 
@@ -217,6 +225,7 @@ function registerChangeSaveGiveUp($tbody) {
             $aim.prepend($changeItemTr);
         }
         registerEditDelete($tbody);
+        Utils.breakText();
     });
 }
 
@@ -257,7 +266,8 @@ function registerSaveCancel($tbody) {
             $priceItemText.find('.goldPrice').text(result.goldPrice);
             $priceItemText.find('.condition span').text(result.conditionName);
             $priceItemText.find('.condition input').val(result.condition);
-            $priceItemText.find('.remark').text(result.remark);
+            $priceItemText.find('.remark .text-break').text(result.remark);
+            $priceItemText.find('.remark .text-break').attr('title', result.remark);
             $priceItemText.find('.operation').append($(changeBtn + deleteBtn + '<input type="hidden" value="' + result._id + '">'));
 
             var $aim ;
@@ -271,6 +281,7 @@ function registerSaveCancel($tbody) {
                 $aim.prepend($priceItemText);
             }
             registerEditDelete($tbody);
+            Utils.breakText();
         })
     });
 

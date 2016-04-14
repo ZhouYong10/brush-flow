@@ -29,4 +29,10 @@ th{
       color: #000;
     }
   }
+  .text-break {
+    color: #000;
+    display: inline-block;
+    max-width: 100px;
+    cursor: pointer;
+  }
 }
