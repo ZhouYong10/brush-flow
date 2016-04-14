@@ -32,7 +32,7 @@
                             <ul>
                                 <% for(var i = 0; i < forums.length; i ++){ %>
                                 <li class="am-u-sm-2 indexColor"><%= i + 1 %></li>
-                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= forums[i].typeName %><%= forums[i].smallTypeName %></li>
+                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= forums[i].name %></li>
                                 <% if(role == '顶级代理'){ %>
                                 <li class="am-u-sm-4 am-u-lg-3">￥<%= forums[i].topPrice %></li>
                                 <% } %>
@@ -56,7 +56,7 @@
                             <ul>
                                 <% for(var i = 0; i < flows.length; i ++){ %>
                                 <li class="am-u-sm-2 indexColor"><%= i + 1 %></li>
-                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= flows[i].typeName %><%= flows[i].smallTypeName %></li>
+                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= flows[i].name %></li>
                                 <% if(role == '顶级代理'){ %>
                                 <li class="am-u-sm-4 am-u-lg-3">￥<%= flows[i].topPrice %></li>
                                 <% } %>
@@ -80,7 +80,7 @@
                             <ul>
                                 <% for(var i = 0; i < wxs.length; i ++){ %>
                                 <li class="am-u-sm-2 indexColor"><%= i + 1 %></li>
-                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= wxs[i].typeName %><%= wxs[i].smallTypeName %></li>
+                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= wxs[i].name %></li>
                                 <% if(role == '顶级代理'){ %>
                                 <li class="am-u-sm-4 am-u-lg-3">￥<%= wxs[i].topPrice %></li>
                                 <% } %>
@@ -104,7 +104,7 @@
                             <ul>
                                 <% for(var i = 0; i < mps.length; i ++){ %>
                                 <li class="am-u-sm-2 indexColor"><%= i + 1 %></li>
-                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= mps[i].typeName %><%= mps[i].smallTypeName %></li>
+                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= mps[i].name %></li>
                                 <% if(role == '顶级代理'){ %>
                                 <li class="am-u-sm-4 am-u-lg-3">￥<%= mps[i].topPrice %></li>
                                 <% } %>
@@ -128,7 +128,7 @@
                             <ul>
                                 <% for(var i = 0; i < wbs.length; i ++){ %>
                                 <li class="am-u-sm-2 indexColor"><%= i + 1 %></li>
-                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= wbs[i].typeName %><%= wbs[i].smallTypeName %></li>
+                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= wbs[i].name %></li>
                                 <% if(role == '顶级代理'){ %>
                                 <li class="am-u-sm-4 am-u-lg-3">￥<%= wbs[i].topPrice %></li>
                                 <% } %>
