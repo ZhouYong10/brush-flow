@@ -69,28 +69,35 @@ module.exports = {
             }).then(function(result) {
                 console.log(result, '------------------------------');
                 if(result) {
-                    request({
-                        url: address
-                    }, function (err, obj, body) {
-                        if (err) {
-                            reject({
-                                isOk: false,
-                                message: '对不起，地址解析失败，请联系管理员！'
-                            });
-                        } else {
-                            var productIns = Product.wrapToInstance(result);
-                            var myPrice = productIns.getPriceByRole(userRole);
-                            var $ = cheerio.load(body);
-                            resolve({
-                                isOk: true,
-                                title: $('title').text(),
-                                price: myPrice,
-                                remark: result.remark,
-                                smallType: result.smallType,
-                                addName: result.name
-                            });
-                        }
-                    });
+                    if(result.condition == 'normal'){
+                        request({
+                            url: address
+                        }, function (err, obj, body) {
+                            if (err) {
+                                reject({
+                                    isOk: false,
+                                    message: '对不起，地址解析失败，请联系管理员！'
+                                });
+                            } else {
+                                var productIns = Product.wrapToInstance(result);
+                                var myPrice = productIns.getPriceByRole(userRole);
+                                var $ = cheerio.load(body);
+                                resolve({
+                                    isOk: true,
+                                    title: $('title').text(),
+                                    price: myPrice,
+                                    remark: result.remark,
+                                    smallType: result.smallType,
+                                    addName: result.name
+                                });
+                            }
+                        });
+                    }else {
+                        reject({
+                            isOk: false,
+                            message: '该网站服务正在开发维护中。。。。。'
+                        });
+                    }
                 }else {
                     reject({
                         isOk: false,
