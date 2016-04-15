@@ -24,7 +24,7 @@ new Vue({
                 securityCode: this.securityCode
             }).then((res) => {
                 if(res.data.isOK) {
-                    $('<a href="' + res.data.path + '" ></a>').get(0).click();
+                    location.href = res.data.path;
                 }else{
                     layer.msg(res.data.message);
                 }
