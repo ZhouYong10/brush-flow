@@ -19,7 +19,7 @@
 
     <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
+        <div id="flowForum" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
@@ -30,50 +30,55 @@
                     </div>
                 </div>
 
-                <form class="am-form am-form-horizontal">
+                <validator name="forumFlow">
+                <form class="am-form am-form-horizontal" method="post" action="/flow/forumTask">
+
                     <div class="am-form-group">
-                        <label for="aimAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>目标地址</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="aimAddress" class="am-radius am-input-sm" type="text" placeholder="请输入目标地址">
+                            <p class="disable">￥ {{price}}/5000</p>
+                            <input type="hidden" v-model="price" value="<%= price %>">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="aimTitle" class="am-u-sm-4 am-u-lg-2 am-form-label">目标标题</label>
+                        <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>目标地址</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <!--<input id="aimTitle" class="am-radius am-input-sm" type="text" readonly>-->
-                            <p id="aimTitle">发生的范德萨</p>
+                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写评论地址" name="address"
+                                   v-validate:address="{required: true, isaddress: true}">
+                            <span class="tips" v-if="$forumFlow.address.required">任务地址不能为空!</span>
+                            <span class="tips" v-if="$forumFlow.address.isaddress">请填写合法的地址!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="taskNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>执行数量</label>
+                        <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskNum" class="am-radius am-input-sm" type="text" placeholder="需要添加的任务数量">
+                            <input id="readNum" class="am-radius am-input-sm" type="text"
+                                   placeholder="刷10000次起步，不足10000 按10000计算，超过部分按照5000来算，不足5000按5000计算"
+                                    v-model="num" name="num"
+                                   v-validate:num="{required: true, isnum: true, maxprice: true}">
+                            <span class="tips" v-if="$forumFlow.num.required">需要添加的阅读数量不能为空!</span>
+                            <span class="tips" v-if="$forumFlow.num.isnum">数量必须为正整数!</span>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="aimTotal" class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                         <div class="am-u-sm-8 am-u-lg-10">
-                            <!--<input id="aimTotal" class="am-radius am-input-sm" type="text" disabled>-->
-                            <p id="aimTotal">发生的范德萨</p>
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <label for="aimRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <textarea id="aimRemark" class="am-radius" rows="3" placeholder="添加任务备注"></textarea>
+                            <span class="disable">￥ {{totalPrice}}</span>
+                            <span class="tips" v-if="$forumFlow.num.maxprice">您的余额不足，请充值!</span>
+                            <input type="hidden" v-model="funds" value="<%= money %>">
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$forumFlow.valid">提交任务</button>
                         </div>
                     </div>
                 </form>
+                </validator>
 
             </div>
         </div>
@@ -84,6 +89,9 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script>
+    require('flowForumTask');
+</script>
 
 </body>
 </html>
