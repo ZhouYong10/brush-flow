@@ -7,19 +7,6 @@ var Order = require('../models/Order');
 
 var router = require('express').Router();
 
-router.get('/taskHistory', function (req, res) {
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            res.render('flowTaskHistory', {
-                title: '流量业务任务历史',
-                money: user.funds,
-                userStatus: user.status,
-                username: user.username,
-                role: user.role
-            })
-        });
-});
-
 router.get('/forumTask', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -40,6 +27,7 @@ router.get('/forumTask', function (req, res) {
 
 router.post('/forumTask', function (req, res) {
     var orderInfo = req.body;
+    orderInfo.realNum = orderInfo.num;
     if(orderInfo.num <= 10000) {
         orderInfo.num = 2;
     }else {
@@ -73,6 +61,7 @@ router.get('/videoTask', function (req, res) {
 
 router.post('/videoTask', function (req, res) {
     var orderInfo = req.body;
+    orderInfo.realNum = orderInfo.num;
     if(orderInfo.num <= 10000) {
         orderInfo.num = 10;
     }else {
@@ -116,6 +105,29 @@ router.get('/video/get/price', function (req, res) {
                     })
                 }
             });
+        });
+});
+
+router.get('/taskHistory', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'flow'
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 1);
+                    res.render('flowTaskHistory', {
+                        title: '流量业务任务历史',
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/flow/taskHistory'
+                    });
+                });
         });
 });
 
