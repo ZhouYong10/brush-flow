@@ -131,4 +131,35 @@ router.get('/taskHistory', function (req, res) {
         });
 });
 
+router.get('/search/flow', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var query = {userId: user._id, type: 'flow'};
+            if(req.query.address){
+                query.address = req.query.address;
+            }
+            if (req.query.createTime) {
+                query.createTime = new RegExp(req.query.createTime);
+            }
+            console.log(query, '----------------------');
+            Order.open().findPages(query, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    console.log(obj, '========================');
+                    Order.addSchedule(obj.results, 1);
+                    res.render('flowTaskHistory', {
+                        title: '流量业务任务历史',
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/flow/taskHistory'
+                    });
+                }, function (error) {
+                    res.send('查询记录失败： ' + error);
+                });
+        });
+});
+
 module.exports = router;
