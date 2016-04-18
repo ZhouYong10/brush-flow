@@ -662,11 +662,35 @@ router.get('/reply/already', function (req, res) {
 
 
 router.get('/flow/wait', function (req, res) {
-    res.render('adminFlowWait', {title: '流量任务管理 / 待处理订单', money: req.session.systemFunds})
+    Order.open().findPages({
+            type: 'flow',
+            status: '未处理'
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminFlowWait', {
+                title: '流量任务管理 / 待处理订单',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/flow/wait'
+            });
+        });
 });
 
 router.get('/flow/already', function (req, res) {
-    res.render('adminFlowAlre', {title: '流量任务管理 / 已处理订单', money: req.session.systemFunds})
+    Order.open().findPages({
+            type: 'flow',
+            status: {$ne: '未处理'}
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminFlowAlre', {
+                title: '流量任务管理 / 已处理订单',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/flow/already'
+            });
+        });
 });
 
 

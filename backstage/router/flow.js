@@ -116,7 +116,7 @@ router.get('/taskHistory', function (req, res) {
                     type: 'flow'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results, 1);
+                    Order.addSchedule(obj.results, 100);
                     res.render('flowTaskHistory', {
                         title: '流量业务任务历史',
                         money: user.funds,
@@ -141,11 +141,9 @@ router.get('/search/flow', function (req, res) {
             if (req.query.createTime) {
                 query.createTime = new RegExp(req.query.createTime);
             }
-            console.log(query, '----------------------');
             Order.open().findPages(query, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    console.log(obj, '========================');
-                    Order.addSchedule(obj.results, 1);
+                    Order.addSchedule(obj.results, 100);
                     res.render('flowTaskHistory', {
                         title: '流量业务任务历史',
                         money: user.funds,
