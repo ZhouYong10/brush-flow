@@ -236,7 +236,7 @@ Order.extend({
         for(var i in orders) {
             var order = orders[i];
             if(order.status == '已处理'){
-                var dealTime = order.dealTime, num = order.num,
+                var dealTime = order.dealTime, num = (order.type == 'flow' ? order.realNum : order.num),
                     delay = 3 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
                 var allTimes = (parseInt(num / speed) + ((num % speed == 0) ? 0 : 1)) * 60 * 1000;
                 var currentTimes = new Date().getTime() - new Date(dealTime).getTime() - delay;
