@@ -344,7 +344,7 @@ Order.include({
                             self.price2 = myPrice2;
                             self.user = user.username;
                             self.userId = user._id;
-                            self.name = product.name;
+                            self.name = product1.name;
                             self.type = product1.type;
                             self.typeName = product1.typeName;
                             self.smallType = product1.smallType;
