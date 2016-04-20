@@ -40,6 +40,14 @@ router.post('/forum/title/by/address', function (req, res) {
         });
 });
 
+router.post('/flow/forum/address', function (req, res) {
+    var address = req.body.address;
+    Address.judgeForumAddress(address)
+        .then(function (obj) {
+            res.send(obj);
+        });
+});
+
 module.exports = router;
 
 

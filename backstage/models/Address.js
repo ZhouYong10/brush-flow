@@ -105,6 +105,23 @@ module.exports = {
                 }
             })
         })
+    },
+    judgeForumAddress: function(address) {
+        return new Promise(function(resolve, reject) {
+            var arr = address.split('/')[2].split('.');
+            arr.shift();
+            var mainUrl = arr.join('.');
+            Product.open().findOne({
+                type: 'flow',
+                address: new RegExp(mainUrl)
+            }).then(function (result) {
+                if(result) {
+                    resolve({isFlow: true});
+                }else {
+                    resolve({isFlow: false});
+                }
+            });
+        })
     }
 };
 

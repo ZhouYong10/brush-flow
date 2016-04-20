@@ -3,15 +3,30 @@
  */
 var Vue = require('vue');
 Vue.use(require('vue-validator'));
+Vue.use(require('vue-resource'));
 var Utils = require('utils');
 
 new Vue({
     el: '#flowForum',
     data: {
         price: 0,
+        address: '',
         num: '',
         funds: 0,
         totalPrice: 0
+    },
+    methods: {
+        judgeAddress: function() {
+            var self = this;
+            Utils.parseFlowAddress(self.$http, self.address)
+                .then(function(isFlow) {
+                    if(isFlow) {
+                        alert('检测到您提交的是视频地址，请到视频流量任务提交订单！！')
+                    }else{
+                        $('form').submit();
+                    }
+                })
+        }
     },
     validators: {
         isaddress: function(val) {

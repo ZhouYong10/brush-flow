@@ -48,7 +48,7 @@
                         <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>目标地址</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写任务地址" name="address"
-                                   v-validate:address="{required: true, isaddress: true}">
+                                   v-validate:address="{required: true, isaddress: true}" v-model="address">
                             <span class="tips" v-if="$forumFlow.address.required">任务地址不能为空!</span>
                             <span class="tips" v-if="$forumFlow.address.isaddress">请填写合法的地址!</span>
                         </div>
@@ -77,7 +77,8 @@
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$forumFlow.valid">提交任务</button>
+                            <button type="submit" class="am-btn am-btn-primary am-radius"
+                                    v-if="$forumFlow.valid" @click.stop.prevent="judgeAddress">提交任务</button>
                         </div>
                     </div>
                 </form>

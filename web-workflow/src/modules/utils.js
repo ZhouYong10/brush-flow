@@ -69,6 +69,14 @@ module.exports = {
                 });
         });
     },
+    parseFlowAddress: function(httpObj,address) {
+        return new Promise(function(resolve, reject) {
+            httpObj.post('/parse/flow/forum/address', {address: address})
+                .then(function (res) {
+                    resolve(res.data.isFlow);
+                });
+        });
+    },
     isNum: function(val) {
         if(val == '' || val == 0){
             return true;
