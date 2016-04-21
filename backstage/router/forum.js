@@ -4,6 +4,46 @@
 /**
  * Created by zhouyong10 on 1/24/16.
  */
+var request = require('request');
+var cheerio = require('cheerio');
+var moment = require('moment');
+
+function postForumOrder(obj) {
+    return new Promise(function (resolve, reject) {
+        var val = '86867555,WDY13419085703,' + moment().format('YYYY-MM-DD HH:mm:ss');
+        request({
+            url: 'http://data.ht4rz.com/Service1.asmx/MakeKey?val='+ val +'&key=ts32%23df3'
+        }, function (err, res, body) {
+            if (err) {
+                reject(err);
+            } else {
+                var $ = cheerio.load(body);
+                var key = $('string').text();
+                var url = 'http://data.ht4rz.com/Service1.asmx/SendContent?key=' + key
+                    + '&address=' + obj.address + '&startime=' + obj.startTime + '&min=' + obj.min
+                    + '&max=' + obj.max + '&contents=' + obj.content;
+                request({
+                    url: encodeURI(url)
+                }, function(err, res, body) {
+                    var $ = cheerio.load(body);
+                    try{
+                        var result = JSON.parse($('string').text());
+                        if(result.flag) {
+                            obj.timetick = result.timetick;
+                            resolve(obj);
+                        }else {
+                            reject(result.msg);
+                        }
+                    }catch (e){
+                        reject(e);
+                    }
+                })
+            }
+        });
+    });
+}
+
+
 var Product = require('../models/Product');
 var User = require('../models/User');
 var Order = require('../models/Order');
@@ -25,17 +65,23 @@ router.get('/create/task', function (req, res) {
 
 router.post('/comment/add', function (req, res) {
     var orderInfo = req.body;
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            var order = Order.wrapToInstance(orderInfo);
-            order.createAndSave(user, {type: 'forum', smallType: orderInfo.smallType})
-                .then(function () {
-                    socketIO.emit('updateNav', {'reply': 1});
-                    res.redirect('/forum/taskHistory');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
-        });
+    postForumOrder(orderInfo).then(function (obj) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var order = Order.wrapToInstance(obj);
+                order.createAndSave(user, {type: 'forum', smallType: obj.smallType})
+                    .then(function (copResult) {
+                        copResult.complete(function () {
+                            socketIO.emit('updateNav', {'reply': 1});
+                            res.redirect('/forum/taskHistory');
+                        });
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            });
+    }, function (msg) {
+        res.send(msg);
+    });
 });
 
 router.get('/taskHistory', function (req, res) {

@@ -69,7 +69,10 @@
                             <label for="startTime" class="am-u-sm-4 am-u-lg-2 am-form-label">定时时间</label>
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <input id="startTime" class="am-radius am-input-sm" type="text" placeholder="点击选择定时时间"
-                                       onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm'})" name="startTime">
+                                       onclick="laydate({
+                                       istime: true,
+                                       min: laydate.now((new Date().getTime() + 10*60*1000), 'YYYY-MM-DD hh:mm'),
+                                       format: 'YYYY-MM-DD hh:mm'})" name="startTime">
                             </div>
                         </div>
 

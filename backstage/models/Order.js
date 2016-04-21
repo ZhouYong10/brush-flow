@@ -318,7 +318,7 @@ Order.include({
                             .then(function () {
                                 User.open().updateById(user._id, {$set: {funds: obj.funds}})
                                     .then(function () {
-                                        resolve();
+                                        resolve(obj);
                                     });
                             });
                     });
