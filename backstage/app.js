@@ -163,6 +163,54 @@ app.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
+//对外公共接口
+var Order = require('./models/Order');
+
+app.get('/wx/like/forward/remote', function (req, res) {
+  var num = parseInt(req.query.num);
+  Object.defineProperty(global, 'forwardNum', {
+    value: num,
+    writable: false,
+    configurable: false
+  });
+  Order.open().findOne({
+    type: 'wx',
+    smallType: 'read',
+    status: '未处理',
+    num: {$lte: num}
+  }).then(function (obj) {
+    if(obj) {
+      res.send(JSON.stringify({
+        id: obj._id,
+        address: obj.address,
+        read: obj.num,
+        like: obj.num2
+      }));
+    }else {
+      res.send(null);
+    }
+  });
+});
+
+app.get('/wx/like/complete/remote', function (req, res) {
+  var status = req.query.status;
+  var msg = req.query.msg;
+  var orderId = req.query.id;
+  Order.open().findById(orderId)
+      .then(function (order) {
+          var orderIns = Order.wrapToInstance(order);
+        if (status == 1) {
+          orderIns.complete(function () {
+            res.end();
+          });
+        } else {
+          orderIns.refund(msg, function() {
+            res.end();
+          });
+        }
+      })
+});
+
 //拦截未登录
 app.use(function(req, res, next) {
   if(req.isAuthenticated()){

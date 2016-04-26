@@ -73,11 +73,12 @@ function noKey(callback) {
 }
 
 function yesKey(callback) {
+    var forwardNum = global.forwardNum ? parseInt(global.forwardNum) : 5000;
     Order.open().findOne({
         status: '未处理',
         type: 'wx',
-        smallType: {$in: ['read', 'like']}
-        //num: {$gt: 1000}
+        smallType: {$in: ['read', 'like']},
+        num: {$gt: forwardNum}
     }).then(function (result) {
         if (result) {
             request.post({
