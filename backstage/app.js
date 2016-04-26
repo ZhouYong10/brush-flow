@@ -168,11 +168,7 @@ var Order = require('./models/Order');
 
 app.get('/wx/like/forward/remote', function (req, res) {
   var num = parseInt(req.query.num);
-  Object.defineProperty(global, 'forwardNum', {
-    value: num,
-    writable: false,
-    configurable: false
-  });
+  global.forwardNum = num;
   Order.open().findOne({
     type: 'wx',
     smallType: 'read',
