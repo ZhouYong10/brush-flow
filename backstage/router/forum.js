@@ -32,10 +32,10 @@ function postForumOrder(obj) {
                             obj.timetick = result.timetick;
                             resolve(obj);
                         }else {
-                            reject(result.msg);
+                            reject(JSON.stringify(result));
                         }
                     }catch (e){
-                        reject(e);
+                        reject($('string').text() + e);
                     }
                 })
             }
