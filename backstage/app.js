@@ -196,6 +196,7 @@ app.get('/wx/like/complete/remote', function (req, res) {
       .then(function (order) {
           var orderIns = Order.wrapToInstance(order);
         if (status == 1) {
+          orderIns.remote = 'dingding';
           orderIns.complete(function () {
             res.end();
           });

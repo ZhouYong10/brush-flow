@@ -754,12 +754,46 @@ router.get('/WX/like/already', function (req, res) {
         status: {$ne: '未处理'}
     }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
+            var orders = obj.results;
+            var readTotal = 0;
+            for(var i = 0; i < orders.length; i++) {
+                readTotal += parseInt(orders[i].num);
+            }
             res.render('adminWXlikeAlre', {
                 title: '微信任务管理 / 已处理微信阅读点赞任务',
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/WX/like/already'
+                path: '/admin/WX/like/already',
+                readTotal: readTotal
+            });
+        });
+});
+
+router.get('/search/WX/like/dingding', function (req, res) {
+    var search = {
+        type: 'wx',
+        smallType: {$in: ['read', 'like']},
+        status: '已处理',
+        createTime: new RegExp(req.query.date)
+    };
+    if(req.query.type) {
+        search.remote = req.query.type;
+    }
+    Order.open().findPages(search, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            var orders = obj.results;
+            var readTotal = 0;
+            for(var i = 0; i < orders.length; i++) {
+                readTotal += parseInt(orders[i].num);
+            }
+            res.render('adminWXlikeAlre', {
+                title: '微信任务管理 / 已处理微信阅读点赞任务',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/like/already',
+                readTotal: readTotal
             });
         });
 });

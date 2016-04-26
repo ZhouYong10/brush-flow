@@ -73,7 +73,7 @@ function noKey(callback) {
 }
 
 function yesKey(callback) {
-    var forwardNum = global.forwardNum ? parseInt(global.forwardNum) : 5000;
+    var forwardNum = global.forwardNum ? global.forwardNum : 5000;
     Order.open().findOne({
         status: '未处理',
         type: 'wx',
@@ -111,6 +111,7 @@ function yesKey(callback) {
                 var secondItemId = $('tbody').last().children().next().children().first().text().split('/')[0];
                 if(secondItemId == firstItemId) {
                     var resultInstance = Order.wrapToInstance(result);
+                    resultInstance.remote = 'tuike';
                     resultInstance.complete(function() {
                         console.log('自动处理订单完成了, href = ' + result.address);
                         callback();
@@ -438,14 +439,26 @@ Order.include({
         User.open().findById(self.userId)
             .then(function(user) {
                 self.profitToParent(user, user, function(order) {
-                    Order.open().updateById(self._id, {
-                        $set: {
-                            status: '已处理',
-                            dealTime:  moment().format('YYYY-MM-DD HH:mm:ss')
-                        }
-                    }).then(function () {
+                    if(self.remote){
+                        Order.open().updateById(self._id, {
+                            $set: {
+                                remote: self.remote,
+                                status: '已处理',
+                                dealTime:  moment().format('YYYY-MM-DD HH:mm:ss')
+                            }
+                        }).then(function () {
                             callback();
                         });
+                    }else {
+                        Order.open().updateById(self._id, {
+                            $set: {
+                                status: '已处理',
+                                dealTime:  moment().format('YYYY-MM-DD HH:mm:ss')
+                            }
+                        }).then(function () {
+                            callback();
+                        });
+                    }
                 });
             })
     },
