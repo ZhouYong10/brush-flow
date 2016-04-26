@@ -748,25 +748,27 @@ router.get('/WX/like/wait', function (req, res) {
 });
 
 router.get('/WX/like/already', function (req, res) {
-    Order.open().findPages({
+    var search = {
         type: 'wx',
         smallType: {$in: ['read', 'like']},
         status: {$ne: '未处理'}
-    }, (req.query.page ? req.query.page : 1))
+    };
+    Order.open().findPages(search, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
-            var orders = obj.results;
-            var readTotal = 0;
-            for(var i = 0; i < orders.length; i++) {
-                readTotal += parseInt(orders[i].num);
-            }
-            res.render('adminWXlikeAlre', {
-                title: '微信任务管理 / 已处理微信阅读点赞任务',
-                money: req.session.systemFunds,
-                orders: obj.results,
-                pages: obj.pages,
-                path: '/admin/WX/like/already',
-                readTotal: readTotal
-            });
+            Order.open().find(search).then(function(allObj) {
+                var readTotal = 0;
+                for(var i = 0; i < allObj.length; i++) {
+                    readTotal += parseInt(allObj[i].num);
+                }
+                res.render('adminWXlikeAlre', {
+                    title: '微信任务管理 / 已处理微信阅读点赞任务',
+                    money: req.session.systemFunds,
+                    orders: obj.results,
+                    pages: obj.pages,
+                    path: '/admin/WX/like/already',
+                    readTotal: readTotal
+                });
+            })
         });
 });
 
@@ -782,19 +784,20 @@ router.get('/search/WX/like/dingding', function (req, res) {
     }
     Order.open().findPages(search, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
-            var orders = obj.results;
-            var readTotal = 0;
-            for(var i = 0; i < orders.length; i++) {
-                readTotal += parseInt(orders[i].num);
-            }
-            res.render('adminWXlikeAlre', {
-                title: '微信任务管理 / 已处理微信阅读点赞任务',
-                money: req.session.systemFunds,
-                orders: obj.results,
-                pages: obj.pages,
-                path: '/admin/WX/like/already',
-                readTotal: readTotal
-            });
+            Order.open().find(search).then(function(allObj) {
+                var readTotal = 0;
+                for(var i = 0; i < allObj.length; i++) {
+                    readTotal += parseInt(allObj[i].num);
+                }
+                res.render('adminWXlikeAlre', {
+                    title: '微信任务管理 / 已处理微信阅读点赞任务',
+                    money: req.session.systemFunds,
+                    orders: obj.results,
+                    pages: obj.pages,
+                    path: '/admin/WX/like/already',
+                    readTotal: readTotal
+                });
+            })
         });
 });
 
@@ -1051,7 +1054,8 @@ router.get('/redirect/aim/order', function (req, res) {
             money: money,
             orders: arr,
             pages: pages,
-            path: path
+            path: path,
+            readTotal: result.num
         });
     })
 
