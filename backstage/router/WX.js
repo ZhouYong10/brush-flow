@@ -380,7 +380,31 @@ router.get('/code', function (req, res) {
                     smallType: 'code'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    console.log(obj, '======================');
+                    Order.addSchedule(obj.results, 50);
+                    res.render('WXcode', {
+                        title: '扫码关注',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/code'
+                    })
+                });
+        });
+});
+
+router.get('/date/search/code', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'code',
+                    createTime: new RegExp(req.query.createTime)
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
                     Order.addSchedule(obj.results, 50);
                     res.render('WXcode', {
                         title: '扫码关注',
