@@ -386,4 +386,29 @@ router.get('/code', function (req, res) {
         });
 });
 
+router.get('/code/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'code'})
+                .then(function(fans) {
+                    var fansIns = Product.wrapToInstance(fans);
+                    var myFansPrice = fansIns.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'wx', smallType: 'codeReply'})
+                        .then(function(reply) {
+                            var replyIns = Product.wrapToInstance(reply);
+                            var myReplyPrice = replyIns.getPriceByRole(user.role);
+                            res.render('WXcodeAdd', {
+                                title: '添加扫码关注任务',
+                                money: user.funds,
+                                username: user.username,
+                                userStatus: user.status,
+                                role: user.role,
+                                fansPrice: myFansPrice,
+                                replyPrice: myReplyPrice
+                            });
+                        });
+                });
+        });
+});
+
 module.exports = router;
