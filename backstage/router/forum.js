@@ -20,15 +20,15 @@ function postForumOrder(obj) {
                 var $ = cheerio.load(body);
                 var key = $('string').text();
                 var url = 'http://data.ht4rz.com/Service1.asmx/SendContent?key=' + key
-                    + '&address=' + obj.address + '&startime=' + obj.startTime + '&min=' + obj.min
-                    + '&max=' + obj.max + '&contents=' + obj.content;
+                    + '&address=' + encodeURIComponent(obj.address) + encodeURI('&startime=' + obj.startTime + '&min=' + obj.min
+                    + '&max=' + obj.max + '&contents=' + obj.content);
                 request({
-                    url: encodeURI(url)
+                    url: url
                 }, function(err, res, body) {
                     var $ = cheerio.load(body);
                     try{
                         var result = JSON.parse($('string').text());
-                        if(result.flag) {
+                        if(result.flag == 'true') {
                             obj.timetick = result.timetick;
                             resolve(obj);
                         }else {
