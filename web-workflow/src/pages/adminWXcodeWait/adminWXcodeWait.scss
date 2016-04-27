@@ -1,3 +1,4 @@
+
 th{
   text-align: center;
 }
@@ -5,4 +6,11 @@ th{
 
 .title-text, .title-url{
   line-height: 11px;
+}
+
+.text-break {
+  color: #000;
+  display: inline-block;
+  max-width: 120px;
+  cursor: pointer;
 }

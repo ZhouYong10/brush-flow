@@ -895,11 +895,38 @@ router.get('/close/wx/fans', function (req, res) {
 
 
 router.get('/WX/code/wait', function (req, res) {
-    res.render('adminWXcodeWait', {title: '微信任务管理 / 待处理微信好友地区扫码', money: req.session.systemFunds})
+    Order.open().findPages({
+            type: 'wx',
+            smallType: 'code',
+            status: '未处理'
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXcodeWait', {
+                title: '微信任务管理 / 待处理微信好友地区扫码',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/code/wait',
+                wxFansIsOpen: 'no'
+            });
+        });
 });
 
 router.get('/WX/code/already', function (req, res) {
-    res.render('adminWXcodeAlre', {title: '微信任务管理 / 已处理微信好友地区扫码', money: req.session.systemFunds})
+    Order.open().findPages({
+            type: 'wx',
+            smallType: 'code',
+            status: {$ne: '未处理'}
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXcodeAlre', {
+                title: '微信任务管理 / 已处理微信好友地区扫码',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/code/already'
+            });
+        });
 });
 
 
