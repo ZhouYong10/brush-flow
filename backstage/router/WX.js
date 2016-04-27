@@ -362,5 +362,28 @@ router.post('/like/add', function (req, res) {
         });
 });
 
+router.get('/code', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'code'
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 50);
+                    res.render('WXcode', {
+                        title: '扫码关注',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/code'
+                    })
+                });
+        });
+});
 
 module.exports = router;
