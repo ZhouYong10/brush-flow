@@ -7,7 +7,16 @@ var Product = require('../models/Product');
 var Order = require('../models/Order');
 
 var moment = require('moment');
+var Formidable = require('formidable');
+var path = require('path');
+var fs = require('fs');
 var router = require('express').Router();
+
+Object.defineProperty(global, 'codeDir', {
+    value: path.join(__dirname, '../public/codes/'),
+    writable: false,
+    configurable: false
+});
 
 router.get('/friend', function (req, res) {
     User.open().findById(req.session.passport.user)
@@ -371,6 +380,7 @@ router.get('/code', function (req, res) {
                     smallType: 'code'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
+                    console.log(obj, '======================');
                     Order.addSchedule(obj.results, 50);
                     res.render('WXcode', {
                         title: '扫码关注',
@@ -409,6 +419,48 @@ router.get('/code/add', function (req, res) {
                         });
                 });
         });
+});
+
+router.post('/code/add', function (req, res) {
+    var order = {};
+    var form = new Formidable.IncomingForm();
+    form.maxFieldsSize = 1024 * 1024;
+    form.encoding = 'utf-8';
+    form.keepExtensions = true;
+    form.hash = 'md5';
+    var logoDir = form.uploadDir = global.codeDir;
+
+    if(!fs.existsSync(logoDir)){
+        fs.mkdirSync(logoDir);
+    }
+    form.on('error', function(err) {
+            res.end(err); //各种错误
+        }).on('field', function(field, value) {
+            order[field] = value;
+        }).on('file', function(field, file) { //上传文件
+            var filePath = file.path;
+            var fileExt = filePath.substring(filePath.lastIndexOf('.'));
+            var newFileName = file.hash + fileExt;
+            var newFilePath = path.join(logoDir + newFileName);
+            fs.rename(filePath, newFilePath, function (err) {
+                order[field] = '/codes/' + newFileName;
+                if(!order.num2){
+                    order.num2 = order.num;
+                }
+                User.open().findById(req.session.passport.user)
+                    .then(function (user) {
+                        var orderIns = Order.wrapToInstance(order);
+                        orderIns.createAndSaveTwo(user, {type: 'wx', smallType: 'code'}, {type: 'wx', smallType: 'codeReply'})
+                            .then(function () {
+                                socketIO.emit('updateNav', {'wxCode': 1});
+                                res.redirect('/wx/code');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    });
+            });
+        });
+    form.parse(req);
 });
 
 module.exports = router;

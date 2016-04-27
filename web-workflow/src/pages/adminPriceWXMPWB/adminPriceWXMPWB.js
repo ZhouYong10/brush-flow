@@ -11,7 +11,7 @@ var wxSmallType = '<td> ' +
     '<option value="collect">收藏</option> ' +
     '<option value="read">阅读</option> ' +
     '<option value="like">点赞</option> ' +
-    '<option value="code">好友地区扫码</option> ' +
+    '<option value="code">扫码关注</option> ' +
     '<option value="codeReply">扫码回复</option> ' +
     '</select> ' +
     '</td> ';

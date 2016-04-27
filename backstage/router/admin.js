@@ -13,7 +13,6 @@ var Order = require('../models/Order');
 
 var moment = require('moment');
 var Formidable = require('formidable');
-
 var path = require('path');
 var fs = require('fs');
 var router = require('express').Router();
