@@ -468,9 +468,7 @@ router.post('/code/add', function (req, res) {
             var newFilePath = path.join(logoDir + newFileName);
             fs.rename(filePath, newFilePath, function (err) {
                 order[field] = '/codes/' + newFileName;
-                if(!order.num2){
-                    order.num2 = order.num;
-                }
+                order.num2 = order.reply == '' ? 0 : order.num;
                 User.open().findById(req.session.passport.user)
                     .then(function (user) {
                         var orderIns = Order.wrapToInstance(order);
