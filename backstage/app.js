@@ -26,6 +26,9 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+var Cleaners = require('./models/Cleaners');
+Cleaners.timeOfDay();
+
 
 passport.serializeUser(function (user, done) {
   done(null, user._id);
