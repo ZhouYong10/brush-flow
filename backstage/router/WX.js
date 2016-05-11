@@ -87,9 +87,11 @@ router.get('/friend/add', function (req, res) {
 });
 
 router.post('/friend/add', function (req, res) {
+    var orderInfo = req.body;
+    orderInfo.account = orderInfo.account.replace(/(^\s*)|(\s*$)/g, "");
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var order = Order.wrapToInstance(req.body);
+            var order = Order.wrapToInstance(orderInfo);
             order.createAndSave(user, {type: 'wx', smallType: 'friend'})
                 .then(function () {
                     socketIO.emit('updateNav', {'wxFriend': 1});
@@ -175,9 +177,11 @@ router.get('/fans/add', function (req, res) {
 });
 
 router.post('/fans/add', function (req, res) {
+    var orderInfo = req.body;
+    orderInfo.account = orderInfo.account.replace(/(^\s*)|(\s*$)/g, "");
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var order = Order.wrapToInstance(req.body);
+            var order = Order.wrapToInstance(orderInfo);
             order.createAndSave(user, {type: 'wx', smallType: 'fans'})
                 .then(function () {
                     socketIO.emit('updateNav', {'wxReply': 1});
