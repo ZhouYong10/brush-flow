@@ -240,6 +240,8 @@ app.get('/client/home', function (req, res) {
       });
 });
 
+app.use('/artificial', require('./router/artificial.js'));
+app.use('/task', require('./router/task.js'));
 app.use('/user', require('./router/user.js'));
 app.use('/forum', require('./router/forum.js'));
 app.use('/flow', require('./router/flow.js'));
