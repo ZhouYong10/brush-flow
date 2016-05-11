@@ -30,4 +30,73 @@ router.get('/all', function (req, res) {
         });
 });
 
+router.get('/alre', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'forum'
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 1);
+                    res.render('handleTaskAlre', {
+                        title: '我做过的任务',
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/forum/taskHistory'
+                    });
+                });
+        });
+});
+
+router.get('/complaints', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'forum'
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 1);
+                    res.render('handleTaskComplaints', {
+                        title: '我被投诉的任务',
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/forum/taskHistory'
+                    });
+                });
+        });
+});
+
+router.get('/account', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'forum'
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 1);
+                    res.render('handleTaskAccount', {
+                        title: '我做任务的微信账户',
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/forum/taskHistory'
+                    });
+                });
+        });
+});
+
 module.exports = router;
