@@ -366,6 +366,7 @@ router.post('/manage/user/add', function (req, res) {
 /*
  * manage price
  * */
+// price forum
 router.get('/price/forum', function (req, res) {
     Product.open().findPages({type: 'forum'}, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
@@ -434,7 +435,7 @@ router.post('/price/forum/img/remove', function (req, res) {
 });
 
 
-
+//  price flow
 router.get('/price/flow', function (req, res) {
     Product.open().findPages({type: 'flow'}, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
@@ -471,6 +472,7 @@ router.post('/price/flow/delete', function (req, res) {
 });
 
 
+//  price WX,MP,WB
 router.get('/price/WX/MP/WB', function (req, res) {
     Product.open().findPages({type: {$in: ['wx', 'wb', 'mp']}}, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
@@ -507,6 +509,18 @@ router.post('/price/WX/MP/WB/delete', function (req, res) {
 });
 
 
+//  price handle
+router.get('/price/handle', function (req, res) {
+    Product.open().findPages({type: {$in: ['wx', 'wb', 'mp']}}, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminPriceHandle', {
+                title: '价格&状态管理 / 人工平台',
+                money: req.session.systemFunds,
+                products: obj.results,
+                pages: obj.pages
+            });
+        });
+});
 
 
 /*
