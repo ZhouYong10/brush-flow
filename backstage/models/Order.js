@@ -157,12 +157,12 @@ function startFans() {
                 });
             }
         })
-    }, 1000 * 60);
+    }, 1000 * 30);
 }
 
 function commitFans(result) {
     request.post({
-        url:'http://178.rocks:88/weixin/user?page=guanzhu',
+        url:'http://178.rocks/weixin/user?page=guanzhu',
         headers:{
             "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             "Accept-Encoding": 'gzip, deflate',
@@ -171,9 +171,9 @@ function commitFans(result) {
             "Connection": 'keep-alive',
             "Content-Type": 'application/x-www-form-urlencoded',
             "Cookie": wxFansCookieInfo,
-            "Host": '178.rocks:88',
-            "Origin": 'http://178.rocks:88',
-            "Referer": 'http://178.rocks:88/weixin/user?page=guanzhu',
+            "Host": '178.rocks',
+            "Origin": 'http://178.rocks',
+            "Referer": 'http://178.rocks/weixin/user?page=guanzhu',
             "Upgrade-Insecure-Requests": 1,
             "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
         },
@@ -207,7 +207,7 @@ function commitFans(result) {
 
 function freshFansCookie() {
     request.get({
-        url:'http://178.rocks:88/weixin/user?page=guanzhu',
+        url:'http://178.rocks/weixin/user?page=guanzhu',
         headers:{
             "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             "Accept-Encoding": 'gzip, deflate, sdch',
@@ -215,8 +215,8 @@ function freshFansCookie() {
             "Cache-Control": 'max-age=0',
             "Connection": 'keep-alive',
             "Cookie": wxFansCookieInfo,
-            "Host": '178.rocks:88',
-            "Referer": 'http://178.rocks:88/weixin/user?page=guanzhu',
+            "Host": '178.rocks',
+            "Referer": 'http://178.rocks/weixin/user?page=guanzhu',
             "Upgrade-Insecure-Requests": 1,
             "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
         }
