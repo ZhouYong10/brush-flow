@@ -3,6 +3,7 @@
  */
 var User = require('../models/User');
 var Order = require('../models/Order');
+var Product = require('../models/Product');
 
 
 var router = require('express').Router();
@@ -31,6 +32,26 @@ router.get('/WX/fans', function (req, res) {
         });
 });
 
+router.get('/WX/fans/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'friend'})
+                .then(function(result) {
+                    var product = Product.wrapToInstance(result);
+                    var myPrice = product.getPriceByRole(user.role);
+                    res.render('handleWXfansAdd', {
+                        title: '添加人工微信粉丝(回复)任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        price: myPrice
+                    })
+                });
+        });
+});
+
+
 router.get('/WX/friend', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -54,6 +75,26 @@ router.get('/WX/friend', function (req, res) {
                 })
         });
 });
+
+router.get('/WX/friend/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'friend'})
+                .then(function(result) {
+                    var product = Product.wrapToInstance(result);
+                    var myPrice = product.getPriceByRole(user.role);
+                    res.render('handleWXfriendAdd', {
+                        title: '添加人工微信个人好友任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        price: myPrice
+                    })
+                });
+        });
+});
+
 
 router.get('/WX/vote', function (req, res) {
     User.open().findById(req.session.passport.user)
@@ -79,6 +120,26 @@ router.get('/WX/vote', function (req, res) {
         });
 });
 
+router.get('/WX/vote/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'friend'})
+                .then(function(result) {
+                    var product = Product.wrapToInstance(result);
+                    var myPrice = product.getPriceByRole(user.role);
+                    res.render('handleWXvoteAdd', {
+                        title: '添加人工微信投票任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        price: myPrice
+                    })
+                });
+        });
+});
+
+
 router.get('/WX/code', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -103,6 +164,26 @@ router.get('/WX/code', function (req, res) {
         });
 });
 
+router.get('/WX/code/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'friend'})
+                .then(function(result) {
+                    var product = Product.wrapToInstance(result);
+                    var myPrice = product.getPriceByRole(user.role);
+                    res.render('handleWXcodeAdd', {
+                        title: '添加人工微信扫码任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        price: myPrice
+                    })
+                });
+        });
+});
+
+
 router.get('/WX/article', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -126,5 +207,25 @@ router.get('/WX/article', function (req, res) {
                 });
         });
 });
+
+router.get('/WX/article/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'friend'})
+                .then(function(result) {
+                    var product = Product.wrapToInstance(result);
+                    var myPrice = product.getPriceByRole(user.role);
+                    res.render('handleWXarticleAdd', {
+                        title: '添加人工微信原文/收藏/分享任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        price: myPrice
+                    })
+                });
+        });
+});
+
 
 module.exports = router;
