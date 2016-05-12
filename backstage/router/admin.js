@@ -511,7 +511,7 @@ router.post('/price/WX/MP/WB/delete', function (req, res) {
 
 //  price handle
 router.get('/price/handle', function (req, res) {
-    Product.open().findPages({type: {$in: ['wx', 'wb', 'mp']}}, (req.query.page ? req.query.page : 1))
+    Product.open().findPages({type: 'handle'}, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
             res.render('adminPriceHandle', {
                 title: '价格&状态管理 / 人工平台',
@@ -519,6 +519,29 @@ router.get('/price/handle', function (req, res) {
                 products: obj.results,
                 pages: obj.pages
             });
+        });
+});
+
+router.post('/price/handle', function (req, res) {
+    Product.open().insert(req.body)
+        .then(function (result) {
+            res.send(result[0]);
+        });
+});
+
+router.post('/price/handle/update', function (req, res) {
+    var id = req.body.id;
+    delete req.body.id;
+    Product.open().updateById(id, {$set: req.body})
+        .then(function (result) {
+            res.end();
+        });
+});
+
+router.post('/price/handle/delete', function (req, res) {
+    Product.open().removeById(req.body.id)
+        .then(function () {
+            res.end();
         });
 });
 

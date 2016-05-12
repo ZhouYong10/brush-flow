@@ -33,18 +33,21 @@
                         添加价格项
                     </button>
 
-                    <div class="am-scrollable-horizontal am-text-center priceWXMPWB">
+                    <div class="am-scrollable-horizontal am-text-center priceFlow">
                         <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>类别</th>
                                 <th>小类</th>
                                 <th>名称</th>
-                                <th>管理员</th>
-                                <th>顶级代理</th>
-                                <th>超级代理</th>
-                                <th>金牌代理</th>
+                                <th>发A</th>
+                                <th>发B</th>
+                                <th>发C</th>
+                                <th>发D</th>
+                                <th>投A</th>
+                                <th>投B</th>
+                                <th>投C</th>
+                                <th>投D</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -53,10 +56,6 @@
                             <% for(var i = 0; i < products.length; i++){ %>
                             <tr>
                                 <td class="num"><%= i + 1 %></td>
-                                <td class="type">
-                                    <span><%= products[i].typeName %></span>
-                                    <input type="hidden" value="<%= products[i].type %>">
-                                </td>
                                 <td class="smallType">
                                     <span><%= products[i].smallTypeName %></span>
                                     <input type="hidden" value="<%= products[i].smallType %>">
@@ -66,6 +65,10 @@
                                 <td class="topPrice"><%= products[i].topPrice %></td>
                                 <td class="superPrice"><%= products[i].superPrice %></td>
                                 <td class="goldPrice"><%= products[i].goldPrice %></td>
+                                <td class="adminPer"><%= products[i].adminPer %></td>
+                                <td class="topPer"><%= products[i].topPer %></td>
+                                <td class="superPer"><%= products[i].superPer %></td>
+                                <td class="goldPer"><%= products[i].goldPer %></td>
                                 <td class="operation">
                                     <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs edit">修改</button>
                                     <button type="button" class="am-btn am-btn-primary am-radius am-btn-xs delete">删除</button>
@@ -92,7 +95,6 @@
 <!--import plugin-->
 <script src="/static/plugins/layer/layer.js"></script>
 <script src="/static/plugins/laypage/laypage.js"></script>
-
 
 <script>
     require('adminMenuContent');
