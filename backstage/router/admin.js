@@ -693,6 +693,21 @@ router.get('/handle/task/already', function (req, res) {
         });
 });
 
+router.get('/handle/task/complete', function (req, res) {
+    Order.open().findPages({
+            type: 'flow',
+            status: {$ne: '未处理'}
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminHandleComplete', {
+                title: '人工任务管理 / 已完结任务',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/flow/already'
+            });
+        });
+});
 
 
 /*
