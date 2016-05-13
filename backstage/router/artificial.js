@@ -227,5 +227,29 @@ router.get('/WX/article/add', function (req, res) {
         });
 });
 
+router.get('/task/check', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'read'
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 50);
+                    res.render('handleTaskCheck', {
+                        title: '人工平台 / 待验收任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/like'
+                    })
+                });
+        });
+});
+
 
 module.exports = router;
