@@ -24,6 +24,7 @@
             <div class="am-panel-bd">
 
                 <div class="am-g">
+
                     <div class="am-u-sm-12 am-u-lg-6">
                         <div class="am-panel am-panel-success">
                             <div class="am-panel-hd">
@@ -48,6 +49,32 @@
                             </ul>
                         </div>
                     </div>
+
+                    <div class="am-u-sm-12 am-u-lg-6">
+                        <div class="am-panel am-panel-success">
+                            <div class="am-panel-hd">
+                                <h3 class="am-panel-title">人工任务</h3>
+                            </div>
+                            <ul>
+                                <% for(var i = 0; i < handles.length; i ++){ %>
+                                <li class="am-u-sm-2 indexColor"><%= i + 1 %></li>
+                                <li class="am-u-sm-6 am-u-lg-7 am-text-center am-text-truncate"><%= handles[i].name %></li>
+                                <% if(role == '顶级代理'){ %>
+                                <li class="am-u-sm-4 am-u-lg-3">￥<%= handles[i].topPrice %></li>
+                                <% } %>
+
+                                <% if(role == '超级代理'){ %>
+                                <li class="am-u-sm-4 am-u-lg-3">￥<%= handles[i].superPrice %></li>
+                                <% } %>
+
+                                <% if(role == '金牌代理'){ %>
+                                <li class="am-u-sm-4 am-u-lg-3">￥<%= handles[i].goldPrice %></li>
+                                <% } %>
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+
                     <div class="am-u-sm-12 am-u-lg-6">
                         <div class="am-panel am-panel-success">
                             <div class="am-panel-hd">
@@ -72,6 +99,7 @@
                             </ul>
                         </div>
                     </div>
+
                     <div class="am-u-sm-12 am-u-lg-6">
                         <div class="am-panel am-panel-success">
                             <div class="am-panel-hd">
@@ -96,6 +124,7 @@
                             </ul>
                         </div>
                     </div>
+
                     <div class="am-u-sm-12 am-u-lg-6">
                         <div class="am-panel am-panel-success">
                             <div class="am-panel-hd">
@@ -120,6 +149,7 @@
                             </ul>
                         </div>
                     </div>
+
                     <div class="am-u-sm-12 am-u-lg-6">
                         <div class="am-panel am-panel-success">
                             <div class="am-panel-hd">
@@ -144,6 +174,7 @@
                             </ul>
                         </div>
                     </div>
+
                 </div>
 
             </div>

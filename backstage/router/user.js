@@ -392,18 +392,21 @@ router.get('/my/price', function (req, res) {
                     product.find({type: 'wx'}).then(function(wxs) {
                         product.find({type: 'mp'}).then(function(mps) {
                             product.find({type: 'wb'}).then(function(wbs) {
-                                res.render('userPrice', {
-                                    title: '我的价格详情',
-                                    money: user.funds,
-                                    username: user.username,
-                                    userStatus: user.status,
-                                    role: user.role,
-                                    forums: forums,
-                                    flows: flows,
-                                    wxs: wxs,
-                                    mps: mps,
-                                    wbs: wbs
-                                });
+                                product.find({type: 'handle'}).then(function(handles) {
+                                    res.render('userPrice', {
+                                        title: '我的价格详情',
+                                        money: user.funds,
+                                        username: user.username,
+                                        userStatus: user.status,
+                                        role: user.role,
+                                        forums: forums,
+                                        flows: flows,
+                                        wxs: wxs,
+                                        mps: mps,
+                                        wbs: wbs,
+                                        handles: handles
+                                    });
+                                })
                             })
                         })
                     })
