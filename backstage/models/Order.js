@@ -338,12 +338,16 @@ Order.include({
                             var product2 = Product.wrapToInstance(result2);
                             var myPrice1 = product1.getPriceByRole(user.role);
                             var myPrice2 = product2.getPriceByRole(user.role);
-                            self.totalPrice = (myPrice1 * self.num + myPrice2 * self.num2).toFixed(4);
+                            if(!self.price || parseFloat(self.price) < parseFloat(myPrice1)) {
+                                self.price = myPrice1;
+                            }
+                            if(!self.price2 || parseFloat(self.price2) < parseFloat(myPrice2)) {
+                                self.price2 = myPrice2;
+                            }
+                            self.totalPrice = (self.price * self.num + self.price2 * self.num2).toFixed(4);
                             if ((self.totalPrice - user.funds) > 0) {
                                 return reject();
                             }
-                            self.price = myPrice1;
-                            self.price2 = myPrice2;
                             self.user = user.username;
                             self.userId = user._id;
                             self.name = product1.name;

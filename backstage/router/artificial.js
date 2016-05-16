@@ -16,8 +16,8 @@ router.get('/WX/fans', function (req, res) {
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
-                    type: 'wx',
-                    smallType: 'friend'
+                    type: 'handle',
+                    smallType: 'WXfans'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results, 10);
@@ -29,7 +29,7 @@ router.get('/WX/fans', function (req, res) {
                         role: user.role,
                         orders: obj.results,
                         pages: obj.pages,
-                        path: '/WX/friend'
+                        path: '/artificial/WX/fans'
                     })
                 })
         });
@@ -89,8 +89,18 @@ router.post('/WX/fans/add', function (req, res) {
         var newFilePath = path.join(logoDir + newFileName);
         fs.rename(filePath, newFilePath, function (err) {
             order[field] = '/handle_example/' + newFileName;
-            console.log(order, '======================');
-            res.end('ok');
+            order.num2 = order.num;
+            User.open().findById(req.session.passport.user)
+                .then(function (user) {
+                    var orderIns = Order.wrapToInstance(order);
+                    orderIns.createAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'wxLike': 1});
+                            res.redirect('/artificial/WX/fans');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                });
         });
     });
     form.parse(req);
