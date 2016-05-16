@@ -345,6 +345,9 @@ Order.include({
                                 self.price2 = myPrice2;
                             }
                             self.totalPrice = (self.price * self.num + self.price2 * self.num2).toFixed(4);
+                            if(product1.type == 'handle' && product1.smallType == 'WXfans' && !self.isReply){
+                                self.totalPrice = (self.price * self.num).toFixed(4);
+                            }
                             if ((self.totalPrice - user.funds) > 0) {
                                 return reject();
                             }
