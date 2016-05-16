@@ -37,16 +37,12 @@ router.get('/WX/fans/add', function (req, res) {
         .then(function (user) {
             Product.open().findOne({type: 'handle', smallType: 'WXfans'})
                 .then(function(result) {
-                    console.log(result, '-----------------------------');
                     var fans = Product.wrapToInstance(result);
                     var fansPrice = fans.getPriceByRole(user.role);
-                    console.log(fansPrice, '===========================');
                     Product.open().findOne({type: 'handle', smallType: 'WXfansReply'})
                         .then(function(result) {
-                            console.log(result, '-----------------------');
                             var reply = Product.wrapToInstance(result);
                             var replyPrice = reply.getPriceByRole(user.role);
-                            console.log(replyPrice, '=====================================');
                             res.render('handleWXfansAdd', {
                                 title: '添加人工微信粉丝(回复)任务',
                                 money: user.funds,
@@ -59,6 +55,10 @@ router.get('/WX/fans/add', function (req, res) {
                         });
                 });
         });
+});
+
+router.post('/WX/fans/add', function (req, res) {
+    console.log(req.body, '===================');
 });
 
 

@@ -54,12 +54,13 @@ new Vue({
                 imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = dataURL;
 
             }
+            $('#photoTip').css('display', 'none');
         },
         check: function(e) {
             if(!$('#doc-ipt-file-2').val()){
                 e.stopPropagation();
                 e.preventDefault();
-                $('#photoTip').css('display','inline-block')
+                $('#photoTip').css('display', 'inline-block');
             }
         }
     },
