@@ -4,13 +4,13 @@
 var smallType = '<td> ' +
     '<select class="am-form-group am-form-select smallType"> ' +
     '<option value="WXfans">微信公众粉丝</option> ' +
-    '<option value="WXfans">微信粉丝回复</option> ' +
-    '<option value="fans">微信个人好友</option> ' +
-    '<option value="fansReply">微信投票</option> ' +
-    '<option value="article">微信扫码</option> ' +
-    '<option value="article">微信扫码回复</option> ' +
-    '<option value="share">微信原文收藏</option> ' +
-    '<option value="share">微信原文分享</option> ' +
+    '<option value="WXfansReply">微信粉丝回复</option> ' +
+    '<option value="WXfriend">微信个人好友</option> ' +
+    '<option value="WXvote">微信投票</option> ' +
+    '<option value="WXcode">微信扫码</option> ' +
+    '<option value="WXcodeReply">微信扫码回复</option> ' +
+    '<option value="WXarticleHide">微信原文收藏</option> ' +
+    '<option value="WXarticleShare">微信原文分享</option> ' +
     '</select> ' +
     '</td> ';
 var saveBtn = '<button type="button" class="am-btn am-btn-primary am-radius am-btn-xs save">保存</button> ';
