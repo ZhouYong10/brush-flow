@@ -5,7 +5,10 @@ var User = require('../models/User');
 var Order = require('../models/Order');
 var Product = require('../models/Product');
 
-
+var moment = require('moment');
+var Formidable = require('formidable');
+var path = require('path');
+var fs = require('fs');
 var router = require('express').Router();
 
 router.get('/WX/fans', function (req, res) {
@@ -57,8 +60,40 @@ router.get('/WX/fans/add', function (req, res) {
         });
 });
 
+Object.defineProperty(global, 'handleExam', {
+    value: path.join(__dirname, '../public/handle_example/'),
+    writable: false,
+    configurable: false
+});
+
 router.post('/WX/fans/add', function (req, res) {
-    console.log(req.body, '===================');
+    var order = {};
+    var form = new Formidable.IncomingForm();
+    form.maxFieldsSize = 1024 * 1024;
+    form.encoding = 'utf-8';
+    form.keepExtensions = true;
+    form.hash = 'md5';
+    var logoDir = form.uploadDir = global.handleExam;
+
+    if(!fs.existsSync(logoDir)){
+        fs.mkdirSync(logoDir);
+    }
+    form.on('error', function(err) {
+        res.end('提交表单失败： ',err); //各种错误
+    }).on('field', function(field, value) {
+        order[field] = value;
+    }).on('file', function(field, file) { //上传文件
+        var filePath = file.path;
+        var fileExt = filePath.substring(filePath.lastIndexOf('.'));
+        var newFileName = file.hash + fileExt;
+        var newFilePath = path.join(logoDir + newFileName);
+        fs.rename(filePath, newFilePath, function (err) {
+            order[field] = '/handle_example/' + newFileName;
+            console.log(order, '======================');
+            res.end('ok');
+        });
+    });
+    form.parse(req);
 });
 
 
