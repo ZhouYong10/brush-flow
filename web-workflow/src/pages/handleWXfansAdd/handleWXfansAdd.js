@@ -10,32 +10,37 @@ new Vue({
     el: '#wxFans',
     data: {
         fansPrice: '',
-        replayPrice: '',
+        replyPrice: '',
         num: '',
+        isReply: '',
         count: 0,
         funds: ''
     },
     methods: {
         total: function() {
-            this.count = (this.myPrice * this.num).toFixed(4);
+            if(this.isReply){
+                this.count = ((parseFloat(this.fansPrice) + parseFloat(this.replyPrice)) * parseInt(this.num)).toFixed(4);
+            }else {
+                this.count = (parseFloat(this.fansPrice) * parseInt(this.num)).toFixed(4);
+            }
         }
     },
     validators: {
         isnum: Utils.isNum,
-        min1000: Utils.min1000,
+        min100: Utils.min100,
         maxprice: function(num) {
-            return parseFloat(this.myPrice * num) <= parseFloat(this.funds);
+            if(this.isReply){
+                return (parseFloat(this.fansPrice) + parseFloat(this.replyPrice)) * parseInt(num) <= parseFloat(this.funds);
+            }else {
+                return parseFloat(this.fansPrice) * parseInt(num) <= parseFloat(this.funds);
+            }
         },
         isfloat: Utils.isfloat,
         minfansprice: function(price) {
-            console.log(parseFloat(price),'================');
-            console.log(parseFloat(this.fansPrice),'================');
             return parseFloat(price) >= parseFloat(this.fansPrice);
         },
         minreplyprice: function(price) {
-            console.log(parseFloat(price),'================');
-            console.log(parseFloat(this.replayPrice),'================');
-            return parseFloat(price) >= parseFloat(this.replayPrice);
+            return parseFloat(price) >= parseFloat(this.replyPrice);
         }
     }
 });
