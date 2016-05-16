@@ -35,18 +35,28 @@ router.get('/WX/fans', function (req, res) {
 router.get('/WX/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'wx', smallType: 'friend'})
+            Product.open().findOne({type: 'handle', smallType: 'WXfans'})
                 .then(function(result) {
-                    var product = Product.wrapToInstance(result);
-                    var myPrice = product.getPriceByRole(user.role);
-                    res.render('handleWXfansAdd', {
-                        title: '添加人工微信粉丝(回复)任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myPrice
-                    })
+                    console.log(result, '-----------------------------');
+                    var fans = Product.wrapToInstance(result);
+                    var fansPrice = fans.getPriceByRole(user.role);
+                    console.log(fansPrice, '===========================');
+                    Product.open().findOne({type: 'handle', smallType: 'WXfansReply'})
+                        .then(function(result) {
+                            console.log(result, '-----------------------');
+                            var reply = Product.wrapToInstance(result);
+                            var replyPrice = reply.getPriceByRole(user.role);
+                            console.log(replyPrice, '=====================================');
+                            res.render('handleWXfansAdd', {
+                                title: '添加人工微信粉丝(回复)任务',
+                                money: user.funds,
+                                username: user.username,
+                                userStatus: user.status,
+                                role: user.role,
+                                fansPrice: fansPrice,
+                                replyPrice: replyPrice
+                            })
+                        });
                 });
         });
 });
