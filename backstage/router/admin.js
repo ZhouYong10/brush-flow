@@ -71,6 +71,7 @@ router.get('/get/system/funds', function(req, res) {
 router.get('/update/header/nav', function (req, res) {
     var updateNav = {
         withdraw: 0,
+        waitHT: 0,
         reply: 0,
         flow: 0,
         wxArticle: 0,
@@ -102,6 +103,9 @@ router.get('/update/header/nav', function (req, res) {
                             for(var i in results) {
                                 var result = results[i];
                                 switch (result.type) {
+                                    case 'handle':
+                                        updateNav.waitHT += 1;
+                                        break;
                                     case 'forum':
                                         updateNav.reply += 1;
                                         break;
