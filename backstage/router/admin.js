@@ -663,18 +663,18 @@ router.get('/order/dealError', function (req, res) {
 * */
 router.get('/handle/task/wait', function (req, res) {
     Order.open().findPages({
-            type: 'flow',
+            type: 'handle',
             status: '未处理'
         }, (req.query.page ? req.query.page : 1))
-        .then(function (obj) {
+        .then(function(obj) {
             res.render('adminHandleWait', {
                 title: '人工任务管理 / 待发布任务',
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/flow/wait'
+                path: '/admin/handle/task/wait'
             });
-        });
+        })
 });
 
 router.get('/handle/task/already', function (req, res) {
