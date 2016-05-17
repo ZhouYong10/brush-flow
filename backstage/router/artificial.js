@@ -95,7 +95,7 @@ router.post('/WX/fans/add', function (req, res) {
                     var orderIns = Order.wrapToInstance(order);
                     orderIns.createAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
                         .then(function () {
-                            socketIO.emit('updateNav', {'wxLike': 1});
+                            socketIO.emit('updateNav', {'waitHT': 1});
                             res.redirect('/artificial/WX/fans');
                         }, function() {
                             res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
