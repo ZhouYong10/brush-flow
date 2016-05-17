@@ -347,11 +347,11 @@ Order.include({
                             self.totalPrice = (self.price * self.num + self.price2 * self.num2).toFixed(4);
                             if(product1.type == 'handle' && product1.smallType == 'WXfans' && !self.isReply){
                                 self.totalPrice = (self.price * self.num).toFixed(4);
-                                self.totalPrice = (self.price * self.num).toFixed(4);
                             }
                             if ((self.totalPrice - user.funds) > 0) {
                                 return reject();
                             }
+                            self.surplus = self.totalPrice;
                             self.user = user.username;
                             self.userId = user._id;
                             self.name = product1.name;
@@ -436,6 +436,10 @@ Order.include({
                     var profit1 = selfPrice1 - parentPrice1;
                     var profit2 = selfPrice2 - parentPrice2;
                     self[name] = (profit1 * self.num + profit2 * self.num2).toFixed(4);
+                    if(product1.type == 'handle' && product1.smallType == 'WXfans' && !self.isReply){
+                        self[name] = (profit1 * self.num).toFixed(4);
+                    }
+                    self.surplus -= self[name];
                     self.countParentProfitTow(parent, product1, product2, callback);
                 })
         }else {
