@@ -7,6 +7,7 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
+    <link rel="stylesheet" href="/static/plugins/fancybox/css/jquery.fancybox.css">
 
     <link rel="stylesheet" href="handleWXfans.scss?__inline">
 </head>
@@ -93,7 +94,10 @@
                             <td class="am-text-middle"><%= orders[i].num %></td>
                             <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                             <td class="am-text-middle">
-                                <img class="am-img-responsive" src="<%= orders[i].photo %>" width="20" height="40">
+                                <a class="fancybox" href="<%= orders[i].photo %>"
+                                   data-fancybox-group="gallery" title="任务样图">
+                                    <img class="am-img-responsive" src="<%= orders[i].photo %>" width="20" height="40">
+                                </a>
                             </td>
                             <td class="am-text-middle">
                                 <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
@@ -178,6 +182,7 @@
 <!--import plugin-->
 <script src="/static/plugins/layer/layer.js"></script>
 <script src="/static/plugins/laypage/laypage.js"></script>
+<script src="/static/plugins/fancybox/js/jquery.fancybox.js"></script>
 
 <script>
     require('handleWXfans');
