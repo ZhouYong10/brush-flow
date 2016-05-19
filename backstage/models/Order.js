@@ -389,7 +389,7 @@ Order.include({
                     var parentPrice = product.getPriceByRole(parent.role);
                     var profit = selfPrice - parentPrice;
                     self[name] = (profit * self.num).toFixed(4);
-                    self.countParentProfit(parent, product, callback);
+                    self.handleCountParentProfit(parent, product, callback);
                 })
         }else {
             Order.open().insert(self)
@@ -429,16 +429,20 @@ Order.include({
                     var profit1 = selfPrice1 - parentPrice1;
                     var profit2 = selfPrice2 - parentPrice2;
                     self[profit] = (profit1 + profit2).toFixed(4);
-                    self.countParentProfitTow(parent, product1, product2, callback);
+
+                    self.realPrice = (self.realPrice - profit1).toFixed(4);
+                    self.realPrice2 = (self.realPrice2 - profit2).toFixed(4);
+                    self.handleCountParentProfitTwo(parent, product1, product2, callback);
                 })
         }else {
-            Order.open().insert(self)
-                .then(function () {
-                    User.open().updateById(self.userId, {$set: {funds: self.funds}})
-                        .then(function () {
-                            callback(self);
-                        });
-                });
+            console.log(self, '==========================');
+            //Order.open().insert(self)
+            //    .then(function () {
+            //        User.open().updateById(self.userId, {$set: {funds: self.funds}})
+            //            .then(function () {
+            //                callback(self);
+            //            });
+            //    });
         }
     },
     createAndSave: function(user, info) {
