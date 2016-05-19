@@ -93,7 +93,7 @@ router.post('/WX/fans/add', function (req, res) {
             User.open().findById(req.session.passport.user)
                 .then(function (user) {
                     var orderIns = Order.wrapToInstance(order);
-                    orderIns.createAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
+                    orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
                         .then(function () {
                             socketIO.emit('updateNav', {'waitHT': 1});
                             res.redirect('/artificial/WX/fans');

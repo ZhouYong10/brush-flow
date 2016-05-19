@@ -287,6 +287,160 @@ Order.extend({
 });
 
 Order.include({
+    handleCreateAndSave: function(user, info) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            Product.open().findOne(info)
+                .then(function(result) {
+                    var product = Product.wrapToInstance(result);
+                    var myPrice = product.getPriceByRole(user.role);
+                    self.totalPrice = (myPrice * self.num).toFixed(4);
+                    if(product.type == 'forum'){
+                        if(self.totalPrice < 0.5) {
+                            self.totalPrice = 0.5;
+                        }
+                    }
+                    if((self.totalPrice - user.funds) > 0) {
+                        return reject();
+                    }
+                    self.price = myPrice;
+                    self.user = user.username;
+                    self.userId = user._id;
+                    self.name = product.name;
+                    self.type = product.type;
+                    self.typeName = product.typeName;
+                    self.smallType = product.smallType;
+                    self.smallTypeName = product.smallTypeName;
+                    self.status = '未处理';
+                    self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                    self.funds = (user.funds - self.totalPrice).toFixed(4);
+                    self.description = self.typeName + self.smallTypeName + '执行' + self.num;
+                    self.handleCountParentProfit(user, product, function(obj) {
+                        resolve(obj);
+                    });
+                });
+        });
+    },
+    handleCreateAndSaveTwo: function(user, info1, info2) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            Product.open().findOne(info1)
+                .then(function(result1) {
+                    var product1 = Product.wrapToInstance(result1);
+                    Product.open().findOne(info2)
+                        .then(function (result2) {
+                            var product2 = Product.wrapToInstance(result2);
+                            var myPrice1 = product1.getPriceByRole(user.role);
+                            var myPrice2 = product2.getPriceByRole(user.role);
+                            if(!self.price || parseFloat(self.price) < parseFloat(myPrice1)) {
+                                self.price = myPrice1;
+                            }
+                            if(!self.price2 || parseFloat(self.price2) < parseFloat(myPrice2)) {
+                                self.price2 = myPrice2;
+                            }
+                            self.totalPrice = (self.price * self.num + self.price2 * self.num2).toFixed(4);
+                            if ((self.totalPrice - user.funds) > 0) {
+                                return reject();
+                            }
+                            self.realPrice = self.price;
+                            self.realPrice2 = self.price2;
+                            self.surplus = self.totalPrice;
+                            self.user = user.username;
+                            self.userId = user._id;
+                            self.name = product1.name;
+                            self.type = product1.type;
+                            self.typeName = product1.typeName;
+                            self.smallType = product1.smallType;
+                            self.smallTypeName = product1.smallTypeName;
+                            self.status = '未处理';
+                            self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                            self.funds = (user.funds - self.totalPrice).toFixed(4);
+                            self.description = self.typeName + self.smallTypeName + '执行' + self.num + '; ' +
+                                product2.typeName + product2.smallTypeName + '执行' + self.num2;
+
+                            self.handleCountParentProfitTwo(user, product1, product2, function(obj) {
+                                resolve(obj);
+                            });
+                        });
+                });
+        });
+    },
+    handleCountParentProfit: function(user, product, callback) {
+        var self = this;
+        var name = '';
+        if(user.parentID) {
+            User.open().findById(user.parentID)
+                .then(function(parent) {
+                    switch (parent.role) {
+                        case '管理员':
+                            name = 'adminProfit';
+                            break;
+                        case '顶级代理':
+                            name = 'topProfit';
+                            break;
+                        case '超级代理':
+                            name = 'superProfit';
+                            break;
+                        case '金牌代理':
+                            name = 'goldProfit';
+                            break;
+                    }
+                    var selfPrice = product.getPriceByRole(user.role);
+                    var parentPrice = product.getPriceByRole(parent.role);
+                    var profit = selfPrice - parentPrice;
+                    self[name] = (profit * self.num).toFixed(4);
+                    self.countParentProfit(parent, product, callback);
+                })
+        }else {
+            Order.open().insert(self)
+                .then(function () {
+                    User.open().updateById(self.userId, {$set: {funds: self.funds}})
+                        .then(function () {
+                            callback(self);
+                        });
+                });
+        }
+    },
+    handleCountParentProfitTwo: function(user, product1, product2, callback) {
+        var self = this;
+        var profit = '';
+        if(user.parentID) {
+            User.open().findById(user.parentID)
+                .then(function(parent) {
+                    switch (parent.role) {
+                        case '管理员':
+                            profit = 'adminProfit';
+                            break;
+                        case '顶级代理':
+                            profit = 'topProfit';
+                            break;
+                        case '超级代理':
+                            profit = 'superProfit';
+                            break;
+                        case '金牌代理':
+                            profit = 'goldProfit';
+                            break;
+                    }
+                    var selfPrice1 = product1.getPriceByRole(user.role);
+                    var selfPrice2 = product2.getPriceByRole(user.role);
+                    var parentPrice1 = product1.getPriceByRole(parent.role);
+                    var parentPrice2 = product2.getPriceByRole(parent.role);
+
+                    var profit1 = selfPrice1 - parentPrice1;
+                    var profit2 = selfPrice2 - parentPrice2;
+                    self[profit] = (profit1 + profit2).toFixed(4);
+                    self.countParentProfitTow(parent, product1, product2, callback);
+                })
+        }else {
+            Order.open().insert(self)
+                .then(function () {
+                    User.open().updateById(self.userId, {$set: {funds: self.funds}})
+                        .then(function () {
+                            callback(self);
+                        });
+                });
+        }
+    },
     createAndSave: function(user, info) {
         var self = this;
         return new Promise(function(resolve, reject) {
