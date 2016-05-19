@@ -697,6 +697,22 @@ router.get('/handle/task/already', function (req, res) {
         });
 });
 
+router.get('/handle/task/error', function (req, res) {
+    Order.open().findPages({
+            type: 'handle',
+            status: '已退款'
+        }, (req.query.page ? req.query.page : 1))
+        .then(function(obj) {
+            res.render('adminHandleError', {
+                title: '人工任务管理 / 未通过任务',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/handle/task/error'
+            });
+        })
+});
+
 router.get('/handle/task/complete', function (req, res) {
     Order.open().findPages({
             type: 'flow',
