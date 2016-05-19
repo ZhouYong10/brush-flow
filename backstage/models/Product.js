@@ -36,6 +36,24 @@ Product.include({
                 break;
         }
         return price;
+    },
+    getPerByRole: function(role) {
+        var price ;
+        switch (role) {
+            case '管理员':
+                price = this.adminPer;
+                break;
+            case '顶级代理':
+                price = this.topPer;
+                break;
+            case '超级代理':
+                price = this.superPer;
+                break;
+            case '金牌代理':
+                price = this.goldPer;
+                break;
+        }
+        return price;
     }
 });
 
