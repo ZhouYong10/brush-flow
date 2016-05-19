@@ -38,22 +38,22 @@ Product.include({
         return price;
     },
     getPerByRole: function(role) {
-        var price ;
+        var per ;
         switch (role) {
             case '管理员':
-                price = this.adminPer;
+                per = this.adminPer;
                 break;
             case '顶级代理':
-                price = this.topPer;
+                per = this.topPer;
                 break;
             case '超级代理':
-                price = this.superPer;
+                per = this.superPer;
                 break;
             case '金牌代理':
-                price = this.goldPer;
+                per = this.goldPer;
                 break;
         }
-        return price;
+        return per;
     }
 });
 
