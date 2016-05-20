@@ -287,6 +287,16 @@ Order.extend({
 });
 
 Order.include({
+    save: function(callback) {
+        var self = this;
+        Order.open().insert(self)
+            .then(function () {
+                User.open().updateById(self.userId, {$set: {funds: self.funds}})
+                    .then(function () {
+                        callback(self);
+                    });
+            });
+    },
     handleCreateAndSave: function(user, info) {
         var self = this;
         return new Promise(function(resolve, reject) {
@@ -294,16 +304,14 @@ Order.include({
                 .then(function(result) {
                     var product = Product.wrapToInstance(result);
                     var myPrice = product.getPriceByRole(user.role);
-                    self.totalPrice = (myPrice * self.num).toFixed(4);
-                    if(product.type == 'forum'){
-                        if(self.totalPrice < 0.5) {
-                            self.totalPrice = 0.5;
-                        }
+                    if(!self.price || parseFloat(self.price) < parseFloat(myPrice)) {
+                        self.price = myPrice;
                     }
+                    self.totalPrice = (self.price * self.num).toFixed(4);
                     if((self.totalPrice - user.funds) > 0) {
                         return reject();
                     }
-                    self.price = myPrice;
+                    self.realPrice = self.price;
                     self.user = user.username;
                     self.userId = user._id;
                     self.name = product.name;
@@ -388,17 +396,18 @@ Order.include({
                     var selfPrice = product.getPriceByRole(user.role);
                     var parentPrice = product.getPriceByRole(parent.role);
                     var profit = selfPrice - parentPrice;
-                    self[name] = (profit * self.num).toFixed(4);
+                    self[name] = profit.toFixed(4);
+                    self.realPrice = (self.realPrice - profit).toFixed(4);
                     self.handleCountParentProfit(parent, product, callback);
                 })
         }else {
-            Order.open().insert(self)
-                .then(function () {
-                    User.open().updateById(self.userId, {$set: {funds: self.funds}})
-                        .then(function () {
-                            callback(self);
-                        });
-                });
+            var adminPer = product.getPerByRole('管理员'), topPer = product.getPerByRole('顶级代理'),
+                superPer = product.getPerByRole('超级代理'), goldPer = product.getPerByRole('金牌代理');
+            self.adminPerPrice = (self.realPrice * adminPer).toFixed(2);
+            self.topPerPrice = (self.realPrice * topPer).toFixed(2);
+            self.superPerPrice = (self.realPrice * superPer).toFixed(2);
+            self.goldPerPrice = (self.realPrice * goldPer).toFixed(2);
+            self.save(callback);
         }
     },
     handleCountParentProfitTwo: function(user, product1, product2, callback) {
@@ -435,16 +444,18 @@ Order.include({
                     self.handleCountParentProfitTwo(parent, product1, product2, callback);
                 })
         }else {
-            console.log(self, '==========================');
-            //Order.open().insert(self)
-            //    .then(function () {
-            //        User.open().updateById(self.userId, {$set: {funds: self.funds}})
-            //            .then(function () {
-            //                callback(self);
-            //            });
-            //    });
+            var adminPer1 = product1.getPerByRole('管理员'), adminPer2 = product2.getPerByRole('管理员'),
+                topPer1 = product1.getPerByRole('顶级代理'), topPer2 = product2.getPerByRole('顶级代理'),
+                superPer1 = product1.getPerByRole('超级代理'), superPer2 = product2.getPerByRole('超级代理'),
+                goldPer1 = product1.getPerByRole('金牌代理'), goldPer2 = product2.getPerByRole('金牌代理');
+            self.adminPerPrice = (self.realPrice * adminPer1 + self.realPrice2 * adminPer2).toFixed(2);
+            self.topPerPrice = (self.realPrice * topPer1 + self.realPrice2 * topPer2).toFixed(2);
+            self.superPerPrice = (self.realPrice * superPer1 + self.realPrice2 * superPer2).toFixed(2);
+            self.goldPerPrice = (self.realPrice * goldPer1 + self.realPrice2 * goldPer2).toFixed(2);
+            self.save(callback);
         }
     },
+
     createAndSave: function(user, info) {
         var self = this;
         return new Promise(function(resolve, reject) {
@@ -474,13 +485,7 @@ Order.include({
                     self.funds = (user.funds - self.totalPrice).toFixed(4);
                     self.description = self.typeName + self.smallTypeName + '执行' + self.num;
                     self.countParentProfit(user, product, function(obj) {
-                        Order.open().insert(obj)
-                            .then(function () {
-                                User.open().updateById(user._id, {$set: {funds: obj.funds}})
-                                    .then(function () {
-                                        resolve(obj);
-                                    });
-                            });
+                        resolve(obj);
                     });
                 });
         });
@@ -522,15 +527,8 @@ Order.include({
                             self.funds = (user.funds - self.totalPrice).toFixed(4);
                             self.description = self.typeName + self.smallTypeName + '执行' + self.num + '; ' +
                                                product2.typeName + product2.smallTypeName + '执行' + self.num2;
-
                             self.countParentProfitTow(user, product1, product2, function(obj) {
-                                Order.open().insert(obj)
-                                    .then(function () {
-                                        User.open().updateById(user._id, {$set: {funds: obj.funds}})
-                                            .then(function () {
-                                                resolve();
-                                            });
-                                    });
+                                resolve(obj);
                             });
                         });
                 });
@@ -563,7 +561,7 @@ Order.include({
                     self.countParentProfit(parent, product, callback);
                 })
         }else {
-            callback(self);
+            self.save(callback);
         }
     },
     countParentProfitTow: function (user, product1, product2, callback) {
@@ -601,7 +599,7 @@ Order.include({
                     self.countParentProfitTow(parent, product1, product2, callback);
                 })
         }else {
-            callback(self);
+            self.save(callback);
         }
     },
     complete: function(callback) {
