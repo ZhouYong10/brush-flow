@@ -455,7 +455,19 @@ Order.include({
             self.save(callback);
         }
     },
-
+    handleRelease: function() {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            Order.open().updateById(self._id, {
+                $set: {
+                    status: '已发布',
+                    releaseTime: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+            }).then(function() {
+                resolve();
+            })
+        })
+    },
     createAndSave: function(user, info) {
         var self = this;
         return new Promise(function(resolve, reject) {

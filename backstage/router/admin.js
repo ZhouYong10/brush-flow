@@ -597,6 +597,26 @@ router.get('/placard/add', function (req, res) {
 });
 
 
+/*
+* handle order
+* */
+router.get('/order/handle/release', function (req, res) {
+    var orderId = req.query.id;
+    var url = req.query.url;
+    Order.open().findById(orderId)
+        .then(function(order) {
+            if(order.status != '已发布'){
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.handleRelease().then(function() {
+                    res.redirect(url);
+                })
+            }else {
+                res.redirect(url);
+            }
+        })
+});
+
+
 
 /*
 * order complete
@@ -692,7 +712,7 @@ router.get('/handle/task/already', function (req, res) {
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/flow/already'
+                path: '/admin/handle/task/already'
             });
         });
 });
@@ -724,7 +744,7 @@ router.get('/handle/task/complete', function (req, res) {
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/flow/already'
+                path: '/admin/handle/task/complete'
             });
         });
 });
@@ -740,7 +760,7 @@ router.get('/handle/task/complaint', function (req, res) {
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/flow/already'
+                path: '/admin/handle/task/complaint'
             });
         });
 });
