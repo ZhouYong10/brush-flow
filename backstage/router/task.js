@@ -11,11 +11,10 @@ router.get('/all', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
-                    userId: user._id,
-                    type: 'forum'
+                    type: 'handle',
+                    status: '已发布'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results, 1);
                     res.render('handleTaskAll', {
                         title: '任务大厅',
                         money: user.funds,

@@ -61,104 +61,55 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>创建时间</th>
-                            <th>地址</th>
+                            <th>类型</th>
                             <th>标题</th>
-                            <th>定时时间</th>
-                            <th>时间间隔</th>
-                            <th>评论内容</th>
-                            <th>总价</th>
-                            <th>进度</th>
-                            <th>状态</th>
+                            <th>账号/地址</th>
+                            <th>单价</th>
                             <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
 
                         <% for(var i = 0; i < orders.length; i++){ %>
-                        <tr class="<% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %> am-primary
-                        <% }else if(orders[i].status == '已退款'){ %> am-danger
-                        <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %> am-active <% } %>">
+                        <tr>
                             <td class="am-text-middle"><%= i + 1  %></td>
-                            <td class="am-text-middle"><%= orders[i].createTime %></td>
+                            <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
                             <td class="am-text-middle">
+                                <%= orders[i].title %>
+                            </td>
+                            <td class="am-text-middle">
+                                <% if(orders[i].account){ %>
+                                <a class="am-text-truncate text-break" title="<%= orders[i].account %>">
+                                    <%= orders[i].account %>
+                                </a>
+                                <% } %>
+
+                                <% if(orders[i].address){ %>
                                 <a class="am-text-truncate text-break" title="<%= orders[i].address %>">
                                     <%= orders[i].address %>
                                 </a>
+                                <% } %>
                             </td>
                             <td class="am-text-middle">
-                                <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
-                                    <%= orders[i].title %>
-                                </a>
+                                <% if(role == '管理员'){ %>
+                                <%= orders[i].adminPerPrice %>
+                                <% } %>
+
+                                <% if(role == '顶级代理'){ %>
+                                <%= orders[i].topPerPrice %>
+                                <% } %>
+
+                                <% if(role == '超级代理'){ %>
+                                <%= orders[i].superPerPrice %>
+                                <% } %>
+
+                                <% if(role == '金牌代理'){ %>
+                                <%= orders[i].goldPerPrice %>
+                                <% } %>
                             </td>
                             <td class="am-text-middle">
-                                <%= orders[i].startTime %>
-                            </td>
-                            <td class="am-text-middle"><%= orders[i].min %>至<%= orders[i].max %>分钟</td>
-                            <td class="am-text-middle">
-                                <a class="am-text-truncate text-break" title="<%= orders[i].content.split('\r\n').join(' 【&】 ') %>">
-                                    <%= orders[i].content.split('\r\n').join(' 【&】 ') %>
-                                </a>
-                            </td>
-                            <td class="am-text-middle">
-                                <%= orders[i].totalPrice %>
-                            </td>
-                            <td class="am-text-middle"><%= orders[i].schedule %></td>
-                            <td class="am-text-middle"><%= orders[i].status %></td>
-                            <td class="am-text-middle">
-                                <% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %>
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs orderError"
-                                   href="/user/order/error?id=<%= orders[i]._id %>&url=<%= path %>">报错</a>
-                                <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %>
-
-                                <% if(orders[i].errorInfo != undefined){ %>
-                                <div class="operation">
-                                    <a class="am-text-truncate text-break am-badge-warning am-radius"
-                                       title="<%= orders[i].errorInfo %>">
-                                        <%= orders[i].errorInfo %>
-                                    </a>
-                                </div>
-                                <% } %>
-
-                                <% if(orders[i].errorDealInfo != undefined){ %>
-                                <div class="operation">
-                                    <a class="am-text-truncate text-break am-badge-primary am-radius"
-                                       title="<%= orders[i].errorDealInfo %>">
-                                        <%= orders[i].errorDealInfo %>
-                                    </a>
-                                </div>
-                                <% } %>
-
-                                <% }else if(orders[i].status == '已退款'){ %>
-
-                                <% if(orders[i].errorInfo != undefined){ %>
-                                <div class="operation">
-                                    <a class="am-text-truncate text-break am-badge-warning am-radius"
-                                       title="<%= orders[i].errorInfo %>">
-                                        <%= orders[i].errorInfo %>
-                                    </a>
-                                </div>
-                                <% } %>
-
-                                <% if(orders[i].errorDealInfo != undefined){ %>
-                                <div class="operation">
-                                    <a class="am-text-truncate text-break am-badge-primary am-radius"
-                                       title="<%= orders[i].errorDealInfo %>">
-                                        <%= orders[i].errorDealInfo %>
-                                    </a>
-                                </div>
-                                <% } %>
-
-                                <% if(orders[i].refundInfo != undefined){ %>
-                                <div class="operation">
-                                    <a class="am-text-truncate text-break am-badge-danger am-radius"
-                                       title="<%= orders[i].refundInfo %>">
-                                        <%= orders[i].refundInfo %>
-                                    </a>
-                                </div>
-                                <% } %>
-
-                                <% } %>
+                                   href="/user/order/error?id=<%= orders[i]._id %>&url=<%= path %>">做任务</a>
                             </td>
                         </tr>
                         <% } %>
