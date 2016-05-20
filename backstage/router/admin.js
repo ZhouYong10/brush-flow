@@ -703,8 +703,8 @@ router.get('/handle/task/wait', function (req, res) {
 
 router.get('/handle/task/already', function (req, res) {
     Order.open().findPages({
-            type: 'flow',
-            status: {$ne: '未处理'}
+            type: 'handle',
+            status: '已发布'
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
             res.render('adminHandleAlre', {
