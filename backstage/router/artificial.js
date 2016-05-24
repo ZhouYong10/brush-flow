@@ -20,7 +20,7 @@ router.get('/WX/fans', function (req, res) {
                     smallType: 'WXfans'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
-                    Order.addSchedule(obj.results, 10);
+                    console.log(obj, '=====================');
                     res.render('handleWXfans', {
                         title: '人工微信粉丝(回复)',
                         money: user.funds,

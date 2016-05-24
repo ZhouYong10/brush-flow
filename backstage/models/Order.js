@@ -13,6 +13,9 @@ var Class = require('./Class');
 //var bcrypt = require('bcryptjs');
 var moment = require('moment');
 
+var images = require('images');
+var path = require('path');
+
 
 var Order = new Class();
 
@@ -457,6 +460,15 @@ Order.include({
     },
     handleRelease: function() {
         var self = this;
+
+        var sourcePath = path.join(global.handleExam, '../' + self.photo);
+        var waterPath = path.join(global.handleExam, '../static/images/waterImg.jpg');
+        var sourceImg = images(sourcePath);
+        var waterImg = images(waterPath);
+        waterImg.resize(180);
+        images(sourceImg)
+            .draw(waterImg, 0, 0)
+            .save(sourcePath);
         return new Promise(function(resolve, reject) {
             Order.open().updateById(self._id, {
                 $set: {
