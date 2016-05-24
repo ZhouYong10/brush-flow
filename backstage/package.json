@@ -17,6 +17,7 @@
     "express-session": "^1.13.0",
     "formidable": "^1.0.17",
     "iconv-lite": "^0.4.13",
+    "images": "^3.0.0",
     "moment": "^2.11.1",
     "mongodb": "^1.4.40",
     "mongoskin": "^1.4.13",
