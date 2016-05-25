@@ -220,18 +220,24 @@ router.get('/WX/vote', function (req, res) {
 router.get('/WX/vote/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'wx', smallType: 'friend'})
+            Product.open().findOne({type: 'handle', smallType: 'WXvote'})
                 .then(function(result) {
-                    var product = Product.wrapToInstance(result);
-                    var myPrice = product.getPriceByRole(user.role);
-                    res.render('handleWXvoteAdd', {
-                        title: '添加人工微信投票任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myPrice
-                    })
+                    var fans = Product.wrapToInstance(result);
+                    var fansPrice = fans.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'handle', smallType: 'WXfansReply'})
+                        .then(function(result) {
+                            var reply = Product.wrapToInstance(result);
+                            var replyPrice = reply.getPriceByRole(user.role);
+                            res.render('handleWXvoteAdd', {
+                                title: '添加人工微信投票任务',
+                                money: user.funds,
+                                username: user.username,
+                                userStatus: user.status,
+                                role: user.role,
+                                fansPrice: fansPrice,
+                                replyPrice: replyPrice
+                            })
+                        });
                 });
         });
 });
