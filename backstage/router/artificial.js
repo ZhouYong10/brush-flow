@@ -20,7 +20,6 @@ router.get('/WX/fans', function (req, res) {
                     smallType: 'WXfans'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
-                    console.log(obj, '=====================');
                     res.render('handleWXfans', {
                         title: '人工微信粉丝(回复)',
                         money: user.funds,
@@ -133,11 +132,10 @@ router.get('/WX/friend', function (req, res) {
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
-                    type: 'wx',
-                    smallType: 'friend'
+                    type: 'handle',
+                    smallType: 'WXfriend'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
-                    Order.addSchedule(obj.results, 10);
                     res.render('handleWXfriend', {
                         title: '人工微信个人好友',
                         money: user.funds,
@@ -146,7 +144,7 @@ router.get('/WX/friend', function (req, res) {
                         role: user.role,
                         orders: obj.results,
                         pages: obj.pages,
-                        path: '/WX/friend'
+                        path: '/artificial/WX/friend'
                     })
                 })
         });
