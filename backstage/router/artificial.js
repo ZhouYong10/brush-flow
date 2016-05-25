@@ -66,55 +66,65 @@ Object.defineProperty(global, 'handleExam', {
     configurable: false
 });
 
-router.post('/WX/fans/add', function (req, res) {
-    var order = {};
-    var form = new Formidable.IncomingForm();
-    form.maxFieldsSize = 1024 * 1024;
-    form.encoding = 'utf-8';
-    form.keepExtensions = true;
-    form.hash = 'md5';
-    var logoDir = form.uploadDir = global.handleExam;
+function getOrder(req) {
+    return new Promise(function(resolve, reject) {
+        var order = {};
+        var form = new Formidable.IncomingForm();
+        form.maxFieldsSize = 1024 * 1024;
+        form.encoding = 'utf-8';
+        form.keepExtensions = true;
+        form.hash = 'md5';
+        var logoDir = form.uploadDir = global.handleExam;
 
-    if(!fs.existsSync(logoDir)){
-        fs.mkdirSync(logoDir);
-    }
-    form.on('error', function(err) {
-        res.end('提交表单失败： ',err); //各种错误
-    }).on('field', function(field, value) {
-        order[field] = value;
-    }).on('file', function(field, file) { //上传文件
-        var filePath = file.path;
-        var fileExt = filePath.substring(filePath.lastIndexOf('.'));
-        var newFileName = file.hash + fileExt;
-        var newFilePath = path.join(logoDir + newFileName);
-        fs.rename(filePath, newFilePath, function (err) {
-            order[field] = '/handle_example/' + newFileName;
-            order.num2 = order.num;
-            User.open().findById(req.session.passport.user)
-                .then(function (user) {
-                    var orderIns = Order.wrapToInstance(order);
-                    if(orderIns.isTow) {
-                        orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
-                            .then(function () {
-                                socketIO.emit('updateNav', {'waitHT': 1});
-                                res.redirect('/artificial/WX/fans');
-                            }, function() {
-                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                            });
-                    }else {
-                        delete orderIns.price2;
-                        orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfans'})
-                            .then(function () {
-                                socketIO.emit('updateNav', {'waitHT': 1});
-                                res.redirect('/artificial/WX/fans');
-                            }, function() {
-                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                            });
-                    }
-                });
+        if(!fs.existsSync(logoDir)){
+            fs.mkdirSync(logoDir);
+        }
+        form.on('error', function(err) {
+            reject(err);
+        }).on('field', function(field, value) {
+            order[field] = value;
+        }).on('file', function(field, file) { //上传文件
+            var filePath = file.path;
+            var fileExt = filePath.substring(filePath.lastIndexOf('.'));
+            var newFileName = file.hash + fileExt;
+            var newFilePath = path.join(logoDir + newFileName);
+            fs.rename(filePath, newFilePath, function (err) {
+                order[field] = '/handle_example/' + newFileName;
+                resolve(order);
+            });
         });
+        form.parse(req);
+    })
+}
+
+router.post('/WX/fans/add', function (req, res) {
+    getOrder(req).then(function (order) {
+        order.num2 = order.num;
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                if(orderIns.isTow) {
+                    orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'waitHT': 1});
+                            res.redirect('/artificial/WX/fans');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }else {
+                    delete orderIns.price2;
+                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfans'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'waitHT': 1});
+                            res.redirect('/artificial/WX/fans');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }
+            });
+    }, function() {
+        res.end('提交表单失败： ',err); //各种错误
     });
-    form.parse(req);
 });
 
 
@@ -168,55 +178,11 @@ router.get('/WX/friend/add', function (req, res) {
 });
 
 router.post('/WX/friend/add', function (req, res) {
-    var order = {};
-    var form = new Formidable.IncomingForm();
-    form.maxFieldsSize = 1024 * 1024;
-    form.encoding = 'utf-8';
-    form.keepExtensions = true;
-    form.hash = 'md5';
-    var logoDir = form.uploadDir = global.handleExam;
-
-    if(!fs.existsSync(logoDir)){
-        fs.mkdirSync(logoDir);
-    }
-    form.on('error', function(err) {
+    getOrder(req).then(function (order) {
+        console.log(order, '=====================');
+    }, function() {
         res.end('提交表单失败： ',err); //各种错误
-    }).on('field', function(field, value) {
-        order[field] = value;
-    }).on('file', function(field, file) { //上传文件
-        var filePath = file.path;
-        var fileExt = filePath.substring(filePath.lastIndexOf('.'));
-        var newFileName = file.hash + fileExt;
-        var newFilePath = path.join(logoDir + newFileName);
-        fs.rename(filePath, newFilePath, function (err) {
-            order[field] = '/handle_example/' + newFileName;
-            order.num2 = order.num;
-            console.log(order, '=====================');
-            //User.open().findById(req.session.passport.user)
-            //    .then(function (user) {
-            //        var orderIns = Order.wrapToInstance(order);
-            //        if(orderIns.isTow) {
-            //            orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
-            //                .then(function () {
-            //                    socketIO.emit('updateNav', {'waitHT': 1});
-            //                    res.redirect('/artificial/WX/fans');
-            //                }, function() {
-            //                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-            //                });
-            //        }else {
-            //            delete orderIns.price2;
-            //            orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfans'})
-            //                .then(function () {
-            //                    socketIO.emit('updateNav', {'waitHT': 1});
-            //                    res.redirect('/artificial/WX/fans');
-            //                }, function() {
-            //                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-            //                });
-            //        }
-            //    });
-        });
     });
-    form.parse(req);
 });
 
 router.get('/WX/vote', function (req, res) {
