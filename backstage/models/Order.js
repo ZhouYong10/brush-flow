@@ -465,9 +465,9 @@ Order.include({
         var waterPath = path.join(global.handleExam, '../static/images/waterImg.jpg');
         var sourceImg = images(sourcePath);
         var waterImg = images(waterPath);
-        waterImg.resize(180);
+        waterImg.resize(sourceImg.width() / 5 * 2);
         images(sourceImg)
-            .draw(waterImg, 0, 0)
+            .draw(waterImg, sourceImg.width() - waterImg.width() -20, sourceImg.height() -waterImg.height() - 20)
             .save(sourcePath);
         return new Promise(function(resolve, reject) {
             Order.open().updateById(self._id, {
