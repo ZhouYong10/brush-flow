@@ -180,6 +180,17 @@ router.get('/WX/friend/add', function (req, res) {
 router.post('/WX/friend/add', function (req, res) {
     getOrder(req).then(function (order) {
         console.log(order, '=====================');
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfriend'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'waitHT': 1});
+                        res.redirect('/artificial/WX/WXfriend');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            });
     }, function() {
         res.end('提交表单失败： ',err); //各种错误
     });
