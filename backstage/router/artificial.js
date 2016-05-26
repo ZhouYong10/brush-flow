@@ -157,20 +157,14 @@ router.get('/WX/friend/add', function (req, res) {
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
                     var fansPrice = fans.getPriceByRole(user.role);
-                    Product.open().findOne({type: 'handle', smallType: 'WXfansReply'})
-                        .then(function(result) {
-                            var reply = Product.wrapToInstance(result);
-                            var replyPrice = reply.getPriceByRole(user.role);
-                            res.render('handleWXfriendAdd', {
-                                title: '添加人工微信个人好友任务',
-                                money: user.funds,
-                                username: user.username,
-                                userStatus: user.status,
-                                role: user.role,
-                                fansPrice: fansPrice,
-                                replyPrice: replyPrice
-                            })
-                        });
+                    res.render('handleWXfriendAdd', {
+                        title: '添加人工微信个人好友任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        fansPrice: fansPrice
+                    })
                 });
         });
 });
@@ -224,22 +218,34 @@ router.get('/WX/vote/add', function (req, res) {
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
                     var fansPrice = fans.getPriceByRole(user.role);
-                    Product.open().findOne({type: 'handle', smallType: 'WXfansReply'})
-                        .then(function(result) {
-                            var reply = Product.wrapToInstance(result);
-                            var replyPrice = reply.getPriceByRole(user.role);
-                            res.render('handleWXvoteAdd', {
-                                title: '添加人工微信投票任务',
-                                money: user.funds,
-                                username: user.username,
-                                userStatus: user.status,
-                                role: user.role,
-                                fansPrice: fansPrice,
-                                replyPrice: replyPrice
-                            })
-                        });
+                    res.render('handleWXvoteAdd', {
+                        title: '添加人工微信投票任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        fansPrice: fansPrice
+                    })
                 });
         });
+});
+
+router.post('/WX/vote/add', function (req, res) {
+    getOrder(req).then(function (order) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXvote'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'waitHT': 1});
+                        res.redirect('/artificial/WX/vote');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            });
+    }, function() {
+        res.end('提交表单失败： ',err); //各种错误
+    });
 });
 
 
