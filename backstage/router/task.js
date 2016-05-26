@@ -29,6 +29,30 @@ router.get('/all', function (req, res) {
         });
 });
 
+router.get('/type', function (req, res) {
+    var smallType = req.query.type;
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    type: 'handle',
+                    smallType: smallType,
+                    status: '已发布'
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    res.render('handleTaskAll', {
+                        title: '任务大厅',
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/forum/taskHistory'
+                    });
+                });
+        });
+});
+
 router.get('/alre', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {

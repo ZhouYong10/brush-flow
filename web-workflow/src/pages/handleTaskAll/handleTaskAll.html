@@ -24,36 +24,22 @@
             <div class="am-panel-bd">
 
                 <div id="searchForm" class="am-form am-form-inline">
-                    <validator name="search">
-                        <form method="get" action="/forum/search/forum">
-                            <div class="am-form-group am-form-group-sm search-title">
-                                <label for="rechargeTotal" class="am-u-sm-4 am-form-label taskTypeLabel">标题/地址</label>
-                                <div class="am-u-sm-8 taskTypeWrap">
-                                    <input id="rechargeTotal" type="text" class="am-form-field am-input-sm am-radius"
-                                           placeholder="标题支持模糊查询" name="titleOrAds"
-                                           v-validate:funds="{required: true}">
-                                </div>
-                            </div>
-
-                            <div class="am-form-group am-form-group-sm search-title">
-                                <label for="rechargeTime" class="am-u-sm-2 am-form-label taskTypeLabel">日期</label>
-                                <div class="am-u-sm-10 taskTypeWrap">
-                                    <input id="rechargeTime" type="text" class="am-form-field am-input-sm am-radius"
-                                           placeholder="点击选择提交日期" name="createTime"
-                                           onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
-                                           v-validate:createtime="{required: true}">
-                                </div>
-                            </div>
-
-                            <div class="am-form-group am-form-group-sm search-title">
-                                <button class="am-btn am-btn-success am-radius am-btn-sm"
-                                        v-if="!$search.funds.required || !$search.createtime.required">
-                                    <i class="am-icon-search"></i>
-                                    搜索
-                                </button>
-                            </div>
-                        </form>
-                    </validator>
+                    <div class="am-btn-group">
+                        <button class="am-btn am-btn-secondary">任务类型</button>
+                        <div class="am-dropdown" data-am-dropdown>
+                            <button class="am-btn am-btn-secondary am-dropdown-toggle" data-am-dropdown-toggle>
+                                <span class="am-icon-caret-down"></span>
+                            </button>
+                            <ul class="am-dropdown-content">
+                                <li><a href="/task/all">所有任务</a></li>
+                                <li><a href="/task/type?type=WXfans">微信粉丝</a></li>
+                                <li><a href="/task/type?type=WXfriend">微信好友</a></li>
+                                <li><a href="/task/type?type=WXvote">微信投票</a></li>
+                                <li><a href="/task/type?type=WXcode">微信扫码</a></li>
+                                <li><a href="/task/type?type=WXarticleShare">微信原文分享/收藏</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="am-scrollable-horizontal am-text-center forum-context">
