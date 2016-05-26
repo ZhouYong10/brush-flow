@@ -53,6 +53,24 @@ router.get('/type', function (req, res) {
         });
 });
 
+router.get('/show', function (req, res) {
+    var orderId = req.query.id;
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findById(orderId)
+                .then(function(order) {
+                    console.log(order, '======================');
+                    res.render('handleTaskShow', {
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        order: order
+                    });
+                })
+        });
+});
+
 router.get('/alre', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
