@@ -333,11 +333,10 @@ router.get('/WX/article', function (req, res) {
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
-                    type: 'wx',
-                    smallType: 'read'
+                    type: 'handle',
+                    smallType: 'WXarticleShare'
                 }, (req.query.page ? req.query.page : 1))
-                .then(function (obj) {
-                    Order.addSchedule(obj.results, 50);
+                .then(function(obj) {
                     res.render('handleWXarticle', {
                         title: '人工微信原文/收藏/分享',
                         money: user.funds,
@@ -346,9 +345,9 @@ router.get('/WX/article', function (req, res) {
                         role: user.role,
                         orders: obj.results,
                         pages: obj.pages,
-                        path: '/WX/like'
+                        path: '/artificial/WX/article'
                     })
-                });
+                })
         });
 });
 
