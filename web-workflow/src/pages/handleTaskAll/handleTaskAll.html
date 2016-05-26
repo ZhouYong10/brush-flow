@@ -49,7 +49,6 @@
                             <th>#</th>
                             <th>类型</th>
                             <th>标题</th>
-                            <th>账号/地址</th>
                             <th>单价</th>
                             <th>操作</th>
                         </tr>
@@ -62,19 +61,6 @@
                             <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
                             <td class="am-text-middle">
                                 <%= orders[i].title %>
-                            </td>
-                            <td class="am-text-middle">
-                                <% if(orders[i].account){ %>
-                                <a class="am-text-truncate text-break" title="<%= orders[i].account %>">
-                                    <%= orders[i].account %>
-                                </a>
-                                <% } %>
-
-                                <% if(orders[i].address){ %>
-                                <a class="am-text-truncate text-break" title="<%= orders[i].address %>">
-                                    <%= orders[i].address %>
-                                </a>
-                                <% } %>
                             </td>
                             <td class="am-text-middle">
                                 <% if(role == '管理员'){ %>
