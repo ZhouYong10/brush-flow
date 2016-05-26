@@ -87,10 +87,10 @@ function getOrder(req) {
             var fileExt = filePath.substring(filePath.lastIndexOf('.'));
             var newFileName = file.hash + fileExt;
             var newFilePath = path.join(logoDir + newFileName);
-            fs.rename(filePath, newFilePath, function (err) {
-                order[field] = '/handle_example/' + newFileName;
-                resolve(order);
-            });
+            fs.renameSync(filePath, newFilePath);
+            order[field] = '/handle_example/' + newFileName;
+        }).on('end', function() {
+            resolve(order);
         });
         form.parse(req);
     })
@@ -276,20 +276,56 @@ router.get('/WX/code', function (req, res) {
 router.get('/WX/code/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Product.open().findOne({type: 'wx', smallType: 'friend'})
+            Product.open().findOne({type: 'handle', smallType: 'WXcode'})
                 .then(function(result) {
-                    var product = Product.wrapToInstance(result);
-                    var myPrice = product.getPriceByRole(user.role);
-                    res.render('handleWXcodeAdd', {
-                        title: '添加人工微信扫码任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myPrice
-                    })
+                    var fans = Product.wrapToInstance(result);
+                    var fansPrice = fans.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'handle', smallType: 'WXcodeReply'})
+                        .then(function(result) {
+                            var reply = Product.wrapToInstance(result);
+                            var replyPrice = reply.getPriceByRole(user.role);
+                            res.render('handleWXcodeAdd', {
+                                title: '添加人工微信扫码(回复)任务',
+                                money: user.funds,
+                                username: user.username,
+                                userStatus: user.status,
+                                role: user.role,
+                                fansPrice: fansPrice,
+                                replyPrice: replyPrice
+                            })
+                        });
                 });
         });
+});
+
+router.post('/WX/code/add', function (req, res) {
+    getOrder(req).then(function (order) {
+        order.num2 = order.num;
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var orderIns = Order.wrapToInstance(order);
+                if(orderIns.isTow) {
+                    orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXcode'}, {type: 'handle', smallType: 'WXcodeReply'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'waitHT': 1});
+                            res.redirect('/artificial/WX/code');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }else {
+                    delete orderIns.price2;
+                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXcode'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'waitHT': 1});
+                            res.redirect('/artificial/WX/code');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }
+            });
+    }, function() {
+        res.end('提交表单失败： ',err); //各种错误
+    });
 });
 
 
