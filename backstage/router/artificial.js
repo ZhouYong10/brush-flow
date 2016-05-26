@@ -254,20 +254,19 @@ router.get('/WX/code', function (req, res) {
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
-                    type: 'wx',
-                    smallType: 'friend'
+                    type: 'handle',
+                    smallType: 'WXcode'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
-                    Order.addSchedule(obj.results, 10);
                     res.render('handleWXcode', {
-                        title: '人工微信扫码',
+                        title: '人工微信扫码(回复)',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
                         role: user.role,
                         orders: obj.results,
                         pages: obj.pages,
-                        path: '/WX/friend'
+                        path: '/artificial/WX/code'
                     })
                 })
         });
