@@ -65,6 +65,17 @@ Object.defineProperty(global, 'handleExam', {
     configurable: false
 });
 
+function mkdirsSync(dirname) {
+    if (fs.existsSync(dirname)) {
+        return true;
+    } else {
+        if (mkdirsSync(path.dirname(dirname))) {
+            fs.mkdirSync(dirname);
+            return true;
+        }
+    }
+}
+
 function getOrder(req) {
     return new Promise(function(resolve, reject) {
         var order = {};
@@ -73,11 +84,9 @@ function getOrder(req) {
         form.encoding = 'utf-8';
         form.keepExtensions = true;
         form.hash = 'md5';
-        var logoDir = form.uploadDir = global.handleExam;
+        var logoDir = form.uploadDir = global.handleExam + moment().format('YYYY-MM-DD') + '/';
 
-        if(!fs.existsSync(logoDir)){
-            fs.mkdirSync(logoDir);
-        }
+        mkdirsSync(logoDir);
         form.on('error', function(err) {
             reject(err);
         }).on('field', function(field, value) {
@@ -85,10 +94,10 @@ function getOrder(req) {
         }).on('file', function(field, file) { //上传文件
             var filePath = file.path;
             var fileExt = filePath.substring(filePath.lastIndexOf('.'));
-            var newFileName = file.hash + fileExt;
+            var newFileName = new Date().getTime() + '-' + file.hash + fileExt;
             var newFilePath = path.join(logoDir + newFileName);
             fs.renameSync(filePath, newFilePath);
-            order[field] = '/handle_example/' + newFileName;
+            order[field] = '/handle_example/' + moment().format('YYYY-MM-DD') + '/' + newFileName;
         }).on('end', function() {
             resolve(order);
         });
