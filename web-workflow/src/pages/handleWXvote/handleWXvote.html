@@ -7,6 +7,7 @@
     <title><%=title%></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
+    <link rel="stylesheet" href="/static/plugins/fancybox/css/jquery.fancybox.css">
 
     <link rel="stylesheet" href="handleWXvote.scss?__inline">
 </head>
@@ -57,14 +58,13 @@
                         <tr>
                             <th>#</th>
                             <th>创建时间</th>
-                            <th>加粉账号</th>
-                            <!--<th>国/省/市</th>-->
-                            <!--<th>粉丝性别</th>-->
-                            <!--<th>指定模式</th>-->
-                            <th>数量/限速</th>
-                            <!--<th>开始时间/持续</th>-->
+                            <th>任务标题</th>
+                            <th>投票地址</th>
+                            <th>投票价格</th>
+                            <th>数量</th>
                             <th>总价</th>
-                            <th>备注</th>
+                            <th>样图</th>
+                            <th>任务说明</th>
                             <th>进度</th>
                             <th>状态</th>
                             <th>操作</th>
@@ -73,28 +73,26 @@
                         <tbody>
 
                         <% for(var i = 0; i < orders.length; i++){ %>
-                        <tr class="<% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %> am-primary
+                        <tr class="<% if((orders[i].status == '已发布' || orders[i].status == '已完成') && orders[i].error == undefined){ %> am-primary
                         <% }else if(orders[i].status == '已退款'){ %> am-danger
-                        <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %> am-active <% } %>">
+                        <% }else if((orders[i].status == '已发布' || orders[i].status == '已完成') && orders[i].error != undefined){ %> am-active <% } %>">
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
-                            <td class="am-text-middle"><%= orders[i].account %></td>
-                            <!--<td class="am-text-middle">-->
-                                <!--<%= orders[i].country %> <br/>-->
-                                <!--<%= orders[i].province %> <br/>-->
-                                <!--<%= orders[i].city %>-->
-                            <!--</td>-->
-                            <!--<td class="am-text-middle"><%= orders[i].gender %></td>-->
-                            <!--<td class="am-text-middle"><%= orders[i].mode %></td>-->
+                            <td class="am-text-middle"><%= orders[i].title %></td>
                             <td class="am-text-middle">
-                                数量: <%= orders[i].num %> <br/>
-                                限速: <%= orders[i].speed %>/分
+                                <a class="am-text-truncate text-break" title="<%= orders[i].address %>">
+                                    <%= orders[i].address %>
+                                </a>
                             </td>
-                            <!--<td class="am-text-middle">-->
-                                <!--开始: <%= orders[i].startTime %> <br/>-->
-                                <!--持续: <%= orders[i].days %> 天-->
-                            <!--</td>-->
+                            <td class="am-text-middle"><%= orders[i].price %></td>
+                            <td class="am-text-middle"><%= orders[i].num %></td>
                             <td class="am-text-middle"><%= orders[i].totalPrice %></td>
+                            <td class="am-text-middle">
+                                <a class="fancybox" href="<%= orders[i].photo %>"
+                                   data-fancybox-group="gallery" title="任务样图">
+                                    <img class="am-img-responsive" src="<%= orders[i].photo %>" width="20" height="40">
+                                </a>
+                            </td>
                             <td class="am-text-middle">
                                 <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
                                     <%= orders[i].remark %>
@@ -103,10 +101,10 @@
                             <td class="am-text-middle"><%= orders[i].schedule %></td>
                             <td class="am-text-middle"><%= orders[i].status %></td>
                             <td class="am-text-middle">
-                                <% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %>
-                                    <a class="am-btn am-btn-primary am-radius am-btn-xs orderError"
-                                       href="/user/order/error?id=<%= orders[i]._id %>&url=<%= path %>">报错</a>
-                                <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %>
+                                <% if((orders[i].status == '已发布' || orders[i].status == '已完成') && orders[i].error == undefined){ %>
+                                <a class="am-btn am-btn-primary am-radius am-btn-xs orderError"
+                                   href="/user/order/error?id=<%= orders[i]._id %>&url=<%= path %>">报错</a>
+                                <% }else if((orders[i].status == '已发布' || orders[i].status == '已完成') && orders[i].error != undefined){ %>
 
                                 <% if(orders[i].errorInfo != undefined){ %>
                                 <div class="operation">
@@ -178,6 +176,7 @@
 <!--import plugin-->
 <script src="/static/plugins/layer/layer.js"></script>
 <script src="/static/plugins/laypage/laypage.js"></script>
+<script src="/static/plugins/fancybox/js/jquery.fancybox.js"></script>
 
 <script>
     require('handleWXvote');

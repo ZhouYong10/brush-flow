@@ -192,8 +192,8 @@ router.get('/WX/vote', function (req, res) {
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
-                    type: 'wx',
-                    smallType: 'friend'
+                    type: 'handle',
+                    smallType: 'WXvote'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results, 10);
@@ -205,7 +205,7 @@ router.get('/WX/vote', function (req, res) {
                         role: user.role,
                         orders: obj.results,
                         pages: obj.pages,
-                        path: '/WX/friend'
+                        path: '/artificial/WX/vote'
                     })
                 })
         });
