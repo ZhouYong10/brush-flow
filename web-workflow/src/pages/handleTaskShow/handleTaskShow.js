@@ -83,3 +83,7 @@ new Vue({
         }
     }
 });
+
+$(function () {
+    $('.fancybox').fancybox();
+});

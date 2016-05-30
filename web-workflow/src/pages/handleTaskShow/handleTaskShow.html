@@ -7,6 +7,7 @@
     <title><%= order.title %></title>
 
     <link rel="import" href="../../components/head/head.html?__inline">
+    <link rel="stylesheet" href="/static/plugins/fancybox/css/jquery.fancybox.css">
 
     <link rel="stylesheet" href="handleTaskShow.scss?__inline">
 </head>
@@ -72,7 +73,10 @@
                             <label class="am-u-sm-4 am-u-lg-2 am-form-label">二维码</label>
                             <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
                                 <div class="am-u-sm-12 am-u-lg-4">
-                                    <img class="am-img-responsive order-content" src="<%= order.codePhoto %>">
+                                    <a class="fancybox" href="<%= order.codePhoto %>"
+                                       data-fancybox-group="gallery" title="任务样图">
+                                        <img class="am-img-responsive order-content" src="<%= order.codePhoto %>" width="100">
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +86,10 @@
                             <label class="am-u-sm-4 am-u-lg-2 am-form-label">样图</label>
                             <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
                                 <div class="am-u-sm-12 am-u-lg-5">
-                                    <img class="am-img-responsive order-content" src="<%= order.photo %>">
+                                    <a class="fancybox" href="<%= order.photo %>"
+                                       data-fancybox-group="gallery" title="任务样图">
+                                        <img class="am-img-responsive order-content" src="<%= order.photo %>" width="200">
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -105,6 +112,7 @@
 <!--import plugin-->
 <!--<script src="/static/js/city.js"></script>-->
 <script src="/static/plugins/laydate/laydate.js"></script>
+<script src="/static/plugins/fancybox/js/jquery.fancybox.js"></script>
 
 
 <script>
