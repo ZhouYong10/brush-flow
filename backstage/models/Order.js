@@ -13,7 +13,9 @@ var Class = require('./Class');
 //var bcrypt = require('bcryptjs');
 var moment = require('moment');
 
+var Formidable = require('formidable');
 var images = require('images');
+var fs = require('fs');
 var path = require('path');
 
 
@@ -237,6 +239,44 @@ function stopFans() {
 }
 
 Order.extend({
+    mkdirsSync: function(dirname) {
+        if (fs.existsSync(dirname)) {
+            return true;
+        } else {
+            if (mkdirsSync(path.dirname(dirname))) {
+                fs.mkdirSync(dirname);
+                return true;
+            }
+        }
+    },
+    getOrder: function getOrder(req) {
+        return new Promise(function(resolve, reject) {
+            var order = {};
+            var form = new Formidable.IncomingForm();
+            form.maxFieldsSize = 1024 * 1024;
+            form.encoding = 'utf-8';
+            form.keepExtensions = true;
+            form.hash = 'md5';
+            var logoDir = form.uploadDir = global.handleExam + moment().format('YYYY-MM-DD') + '/';
+
+            Order.mkdirsSync(logoDir);
+            form.on('error', function(err) {
+                reject(err);
+            }).on('field', function(field, value) {
+                order[field] = value;
+            }).on('file', function(field, file) { //上传文件
+                var filePath = file.path;
+                var fileExt = filePath.substring(filePath.lastIndexOf('.'));
+                var newFileName = new Date().getTime() + '-' + file.hash + fileExt;
+                var newFilePath = path.join(logoDir + newFileName);
+                fs.renameSync(filePath, newFilePath);
+                order[field] = '/handle_example/' + moment().format('YYYY-MM-DD') + '/' + newFileName;
+            }).on('end', function() {
+                resolve(order);
+            });
+            form.parse(req);
+        })
+    },
     addSchedule: function(orders, speedNum) {
         for(var i in orders) {
             var order = orders[i];

@@ -59,7 +59,6 @@ router.get('/show', function (req, res) {
         .then(function (user) {
             Order.open().findById(orderId)
                 .then(function(order) {
-                    console.log(order, '======================');
                     res.render('handleTaskShow', {
                         money: user.funds,
                         role: user.role,
@@ -69,6 +68,14 @@ router.get('/show', function (req, res) {
                     });
                 })
         });
+});
+
+router.post('/show', function (req, res) {
+    Order.getOrder(req).then(function (order) {
+        console.log(order, '========================');
+    }, function() {
+        res.end('提交表单失败： ',err); //各种错误
+    });
 });
 
 router.get('/alre', function (req, res) {
