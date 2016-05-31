@@ -86,12 +86,11 @@ router.post('/show', function (req, res) {
 router.get('/alre', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'forum'
+            Task.open().findPages({
+                    taskUserId: user._id
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results, 1);
+                    console.log(obj,'============================');
                     res.render('handleTaskAlre', {
                         title: '我做过的任务',
                         money: user.funds,
