@@ -513,7 +513,9 @@ Order.include({
             Order.open().updateById(self._id, {
                 $set: {
                     status: '已发布',
-                    releaseTime: moment().format('YYYY-MM-DD HH:mm:ss')
+                    releaseTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    taskNum: 0,
+                    taskUsers: []
                 }
             }).then(function() {
                 resolve();

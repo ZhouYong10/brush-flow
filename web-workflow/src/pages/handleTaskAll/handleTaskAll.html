@@ -50,6 +50,7 @@
                             <th>类型</th>
                             <th>标题</th>
                             <th>单价</th>
+                            <th>总数 / 剩余</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -78,6 +79,9 @@
                                 <% if(role == '金牌代理'){ %>
                                 <%= orders[i].goldPerPrice %>
                                 <% } %>
+                            </td>
+                            <td class="am-text-middle">
+                                <%= orders[i].num %> / <%= orders[i].num - (orders[i].taskNum ? orders[i].taskNum : 0) %>
                             </td>
                             <td class="am-text-middle">
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs"

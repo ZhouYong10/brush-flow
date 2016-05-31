@@ -38,7 +38,7 @@
                             <th>类型 | 标题</th>
                             <th>账号/地址</th>
                             <th>单价</th>
-                            <th>数量/已做</th>
+                            <th>数量 / 已做</th>
                             <th>二维码</th>
                             <th>样图</th>
                             <th>任务说明</th>
@@ -78,8 +78,7 @@
                                 <%= orders[i].price2 %>
                             </td>
                             <td class="am-text-middle">
-                                <%= orders[i].num %><br>
-                                <%= orders[i].numAlre %>
+                                <%= orders[i].num %> / <%= orders[i].taskNum %>
                             </td>
                             <td class="am-text-middle">
                                 <% if(orders[i].codePhoto){ %>
