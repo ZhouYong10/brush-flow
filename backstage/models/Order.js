@@ -243,7 +243,7 @@ Order.extend({
         if (fs.existsSync(dirname)) {
             return true;
         } else {
-            if (mkdirsSync(path.dirname(dirname))) {
+            if (Order.mkdirsSync(path.dirname(dirname))) {
                 fs.mkdirSync(dirname);
                 return true;
             }
