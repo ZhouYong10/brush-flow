@@ -3,6 +3,7 @@
  */
 var User = require('../models/User');
 var Order = require('../models/Order');
+var Task = require('../models/Task');
 
 var router = require('express').Router();
 
@@ -12,7 +13,8 @@ router.get('/all', function (req, res) {
         .then(function (user) {
             Order.open().findPages({
                     type: 'handle',
-                    status: '已发布'
+                    status: '已发布',
+                    taskUsers: {$not: {$all: [user._id]}}
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     res.render('handleTaskAll', {
@@ -71,8 +73,11 @@ router.get('/show', function (req, res) {
 });
 
 router.post('/show', function (req, res) {
-    Order.getOrder(req).then(function (order) {
-        console.log(order, '========================');
+    Order.getOrder(req).then(function (info) {
+        info.userId = req.session.passport.user;
+        Task.createTask(info).then(function(task) {
+            res.redirect('/task/all');
+        })
     }, function() {
         res.end('提交表单失败： ',err); //各种错误
     });
