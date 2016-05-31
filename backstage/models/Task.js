@@ -28,6 +28,7 @@ Task.extend({
                             order.taskUserRole = user.role;
                             order.taskPhoto = info.taskPhoto;
                             order.taskCreateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                            order.taskStatus = '待审核';
                             Task.open().insert(order).then(function(tasks) {
                                 var updateInfo ;
                                 if((order.num - (order.taskNum ? order.taskNum : 0)) > 1) {

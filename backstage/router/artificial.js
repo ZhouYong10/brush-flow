@@ -4,6 +4,7 @@
 var User = require('../models/User');
 var Order = require('../models/Order');
 var Product = require('../models/Product');
+var Task = require('../models/Task');
 
 var moment = require('moment');
 var path = require('path');
@@ -376,13 +377,12 @@ router.post('/WX/article/add', function (req, res) {
 router.get('/task/check', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
+            Task.open().findPages({
                     userId: user._id,
-                    type: 'wx',
-                    smallType: 'read'
+                    taskStatus: '待审核'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results, 50);
+                    console.log(obj, '========================');
                     res.render('handleTaskCheck', {
                         title: '人工平台 / 待验收任务',
                         money: user.funds,
@@ -391,7 +391,7 @@ router.get('/task/check', function (req, res) {
                         role: user.role,
                         orders: obj.results,
                         pages: obj.pages,
-                        path: '/WX/like'
+                        path: '/artificial/task/check'
                     })
                 });
         });
