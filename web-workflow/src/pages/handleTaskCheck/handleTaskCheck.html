@@ -61,7 +61,7 @@
                             <th>类型</th>
                             <th>标题</th>
                             <th>账号/地址</th>
-                            <th>单价</th>
+                            <th>发布价</th>
                             <th>说明</th>
                             <th>二维码</th>
                             <th>样图</th>
@@ -95,21 +95,7 @@
                                 <% } %>
                             </td>
                             <td class="am-text-middle">
-                                <% if(role == '管理员'){ %>
-                                <%= orders[i].adminPerPrice %>
-                                <% } %>
-
-                                <% if(role == '顶级代理'){ %>
-                                <%= orders[i].topPerPrice %>
-                                <% } %>
-
-                                <% if(role == '超级代理'){ %>
-                                <%= orders[i].superPerPrice %>
-                                <% } %>
-
-                                <% if(role == '金牌代理'){ %>
-                                <%= orders[i].goldPerPrice %>
-                                <% } %>
+                                <%= (parseFloat(orders[i].price) + parseFloat(orders[i].price2 ? orders[i].price : 0)).toFixed(2) %>
                             </td>
                             <td class="am-text-middle">
                                 <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
