@@ -59,16 +59,21 @@ router.get('/show', function (req, res) {
     var orderId = req.query.id;
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findById(orderId)
-                .then(function(order) {
-                    res.render('handleTaskShow', {
-                        money: user.funds,
-                        role: user.role,
-                        userStatus: user.status,
-                        username: user.username,
-                        order: order
-                    });
-                })
+            if(user.taskAccount && user.taskName){
+                Order.open().findById(orderId)
+                    .then(function(order) {
+                        res.render('handleTaskShow', {
+                            money: user.funds,
+                            role: user.role,
+                            userStatus: user.status,
+                            username: user.username,
+                            order: order
+                        });
+                    })
+            }else{
+                req.session.msg = '请填写您做任务的微信账户信息!';
+                res.redirect('/task/account');
+            }
         });
 });
 
@@ -136,7 +141,8 @@ router.get('/account', function (req, res) {
                 user: user,
                 username: user.username,
                 userStatus: user.status,
-                role: user.role
+                role: user.role,
+                message: req.session.msg ? req.session.msg : ''
             });
         }, function (error) {
             res.send('获取用户详细信息失败： ' + error);
@@ -151,6 +157,7 @@ router.post('/account', function (req, res) {
             taskName: update.taskName
         }
     }).then(function (user) {
+        delete req.session.msg;
         res.redirect('/task/account');
     }, function (error) {
         res.send('更新用户信息失败： ' + error);
