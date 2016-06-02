@@ -23,6 +23,8 @@ Task.extend({
                     }).then(function(order) {
                         if(order) {
                             delete order._id;
+                            order.taskAccount = user.taskAccount;
+                            order.taskName = user.taskName;
                             order.taskUserId = user._id;
                             order.taskUser = user.username;
                             order.taskUserRole = user.role;
