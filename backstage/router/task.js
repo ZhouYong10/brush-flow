@@ -144,7 +144,6 @@ router.get('/account', function (req, res) {
 });
 
 router.post('/account', function (req, res) {
-    console.log(req.body, '============================');
     var update = req.body;
     User.open().updateById(req.session.passport.user, {
         $set: {
