@@ -145,6 +145,17 @@ router.get('/account', function (req, res) {
 
 router.post('/account', function (req, res) {
     console.log(req.body, '============================');
+    var update = req.body;
+    User.open().updateById(req.session.passport.user, {
+        $set: {
+            taskAccount: update.taskAccount,
+            taskName: update.taskName
+        }
+    }).then(function (user) {
+        res.redirect('/task/account');
+    }, function (error) {
+        res.send('更新用户信息失败： ' + error);
+    });
 });
 
 module.exports = router;
