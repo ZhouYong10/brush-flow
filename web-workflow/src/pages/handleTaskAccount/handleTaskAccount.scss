@@ -10,3 +10,9 @@
 .tips{
   color: red;
 }
+
+@media (min-width: 800px) {
+  form{
+    padding-right: 88px;
+  }
+}
