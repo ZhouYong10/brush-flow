@@ -19,6 +19,11 @@
   font-size: 1.4em;
 }
 
+.navTips{
+  color: red;
+  display: none;
+}
+
 @media screen and (min-width: 1000px){
   .app-content{
     max-width: 64%;

@@ -9,7 +9,10 @@
     <ul class="am-menu-nav am-avg-sm-4 am-collapse">
 
         <li class="am-parent">
-            <a href="##" class="menu-item">任务平台</a>
+            <a href="##" class="menu-item">
+                <span class="navTips complaints"> * </span>
+                任务平台
+            </a>
             <ul class="am-menu-sub am-collapse  am-avg-sm-2 ">
 
                 <li class="">
@@ -21,7 +24,10 @@
                 </li>
 
                 <li class="">
-                    <a href="/task/complaints" class="menu-item">被投诉任务</a>
+                    <a href="/task/complaints" class="menu-item">
+                        被投诉任务
+                        <span class="navTips navUpdateNum complaints"></span>
+                    </a>
                 </li>
 
                 <li class="">
@@ -32,7 +38,10 @@
         </li>
 
         <li class="am-parent">
-            <a href="##" class="menu-item">人工平台</a>
+            <a href="##" class="menu-item">
+                <span class="navTips checks"> * </span>
+                人工平台
+            </a>
             <ul class="am-menu-sub am-collapse  am-avg-sm-2 ">
 
                 <li class="">
@@ -56,7 +65,10 @@
                 </li>
 
                 <li class="">
-                    <a href="/artificial/task/check" class="menu-item">待验收任务</a>
+                    <a href="/artificial/task/check" class="menu-item">
+                        待验收任务
+                        <span class="navTips navUpdateNum checks"></span>
+                    </a>
                 </li>
             </ul>
         </li>
@@ -168,4 +180,7 @@
     </ul>
 
 </nav>
+
+<script src="/socket.io/socket.io.js"></script>
+
 

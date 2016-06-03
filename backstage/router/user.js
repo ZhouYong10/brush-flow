@@ -8,10 +8,43 @@ var Recharge = require('../models/Recharge');
 var Withdraw = require('../models/Withdraw');
 var Profit = require('../models/Profit');
 var Product = require('../models/Product');
+var Task = require('../models/Task');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
 var moment = require('moment');
+
+/*
+ * update header nav
+ * */
+router.get('/update/header/nav', function (req, res) {
+    var updateNav = {
+        complaints: 0,
+        checks: 0
+    };
+
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Task.open().find({
+                taskUserId: user._id,
+                taskStatus: '被投诉'
+            }).then(function (complaints) {
+                if (complaints) {
+                    updateNav.complaints = complaints.length;
+                }
+                Task.open().find({
+                    userId: user._id,
+                    taskStatus: '待审核'
+                }).then(function (checks) {
+                    if (checks) {
+                        updateNav.checks = checks.length;
+                    }
+                    console.log(updateNav, '=======================');
+                    res.send(updateNav);
+                });
+            });
+        });
+});
 
 router.get('/recharge', function (req, res) {
     User.open().findById(req.session.passport.user)
