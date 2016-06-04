@@ -366,6 +366,8 @@ Order.include({
                     self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                     self.funds = (user.funds - self.totalPrice).toFixed(4);
                     self.description = self.typeName + self.smallTypeName + '执行' + self.num;
+                    self.taskNum = 0;
+                    self.taskUsers = [];
                     self.handleCountParentProfit(user, product, function(obj) {
                         resolve(obj);
                     });
@@ -408,6 +410,8 @@ Order.include({
                             self.funds = (user.funds - self.totalPrice).toFixed(4);
                             self.description = self.typeName + self.smallTypeName + '执行' + self.num + '; ' +
                                 product2.typeName + product2.smallTypeName + '执行' + self.num2;
+                            self.taskNum = 0;
+                            self.taskUsers = [];
 
                             self.handleCountParentProfitTwo(user, product1, product2, function(obj) {
                                 resolve(obj);
