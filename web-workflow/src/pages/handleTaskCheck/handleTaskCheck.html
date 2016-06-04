@@ -128,9 +128,9 @@
                             </td>
                             <td class="am-text-middle">
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs"
-                                   href="###">完成</a>
+                                   href="/artificial/task/check/success?taskId=<%= orders[i]._id %>">完成</a>
                                 <a class="am-btn am-btn-danger am-radius am-btn-xs orderError"
-                                   href="###">投诉</a>
+                                   href="/artificial/task/check/complaints?taskId=<%= orders[i]._id %>">投诉</a>
                             </td>
                         </tr>
                         <% } %>

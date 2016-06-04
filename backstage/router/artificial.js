@@ -417,5 +417,16 @@ router.get('/task/check', function (req, res) {
         });
 });
 
+router.get('/task/check/complaints', function (req, res) {
+    var info = req.query;
+    Task.open().updateById(info.taskId, {$set: {
+        taskStatus: '被投诉',
+        complaintsInfo: info.info,
+        complaintsTime: moment().format('YYYY-MM-DD HH:mm:ss')
+    }}).then(function() {
+        res.redirect('/artificial/task/check');
+    })
+});
+
 
 module.exports = router;
