@@ -419,12 +419,18 @@ router.get('/task/check', function (req, res) {
 
 router.get('/task/check/complaints', function (req, res) {
     var info = req.query;
-    Task.open().updateById(info.taskId, {$set: {
-        taskStatus: '被投诉',
-        complaintsInfo: info.info,
-        complaintsTime: moment().format('YYYY-MM-DD HH:mm:ss')
-    }}).then(function() {
-        res.redirect('/artificial/task/check');
+    Task.open().findById(info.taskId).then(function(task) {
+        Task.open().updateById(info.taskId, {$set: {
+            taskStatus: '被投诉',
+            complaintsInfo: info.info,
+            complaintsTime: moment().format('YYYY-MM-DD HH:mm:ss')
+        }}).then(function() {
+            Order.open().updateById(task.orderId, {
+                $inc: {taskNum: -1}
+            }).then(function() {
+                res.redirect('/artificial/task/check');
+            })
+        })
     })
 });
 
