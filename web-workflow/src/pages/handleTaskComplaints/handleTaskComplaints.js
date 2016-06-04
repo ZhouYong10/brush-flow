@@ -11,6 +11,7 @@ new Vue({
 });
 
 $(function () {
+    $('.fancybox').fancybox();
     Utils.layPrompt('请输入错误原因！');
     Utils.breakText();
     Utils.isFreeze();

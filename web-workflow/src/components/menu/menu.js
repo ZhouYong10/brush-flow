@@ -2,10 +2,8 @@
  * Created by zhouyong10 on 6/3/16.
  */
 $(function () {
-    console.log($('.navTips').length, '======================');
     if($('.navTips').length) {
         $.get('/user/update/header/nav', function (obj) {
-            console.log(obj, '======================');
             navUpdateNum(obj);
         });
 

@@ -113,12 +113,11 @@ router.get('/alre', function (req, res) {
 router.get('/complaints', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'forum'
+            Task.open().findPages({
+                    taskUserId: user._id,
+                    taskStatus: '被投诉'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results, 1);
                     res.render('handleTaskComplaints', {
                         title: '我被投诉的任务',
                         money: user.funds,
@@ -126,8 +125,7 @@ router.get('/complaints', function (req, res) {
                         userStatus: user.status,
                         username: user.username,
                         orders: obj.results,
-                        pages: obj.pages,
-                        path: '/forum/taskHistory'
+                        pages: obj.pages
                     });
                 });
         });
