@@ -22,6 +22,7 @@ Task.extend({
                         status: '已发布'
                     }).then(function(order) {
                         if(order) {
+                            order.orderId = order._id + '';
                             delete order._id;
                             order.taskAccount = user.taskAccount;
                             order.taskName = user.taskName;

@@ -39,7 +39,6 @@ router.get('/update/header/nav', function (req, res) {
                     if (checks) {
                         updateNav.checks = checks.length;
                     }
-                    console.log(updateNav, '=======================');
                     res.send(updateNav);
                 });
             });
