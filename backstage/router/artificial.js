@@ -375,14 +375,12 @@ router.post('/WX/article/add', function (req, res) {
 });
 
 router.get('/task/details', function (req, res) {
-    console.log(req.query.orderId, '===================');
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Task.open().findPages({
                     orderId: req.query.orderId
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    console.log(obj, '===================');
                     res.render('handleOrderTasks', {
                         title: '人工平台 / 任务进度详情',
                         money: user.funds,
