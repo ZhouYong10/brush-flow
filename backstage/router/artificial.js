@@ -417,6 +417,17 @@ router.get('/task/check', function (req, res) {
         });
 });
 
+router.get('/task/check/success', function (req, res) {
+    Task.open().findById(req.query.taskId).then(function(task) {
+        console.log(task, '===================================');
+        var taskIns = Task.wrapToInstance(task);
+        taskIns.success().then(function() {
+            console.log('OK ------------------------------------ OK');
+            res.redirect('/artificial/task/check');
+        })
+    })
+});
+
 router.get('/task/check/complaints', function (req, res) {
     var info = req.query;
     Task.open().findById(info.taskId).then(function(task) {

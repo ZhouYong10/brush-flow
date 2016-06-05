@@ -5,6 +5,7 @@ var db = require('../dbWrap');
 var Class = require('./Class');
 var Order = require('./Order');
 var User = require('./User');
+var Profit = require('./Profit');
 var moment = require('moment');
 
 
@@ -65,42 +66,132 @@ Task.open = function() {
 };
 
 Task.include({
-
+    success: function() {
+            var self = this;
+        return new Promise(function(resolve, reject) {
+            User.open().findById(self.taskUserId).then(function(user) {
+                console.log(parseFloat(self.getPriceByRole(user.role)),'111111111111111111111111111111111111111111111');
+                User.open().updateById(self.taskUserId, {
+                    $set: {
+                        funds: (parseFloat(self.getPriceByRole(user.role)) + parseFloat(user.funds)).toFixed(4)
+                    }
+                }).then(function() {
+                    console.log('2222222222222222222222222222222222222222222222222222');
+                    self.profitToTaskUser(user, function() {
+                        console.log('3333333333333333333333333333333333333333333333333');
+                        User.open().findById(self.userId).then(function(orderUser) {
+                            self.profitToOrderUser(orderUser, function() {
+                                console.log('4444444444444444444444444444444444444444444444444444444');
+                                Task.open().updateById(self._id, {$set: {
+                                    taskStatus: '完成',
+                                    successTime: moment().format('YYYY-MM-DD HH:mm:ss')
+                                }}).then(function() {
+                                    console.log('55555555555555555555555555555555555555555555555555555555555');
+                                    resolve();
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        })
+    },
+    profitToTaskUser: function(user, cb) {
+        var self = this;
+        console.log(user.role, 'user.role ======================================');
+        console.log(user.parentID, 'user.parentID ======================================');
+        if(user.parentID) {
+            User.open().findById(user.parentID).then(function(parent) {
+                    var userPrice = self.getPriceByRole(user.role);
+                    var parentPrice = self.getPriceByRole(parent.role);
+                    var profit = (parseFloat(parentPrice) - parseFloat(userPrice)).toFixed(2);
+                    var funds = (parseFloat(profit) + parseFloat(parent.funds)).toFixed(4);
+                    User.open().updateById(parent._id, {$set: {funds: funds}})
+                        .then(function () {
+                            Profit.open().insert({
+                                userId: parent._id,
+                                username: parent.username,
+                                orderUserId: self.taskUserId,
+                                orderUsername: self.taskUser,
+                                typeName: self.typeName,
+                                smallTypeName: self.smallTypeName,
+                                profit: profit,
+                                orderId: self._id + '',
+                                status: 'success',
+                                createTime: self.createTime
+                            }).then(function (profit) {
+                                self.profitToTaskUser(parent, cb);
+                            })
+                        });
+                })
+        }else {
+            cb();
+        }
+    },
+    profitToOrderUser: function(user, cb) {
+        var self = this;
+        if(user.parentID) {
+            User.open().findById(user.parentID)
+                .then(function(parent) {
+                    var profit = self.getProfitByRole(parent.role);
+                    var funds = (parseFloat(profit) + parseFloat(parent.funds)).toFixed(4);
+                    User.open().updateById(parent._id, {$set: {funds: funds}})
+                        .then(function () {
+                            Profit.open().insert({
+                                userId: parent._id,
+                                username: parent.username,
+                                orderUserId: self.taskUserId,
+                                orderUsername: self.taskUser,
+                                typeName: self.typeName,
+                                smallTypeName: self.smallTypeName,
+                                profit: profit,
+                                orderId: self._id + '',
+                                status: 'success',
+                                createTime: self.createTime
+                            }).then(function (profit) {
+                                self.profitToOrderUser(parent, cb);
+                            })
+                        });
+                })
+        }else {
+            cb();
+        }
+    },
+    getProfitByRole: function(role) {
+        var profit ;
+        switch (role) {
+            case '管理员':
+                profit = this.adminProfit;
+                break;
+            case '顶级代理':
+                profit = this.topProfit;
+                break;
+            case '超级代理':
+                profit = this.superProfit;
+                break;
+            case '金牌代理':
+                profit = this.goldProfit;
+                break;
+        }
+        return profit;
+    },
     getPriceByRole: function(role) {
         var price ;
         switch (role) {
             case '管理员':
-                price = this.adminPrice;
+                price = this.adminPerPrice;
                 break;
             case '顶级代理':
-                price = this.topPrice;
+                price = this.topPerPrice;
                 break;
             case '超级代理':
-                price = this.superPrice;
+                price = this.superPerPrice;
                 break;
             case '金牌代理':
-                price = this.goldPrice;
+                price = this.goldPerPrice;
                 break;
         }
         return price;
-    },
-    getPerByRole: function(role) {
-        var per ;
-        switch (role) {
-            case '管理员':
-                per = this.adminPer;
-                break;
-            case '顶级代理':
-                per = this.topPer;
-                break;
-            case '超级代理':
-                per = this.superPer;
-                break;
-            case '金牌代理':
-                per = this.goldPer;
-                break;
-        }
-        return per;
     }
 });
 
