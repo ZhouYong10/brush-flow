@@ -10,6 +10,7 @@ var Withdraw = require('../models/Withdraw');
 
 var Product = require('../models/Product');
 var Order = require('../models/Order');
+var Task = require('../models/Task');
 
 var moment = require('moment');
 var Formidable = require('formidable');
@@ -72,6 +73,7 @@ router.get('/update/header/nav', function (req, res) {
     var updateNav = {
         withdraw: 0,
         waitHT: 0,
+        complaintHT: 0,
         reply: 0,
         flow: 0,
         wxArticle: 0,
@@ -97,51 +99,56 @@ router.get('/update/header/nav', function (req, res) {
                 if (feedbacks) {
                     updateNav.feedback = feedbacks.length;
                 }
-                Order.open().find({status: '未处理'})
-                    .then(function (results) {
-                        if(results) {
-                            for(var i in results) {
-                                var result = results[i];
-                                switch (result.type) {
-                                    case 'handle':
-                                        updateNav.waitHT += 1;
-                                        break;
-                                    case 'forum':
-                                        updateNav.reply += 1;
-                                        break;
-                                    case 'flow':
-                                        updateNav.flow += 1;
-                                        break;
-                                    case 'wx':
-                                        switch (result.smallType) {
-                                            case 'article': case 'share': case 'collect':
+                Task.open().find({taskStatus: '被投诉'}).then(function(tasks) {
+                    if(tasks) {
+                        updateNav.complaintHT = tasks.length;
+                    }
+                    Order.open().find({status: '未处理'})
+                        .then(function (results) {
+                            if(results) {
+                                for(var i in results) {
+                                    var result = results[i];
+                                    switch (result.type) {
+                                        case 'handle':
+                                            updateNav.waitHT += 1;
+                                            break;
+                                        case 'forum':
+                                            updateNav.reply += 1;
+                                            break;
+                                        case 'flow':
+                                            updateNav.flow += 1;
+                                            break;
+                                        case 'wx':
+                                            switch (result.smallType) {
+                                                case 'article': case 'share': case 'collect':
                                                 updateNav.wxArticle += 1;
                                                 break;
-                                            case 'read': case 'like':
+                                                case 'read': case 'like':
                                                 updateNav.wxLike += 1;
                                                 break;
-                                            case 'fans': case 'fansReply':
+                                                case 'fans': case 'fansReply':
                                                 updateNav.wxReply += 1;
                                                 break;
-                                            case 'friend':
-                                                updateNav.wxFriend += 1;
-                                                break;
-                                            case 'code':
-                                                updateNav.wxCode += 1;
-                                                break;
-                                        }
-                                        break;
-                                    case 'mp':
-                                        updateNav.mp += 1;
-                                        break;
-                                    case 'wb':
-                                        updateNav.wb += 1;
-                                        break;
+                                                case 'friend':
+                                                    updateNav.wxFriend += 1;
+                                                    break;
+                                                case 'code':
+                                                    updateNav.wxCode += 1;
+                                                    break;
+                                            }
+                                            break;
+                                        case 'mp':
+                                            updateNav.mp += 1;
+                                            break;
+                                        case 'wb':
+                                            updateNav.wb += 1;
+                                            break;
+                                    }
                                 }
                             }
-                        }
-                        res.send(updateNav);
-                    });
+                            res.send(updateNav);
+                        });
+                })
             });
         });
     });
@@ -750,11 +757,11 @@ router.get('/handle/task/complete', function (req, res) {
 });
 
 router.get('/handle/task/complaint', function (req, res) {
-    Order.open().findPages({
-            type: 'flow',
-            status: {$ne: '未处理'}
+    Task.open().findPages({
+            taskStatus: '被投诉'
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
+            console.log(obj, '=============================');
             res.render('adminHandleComplaint', {
                 title: '人工任务管理 / 被投诉任务',
                 money: req.session.systemFunds,
