@@ -436,11 +436,7 @@ router.get('/task/check/complaints', function (req, res) {
             complaintsInfo: info.info,
             complaintsTime: moment().format('YYYY-MM-DD HH:mm:ss')
         }}).then(function() {
-            Order.open().updateById(task.orderId, {
-                $inc: {taskNum: -1}
-            }).then(function() {
-                res.redirect('/artificial/task/check');
-            })
+            res.redirect('/artificial/task/check');
         })
     })
 });

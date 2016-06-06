@@ -771,11 +771,18 @@ router.get('/handle/task/complaint', function (req, res) {
 });
 
 router.get('/handle/task/complaint/success', function (req, res) {
-    Task.open().updateById(req.query.taskId, {$set: {
-        taskStatus: '投诉成立'
-    }}).then(function () {
-        res.redirect('/admin/handle/task/complaint');
-        });
+    Task.open().findById(req.query.taskId).then(function(task) {
+        Task.open().updateById(task._id, {$set: {
+            taskStatus: '投诉成立'
+        }}).then(function() {
+            Order.open().updateById(task.orderId, {
+                $set: {status: '已发布'},
+                $inc: {taskNum: -1}
+            }).then(function() {
+                res.redirect('/admin/handle/task/complaint');
+            })
+        })
+    })
 });
 
 router.get('/handle/task/complaint/refuse', function (req, res) {
