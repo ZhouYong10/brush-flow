@@ -131,6 +131,27 @@ router.get('/complaints', function (req, res) {
         });
 });
 
+router.get('/complaints/alre', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Task.open().findPages({
+                    taskUserId: user._id,
+                    taskStatus: {$in: ['投诉成立', '投诉不成立']}
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    res.render('handleTaskComplaintsAlre', {
+                        title: '已处理的投诉任务',
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        orders: obj.results,
+                        pages: obj.pages
+                    });
+                });
+        });
+});
+
 router.get('/account', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {

@@ -445,5 +445,26 @@ router.get('/task/check/complaints', function (req, res) {
     })
 });
 
+router.get('/task/complaint', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Task.open().findPages({
+                    userId: user._id,
+                    taskStatus: {$in: ['被投诉', '投诉成立', '投诉不成立']}
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    res.render('handleTaskComplaintsAlre', {
+                        title: '人工平台 / 我投诉的任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages
+                    })
+                });
+        });
+});
+
 
 module.exports = router;
