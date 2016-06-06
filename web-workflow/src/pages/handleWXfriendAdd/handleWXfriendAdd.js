@@ -59,7 +59,7 @@ new Vue({
     },
     validators: {
         isnum: Utils.isNum,
-        min100: Utils.min100,
+        min10: Utils.min10,
         maxprice: function(num) {
             return parseFloat(this.myFansPrice) * parseInt(num) <= parseFloat(this.funds);
         },
