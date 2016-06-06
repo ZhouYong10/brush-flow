@@ -779,12 +779,17 @@ router.get('/handle/task/complaint/success', function (req, res) {
 });
 
 router.get('/handle/task/complaint/refuse', function (req, res) {
-    Task.open().updateById(req.query.taskId, {$set: {
-        taskStatus: '投诉不成立',
-        complaintRefuse: req.query.info
-    }}).then(function () {
-        res.redirect('/admin/handle/task/complaint');
-    });
+    Task.open().findById(req.query.taskId).then(function(task) {
+        var taskIns = Task.wrapToInstance(task);
+        taskIns.success().then(function() {
+            Task.open().updateById(req.query.taskId, {$set: {
+                taskStatus: '投诉不成立',
+                complaintRefuse: req.query.info
+            }}).then(function () {
+                res.redirect('/admin/handle/task/complaint');
+            });
+        })
+    })
 });
 
 router.get('/handle/task/complaint/alre', function (req, res) {
