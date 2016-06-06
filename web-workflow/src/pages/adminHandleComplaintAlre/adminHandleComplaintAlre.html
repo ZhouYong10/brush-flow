@@ -9,7 +9,7 @@
     <link rel="import" href="../../components/head/head.html?__inline">
     <link rel="stylesheet" href="/static/plugins/fancybox/css/jquery.fancybox.css">
 
-    <link rel="stylesheet" href="./adminHandleComplaint.scss?__inline">
+    <link rel="stylesheet" href="./adminHandleComplaintAlre.scss?__inline">
 </head>
 <body>
 
@@ -43,7 +43,7 @@
                             <th>任务图</th>
                             <th>账号/昵称</th>
                             <th>投诉原因</th>
-                            <th>操作</th>
+                            <th>状态/拒绝理由</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -109,10 +109,10 @@
                                 </a>
                             </td>
                             <td class="am-text-middle">
-                                <a class="am-btn am-btn-primary am-radius am-btn-xs"
-                                   href="/admin/handle/task/complaint/success?taskId=<%= orders[i]._id %>">通过</a>
-                                <a class="am-btn am-btn-danger am-radius am-btn-xs orderError"
-                                   href="/admin/handle/task/complaint/refuse?taskId=<%= orders[i]._id %>">拒绝</a>
+                                <%= orders[i].taskStatus %> <br/>
+                                <a class="am-text-truncate text-break am-badge-secondary" title="<%= orders[i].complaintRefuse %>">
+                                    <%= orders[i].complaintRefuse %>
+                                </a>
                             </td>
                         </tr>
                         <% } %>
@@ -155,13 +155,13 @@
             extend: 'extend/layer.ext.js'
         });
 
-        $('.orderError').click(function (e) {
+        $('.orderRefund').click(function (e) {
             e.stopPropagation();
             e.preventDefault();
             var href = $(this).attr('href');
             layer.prompt({
                 formType: 2,
-                title: '请输入拒绝投诉的理由！',
+                title: '请输入拒绝接单的理由！',
                 offset: '6%'
             }, function (value, index) {
                 href += '&info=' + value.replace(/\r\n/g,"").replace(/\n/g,"");

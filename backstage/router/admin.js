@@ -761,17 +761,45 @@ router.get('/handle/task/complaint', function (req, res) {
             taskStatus: '被投诉'
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
-            console.log(obj, '=============================');
             res.render('adminHandleComplaint', {
                 title: '人工任务管理 / 被投诉任务',
                 money: req.session.systemFunds,
                 orders: obj.results,
-                pages: obj.pages,
-                path: '/admin/handle/task/complaint'
+                pages: obj.pages
             });
         });
 });
 
+router.get('/handle/task/complaint/success', function (req, res) {
+    Task.open().updateById(req.query.taskId, {$set: {
+        taskStatus: '投诉成立'
+    }}).then(function () {
+        res.redirect('/admin/handle/task/complaint');
+        });
+});
+
+router.get('/handle/task/complaint/refuse', function (req, res) {
+    Task.open().updateById(req.query.taskId, {$set: {
+        taskStatus: '投诉不成立',
+        complaintRefuse: req.query.info
+    }}).then(function () {
+        res.redirect('/admin/handle/task/complaint');
+    });
+});
+
+router.get('/handle/task/complaint/alre', function (req, res) {
+    Task.open().findPages({
+            taskStatus: {$in: ['投诉成立', '投诉不成立']}
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminHandleComplaintAlre', {
+                title: '人工任务管理 / 被投诉已处理',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages
+            });
+        });
+});
 
 /*
  * manage order form
