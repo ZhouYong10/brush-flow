@@ -103,7 +103,7 @@ router.get('/update/header/nav', function (req, res) {
                     if(tasks) {
                         updateNav.complaintHT = tasks.length;
                     }
-                    Order.open().find({status: '未处理'})
+                    Order.open().find({status: {$in: ['未处理', '审核中']}})
                         .then(function (results) {
                             if(results) {
                                 for(var i in results) {
@@ -695,7 +695,7 @@ router.get('/order/dealError', function (req, res) {
 router.get('/handle/task/wait', function (req, res) {
     Order.open().findPages({
             type: 'handle',
-            status: '未处理'
+            status: '审核中'
         }, (req.query.page ? req.query.page : 1))
         .then(function(obj) {
             res.render('adminHandleWait', {

@@ -38,7 +38,8 @@ router.get('/type', function (req, res) {
             Order.open().findPages({
                     type: 'handle',
                     smallType: smallType,
-                    status: '已发布'
+                    status: '已发布',
+                    taskUsers: {$not: {$all: [user._id]}}
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     res.render('handleTaskAll', {

@@ -436,6 +436,7 @@ router.get('/task/check/complaints', function (req, res) {
             complaintsInfo: info.info,
             complaintsTime: moment().format('YYYY-MM-DD HH:mm:ss')
         }}).then(function() {
+            socketIO.emit('updateNav', {'complaintHT': 1});
             res.redirect('/artificial/task/check');
         })
     })

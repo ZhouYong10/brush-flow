@@ -362,7 +362,7 @@ Order.include({
                     self.typeName = product.typeName;
                     self.smallType = product.smallType;
                     self.smallTypeName = product.smallTypeName;
-                    self.status = '未处理';
+                    self.status = '审核中';
                     self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                     self.funds = (user.funds - self.totalPrice).toFixed(4);
                     self.description = self.typeName + self.smallTypeName + '执行' + self.num;
@@ -405,7 +405,7 @@ Order.include({
                             self.typeName = product1.typeName;
                             self.smallType = product1.smallType;
                             self.smallTypeName = product1.smallTypeName;
-                            self.status = '未处理';
+                            self.status = '审核中';
                             self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                             self.funds = (user.funds - self.totalPrice).toFixed(4);
                             self.description = self.typeName + self.smallTypeName + '执行' + self.num + '; ' +
