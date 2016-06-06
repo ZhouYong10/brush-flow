@@ -25,6 +25,13 @@ function updateNav(obj, isAdd) {
         $('.updateNum.' + key).text(' ( ' + obj[key] + ' ) ');
     }
 
+    var waitHT = parseInt($('.updateNum.waitHT').text().split(' ')[2]);
+    var complaintHT = parseInt($('.updateNum.complaintHT').text().split(' ')[2]);
+    var htNum = waitHT + complaintHT;
+    if(htNum > 0) {
+        $('.tips.waitHT.complaintHT').css('display', 'inline');
+    }
+
     var wxArticle = parseInt($('.updateNum.wxArticle').text().split(' ')[2]);
     var wxLike = parseInt($('.updateNum.wxLike').text().split(' ')[2]);
     var wxReply = parseInt($('.updateNum.wxReply').text().split(' ')[2]);
