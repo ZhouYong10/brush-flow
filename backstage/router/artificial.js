@@ -493,6 +493,19 @@ router.get('/order/refund', function (req, res) {
         }else {
             Order.open().findById(req.query.id).then(function(order) {
                 console.log(order, '==================================');
+                Order.open().updateById(order._id, {$set: {
+                    status: '已退款',
+                    surplus: 0
+                }}).then(function() {
+                    User.open().findById(order.userId).then(function(user) {
+                        var funds = (parseFloat(user.funds) + parseFloat(order.surplus)).toFixed(4);
+                        User.open().updateById(user._id, {$set: {
+                            funds: funds
+                        }}).then(function() {
+                            res.redirect(req.query.path);
+                        })
+                    })
+                })
             })
         }
     })
