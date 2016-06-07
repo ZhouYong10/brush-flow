@@ -715,7 +715,7 @@ router.get('/handle/task/already', function (req, res) {
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
             res.render('adminHandleAlre', {
-                title: '人工任务管理 / 已发布任务',
+                title: '人工任务管理 / 执行中任务',
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
@@ -731,7 +731,7 @@ router.get('/handle/task/error', function (req, res) {
         }, (req.query.page ? req.query.page : 1))
         .then(function(obj) {
             res.render('adminHandleError', {
-                title: '人工任务管理 / 未通过任务',
+                title: '人工任务管理 / 已退款任务',
                 money: req.session.systemFunds,
                 orders: obj.results,
                 pages: obj.pages,
@@ -742,18 +742,17 @@ router.get('/handle/task/error', function (req, res) {
 
 router.get('/handle/task/complete', function (req, res) {
     Order.open().findPages({
-            type: 'flow',
-            status: {$ne: '未处理'}
+            type: 'handle',
+            status: '已完成'
         }, (req.query.page ? req.query.page : 1))
-        .then(function (obj) {
+        .then(function(obj) {
             res.render('adminHandleComplete', {
                 title: '人工任务管理 / 已完结任务',
                 money: req.session.systemFunds,
                 orders: obj.results,
-                pages: obj.pages,
-                path: '/admin/handle/task/complete'
+                pages: obj.pages
             });
-        });
+        })
 });
 
 router.get('/handle/task/complaint', function (req, res) {
