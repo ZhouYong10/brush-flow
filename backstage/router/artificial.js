@@ -463,5 +463,27 @@ router.get('/task/complaint', function (req, res) {
         });
 });
 
+router.get('/order/pause', function (req, res) {
+    console.log(req.query, '======================');
+    Order.open().updateById(req.query.id, {$set: {
+        status: '已暂停'
+    }}).then(function() {
+        res.redirect(req.query.path);
+    })
+});
+
+router.get('/order/start', function (req, res) {
+    console.log(req.query, '======================');
+    Order.open().updateById(req.query.id, {$set: {
+        status: '已发布'
+    }}).then(function() {
+        res.redirect(req.query.path);
+    })
+});
+
+router.get('/order/refund', function (req, res) {
+    console.log(req.query, '======================');
+});
+
 
 module.exports = router;
