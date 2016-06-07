@@ -31,9 +31,14 @@ router.use(function(req, res, next) {
         .then(function (user) {
             var userIns = User.wrapToInstance(user);
             if(userIns.isAdmin()){
-                User.getSystemFunds().then(function (count) {
-                    req.session.systemFunds = count;
-                    next();
+                User.getSystemFunds().then(function (canUse) {
+                    req.session.systemFunds = canUse;
+                    Order.getOrderFreezeFunds().then(function(orderFreeze) {
+                        Withdraw.getWithdrawFreezeFunds().then(function(withdrawFreeze) {
+                            req.session.freezeFunds = (parseFloat(orderFreeze) + parseFloat(withdrawFreeze)).toFixed(4);
+                            next();
+                        })
+                    })
                 });
             }else{
                 console.log('不是管理员，不能非法登陆。。。。。。。。。。。。');
@@ -51,6 +56,7 @@ router.get('/home', function (req, res) {
             res.render('adminHome', {
                 title: '管理员公告',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 placards: obj.results,
                 pages: obj.pages
             });
@@ -163,6 +169,7 @@ router.get('/recharge/history', function (req, res) {
             res.render('adminRechargeHistory', {
                 title: '资金管理 / 充值记录',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 recharges: obj.results,
                 pages: obj.pages,
                 path: '/admin/recharge/history'
@@ -178,6 +185,7 @@ router.get('/search/recharge/by/alipayId', function (req, res) {
             res.render('adminRechargeHistory', {
                 title: '资金管理 / 充值记录',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 recharges: obj.results,
                 pages: obj.pages,
                 path: '/admin/recharge/history'
@@ -196,6 +204,7 @@ router.get('/search/user/recharge', function (req, res) {
             res.render('adminRechargeHistory', {
                 title: '资金管理 / 充值记录',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 recharges: obj.results,
                 pages: obj.pages,
                 path: '/admin/recharge/history'
@@ -233,6 +242,7 @@ router.get('/withdraw/wait', function (req, res) {
             res.render('adminWithdrawWait', {
                 title: '资金管理 / 提现管理 / 待处理',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 withdraws: obj.results,
                 pages: obj.pages,
                 path: '/admin/withdraw/wait'
@@ -246,6 +256,7 @@ router.get('/withdraw/already', function (req, res) {
             res.render('adminWithdrawAlre', {
                 title: '资金管理 / 提现管理 / 已处理',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 withdraws: obj.results,
                 pages: obj.pages,
                 path: '/admin/withdraw/already'
@@ -278,6 +289,7 @@ router.get('/manage/user', function (req, res) {
             res.render('adminManageUser', {
                 title: '设置 / 用户管理 / 所有用户',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 users: obj.results,
                 pages: obj.pages
             });
@@ -294,6 +306,7 @@ router.get('/search/user', function (req, res) {
             res.render('adminManageUser', {
                 title: '设置 / 用户管理 / 所有用户',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 users: obj.results,
                 pages: obj.pages
             });
@@ -308,6 +321,7 @@ router.get('/manage/user/edit', function(req, res) {
             res.render('adminManageUserEdit', {
                 title: '设置 / 用户管理 / 编辑用户信息',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 user: user
             });
         }, function (error) {
@@ -343,6 +357,7 @@ router.get('/manage/user/del', function(req, res) {
 router.get('/manage/user/add', function (req, res) {
     res.render('adminManageUserAdd', {
         title: '设置 / 用户管理 / 添加用户',
+        freezeFunds: req.session.freezeFunds,
         money: req.session.systemFunds
     })
 });
@@ -384,6 +399,7 @@ router.get('/price/forum', function (req, res) {
             res.render('adminPriceForum', {
                 title: '价格&状态管理 / 论坛模块',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 products: obj.results,
                 pages: obj.pages
             });
@@ -453,6 +469,7 @@ router.get('/price/flow', function (req, res) {
             res.render('adminPriceFlow', {
                 title: '价格&状态管理 / 流量模块',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 products: obj.results,
                 pages: obj.pages
             });
@@ -490,6 +507,7 @@ router.get('/price/WX/MP/WB', function (req, res) {
             res.render('adminPriceWXMPWB', {
                 title: '价格&状态管理 / 微信、美拍、微博',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 products: obj.results,
                 pages: obj.pages
             });
@@ -527,6 +545,7 @@ router.get('/price/handle', function (req, res) {
             res.render('adminPriceHandle', {
                 title: '价格&状态管理 / 人工平台',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 products: obj.results,
                 pages: obj.pages
             });
@@ -561,7 +580,11 @@ router.post('/price/handle/delete', function (req, res) {
  * manage placard
  * */
 router.get('/placard/send', function (req, res) {
-    res.render('adminPlacardSend', {title: '公告管理 / 发布公告', money: req.session.systemFunds})
+    res.render('adminPlacardSend', {
+        title: '公告管理 / 发布公告',
+        freezeFunds: req.session.freezeFunds,
+        money: req.session.systemFunds
+    })
 });
 
 router.post('/placard/send', function (req, res) {
@@ -582,6 +605,7 @@ router.get('/placard/history', function (req, res) {
             res.render('adminPlacardHistory', {
                 title: '公告管理 / 历史公告',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 placards: obj.results,
                 pages: obj.pages
             });
@@ -600,7 +624,11 @@ router.get('/placard/history/del', function (req, res) {
 });
 
 router.get('/placard/add', function (req, res) {
-    res.render('adminPlacardAdd', {title: '公告管理 / 添加公告类型', money: req.session.systemFunds})
+    res.render('adminPlacardAdd', {
+        title: '公告管理 / 添加公告类型',
+        freezeFunds: req.session.freezeFunds,
+        money: req.session.systemFunds
+    })
 });
 
 
@@ -701,6 +729,7 @@ router.get('/handle/task/wait', function (req, res) {
             res.render('adminHandleWait', {
                 title: '人工任务管理 / 待发布任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/handle/task/wait'
@@ -717,6 +746,7 @@ router.get('/handle/task/already', function (req, res) {
             res.render('adminHandleAlre', {
                 title: '人工任务管理 / 执行中任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/handle/task/already'
@@ -733,6 +763,7 @@ router.get('/handle/task/error', function (req, res) {
             res.render('adminHandleError', {
                 title: '人工任务管理 / 已退款任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/handle/task/error'
@@ -749,6 +780,7 @@ router.get('/handle/task/complete', function (req, res) {
             res.render('adminHandleComplete', {
                 title: '人工任务管理 / 已完结任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages
             });
@@ -763,6 +795,7 @@ router.get('/order/details', function (req, res) {
             res.render('adminHandleOrderTasks', {
                 title: '人工任务管理 / 任务进度详情',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages
             });
@@ -777,6 +810,7 @@ router.get('/handle/task/complaint', function (req, res) {
             res.render('adminHandleComplaint', {
                 title: '人工任务管理 / 被投诉任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages
             });
@@ -820,6 +854,7 @@ router.get('/handle/task/complaint/alre', function (req, res) {
             res.render('adminHandleComplaintAlre', {
                 title: '人工任务管理 / 被投诉已处理',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages
             });
@@ -840,6 +875,7 @@ router.get('/reply/wait', function (req, res) {
             res.render('adminReplyWait', {
                 title: '回复任务管理 / 待处理订单',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/reply/wait'
@@ -856,6 +892,7 @@ router.get('/reply/already', function (req, res) {
             res.render('adminReplyAlre', {
                 title: '回复任务管理 / 已处理订单',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/reply/already'
@@ -874,6 +911,7 @@ router.get('/flow/wait', function (req, res) {
             res.render('adminFlowWait', {
                 title: '流量任务管理 / 待处理订单',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/flow/wait'
@@ -890,6 +928,7 @@ router.get('/flow/already', function (req, res) {
             res.render('adminFlowAlre', {
                 title: '流量任务管理 / 已处理订单',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/flow/already'
@@ -909,6 +948,7 @@ router.get('/WX/article/wait', function (req, res) {
             res.render('adminWXarticleWait', {
                 title: '微信任务管理 / 待处理微信原文任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/article/wait'
@@ -926,6 +966,7 @@ router.get('/WX/article/already', function (req, res) {
             res.render('adminWXarticleAlre', {
                 title: '微信任务管理 / 已处理微信原文任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/article/already'
@@ -943,6 +984,7 @@ router.get('/WX/like/wait', function (req, res) {
             res.render('adminWXlikeWait', {
                 title: '微信任务管理 / 待处理微信阅读点赞任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/like/wait',
@@ -967,6 +1009,7 @@ router.get('/WX/like/already', function (req, res) {
                 res.render('adminWXlikeAlre', {
                     title: '微信任务管理 / 已处理微信阅读点赞任务',
                     money: req.session.systemFunds,
+                    freezeFunds: req.session.freezeFunds,
                     orders: obj.results,
                     pages: obj.pages,
                     path: '/admin/WX/like/already',
@@ -996,6 +1039,7 @@ router.get('/search/WX/like/dingding', function (req, res) {
                 res.render('adminWXlikeAlre', {
                     title: '微信任务管理 / 已处理微信阅读点赞任务',
                     money: req.session.systemFunds,
+                    freezeFunds: req.session.freezeFunds,
                     orders: obj.results,
                     pages: obj.pages,
                     path: '/admin/WX/like/already',
@@ -1027,6 +1071,7 @@ router.get('/WX/reply/wait', function (req, res) {
             res.render('adminWXreplyWait', {
                 title: '微信任务管理 / 待处理公众粉丝回复任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/reply/wait',
@@ -1045,6 +1090,7 @@ router.get('/WX/reply/already', function (req, res) {
             res.render('adminWXreplyAlre', {
                 title: '微信任务管理 / 已处理公众粉丝回复任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/reply/already'
@@ -1062,6 +1108,7 @@ router.get('/WX/friend/wait', function (req, res) {
             res.render('adminWXfriendWait', {
                 title: '微信任务管理 / 待处理微信个人好友任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/friend/wait',
@@ -1080,6 +1127,7 @@ router.get('/WX/friend/already', function (req, res) {
             res.render('adminWXfriendAlre', {
                 title: '微信任务管理 / 已处理微信个人好友任务',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/friend/already'
@@ -1109,6 +1157,7 @@ router.get('/WX/code/wait', function (req, res) {
             res.render('adminWXcodeWait', {
                 title: '微信任务管理 / 待处理微信好友地区扫码',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/code/wait',
@@ -1127,6 +1176,7 @@ router.get('/WX/code/already', function (req, res) {
             res.render('adminWXcodeAlre', {
                 title: '微信任务管理 / 已处理微信好友地区扫码',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/code/already'
@@ -1146,6 +1196,7 @@ router.get('/MP/wait', function (req, res) {
             res.render('adminMPWait', {
                 title: '美拍任务管理 / 待处理订单',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/MP/wait'
@@ -1163,6 +1214,7 @@ router.get('/MP/already', function (req, res) {
             res.render('adminMPAlre', {
                 title: '美拍任务管理 / 已处理订单',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/MP/already'
@@ -1181,6 +1233,7 @@ router.get('/WB/wait', function (req, res) {
             res.render('adminWBWait', {
                 title: '微博任务管理 / 待处理订单',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WB/wait'
@@ -1197,6 +1250,7 @@ router.get('/WB/already', function (req, res) {
             res.render('adminWBAlre', {
                 title: '微博任务管理 / 已处理订单',
                 money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WB/already'
@@ -1212,6 +1266,7 @@ router.get('/error/wait', function (req, res) {
         res.render('adminErrorWait', {
             title: '错误信息管理 / 待处理错误报告',
             money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
             orders: obj.results,
             pages: obj.pages,
             path: '/admin/error/wait'
@@ -1225,6 +1280,7 @@ router.get('/error/already', function (req, res) {
         res.render('adminErrorAlre', {
             title: '错误信息管理 / 待处理错误报告',
             money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
             orders: obj.results,
             pages: obj.pages,
             path: '/admin/error/already'
@@ -1234,7 +1290,8 @@ router.get('/error/already', function (req, res) {
 
 router.get('/redirect/aim/order', function (req, res) {
     var orderId = req.query.id, type = req.query.type, smallType = req.query.smallType,
-        render = '', title = '', money = req.session.systemFunds, pages = 1, path = '/admin/error/wait';
+        render = '', title = '', money = req.session.systemFunds, freezeFunds = req.session.freezeFunds,
+        pages = 1, path = '/admin/error/wait';
     Order.open().findById(orderId).then(function(result) {
         var arr = [];
         arr.push(result);
@@ -1283,6 +1340,7 @@ router.get('/redirect/aim/order', function (req, res) {
         res.render(render, {
             title: title,
             money: money,
+            freezeFunds: freezeFunds,
             orders: arr,
             pages: pages,
             path: path,
@@ -1300,6 +1358,7 @@ router.get('/feedback/wait', function (req, res) {
         res.render('adminFeedbackWait', {
             title: '问题反馈信息管理 / 待处理问题反馈信息',
             money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
             feedbacks: obj.results,
             pages: obj.pages
         });
@@ -1320,6 +1379,7 @@ router.get('/feedback/already', function (req, res) {
         res.render('adminFeedbackAlre', {
             title: '问题反馈信息管理 / 已处理问题反馈信息',
             money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
             feedbacks: obj.results,
             pages: obj.pages
         });

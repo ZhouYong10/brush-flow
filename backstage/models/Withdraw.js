@@ -20,6 +20,19 @@ Withdraw.open = function() {
 };
 
 Withdraw.extend({
+    getWithdrawFreezeFunds: function() {
+        return new Promise(function(resolve, reject) {
+            Withdraw.open().find({
+                status: '未处理'
+            }).then(function(Withdraws) {
+                var count = 0;
+                Withdraws.forEach(function (Withdraw) {
+                    count += parseFloat(Withdraw.funds);
+                });
+                resolve(count.toFixed(4));
+            })
+        })
+    },
     saveOne: function(withdraw, userId) {
         return new Promise(function(resolve, reject) {
             User.open().findById(userId)

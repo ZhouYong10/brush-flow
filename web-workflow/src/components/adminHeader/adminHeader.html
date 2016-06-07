@@ -13,13 +13,14 @@
                 <!--<i class="am-header-icon am-icon-money"></i>-->
                 <!--￥<%= money %>-->
             <!--</a>-->
-            <a href="#phone-link">
+            <a href="#phone-link" style="margin: -13px;">
                 <span class="am-show-sm">￥<%= money %></span>
+                <span class="am-show-sm">￥<%= freezeFunds %></span>
             </a>
         </div>
 
         <h1 class="am-header-title am-hide-sm">
-            系统资金: ￥<%= money %>
+            可用: ￥<%= money %> &nbsp; 冻结: ￥<%= freezeFunds %>
         </h1>
 
         <div class="am-header-right am-header-nav">
