@@ -23,7 +23,7 @@
         <div class="am-hide-sm am-u-lg-2 am-u-md-3">
             <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
         </div>
-  
+
         <div class="am-u-lg-10 am-u-md-9">
             <div class="am-panel am-panel-primary">
                 <div class="am-panel-hd"><%= title %></div>
@@ -149,33 +149,6 @@
     $(function() {
         $('.fancybox').fancybox();
 
-        var clip = new Clipboard('.clipboard');
-        clip.on('success', function (e) {
-            $(e.trigger).removeClass('am-btn-primary').addClass('am-btn-danger');
-            layer.msg('复制成功！', {
-                time: 1000
-            });
-        });
-
-        layer.config({
-            extend: 'extend/layer.ext.js'
-        });
-
-        $('.orderRefund').click(function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            var href = $(this).attr('href');
-            layer.prompt({
-                formType: 2,
-                title: '请输入拒绝接单的理由！',
-                offset: '6%'
-            }, function (value, index) {
-                href += '&info=' + value.replace(/\r\n/g,"").replace(/\n/g,"");
-                layer.close(index);
-                $('<a href=' + href + '></a>').get(0).click();
-            });
-        });
-
         $('.text-break').click(function () {
             var self = this;
             layer.alert($(self).text());
@@ -194,7 +167,12 @@
             }(),
             jump: function(e, first){ //触发分页后的回调
                 if(!first){ //一定要加此判断，否则初始时会无限刷新
-                    location.href = '?page='+e.curr;
+                    if(location.search) {
+                        var search = location.search.replace(/page=(\d+)/,' ');
+                        location.href = search + '&page='+e.curr;
+                    }else{
+                        location.href = '?page='+e.curr;
+                    }
                 }
             }
         });
