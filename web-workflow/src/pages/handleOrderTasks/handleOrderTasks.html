@@ -129,18 +129,19 @@
                             <td class="am-text-middle">
                                 <% if(orders[i].taskStatus == '完成'){ %>
                                 <span class="am-badge-success"><%= orders[i].taskStatus %></span> <br/>
-                                <% } %>
 
-                                <% if(orders[i].taskStatus == '投诉成立'){ %>
-                                <%= orders[i].taskStatus %> <br/>
-                                <% } %>
+                                <% }else if(orders[i].taskStatus == '投诉成立'){ %>
+                                <span class="am-badge-danger"><%= orders[i].taskStatus %></span> <br/>
 
-                                <% if(orders[i].taskStatus == '投诉不成立'){ %>
+                                <% }else if(orders[i].taskStatus == '投诉不成立'){ %>
                                 <span class="am-badge-secondary"><%= orders[i].taskStatus %></span> <br/>
-                                <% } %>
 
-                                <% if(orders[i].taskStatus == '被投诉'){ %>
+                                <% }else if(orders[i].taskStatus == '被投诉'){ %>
                                 <span class="am-badge-warning"><%= orders[i].taskStatus %></span> <br/>
+
+                                <% }else { %>
+                                <%= orders[i].taskStatus %>
+
                                 <% } %>
                             </td>
                         </tr>
