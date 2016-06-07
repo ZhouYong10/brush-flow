@@ -755,6 +755,20 @@ router.get('/handle/task/complete', function (req, res) {
         })
 });
 
+router.get('/order/details', function (req, res) {
+    Task.open().findPages({
+            orderId: req.query.orderId
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminHandleOrderTasks', {
+                title: '人工任务管理 / 任务进度详情',
+                money: req.session.systemFunds,
+                orders: obj.results,
+                pages: obj.pages
+            });
+        });
+});
+
 router.get('/handle/task/complaint', function (req, res) {
     Task.open().findPages({
             taskStatus: '被投诉'
@@ -811,6 +825,8 @@ router.get('/handle/task/complaint/alre', function (req, res) {
             });
         });
 });
+
+
 
 /*
  * manage order form

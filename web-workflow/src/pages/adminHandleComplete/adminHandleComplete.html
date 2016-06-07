@@ -77,7 +77,9 @@
                                 <%= orders[i].price2 %>
                             </td>
                             <td class="am-text-middle">
-                                <%= orders[i].num %> / <%= orders[i].taskNum %>
+                                <a href="/admin/order/details?orderId=<%= orders[i]._id %>" title="点击查看任务列表">
+                                    <%= orders[i].num %> / <%= orders[i].taskNum %>
+                                </a>
                             </td>
                             <td class="am-text-middle">
                                 <% if(orders[i].codePhoto){ %>
