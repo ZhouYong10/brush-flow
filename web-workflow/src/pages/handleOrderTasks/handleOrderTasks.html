@@ -95,7 +95,7 @@
                                 <% } %>
                             </td>
                             <td class="am-text-middle">
-                                <%= (parseFloat(orders[i].price) + parseFloat(orders[i].price2 ? orders[i].price : 0)).toFixed(2) %>
+                                <%= orders[i].releasePrice %>
                             </td>
                             <td class="am-text-middle">
                                 <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">

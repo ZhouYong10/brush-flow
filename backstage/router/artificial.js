@@ -483,6 +483,9 @@ router.get('/order/start', function (req, res) {
 
 router.get('/order/refund', function (req, res) {
     console.log(req.query, '======================');
+    Order.open().findById(req.query.id).then(function(order) {
+        console.log(order, '==================================');
+    })
 });
 
 

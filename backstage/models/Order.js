@@ -355,6 +355,8 @@ Order.include({
                         return reject();
                     }
                     self.realPrice = self.price;
+                    self.surplus = self.totalPrice;
+                    self.releasePrice = (parseFloat(self.price) + parseFloat(self.price2 ? self.price2 : 0)).toFixed(2);
                     self.user = user.username;
                     self.userId = user._id;
                     self.name = product.name;
@@ -398,6 +400,7 @@ Order.include({
                             self.realPrice = self.price;
                             self.realPrice2 = self.price2;
                             self.surplus = self.totalPrice;
+                            self.releasePrice = (parseFloat(self.price) + parseFloat(self.price2 ? self.price2 : 0)).toFixed(2);
                             self.user = user.username;
                             self.userId = user._id;
                             self.name = product1.name;
