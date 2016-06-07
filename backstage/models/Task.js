@@ -87,7 +87,14 @@ Task.include({
                                     successTime: moment().format('YYYY-MM-DD HH:mm:ss')
                                 }}).then(function() {
                                     console.log('55555555555555555555555555555555555555555555555555555555555');
-                                    resolve();
+                                    Order.open().findById(self.orderId).then(function(order) {
+                                        var surplus = (parseFloat(order.surplus) - parseFloat(self.releasePrice)).toFixed(4);
+                                        Order.open().updateById(order._id, {$set: {
+                                            surplus: surplus
+                                        }}).then(function() {
+                                            resolve();
+                                        })
+                                    })
                                 })
                             })
                         })
