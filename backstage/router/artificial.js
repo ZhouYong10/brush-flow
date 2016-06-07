@@ -375,6 +375,7 @@ router.post('/WX/article/add', function (req, res) {
 });
 
 router.get('/task/details', function (req, res) {
+    console.log(req.query, '============================');
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Task.open().findPages({
@@ -389,7 +390,7 @@ router.get('/task/details', function (req, res) {
                         role: user.role,
                         orders: obj.results,
                         pages: obj.pages,
-                        path: '/artificial/task/check'
+                        msg: req.query.msg
                     })
                 });
         });
@@ -483,8 +484,17 @@ router.get('/order/start', function (req, res) {
 
 router.get('/order/refund', function (req, res) {
     console.log(req.query, '======================');
-    Order.open().findById(req.query.id).then(function(order) {
-        console.log(order, '==================================');
+    Task.open().find({
+        orderId: req.query.id,
+        taskStatus: {$in: ['待审核', '被投诉']}
+    }).then(function(tasks) {
+        if(tasks.length > 0) {
+            res.redirect('/artificial/task/details?orderId=' + req.query.id + encodeURI('&msg=存在待审核或被投诉未处理任务，不能取消当前发布的任务！'));
+        }else {
+            Order.open().findById(req.query.id).then(function(order) {
+                console.log(order, '==================================');
+            })
+        }
     })
 });
 
