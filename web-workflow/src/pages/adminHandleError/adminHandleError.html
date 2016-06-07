@@ -42,7 +42,7 @@
                             <th>二维码</th>
                             <th>样图</th>
                             <th>任务说明</th>
-                            <th>总价</th>
+                            <th>总价/结余</th>
                             <th>返利 | 价格</th>
                             <th>拒绝原因</th>
                         </tr>
@@ -97,7 +97,10 @@
                                     <%= orders[i].remark %>
                                 </a>
                             </td>
-                            <td class="am-text-middle"><%= orders[i].totalPrice %></td>
+                            <td class="am-text-middle">
+                                <%= orders[i].totalPrice %> <br/>
+                                <%= orders[i].surplus %>
+                            </td>
                             <td class="am-text-middle">
                                 A: <%= orders[i].adminProfit %> | <%= orders[i].adminPerPrice %><br/>
                                 B: <%= orders[i].topProfit %> | <%= orders[i].topPerPrice %><br/>
