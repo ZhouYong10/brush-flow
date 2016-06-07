@@ -70,23 +70,18 @@ Task.include({
             var self = this;
         return new Promise(function(resolve, reject) {
             User.open().findById(self.taskUserId).then(function(user) {
-                console.log(parseFloat(self.getPriceByRole(user.role)),'111111111111111111111111111111111111111111111');
                 User.open().updateById(self.taskUserId, {
                     $set: {
                         funds: (parseFloat(self.getPriceByRole(user.role)) + parseFloat(user.funds)).toFixed(4)
                     }
                 }).then(function() {
-                    console.log('2222222222222222222222222222222222222222222222222222');
                     self.profitToTaskUser(user, function() {
-                        console.log('3333333333333333333333333333333333333333333333333');
                         User.open().findById(self.userId).then(function(orderUser) {
                             self.profitToOrderUser(orderUser, function() {
-                                console.log('4444444444444444444444444444444444444444444444444444444');
                                 Task.open().updateById(self._id, {$set: {
                                     taskStatus: '完成',
                                     successTime: moment().format('YYYY-MM-DD HH:mm:ss')
                                 }}).then(function() {
-                                    console.log('55555555555555555555555555555555555555555555555555555555555');
                                     Order.open().findById(self.orderId).then(function(order) {
                                         var surplus = (parseFloat(order.surplus) - parseFloat(self.releasePrice)).toFixed(4);
                                         Order.open().updateById(order._id, {$set: {
@@ -105,8 +100,6 @@ Task.include({
     },
     profitToTaskUser: function(user, cb) {
         var self = this;
-        console.log(user.role, 'user.role ======================================');
-        console.log(user.parentID, 'user.parentID ======================================');
         if(user.parentID) {
             User.open().findById(user.parentID).then(function(parent) {
                     var userPrice = self.getPriceByRole(user.role);

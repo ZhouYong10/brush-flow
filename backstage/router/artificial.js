@@ -375,7 +375,6 @@ router.post('/WX/article/add', function (req, res) {
 });
 
 router.get('/task/details', function (req, res) {
-    console.log(req.query, '============================');
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Task.open().findPages({
@@ -420,10 +419,8 @@ router.get('/task/check', function (req, res) {
 
 router.get('/task/check/success', function (req, res) {
     Task.open().findById(req.query.taskId).then(function(task) {
-        console.log(task, '===================================');
         var taskIns = Task.wrapToInstance(task);
         taskIns.success().then(function() {
-            console.log('OK ------------------------------------ OK');
             res.redirect('/artificial/task/check');
         })
     })
@@ -465,7 +462,6 @@ router.get('/task/complaint', function (req, res) {
 });
 
 router.get('/order/pause', function (req, res) {
-    console.log(req.query, '======================');
     Order.open().updateById(req.query.id, {$set: {
         status: '已暂停'
     }}).then(function() {
@@ -474,7 +470,6 @@ router.get('/order/pause', function (req, res) {
 });
 
 router.get('/order/start', function (req, res) {
-    console.log(req.query, '======================');
     Order.open().updateById(req.query.id, {$set: {
         status: '已发布'
     }}).then(function() {
@@ -483,7 +478,6 @@ router.get('/order/start', function (req, res) {
 });
 
 router.get('/order/refund', function (req, res) {
-    console.log(req.query, '======================');
     Task.open().find({
         orderId: req.query.id,
         taskStatus: {$in: ['待审核', '被投诉']}
@@ -492,7 +486,6 @@ router.get('/order/refund', function (req, res) {
             res.redirect('/artificial/task/details?orderId=' + req.query.id + encodeURI('&msg=存在待审核或被投诉未处理任务，不能取消当前发布的任务！'));
         }else {
             Order.open().findById(req.query.id).then(function(order) {
-                console.log(order, '==================================');
                 Order.open().updateById(order._id, {$set: {
                     status: '已退款',
                     surplus: 0
