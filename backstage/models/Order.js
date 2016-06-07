@@ -239,6 +239,19 @@ function stopFans() {
 }
 
 Order.extend({
+    getOrderFreezeFunds: function() {
+        return new Promise(function(resolve, reject) {
+            Order.open().find({
+                status: {$in: ['审核中', '已发布', '已暂停']}
+            }).then(function(orders) {
+                var count = 0;
+                orders.forEach(function (order) {
+                    count += parseFloat(order.surplus);
+                });
+                resolve(count.toFixed(4));
+            })
+        })
+    },
     mkdirsSync: function(dirname) {
         if (fs.existsSync(dirname)) {
             return true;

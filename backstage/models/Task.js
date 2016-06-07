@@ -14,6 +14,19 @@ var Task = new Class();
 
 Task.extend(db);
 Task.extend({
+    getTaskFreezeFunds: function() {
+        return new Promise(function(resolve, reject) {
+            Task.open().find({
+                taskStatus: {$in: ['待审核', '被投诉']}
+            }).then(function(tasks) {
+                var count = 0;
+                tasks.forEach(function (task) {
+                    count += parseFloat(task.releasePrice);
+                });
+                resolve(count.toFixed(4));
+            })
+        })
+    },
     createTask: function(info) {
         return new Promise(function(resolve, reject) {
             User.open().findById(info.userId)
