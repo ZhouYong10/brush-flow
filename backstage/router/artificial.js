@@ -142,6 +142,30 @@ router.get('/WX/friend', function (req, res) {
         });
 });
 
+router.get('/account/search/friend', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'handle',
+                    smallType: 'WXfriend',
+                    account: new RegExp(req.query.account)
+                }, (req.query.page ? req.query.page : 1))
+                .then(function(obj) {
+                    res.render('handleWXfriend', {
+                        title: '人工微信个人好友',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/artificial/WX/friend'
+                    })
+                })
+        });
+});
+
 router.get('/WX/friend/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
