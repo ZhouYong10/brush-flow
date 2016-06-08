@@ -78,7 +78,10 @@
                         <tr class="<% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %> am-primary
                         <% }else if(orders[i].status == '已退款'){ %> am-danger
                         <% }else if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %> am-active <% } %>">
-                            <td class="am-text-middle"><%= i + 1 %></td>
+                            <td class="am-text-middle">
+                                <input type="hidden" id="orderID" value="<%= orders[i]._id %>">
+                                <%= i + 1 %>
+                            </td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].account %></td>
                             <!--<td class="am-text-middle">-->
