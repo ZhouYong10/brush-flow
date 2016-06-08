@@ -44,6 +44,15 @@
                         </div>
 
                         <div class="am-form-group">
+                            <label for="fansID" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>扫码账号</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                                <input id="fansID" class="am-radius am-input-sm" type="text" placeholder="请填写需要扫码的微信号或者ID,用于任务搜索"
+                                       v-validate:account="{required: true}" name="account">
+                                <span class="tips" v-if="$wxFans.account.required">账号不能为空!</span>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
                             <label for="fansPrice" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>扫码价格</label>
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <input type="hidden" v-model="fansPrice" value="<%= fansPrice %>">
