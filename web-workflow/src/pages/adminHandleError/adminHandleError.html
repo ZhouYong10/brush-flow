@@ -38,7 +38,7 @@
                             <th>类型 | 标题</th>
                             <th>账号 / 地址</th>
                             <th>单价</th>
-                            <th>数量 / 已做</th>
+                            <th>已做 / 数量</th>
                             <th>二维码</th>
                             <th>样图</th>
                             <th>任务说明</th>
@@ -79,7 +79,7 @@
                             </td>
                             <td class="am-text-middle">
                                 <a href="/admin/order/details?orderId=<%= orders[i]._id %>" title="点击查看任务列表">
-                                    <%= orders[i].num %> / <%= orders[i].taskNum %>
+                                    <%= orders[i].taskNum %> / <%= orders[i].num %>
                                 </a>
                             </td>
                             <td class="am-text-middle">
