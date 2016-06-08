@@ -204,13 +204,17 @@ router.post('/WX/friend/add', function (req, res) {
 });
 
 router.get('/WX/vote', function (req, res) {
+    var obj = {
+        type: 'handle',
+        smallType: 'WXvote'
+    };
+    if(req.query.address) {
+        obj.address = new RegExp(req.query.address);
+    }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'handle',
-                    smallType: 'WXvote'
-                }, (req.query.page ? req.query.page : 1))
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results, 10);
                     res.render('handleWXvote', {
