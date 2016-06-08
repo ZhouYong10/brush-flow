@@ -11,37 +11,17 @@ var path = require('path');
 var router = require('express').Router();
 
 router.get('/WX/fans', function (req, res) {
+    var obj = {
+        type: 'handle',
+        smallType: 'WXfans'
+    };
+    if(req.query.account) {
+        obj.account = new RegExp(req.query.account);
+    }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'handle',
-                    smallType: 'WXfans'
-                }, (req.query.page ? req.query.page : 1))
-                .then(function(obj) {
-                    res.render('handleWXfans', {
-                        title: '人工微信粉丝(回复)',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        orders: obj.results,
-                        pages: obj.pages,
-                        path: '/artificial/WX/fans'
-                    })
-                })
-        });
-});
-
-router.get('/account/search/fans', function (req, res) {
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'handle',
-                    smallType: 'WXfans',
-                    account: new RegExp(req.query.account)
-                }, (req.query.page ? req.query.page : 1))
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('handleWXfans', {
                         title: '人工微信粉丝(回复)',
@@ -120,37 +100,17 @@ router.post('/WX/fans/add', function (req, res) {
 
 
 router.get('/WX/friend', function (req, res) {
+    var obj = {
+        type: 'handle',
+        smallType: 'WXfriend'
+    };
+    if(req.query.account) {
+        obj.account = new RegExp(req.query.account);
+    }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'handle',
-                    smallType: 'WXfriend'
-                }, (req.query.page ? req.query.page : 1))
-                .then(function(obj) {
-                    res.render('handleWXfriend', {
-                        title: '人工微信个人好友',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        orders: obj.results,
-                        pages: obj.pages,
-                        path: '/artificial/WX/friend'
-                    })
-                })
-        });
-});
-
-router.get('/account/search/friend', function (req, res) {
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'handle',
-                    smallType: 'WXfriend',
-                    account: new RegExp(req.query.account)
-                }, (req.query.page ? req.query.page : 1))
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('handleWXfriend', {
                         title: '人工微信个人好友',
