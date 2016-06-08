@@ -230,13 +230,17 @@ router.post('/WX/vote/add', function (req, res) {
 
 
 router.get('/WX/code', function (req, res) {
+    var obj = {
+        type: 'handle',
+        smallType: 'WXcode'
+    };
+    if(req.query.account) {
+        obj.account = new RegExp(req.query.account);
+    }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'handle',
-                    smallType: 'WXcode'
-                }, (req.query.page ? req.query.page : 1))
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('handleWXcode', {
                         title: '人工微信扫码(回复)',

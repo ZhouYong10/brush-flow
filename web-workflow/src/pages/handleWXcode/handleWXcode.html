@@ -28,12 +28,12 @@
                     <validator name="search">
                         <div class="am-form-group am-form-group-sm search-title">
                             <label for="taskName" class="am-u-sm-3 am-form-label taskTypeLabel">
-                                微信账号
+                                扫码账号
                             </label>
                             <div class="am-u-sm-9 taskTypeWrap">
-                                <form id="search" method="get" action="/WX/account/search/friend">
+                                <form id="search" method="get" action="/artificial/WX/code">
                                     <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
-                                           name="account" placeholder="请输入微信账号"
+                                           name="account" placeholder="请输入扫码账号"
                                            v-validate:account="{required: true}">
                                 </form>
                             </div>
