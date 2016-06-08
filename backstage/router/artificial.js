@@ -309,13 +309,17 @@ router.post('/WX/code/add', function (req, res) {
 
 
 router.get('/WX/article', function (req, res) {
+    var obj = {
+        type: 'handle',
+        smallType: 'WXarticleShare'
+    };
+    if(req.query.address) {
+        obj.address = new RegExp(req.query.address);
+    }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
-                    userId: user._id,
-                    type: 'handle',
-                    smallType: 'WXarticleShare'
-                }, (req.query.page ? req.query.page : 1))
+            obj.userId = user._id;
+            Order.open().findPages(obj, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('handleWXarticle', {
                         title: '人工微信原文/收藏/分享',
