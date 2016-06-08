@@ -333,7 +333,7 @@ router.post('/manage/user/edit', function(req, res) {
     var updateInfo = req.body;
     var id = updateInfo.id;
     delete updateInfo.id;
-    User.updateById(id, {$set: updateInfo})
+    User.open().updateById(id, {$set: updateInfo})
         .then(function (user) {
             res.redirect('/admin/manage/user');
         }, function(error) {

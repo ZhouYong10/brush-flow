@@ -12,6 +12,9 @@ new Vue({
     },
     validators: {
         isfloat: Utils.isfloat,
+        mustOne: function(funds) {
+            return parseFloat(funds) >= 1;
+        },
         mintotal: function(funds) {
             var val = funds.trim();
             return val == '' ? true : parseFloat(val) <= parseFloat(this.userFunds);
