@@ -185,4 +185,20 @@ router.post('/account', function (req, res) {
     });
 });
 
+router.get('/new/tasker/have/look', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('handleTaskerLook', {
+                title: '新手必看',
+                money: user.funds,
+                user: user,
+                username: user.username,
+                userStatus: user.status,
+                role: user.role
+            });
+        }, function (error) {
+            res.send('获取用户详细信息失败： ' + error);
+        });
+});
+
 module.exports = router;
