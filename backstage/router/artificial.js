@@ -524,5 +524,21 @@ router.get('/order/refund', function (req, res) {
     })
 });
 
+router.get('/release/have/look', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('handleReleaseLook', {
+                title: '发布必看',
+                money: user.funds,
+                user: user,
+                username: user.username,
+                userStatus: user.status,
+                role: user.role
+            });
+        }, function (error) {
+            res.send('获取用户详细信息失败： ' + error);
+        });
+});
+
 
 module.exports = router;

@@ -1,12 +1,3 @@
-.am-panel-bd{
-  overflow: hidden;
-}
-
-.disable{
-  margin: 0;
-  padding-top: 8px;
-}
-
 .tips{
   color: red;
 }
@@ -15,6 +6,15 @@
   text-align: center;
   font-size: large;
   font-weight:bold;
+}
+
+.disable{
+  margin: 0;
+  padding-top: 8px;
+}
+
+.no-margin{
+  margin-bottom:0 !important;
 }
 
 @media (min-width: 800px) {

@@ -101,7 +101,7 @@ new Vue({
     },
     validators: {
         isnum: Utils.isNum,
-        min10: Utils.min10,
+        min20: Utils.min20,
         maxprice: function(num) {
             if(this.isReply){
                 return (parseFloat(this.myFansPrice) + parseFloat(this.myReplyPrice)) * parseInt(num) <= parseFloat(this.funds);
