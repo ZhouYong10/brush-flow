@@ -104,9 +104,40 @@ router.get('/alre', function (req, res) {
                         userStatus: user.status,
                         username: user.username,
                         orders: obj.results,
-                        pages: obj.pages,
-                        path: '/forum/taskHistory'
+                        pages: obj.pages
                     });
+                });
+        });
+});
+
+router.get('/search/task', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var query = {taskUserId: user._id};
+            var titleOrAds = req.query.titleOrAds;
+            if (titleOrAds) {
+                if(titleOrAds.indexOf('http://') != -1) {
+                    query.address = titleOrAds;
+                }else {
+                    query.title = new RegExp(titleOrAds);
+                }
+            }
+            if (req.query.createTime) {
+                query.createTime = new RegExp(req.query.createTime);
+            }
+            Task.open().findPages(query, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    res.render('handleTaskAlre', {
+                        title: '我做过的任务',
+                        money: user.funds,
+                        role: user.role,
+                        userStatus: user.status,
+                        username: user.username,
+                        orders: obj.results,
+                        pages: obj.pages
+                    });
+                }, function (error) {
+                    res.send('查询记录失败： ' + error);
                 });
         });
 });
