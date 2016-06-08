@@ -11,7 +11,6 @@ var moment = require('moment');
 
 var Task = new Class();
 
-
 Task.extend(db);
 Task.extend({
     getTaskFreezeFunds: function() {
@@ -208,5 +207,24 @@ Task.include({
     }
 });
 
+(function() {
+    setInterval(function() {
+        console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 扫描了一次人工任务审核。');
+        Task.open().find({
+            taskStatus: '待审核'
+        }).then(function(tasks) {
+            tasks.forEach(function(task) {
+                var taskCreateTime = task._id.getTimestamp();
+                var timeNow = new Date().getTime();
+                if((timeNow - taskCreateTime) > 1000 * 60 * 60) {
+                    var taskIns = Task.wrapToInstance(task);
+                    taskIns.success().then(function() {
+                        console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);
+                    })
+                }
+            })
+        })
+    }, 1000 * 60 * 30);
+})();
 
 module.exports = Task;
