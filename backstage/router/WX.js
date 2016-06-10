@@ -88,6 +88,13 @@ router.get('/friend/add', function (req, res) {
 
 router.post('/friend/add', function (req, res) {
     var orderInfo = req.body;
+    if(!orderInfo.account){
+        return res.send('<h1>微信公众平台账号或ID不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 1000) {
+        return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低1000起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+
     orderInfo.account = orderInfo.account.replace(/(^\s*)|(\s*$)/g, "");
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -97,7 +104,7 @@ router.post('/friend/add', function (req, res) {
                     socketIO.emit('updateNav', {'wxFriend': 1});
                     res.redirect('/wx/friend');
                 }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！!</h1>')
                 });
         });
 });
@@ -178,6 +185,13 @@ router.get('/fans/add', function (req, res) {
 
 router.post('/fans/add', function (req, res) {
     var orderInfo = req.body;
+    if(!orderInfo.account){
+        return res.send('<h1>微信公众平台账号或ID不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 100) {
+        return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低100起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+
     orderInfo.account = orderInfo.account.replace(/(^\s*)|(\s*$)/g, "");
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -256,6 +270,16 @@ router.get('/share/add', function (req, res) {
 
 router.post('/share/add', function (req, res) {
     var orderInfo = req.body;
+    if(!orderInfo.smallType){
+        return res.send('<h1>需要提交的任务类型不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(!orderInfo.address){
+        return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 30) {
+        return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低30起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);
@@ -357,6 +381,16 @@ router.get('/like/add', function (req, res) {
 
 router.post('/like/add', function (req, res) {
     var orderInfo = req.body;
+    if(!orderInfo.address){
+        return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 200) {
+        return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低200起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(orderInfo.num2 && !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) && orderInfo.num2 > (orderInfo.num / 10)) {
+        return res.send('<h1>点赞数量必须为正整数,且不能大于阅读数量的10%!.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+
     orderInfo.num = parseInt(orderInfo.num);
     if(orderInfo.num2 == ''){
         orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
