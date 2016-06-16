@@ -61,7 +61,7 @@ new Vue({
         isnum: Utils.isNum,
         min20: Utils.min20,
         maxprice: function(num) {
-            return parseFloat(this.myFansPrice) * parseInt(num) <= parseFloat(this.funds);
+            return parseFloat(this.myFansPrice) * parseInt(num ? num : 0) <= parseFloat(this.funds);
         },
         isfloat: Utils.isfloat,
         minfansprice: function(price) {

@@ -53,6 +53,17 @@
                         </div>
 
                         <div class="am-form-group">
+                            <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务描述</label>
+                            <div class="am-u-sm-8 am-u-lg-10">
+                            <textarea id="fansRemark" class="am-radius" rows="3"
+                                      placeholder="添加任务说明，越详细，越有助于投手正确完成任务。"
+                                      v-validate:remark="{required: true}"
+                                      name="remark"></textarea>
+                                <span class="tips" v-if="$wxFans.remark.required">任务描述不能为空，描述越详细，越有助于投手正确完成任务！</span>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
                             <label for="fansPrice" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>投票价格</label>
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <input type="hidden" v-model="fansPrice" value="<%= fansPrice %>">
@@ -83,14 +94,6 @@
                                 <p class="disable taskPrice">￥ {{count}}</p>
                                 <span class="tips" v-if="$wxFans.num.maxprice">您的余额不足，请充值!</span>
                                 <input type="hidden" v-model="funds" value="<%= money %>">
-                            </div>
-                        </div>
-
-                        <div class="am-form-group">
-                            <label for="fansRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务说明</label>
-                            <div class="am-u-sm-8 am-u-lg-10">
-                            <textarea id="fansRemark" class="am-radius" rows="3"
-                                      placeholder="添加任务说明，越详细，越有助于投手正确完成任务。" name="remark"></textarea>
                             </div>
                         </div>
 
