@@ -4,11 +4,13 @@
 var Schedule = require('node-schedule');
 var Feedback = require('./Feedback');
 var Order = require('./Order');
+var Task = require('./Task');
 var Placard = require('./Placard');
 var Profit = require('./Profit');
 var Recharge = require('./Recharge');
 var Withdraw = require('./Withdraw');
 
+var fs = require('fs');
 
 function getDateStr(AddDayCount) {
     var dd = new Date();
@@ -19,13 +21,40 @@ function getDateStr(AddDayCount) {
     return y+"-"+m+"-"+d;
 }
 
+function removePhoto(path) {
+    var photoPath = global.handleExam + '..' + path;
+    fs.unlinkSync(photoPath);
+}
+
 function remove(model, date) {
     model.open().find().then(function(results) {
         for(var i = 0; i < results.length; i++){
             var result = results[i];
             var ts = result._id.getTimestamp();
             if(ts < date){
-                model.open().remove(result);
+                if(result.type && result.type == 'handle'){
+                    if(result.status == '已退款' || result.status == '已完成'){
+                        Task.open().find({orderId: result._id})
+                            .then(function (tasks) {
+                                for (var j = 0; j < tasks.length; j++) {
+                                    var task = tasks[j];
+                                    if (task.taskPhoto) {
+                                        removePhoto(task.taskPhoto);
+                                    }
+                                    Task.open().remove(task);
+                                }
+                            });
+                        if(result.codePhoto) {
+                            removePhoto(result.codePhoto);
+                        }
+                        if(result.photo) {
+                            removePhoto(result.photo);
+                        }
+                        model.open().remove(result);
+                    }
+                }else {
+                    model.open().remove(result);
+                }
             }
         }
     })
