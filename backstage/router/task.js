@@ -82,7 +82,7 @@ router.post('/show', function (req, res) {
     Order.getOrder(req).then(function (info) {
         info.userId = req.session.passport.user;
         Task.createTask(info).then(function(task) {
-            socketIO.emit('navUpdateNum', {'checks': 1});
+            socketIO.emit('navUpdateNum', {'checks': 1, 'orderUser': task.user});
             res.redirect('/task/all');
         })
     }, function() {

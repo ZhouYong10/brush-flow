@@ -9,7 +9,11 @@ $(function () {
 
         var socket = io();
         socket.on('navUpdateNum', function (obj) {
-            navUpdateNum(obj, true);
+            var orderUser = obj.orderUser;
+            delete obj.orderUser;
+            if($('#username').val() == orderUser){
+                navUpdateNum(obj, true);
+            }
         });
     }
 });
