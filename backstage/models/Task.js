@@ -35,35 +35,46 @@ Task.extend({
                         status: '已发布'
                     }).then(function(order) {
                         if(order) {
-                            order.orderId = order._id + '';
-                            delete order._id;
-                            order.taskAccount = user.taskAccount;
-                            order.taskName = user.taskName;
-                            order.taskUserId = user._id;
-                            order.taskUser = user.username;
-                            order.taskUserRole = user.role;
-                            order.taskPhoto = info.taskPhoto;
-                            order.taskCreateTime = moment().format('YYYY-MM-DD HH:mm:ss');
-                            order.taskStatus = '待审核';
-                            Task.open().insert(order).then(function(tasks) {
-                                var updateInfo ;
-                                if((order.num - (order.taskNum ? order.taskNum : 0)) > 1) {
-                                    updateInfo = {
-                                        $inc: {taskNum: 1},
-                                        $push: {taskUsers: user._id}
-                                    };
-                                }else {
-                                    updateInfo = {
-                                        $set: {status: '已完成'},
-                                        $inc: {taskNum: 1},
-                                        $push: {taskUsers: user._id}
-                                    };
+                            var flag = true;
+                            for(var i = 0; i < order.taskUsers.length; i++) {
+                                var taskUser = order.taskUsers[i];
+                                if ((taskUser + '') == (user._id + '')) {
+                                    flag = false;
+                                    console.log('=================================');
+                                    reject('您已经做过该任务了，不要以为我不知道哦！！！');
                                 }
-                                Order.open().updateById(info.orderId, updateInfo)
-                                    .then(function(result) {
-                                    resolve(tasks[0]);
+                            }
+                            if(flag) {
+                                order.orderId = order._id + '';
+                                delete order._id;
+                                order.taskAccount = user.taskAccount;
+                                order.taskName = user.taskName;
+                                order.taskUserId = user._id;
+                                order.taskUser = user.username;
+                                order.taskUserRole = user.role;
+                                order.taskPhoto = info.taskPhoto;
+                                order.taskCreateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                                order.taskStatus = '待审核';
+                                Task.open().insert(order).then(function(tasks) {
+                                    var updateInfo ;
+                                    if((order.num - (order.taskNum ? order.taskNum : 0)) > 1) {
+                                        updateInfo = {
+                                            $inc: {taskNum: 1},
+                                            $push: {taskUsers: user._id}
+                                        };
+                                    }else {
+                                        updateInfo = {
+                                            $set: {status: '已完成'},
+                                            $inc: {taskNum: 1},
+                                            $push: {taskUsers: user._id}
+                                        };
+                                    }
+                                    Order.open().updateById(info.orderId, updateInfo)
+                                        .then(function(result) {
+                                            resolve(tasks[0]);
+                                        })
                                 })
-                            })
+                            }
                         }else {
                             reject('不好意思，任务已经结束了，下次动作要快点哦！');
                         }

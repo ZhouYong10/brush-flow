@@ -84,9 +84,11 @@ router.post('/show', function (req, res) {
         Task.createTask(info).then(function(task) {
             socketIO.emit('navUpdateNum', {'checks': 1, 'orderUser': task.user});
             res.redirect('/task/all');
+        }, function(err) {
+            res.send('<h1>'+err+'</h1>'); //各种错误
         })
-    }, function() {
-        res.end('提交表单失败： ',err); //各种错误
+    }, function(err) {
+        res.send('<h1>'+err+'</h1>'); //各种错误
     });
 });
 
