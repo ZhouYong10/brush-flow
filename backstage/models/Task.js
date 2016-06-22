@@ -40,7 +40,6 @@ Task.extend({
                                 var taskUser = order.taskUsers[i];
                                 if ((taskUser + '') == (user._id + '')) {
                                     flag = false;
-                                    console.log('=================================');
                                     reject('您已经做过该任务了，不要以为我不知道哦！！！');
                                 }
                             }
