@@ -220,11 +220,7 @@ router.get('/hand/recharge', function (req, res) {
         res.send('充值金额必须是数字。。。。。。');
     }else {
         Recharge.hand(msg.id, msg.funds).then(function(backInfo) {
-            if(backInfo) {
-                res.send(backInfo);
-            }else {
-                res.redirect(msg.url);
-            }
+            res.redirect(msg.url + '?date=' + new Date().getTime());
         })
     }
 });

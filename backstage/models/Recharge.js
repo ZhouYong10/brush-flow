@@ -22,31 +22,42 @@ Recharge.extend({
         return new Promise(function(resolve, reject) {
             Recharge.open().findById(id)
                 .then(function (record) {
-                    if(record.isRecharge) {
-                        resolve('已经充值过了还来，滚犊子...');
-                    }else {
-                        User.open().findById(record.userId)
-                            .then(function (user) {
-                                var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
-                                User.open().updateById(user._id, {
+                    Recharge.open().findOne({alipayId: record.alipayId, isRecharge: true})
+                        .then(function (recordAlre) {
+                            if(recordAlre) {
+                                Recharge.open().update({alipayId: recordAlre.alipayId, isRecharge: false}, {
                                     $set: {
-                                        funds: fundsNow
+                                        isRecharge: true,
+                                        dec: '已经充值过了还来，滚犊子...!',
+                                        status: '失败'
                                     }
                                 }).then(function () {
-                                    Recharge.open().updateById(record._id, {
-                                        $set: {
-                                            funds: funds,
-                                            isRecharge: true,
-                                            dec: '充值成功!',
-                                            status: '成功',
-                                            userNowFunds: fundsNow
-                                        }
-                                    }).then(function () {
-                                        resolve();
-                                    });
+                                    resolve();
                                 });
-                            });
-                    }
+                            }else {
+                                User.open().findById(record.userId)
+                                    .then(function (user) {
+                                        var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                                        User.open().updateById(user._id, {
+                                            $set: {
+                                                funds: fundsNow
+                                            }
+                                        }).then(function () {
+                                            Recharge.open().updateById(record._id, {
+                                                $set: {
+                                                    funds: funds,
+                                                    isRecharge: true,
+                                                    dec: '充值成功!',
+                                                    status: '成功',
+                                                    userNowFunds: fundsNow
+                                                }
+                                            }).then(function () {
+                                                resolve();
+                                            });
+                                        });
+                                    });
+                            }
+                        });
                 });
         })
     },
@@ -121,56 +132,43 @@ Recharge.extend({
                     });
                     break;
                 case "S":
-                    Recharge.open().findOne({alipayId: aliplayId})
-                        .then(function (record) {
-                            if(record.isRecharge) {
-                                resolve('已经充值过了还来，滚犊子...');
+                    Recharge.open().findOne({alipayId: aliplayId, isRecharge: true})
+                        .then(function (recordAlre) {
+                            if(recordAlre) {
+                                Recharge.open().update({alipayId: aliplayId, isRecharge: false}, {
+                                    $set: {
+                                        isRecharge: true,
+                                        dec: '已经充值过了还来，滚犊子...!',
+                                        status: '失败'
+                                    }
+                                }).then(function () {
+                                    resolve('已经充值过了还来，滚犊子...');
+                                });
                             }else {
-                                User.open().findById(record.userId)
-                                    .then(function (user) {
-                                        var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
-                                        User.open().updateById(user._id, {
-                                            $set: {
-                                                funds: fundsNow
-                                            }
-                                        }).then(function () {
-                                            Recharge.open().updateById(record._id, {
-                                                $set: {
-                                                    funds: funds,
-                                                    isRecharge: true,
-                                                    dec: '充值成功!',
-                                                    status: '成功',
-                                                    userNowFunds: fundsNow
-                                                }
-                                            }).then(function () {
-                                                resolve();
+                                Recharge.open().findOne({alipayId: aliplayId, isRecharge: false})
+                                    .then(function (record) {
+                                        User.open().findById(record.userId)
+                                            .then(function (user) {
+                                                var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
+                                                User.open().updateById(user._id, {
+                                                    $set: {
+                                                        funds: fundsNow
+                                                    }
+                                                }).then(function () {
+                                                    Recharge.open().updateById(record._id, {
+                                                        $set: {
+                                                            funds: funds,
+                                                            isRecharge: true,
+                                                            dec: '充值成功!',
+                                                            status: '成功',
+                                                            userNowFunds: fundsNow
+                                                        }
+                                                    }).then(function () {
+                                                        resolve();
+                                                    });
+                                                });
                                             });
-                                        });
                                     });
-
-
-
-
-                                //Recharge.open().updateById(record._id, {
-                                //    $set: {
-                                //        funds: funds,
-                                //        isRecharge: true,
-                                //        dec: '充值成功!',
-                                //        status: '成功'
-                                //    }
-                                //}).then(function () {
-                                //    User.open().findById(record.userId)
-                                //        .then(function (user) {
-                                //            var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
-                                //            User.open().updateById(user._id, {
-                                //                $set: {
-                                //                    funds: fundsNow
-                                //                }
-                                //            }).then(function () {
-                                //                resolve();
-                                //            });
-                                //        });
-                                //});
                             }
                         });
                     break;
