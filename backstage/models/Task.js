@@ -91,13 +91,17 @@ Task.include({
     success: function() {
             var self = this;
         return new Promise(function(resolve, reject) {
+            console.log('========================================================================================================');
+            console.log('self.taskUserId:   ', self.taskUserId);
             User.open().findById(self.taskUserId).then(function(user) {
+                console.log('funds:   ', (parseFloat(self.getPriceByRole(user.role)) + parseFloat(user.funds)).toFixed(4));
                 User.open().updateById(self.taskUserId, {
                     $set: {
                         funds: (parseFloat(self.getPriceByRole(user.role)) + parseFloat(user.funds)).toFixed(4)
                     }
                 }).then(function() {
                     self.profitToTaskUser(user, function() {
+                        console.log('self.userId:   ', self.userId);
                         User.open().findById(self.userId).then(function(orderUser) {
                             self.profitToOrderUser(orderUser, function() {
                                 Task.open().updateById(self._id, {$set: {
@@ -105,6 +109,8 @@ Task.include({
                                     successTime: moment().format('YYYY-MM-DD HH:mm:ss')
                                 }}).then(function() {
                                     Order.open().findById(self.orderId).then(function(order) {
+                                        console.log('surplus:   ', (parseFloat(order.surplus) - parseFloat(self.releasePrice)).toFixed(4));
+                                        console.log('========================================================================================================');
                                         var surplus = (parseFloat(order.surplus) - parseFloat(self.releasePrice)).toFixed(4);
                                         Order.open().updateById(order._id, {$set: {
                                             surplus: surplus
@@ -223,7 +229,6 @@ Task.include({
         Task.open().find({
             taskStatus: '待审核'
         }).then(function(tasks) {
-            console.log(tasks, '1111111111111111111111111111111111111111111111111111111111111111');
             followedByPayment(tasks);
         })
     }, 1000 * 10);
@@ -232,13 +237,12 @@ Task.include({
 function followedByPayment(tasks) {
     if(tasks.length > 0) {
         var task = tasks.shift();
-        console.log(task, '2222222222222222222222222222222222222222222222222222222222222222222222');
         var taskCreateTime = task._id.getTimestamp();
         var timeNow = new Date().getTime();
-        console.log(timeNow - taskCreateTime, '3333333333333333333333333333333333333333333333333333333333333333333333333333');
         if((timeNow - taskCreateTime) > 1000 * 60 * 60) {
             console.log('执行自动审核===============================================');
             var taskIns = Task.wrapToInstance(task);
+            console.log(taskIns, '=====================================================');
             taskIns.success().then(function() {
                 console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);
                 followedByPayment(tasks);
