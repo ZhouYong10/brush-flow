@@ -237,11 +237,15 @@ function followedByPayment(tasks) {
         var timeNow = new Date().getTime();
         console.log(timeNow - taskCreateTime, '3333333333333333333333333333333333333333333333333333333333333333333333333333');
         if((timeNow - taskCreateTime) > 1000 * 60 * 60) {
+            console.log('执行自动审核===============================================');
             var taskIns = Task.wrapToInstance(task);
             taskIns.success().then(function() {
                 console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);
                 followedByPayment(tasks);
             })
+        }else{
+            console.log('没有过期的审核任务，继续循环下一个任务。---------------------------------');
+            followedByPayment(tasks);
         }
     }
 }
