@@ -225,7 +225,7 @@ Task.include({
         }).then(function(tasks) {
             followedByPayment(tasks);
         })
-    }, 1000 * 60 * 30);
+    }, 1000 * 10);
 })();
 
 function followedByPayment(tasks) {
