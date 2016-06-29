@@ -243,10 +243,10 @@ function followedByPayment(tasks) {
             console.log('执行自动审核===============================================');
             var taskIns = Task.wrapToInstance(task);
             console.log(taskIns, '=====================================================');
-            taskIns.success().then(function() {
+            taskIns.success().then(function () {
                 console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);
+            });
                 followedByPayment(tasks);
-            })
         }else{
             console.log('没有过期的审核任务，继续循环下一个任务。---------------------------------');
             followedByPayment(tasks);
