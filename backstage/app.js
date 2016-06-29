@@ -65,7 +65,11 @@ passport.use(new LocalStrategy({
         }
         bcrypt.compare(password, user.password, function(err, isMatch) {
           if (isMatch) {
-            done(null, user, '登陆成功！');
+            if(user.status == '冻结'){
+              done(null, false, '账户已被冻结，请联系上级或管理员！');
+            }else{
+              done(null, user, '登陆成功！');
+            }
           } else {
             done(null, false, '密码错误！');
           }
