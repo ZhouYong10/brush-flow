@@ -223,6 +223,7 @@ Task.include({
         Task.open().find({
             taskStatus: '待审核'
         }).then(function(tasks) {
+            console.log(tasks, '1111111111111111111111111111111111111111111111111111111111111111');
             followedByPayment(tasks);
         })
     }, 1000 * 10);
@@ -231,8 +232,10 @@ Task.include({
 function followedByPayment(tasks) {
     if(tasks.length > 0) {
         var task = tasks.shift();
+        console.log(task, '2222222222222222222222222222222222222222222222222222222222222222222222');
         var taskCreateTime = task._id.getTimestamp();
         var timeNow = new Date().getTime();
+        console.log(timeNow - taskCreateTime, '3333333333333333333333333333333333333333333333333333333333333333333333333333');
         if((timeNow - taskCreateTime) > 1000 * 60 * 60) {
             var taskIns = Task.wrapToInstance(task);
             taskIns.success().then(function() {
