@@ -251,7 +251,7 @@ function followedByPayment(tasks) {
             var taskIns = Task.wrapToInstance(task);
             taskIns.success().then(function () {
                 console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);
-                //followedByPayment(tasks);
+                followedByPayment(tasks);
             });
         }else{
             console.log('没有过期的审核任务，继续循环下一个任务。---------------------------------');
