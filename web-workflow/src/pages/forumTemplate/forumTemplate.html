@@ -36,6 +36,7 @@
 
                 <validator name="forumcomment">
                     <form class="am-form am-form-horizontal" method="post" action="/forum/comment/add">
+                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
 
                         <div class="am-form-group">
                             <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务地址</label>

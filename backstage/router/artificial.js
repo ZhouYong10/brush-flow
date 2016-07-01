@@ -48,14 +48,17 @@ router.get('/WX/fans/add', function (req, res) {
                         .then(function(result) {
                             var reply = Product.wrapToInstance(result);
                             var replyPrice = reply.getPriceByRole(user.role);
-                            res.render('handleWXfansAdd', {
-                                title: '添加人工微信粉丝(回复)任务',
-                                money: user.funds,
-                                username: user.username,
-                                userStatus: user.status,
-                                role: user.role,
-                                fansPrice: fansPrice,
-                                replyPrice: replyPrice
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('handleWXfansAdd', {
+                                    title: '添加人工微信粉丝(回复)任务',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    fansPrice: fansPrice,
+                                    replyPrice: replyPrice,
+                                    orderFlag: orderFlag
+                                })
                             })
                         });
                 });
@@ -74,24 +77,28 @@ router.post('/WX/fans/add', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
-                if(orderIns.isTow) {
-                    orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
-                        .then(function () {
-                            socketIO.emit('updateNav', {'waitHT': 1});
-                            res.redirect('/artificial/WX/fans');
-                        }, function() {
-                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                        });
-                }else {
-                    delete orderIns.price2;
-                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfans'})
-                        .then(function () {
-                            socketIO.emit('updateNav', {'waitHT': 1});
-                            res.redirect('/artificial/WX/fans');
-                        }, function() {
-                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                        });
-                }
+                orderIns.checkRandomStr(req).then(function() {
+                    if(orderIns.isTow) {
+                        orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXfans'}, {type: 'handle', smallType: 'WXfansReply'})
+                            .then(function () {
+                                socketIO.emit('updateNav', {'waitHT': 1});
+                                res.redirect('/artificial/WX/fans');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }else {
+                        delete orderIns.price2;
+                        orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfans'})
+                            .then(function () {
+                                socketIO.emit('updateNav', {'waitHT': 1});
+                                res.redirect('/artificial/WX/fans');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }
+                }, function(msg) {
+                    res.redirect('/artificial/WX/fans');
+                })
             });
     }, function() {
         res.end('提交表单失败： ',err); //各种错误
@@ -133,13 +140,16 @@ router.get('/WX/friend/add', function (req, res) {
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
                     var fansPrice = fans.getPriceByRole(user.role);
-                    res.render('handleWXfriendAdd', {
-                        title: '添加人工微信个人好友任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        fansPrice: fansPrice
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('handleWXfriendAdd', {
+                            title: '添加人工微信个人好友任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            fansPrice: fansPrice,
+                            orderFlag: orderFlag
+                        })
                     })
                 });
         });
@@ -150,13 +160,17 @@ router.post('/WX/friend/add', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
-                orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfriend'})
-                    .then(function () {
-                        socketIO.emit('updateNav', {'waitHT': 1});
-                        res.redirect('/artificial/WX/friend');
-                    }, function() {
-                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                    });
+                orderIns.checkRandomStr(req).then(function() {
+                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXfriend'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'waitHT': 1});
+                            res.redirect('/artificial/WX/friend');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }, function(msg) {
+                    res.redirect('/artificial/WX/friend');
+                })
             });
     }, function() {
         res.end('提交表单失败： ',err); //各种错误
@@ -198,13 +212,16 @@ router.get('/WX/vote/add', function (req, res) {
                 .then(function(result) {
                     var fans = Product.wrapToInstance(result);
                     var fansPrice = fans.getPriceByRole(user.role);
-                    res.render('handleWXvoteAdd', {
-                        title: '添加人工微信投票任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        fansPrice: fansPrice
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('handleWXvoteAdd', {
+                            title: '添加人工微信投票任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            fansPrice: fansPrice,
+                            orderFlag: orderFlag
+                        })
                     })
                 });
         });
@@ -215,13 +232,17 @@ router.post('/WX/vote/add', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
-                orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXvote'})
-                    .then(function () {
-                        socketIO.emit('updateNav', {'waitHT': 1});
-                        res.redirect('/artificial/WX/vote');
-                    }, function() {
-                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                    });
+                orderIns.checkRandomStr(req).then(function() {
+                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXvote'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'waitHT': 1});
+                            res.redirect('/artificial/WX/vote');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }, function(msg) {
+                    res.redirect('/artificial/WX/vote');
+                })
             });
     }, function() {
         res.end('提交表单失败： ',err); //各种错误
@@ -267,14 +288,17 @@ router.get('/WX/code/add', function (req, res) {
                         .then(function(result) {
                             var reply = Product.wrapToInstance(result);
                             var replyPrice = reply.getPriceByRole(user.role);
-                            res.render('handleWXcodeAdd', {
-                                title: '添加人工微信扫码(回复)任务',
-                                money: user.funds,
-                                username: user.username,
-                                userStatus: user.status,
-                                role: user.role,
-                                fansPrice: fansPrice,
-                                replyPrice: replyPrice
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('handleWXcodeAdd', {
+                                    title: '添加人工微信扫码(回复)任务',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    fansPrice: fansPrice,
+                                    replyPrice: replyPrice,
+                                    orderFlag: orderFlag
+                                })
                             })
                         });
                 });
@@ -287,24 +311,28 @@ router.post('/WX/code/add', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
-                if(orderIns.isTow) {
-                    orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXcode'}, {type: 'handle', smallType: 'WXcodeReply'})
-                        .then(function () {
-                            socketIO.emit('updateNav', {'waitHT': 1});
-                            res.redirect('/artificial/WX/code');
-                        }, function() {
-                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                        });
-                }else {
-                    delete orderIns.price2;
-                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXcode'})
-                        .then(function () {
-                            socketIO.emit('updateNav', {'waitHT': 1});
-                            res.redirect('/artificial/WX/code');
-                        }, function() {
-                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                        });
-                }
+                orderIns.checkRandomStr(req).then(function() {
+                    if(orderIns.isTow) {
+                        orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXcode'}, {type: 'handle', smallType: 'WXcodeReply'})
+                            .then(function () {
+                                socketIO.emit('updateNav', {'waitHT': 1});
+                                res.redirect('/artificial/WX/code');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }else {
+                        delete orderIns.price2;
+                        orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXcode'})
+                            .then(function () {
+                                socketIO.emit('updateNav', {'waitHT': 1});
+                                res.redirect('/artificial/WX/code');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }
+                }, function(msg) {
+                    res.redirect('/artificial/WX/code');
+                })
             });
     }, function() {
         res.end('提交表单失败： ',err); //各种错误
@@ -350,14 +378,17 @@ router.get('/WX/article/add', function (req, res) {
                         .then(function(result) {
                             var reply = Product.wrapToInstance(result);
                             var replyPrice = reply.getPriceByRole(user.role);
-                            res.render('handleWXarticleAdd', {
-                                title: '添加人工微信原文/收藏/分享任务',
-                                money: user.funds,
-                                username: user.username,
-                                userStatus: user.status,
-                                role: user.role,
-                                fansPrice: fansPrice,
-                                replyPrice: replyPrice
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('handleWXarticleAdd', {
+                                    title: '添加人工微信原文/收藏/分享任务',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    fansPrice: fansPrice,
+                                    replyPrice: replyPrice,
+                                    orderFlag: orderFlag
+                                })
                             })
                         });
                 });
@@ -370,24 +401,28 @@ router.post('/WX/article/add', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var orderIns = Order.wrapToInstance(order);
-                if(orderIns.isTow) {
-                    orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXarticleShare'}, {type: 'handle', smallType: 'WXarticleHide'})
-                        .then(function () {
-                            socketIO.emit('updateNav', {'waitHT': 1});
-                            res.redirect('/artificial/WX/article');
-                        }, function() {
-                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                        });
-                }else {
-                    delete orderIns.price2;
-                    orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXarticleShare'})
-                        .then(function () {
-                            socketIO.emit('updateNav', {'waitHT': 1});
-                            res.redirect('/artificial/WX/article');
-                        }, function() {
-                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                        });
-                }
+                orderIns.checkRandomStr(req).then(function() {
+                    if(orderIns.isTow) {
+                        orderIns.handleCreateAndSaveTwo(user, {type: 'handle', smallType: 'WXarticleShare'}, {type: 'handle', smallType: 'WXarticleHide'})
+                            .then(function () {
+                                socketIO.emit('updateNav', {'waitHT': 1});
+                                res.redirect('/artificial/WX/article');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }else {
+                        delete orderIns.price2;
+                        orderIns.handleCreateAndSave(user, {type: 'handle', smallType: 'WXarticleShare'})
+                            .then(function () {
+                                socketIO.emit('updateNav', {'waitHT': 1});
+                                res.redirect('/artificial/WX/article');
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }
+                }, function(msg) {
+                    res.redirect('/artificial/WX/article');
+                })
             });
     }, function() {
         res.end('提交表单失败： ',err); //各种错误

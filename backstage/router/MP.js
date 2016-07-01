@@ -59,14 +59,17 @@ router.get('/like/add', function (req, res) {
                 .then(function(like) {
                     var likeIns = Product.wrapToInstance(like);
                     var myLikePrice = likeIns.getPriceByRole(user.role);
-                    res.render('MPlikeAdd', {
-                        title: '添加美拍点赞任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myLikePrice
-                    });
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('MPlikeAdd', {
+                            title: '添加美拍点赞任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myLikePrice,
+                            orderFlag: orderFlag
+                        });
+                    })
                 });
         });
 });
@@ -75,13 +78,17 @@ router.post('/like/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSave(user, {type: 'mp', smallType: 'like'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'mp': 1});
-                    res.redirect('/mp/like');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'mp', smallType: 'like'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'mp': 1});
+                        res.redirect('/mp/like');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/mp/like');
+            })
         });
 });
 
@@ -137,14 +144,17 @@ router.get('/comment/add', function (req, res) {
                 .then(function(comment) {
                     var commentIns = Product.wrapToInstance(comment);
                     var myCommentPrice = commentIns.getPriceByRole(user.role);
-                    res.render('MPcommentAdd', {
-                        title: '添加美拍评论任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myCommentPrice
-                    });
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('MPcommentAdd', {
+                            title: '添加美拍评论任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myCommentPrice,
+                            orderFlag: orderFlag
+                        });
+                    })
                 });
         });
 });
@@ -153,13 +163,17 @@ router.post('/comment/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSave(user, {type: 'mp', smallType: 'comment'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'mp': 1});
-                    res.redirect('/mp/comment');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'mp', smallType: 'comment'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'mp': 1});
+                        res.redirect('/mp/comment');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/mp/comment');
+            })
         });
 });
 
@@ -215,14 +229,17 @@ router.get('/attention/add', function (req, res) {
                 .then(function(attention) {
                     var attentionIns = Product.wrapToInstance(attention);
                     var myAttentionPrice = attentionIns.getPriceByRole(user.role);
-                    res.render('MPattentionAdd', {
-                        title: '添加美拍关注任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myAttentionPrice
-                    });
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('MPattentionAdd', {
+                            title: '添加美拍关注任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myAttentionPrice,
+                            orderFlag: orderFlag
+                        });
+                    })
                 });
         });
 });
@@ -231,13 +248,17 @@ router.post('/attention/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSave(user, {type: 'mp', smallType: 'attention'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'mp': 1});
-                    res.redirect('/mp/attention');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'mp', smallType: 'attention'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'mp': 1});
+                        res.redirect('/mp/attention');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/mp/attention');
+            })
         });
 });
 
@@ -293,14 +314,17 @@ router.get('/forward/add', function (req, res) {
                 .then(function(forward) {
                     var forwardIns = Product.wrapToInstance(forward);
                     var myForwardPrice = forwardIns.getPriceByRole(user.role);
-                    res.render('MPforwardAdd', {
-                        title: '添加美拍转发任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myForwardPrice
-                    });
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('MPforwardAdd', {
+                            title: '添加美拍转发任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myForwardPrice,
+                            orderFlag: orderFlag
+                        });
+                    })
                 });
         });
 });
@@ -309,13 +333,17 @@ router.post('/forward/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSave(user, {type: 'mp', smallType: 'forward'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'mp': 1});
-                    res.redirect('/mp/forward');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'mp', smallType: 'forward'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'mp': 1});
+                        res.redirect('/mp/forward');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/mp/forward');
+            })
         });
 });
 

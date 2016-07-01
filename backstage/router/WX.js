@@ -74,13 +74,16 @@ router.get('/friend/add', function (req, res) {
                 .then(function(result) {
                     var product = Product.wrapToInstance(result);
                     var myPrice = product.getPriceByRole(user.role);
-                    res.render('WXfriendAdd', {
-                        title: '添加公众粉丝(1000以上)',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myPrice
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WXfriendAdd', {
+                            title: '添加公众粉丝(1000以上)',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myPrice,
+                            orderFlag: orderFlag
+                        })
                     })
                 });
         });
@@ -99,13 +102,17 @@ router.post('/friend/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);
-            order.createAndSave(user, {type: 'wx', smallType: 'friend'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'wxFriend': 1});
-                    res.redirect('/wx/friend');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！!</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'wx', smallType: 'friend'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wxFriend': 1});
+                        res.redirect('/wx/friend');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！!</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wx/friend');
+            })
         });
 });
 
@@ -169,15 +176,18 @@ router.get('/fans/add', function (req, res) {
                         .then(function(reply) {
                             var replyIns = Product.wrapToInstance(reply);
                             var myReplyPrice = replyIns.getPriceByRole(user.role);
-                            res.render('WXfansAdd', {
-                                title: '添加公众粉丝(1000以下)',
-                                money: user.funds,
-                                username: user.username,
-                                userStatus: user.status,
-                                role: user.role,
-                                fansPrice: myFansPrice,
-                                replyPrice: myReplyPrice
-                            });
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('WXfansAdd', {
+                                    title: '添加公众粉丝(1000以下)',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    fansPrice: myFansPrice,
+                                    replyPrice: myReplyPrice,
+                                    orderFlag: orderFlag
+                                });
+                            })
                         });
                 });
         });
@@ -196,13 +206,17 @@ router.post('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);
-            order.createAndSave(user, {type: 'wx', smallType: 'fans'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'wxReply': 1});
-                    res.redirect('/wx/fans');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'wx', smallType: 'fans'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wxReply': 1});
+                        res.redirect('/wx/fans');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wx/fans');
+            })
         });
 });
 
@@ -258,13 +272,16 @@ router.get('/account/search/share', function (req, res) {
 router.get('/share/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WXshareAdd', {
-                title: '添加微信原文/分享/收藏任务',
-                money: user.funds,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
-            });
+            Order.getRandomStr(req).then(function(orderFlag) {
+                res.render('WXshareAdd', {
+                    title: '添加微信原文/分享/收藏任务',
+                    money: user.funds,
+                    username: user.username,
+                    userStatus: user.status,
+                    role: user.role,
+                    orderFlag: orderFlag
+                });
+            })
         });
 });
 
@@ -283,13 +300,17 @@ router.post('/share/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);
-            order.createAndSave(user, {type: 'wx', smallType: orderInfo.smallType})
-                .then(function () {
-                    socketIO.emit('updateNav', {'wxArticle': 1});
-                    res.redirect('/wx/share');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'wx', smallType: orderInfo.smallType})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wxArticle': 1});
+                        res.redirect('/wx/share');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wx/share');
+            })
         });
 });
 
@@ -365,15 +386,18 @@ router.get('/like/add', function (req, res) {
                         .then(function(like) {
                             var likeIns = Product.wrapToInstance(like);
                             var myLikePrice = likeIns.getPriceByRole(user.role);
-                            res.render('WXlikeAdd', {
-                                title: '添加微信图文点赞任务',
-                                money: user.funds,
-                                username: user.username,
-                                userStatus: user.status,
-                                role: user.role,
-                                price: myReadPrice,
-                                price2: myLikePrice
-                            });
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('WXlikeAdd', {
+                                    title: '添加微信图文点赞任务',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    price: myReadPrice,
+                                    price2: myLikePrice,
+                                    orderFlag: orderFlag
+                                });
+                            })
                         });
                 });
         });
@@ -399,13 +423,17 @@ router.post('/like/add', function (req, res) {
         .then(function (user) {
 
             var order = Order.wrapToInstance(orderInfo);
-            order.createAndSaveTwo(user, {type: 'wx', smallType: 'read'}, {type: 'wx', smallType: 'like'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'wxLike': 1});
-                    res.redirect('/wx/like');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSaveTwo(user, {type: 'wx', smallType: 'read'}, {type: 'wx', smallType: 'like'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wxLike': 1});
+                        res.redirect('/wx/like');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wx/like');
+            })
         });
 });
 
@@ -469,15 +497,18 @@ router.get('/code/add', function (req, res) {
                         .then(function(reply) {
                             var replyIns = Product.wrapToInstance(reply);
                             var myReplyPrice = replyIns.getPriceByRole(user.role);
-                            res.render('WXcodeAdd', {
-                                title: '添加扫码关注任务',
-                                money: user.funds,
-                                username: user.username,
-                                userStatus: user.status,
-                                role: user.role,
-                                fansPrice: myFansPrice,
-                                replyPrice: myReplyPrice
-                            });
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('WXcodeAdd', {
+                                    title: '添加扫码关注任务',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    fansPrice: myFansPrice,
+                                    replyPrice: myReplyPrice,
+                                    orderFlag: orderFlag
+                                });
+                            })
                         });
                 });
         });
@@ -510,13 +541,17 @@ router.post('/code/add', function (req, res) {
                 User.open().findById(req.session.passport.user)
                     .then(function (user) {
                         var orderIns = Order.wrapToInstance(order);
-                        orderIns.createAndSaveTwo(user, {type: 'wx', smallType: 'code'}, {type: 'wx', smallType: 'codeReply'})
-                            .then(function () {
-                                socketIO.emit('updateNav', {'wxCode': 1});
-                                res.redirect('/wx/code');
-                            }, function() {
-                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                            });
+                        orderIns.checkRandomStr(req).then(function() {
+                            orderIns.createAndSaveTwo(user, {type: 'wx', smallType: 'code'}, {type: 'wx', smallType: 'codeReply'})
+                                .then(function () {
+                                    socketIO.emit('updateNav', {'wxCode': 1});
+                                    res.redirect('/wx/code');
+                                }, function() {
+                                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                                });
+                        }, function(msg) {
+                            res.redirect('/wx/code');
+                        })
                     });
             });
         });

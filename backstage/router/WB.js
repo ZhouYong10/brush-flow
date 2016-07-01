@@ -60,14 +60,17 @@ router.get('/like/add', function (req, res) {
                 .then(function(result) {
                     var resultIns = Product.wrapToInstance(result);
                     var myPrice = resultIns.getPriceByRole(user.role);
-                    res.render('WBlikeAdd', {
-                        title: '添加微博高级点赞任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myPrice
-                    });
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WBlikeAdd', {
+                            title: '添加微博高级点赞任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myPrice,
+                            orderFlag: orderFlag
+                        });
+                    })
                 });
         });
 });
@@ -76,13 +79,17 @@ router.post('/like/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSave(user, {type: 'wb', smallType: 'like'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'wb': 1});
-                    res.redirect('/wb/like');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'wb', smallType: 'like'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wb': 1});
+                        res.redirect('/wb/like');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wb/like');
+            })
         });
 });
 
@@ -138,14 +145,17 @@ router.get('/vote/add', function (req, res) {
                 .then(function(result) {
                     var resultIns = Product.wrapToInstance(result);
                     var myPrice = resultIns.getPriceByRole(user.role);
-                    res.render('WBvoteAdd', {
-                        title: '添加微博投票任务',
-                        money: user.funds,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role,
-                        price: myPrice
-                    });
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WBvoteAdd', {
+                            title: '添加微博投票任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myPrice,
+                            orderFlag: orderFlag
+                        });
+                    })
                 });
         });
 });
@@ -154,13 +164,17 @@ router.post('/vote/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSave(user, {type: 'wb', smallType: 'vote'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'wb': 1});
-                    res.redirect('/wb/vote');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'wb', smallType: 'vote'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wb': 1});
+                        res.redirect('/wb/vote');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wb/vote');
+            })
         });
 });
 
@@ -216,13 +230,16 @@ router.get('/task/search/fans', function (req, res) {
 router.get('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WBfansAdd', {
-                title: '添加微博粉丝任务',
-                money: user.funds,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
-            });
+            Order.getRandomStr(req).then(function(orderFlag) {
+                res.render('WBfansAdd', {
+                    title: '添加微博粉丝任务',
+                    money: user.funds,
+                    username: user.username,
+                    userStatus: user.status,
+                    role: user.role,
+                    orderFlag: orderFlag
+                });
+            })
         });
 });
 
@@ -230,13 +247,17 @@ router.post('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSave(user, {type: 'wb', smallType: order.smallType})
-                .then(function () {
-                    socketIO.emit('updateNav', {'wb': 1});
-                    res.redirect('/wb/fans');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'wb', smallType: order.smallType})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wb': 1});
+                        res.redirect('/wb/fans');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wb/fans');
+            })
         });
 });
 
@@ -304,13 +325,16 @@ router.get('/task/search/forward', function (req, res) {
 router.get('/forward/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('WBforwardAdd', {
-                title: '添加微博转发任务',
-                money: user.funds,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
-            });
+            Order.getRandomStr(req).then(function(orderFlag) {
+                res.render('WBforwardAdd', {
+                    title: '添加微博转发任务',
+                    money: user.funds,
+                    username: user.username,
+                    userStatus: user.status,
+                    role: user.role,
+                    orderFlag: orderFlag
+                });
+            })
         });
 });
 
@@ -318,13 +342,17 @@ router.post('/forward/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(req.body);
-            order.createAndSave(user, {type: 'wb', smallType: order.smallType})
-                .then(function () {
-                    socketIO.emit('updateNav', {'wb': 1});
-                    res.redirect('/wb/forward');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'wb', smallType: order.smallType})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wb': 1});
+                        res.redirect('/wb/forward');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wb/forward');
+            })
         });
 });
 

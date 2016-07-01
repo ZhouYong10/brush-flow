@@ -13,13 +13,16 @@ router.get('/forumTask', function (req, res) {
             Product.open().findOne({type: 'flow', smallType: 'forum'})
                 .then(function(result) {
                     var instance = Product.wrapToInstance(result);
-                    res.render('flowForumTask', {
-                        title: '论坛流量任务',
-                        money: user.funds,
-                        userStatus: user.status,
-                        username: user.username,
-                        role: user.role,
-                        price: instance.getPriceByRole(user.role)
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('flowForumTask', {
+                            title: '论坛流量任务',
+                            money: user.funds,
+                            userStatus: user.status,
+                            username: user.username,
+                            role: user.role,
+                            price: instance.getPriceByRole(user.role),
+                            orderFlag: orderFlag
+                        })
                     })
                 })
         });
@@ -36,26 +39,33 @@ router.post('/forumTask', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);
-            order.createAndSave(user, {type: 'flow', smallType: 'forum'})
-                .then(function () {
-                    socketIO.emit('updateNav', {'flow': 1});
-                    res.redirect('/flow/taskHistory');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'flow', smallType: 'forum'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'flow': 1});
+                        res.redirect('/flow/taskHistory');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/flow/taskHistory');
+            })
         });
 });
 
 router.get('/videoTask', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('flowVideoTask', {
-                title: '视频流量任务',
-                money: user.funds,
-                userStatus: user.status,
-                username: user.username,
-                role: user.role
-            });
+            Order.getRandomStr(req).then(function(orderFlag) {
+                res.render('flowVideoTask', {
+                    title: '视频流量任务',
+                    money: user.funds,
+                    userStatus: user.status,
+                    username: user.username,
+                    role: user.role,
+                    orderFlag: orderFlag
+                });
+            })
         });
 });
 
@@ -70,13 +80,17 @@ router.post('/videoTask', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);
-            order.createAndSave(user, {type: 'flow', smallType: 'video', name: orderInfo.name})
-                .then(function () {
-                    socketIO.emit('updateNav', {'flow': 1});
-                    res.redirect('/flow/taskHistory');
-                }, function() {
-                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                });
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'flow', smallType: 'video', name: orderInfo.name})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'flow': 1});
+                        res.redirect('/flow/taskHistory');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/flow/taskHistory');
+            })
         });
 });
 

@@ -63,13 +63,16 @@ router.get('/show', function (req, res) {
             if(user.taskAccount && user.taskName){
                 Order.open().findById(orderId)
                     .then(function(order) {
-                        res.render('handleTaskShow', {
-                            money: user.funds,
-                            role: user.role,
-                            userStatus: user.status,
-                            username: user.username,
-                            order: order
-                        });
+                        Task.getRandomStr(req).then(function(orderFlag) {
+                            res.render('handleTaskShow', {
+                                money: user.funds,
+                                role: user.role,
+                                userStatus: user.status,
+                                username: user.username,
+                                order: order,
+                                orderFlag: orderFlag
+                            });
+                        })
                     })
             }else{
                 req.session.msg = '请填写您做任务的微信账户信息!';
@@ -81,11 +84,15 @@ router.get('/show', function (req, res) {
 router.post('/show', function (req, res) {
     Order.getOrder(req).then(function (info) {
         info.userId = req.session.passport.user;
-        Task.createTask(info).then(function(task) {
-            socketIO.emit('navUpdateNum', {'checks': 1, 'orderUser': task.user});
+        Task.checkRandomStr(req, info).then(function() {
+            Task.createTask(info).then(function(task) {
+                socketIO.emit('navUpdateNum', {'checks': 1, 'orderUser': task.user});
+                res.redirect('/task/all');
+            }, function(err) {
+                res.send('<h1>'+err+'</h1>'); //各种错误
+            })
+        }, function(msg) {
             res.redirect('/task/all');
-        }, function(err) {
-            res.send('<h1>'+err+'</h1>'); //各种错误
         })
     }, function(err) {
         res.send('<h1>'+err+'</h1>'); //各种错误

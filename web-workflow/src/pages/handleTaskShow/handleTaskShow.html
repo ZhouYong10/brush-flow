@@ -25,6 +25,7 @@
             <div class="am-panel-bd">
 
                 <form class="am-form am-form-horizontal" enctype="multipart/form-data" method="post" action="/task/show" >
+                    <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
                     <input type="hidden" name="orderId" value="<%= order._id %>">
                     <div class="am-form-group no-margin">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格</label>

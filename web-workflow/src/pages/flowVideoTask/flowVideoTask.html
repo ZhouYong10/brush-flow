@@ -36,6 +36,7 @@
 
                 <validator name="forumFlow">
                     <form class="am-form am-form-horizontal" method="post" action="/flow/videoTask">
+                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
 
                         <div class="am-form-group">
                             <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>目标地址</label>

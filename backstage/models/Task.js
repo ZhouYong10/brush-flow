@@ -13,6 +13,24 @@ var Task = new Class();
 
 Task.extend(db);
 Task.extend({
+    getRandomStr: function(req) {
+        return new Promise(function(resolve, reject) {
+            var str = Math.random().toString(36).substr(2);
+            req.session.orderFlag = str;
+            resolve(str);
+        })
+    },
+    checkRandomStr: function(req, info) {
+        return new Promise(function(resolve, reject) {
+            if(info.orderFlag == req.session.orderFlag) {
+                req.session.orderFlag = '';
+                resolve();
+            }else {
+                console.log('订单已经提交了，请勿重复提交！');
+                reject();
+            }
+        })
+    },
     getTaskFreezeFunds: function() {
         return new Promise(function(resolve, reject) {
             Task.open().find({

@@ -34,6 +34,7 @@
 
                 <validator name="wxCode">
                 <form class="am-form am-form-horizontal" method="post" enctype="multipart/form-data" action="/wx/code/add">
+                    <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
                     <div class="am-form-group">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
                         <div class="am-u-sm-8 am-u-lg-10">

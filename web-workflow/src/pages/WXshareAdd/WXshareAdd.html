@@ -34,6 +34,7 @@
 
                 <validator name="wxshare">
                 <form class="am-form am-form-horizontal" method="post" action="/wx/share/add">
+                    <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
                     <div class="am-form-group">
                         <label for="taskType" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务类型</label>
                         <div class="am-u-sm-8 am-u-lg-10">

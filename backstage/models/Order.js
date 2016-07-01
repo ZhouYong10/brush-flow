@@ -239,6 +239,13 @@ function stopFans() {
 }
 
 Order.extend({
+    getRandomStr: function(req) {
+        return new Promise(function(resolve, reject) {
+            var str = Math.random().toString(36).substr(2);
+            req.session.orderFlag = str;
+            resolve(str);
+        })
+    },
     getOrderFreezeFunds: function() {
         return new Promise(function(resolve, reject) {
             Order.open().find({
@@ -343,6 +350,18 @@ Order.extend({
 });
 
 Order.include({
+    checkRandomStr: function(req) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            if(self.orderFlag == req.session.orderFlag) {
+                req.session.orderFlag = '';
+                resolve();
+            }else {
+                console.log('订单已经提交了，请勿重复提交！');
+                reject();
+            }
+        })
+    },
     save: function(callback) {
         var self = this;
         Order.open().insert(self)

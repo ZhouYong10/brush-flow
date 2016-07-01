@@ -53,12 +53,15 @@ var router = require('express').Router();
 router.get('/create/task', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('forumTemplate', {
-                title: '论坛回复任务',
-                money: user.funds,
-                role: user.role,
-                userStatus: user.status,
-                username: user.username
+            Order.getRandomStr(req).then(function(orderFlag) {
+                res.render('forumTemplate', {
+                    title: '论坛回复任务',
+                    money: user.funds,
+                    role: user.role,
+                    userStatus: user.status,
+                    username: user.username,
+                    orderFlag: orderFlag
+                })
             })
         });
 });
@@ -69,15 +72,19 @@ router.post('/comment/add', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function (user) {
                 var order = Order.wrapToInstance(obj);
-                order.createAndSave(user, {type: 'forum', smallType: obj.smallType})
-                    .then(function (copResult) {
-                        copResult.complete(function () {
-                            socketIO.emit('updateNav', {'reply': 1});
-                            res.redirect('/forum/taskHistory');
+                order.checkRandomStr(req).then(function() {
+                    order.createAndSave(user, {type: 'forum', smallType: obj.smallType})
+                        .then(function (copResult) {
+                            copResult.complete(function () {
+                                socketIO.emit('updateNav', {'reply': 1});
+                                res.redirect('/forum/taskHistory');
+                            });
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                         });
-                    }, function() {
-                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                    });
+                }, function(msg) {
+                    res.redirect('/forum/taskHistory');
+                })
             });
     }, function (msg) {
         res.send(msg);
