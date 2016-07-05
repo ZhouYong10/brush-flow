@@ -62,6 +62,18 @@
                     </div>
                     <% } %>
 
+                    <% if(order.account){ %>
+                    <div class="am-form-group am-form-file no-margin">
+                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务账号</label>
+                        <div class="am-u-sm-8 am-u-lg-10 am-g-collapse">
+                            <p class="order-content">
+                                <a href="<%= order.account %>">手机上长按复制账号</a><br>
+                                <%= order.account %>
+                            </p>
+                        </div>
+                    </div>
+                    <% } %>
+
                     <div class="am-form-group no-margin">
                         <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务说明</label>
                         <div class="am-u-sm-8 am-u-lg-10">
