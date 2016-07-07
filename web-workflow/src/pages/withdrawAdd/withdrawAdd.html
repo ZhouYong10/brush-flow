@@ -23,6 +23,15 @@
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        1、提现金额不能小于1元。<br/>
+                        2、平台用户提现支付宝必须和充值支付宝一致，否则平台不受理（投手提现不受此限制）。<br/>
+                        3、提现支付宝昵称请填实名（个别支付宝用户需要实名验证，敬请谅解），否则支付宝无法转账。<br/>
+                    </div>
+                </div>
+
                 <validator name="withdraw">
                     <form class="am-form am-form-horizontal" method="post" action="/user/withdraw/add">
                         <div class="am-form-group">

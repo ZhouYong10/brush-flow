@@ -23,6 +23,15 @@
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd">
 
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        1、任务报错请提交任务链接、差量多少、以及错误描述，否则平台无法受理。<br/>
+                        2、充值交易号过期，请提交充值支付宝账户、昵称，以及充值交易号，否则平台无法受理。<br/>
+                        3、同一问题请不要频繁重复提交。<br/>
+                    </div>
+                </div>
+
                 <validator name="feedbackAdd">
                     <form class="am-form am-form-horizontal" method="post" action="/user/feedback/add">
 

@@ -87,7 +87,7 @@ module.exports = {
             var older = Date.parse(getDateStr(-30));
             remove(Feedback, older);
             remove(Order, older);
-            remove(Placard, older);
+            //remove(Placard, older);
             remove(Profit, older);
             remove(Recharge, older);
             remove(Withdraw, older);
