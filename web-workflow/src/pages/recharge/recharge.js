@@ -5,6 +5,8 @@ var Vue = require('vue');
 Vue.use(require('vue-validator'));
 Vue.use(require('vue-resource'));
 
+var Utils = require('utils');
+
 
 new Vue({
     el: '#recharge',
@@ -24,5 +26,8 @@ new Vue({
                 }
             });
         }
+    },
+    validators: {
+        isnum: Utils.isNum
     }
 });

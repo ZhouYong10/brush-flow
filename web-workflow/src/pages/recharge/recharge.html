@@ -45,9 +45,9 @@
                         </label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="输入28 或 32 位的支付宝交易号"
-                            v-validate:num="{required: true, minlength: 28, maxlength: 32}" v-model="num">
+                            v-validate:num="{required: true, minlength: 28, maxlength: 32, isnum: true}" v-model="num">
                             <span class="tips" v-if="$recharge.num.required">支付宝交易号不能为空!</span>
-                            <span class="tips" v-if="$recharge.num.minlength || $recharge.num.maxlength">请输入合法的支付宝交易号!</span>
+                            <span class="tips" v-if="$recharge.num.minlength || $recharge.num.maxlength || $recharge.num.isnum">请输入合法的支付宝交易号!</span>
                         </div>
                     </div>
 
