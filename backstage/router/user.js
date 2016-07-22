@@ -66,7 +66,12 @@ router.post('/recharge', function (req, res) {
             isOK: false,
             message: '该交易号已经过期！'
         });
-    }else {
+    }else if(!(/^[0-9]*[1-9][0-9]*$/.test(alipayInfo.alipayId))){
+        res.send({
+            isOK: false,
+            message: '请输入合法的支付宝交易号!'
+        });
+    } else {
         Recharge.open().findOne({alipayId: alipayInfo.alipayId})
             .then(function (result) {
                 if (result) {
