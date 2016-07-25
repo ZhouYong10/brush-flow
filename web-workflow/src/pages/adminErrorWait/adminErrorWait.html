@@ -37,6 +37,7 @@
                             <th>报错日期</th>
                             <th>错误类别</th>
                             <th>地址|账号</th>
+                            <th>阅读初始量</th>
                             <th>问题描述</th>
                             <th>操作</th>
                         </tr>
@@ -68,6 +69,7 @@
                                    data-clipboard-text="<%= orders[i].account %>">复制</a>
                                 <% } %>
                             </td>
+                            <td class="am-text-middle"><%= orders[i].startReadNum %></td>
                             <td class="am-text-middle">
                                 <a class="am-text-truncate text-break" title="<%= orders[i].errorInfo %>">
                                     <%= orders[i].errorInfo %>

@@ -655,10 +655,12 @@ router.get('/order/handle/release', function (req, res) {
 router.get('/order/complete', function (req, res) {
     var orderId = req.query.id;
     var url = req.query.url;
+    var startReadNum = req.query.info;
     Order.open().findById(orderId)
         .then(function(order) {
             if(order.status != '已处理'){
                 var orderIns = Order.wrapToInstance(order);
+                orderIns.startReadNum = startReadNum;
                 orderIns.complete(function() {
                     res.redirect(url);
                 });

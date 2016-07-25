@@ -199,11 +199,13 @@ app.get('/wx/like/complete/remote', function (req, res) {
   var status = req.query.status;
   var msg = req.query.msg;
   var orderId = req.query.id;
+  var startReadNum = req.query.startReadNum;
   Order.open().findById(orderId)
       .then(function (order) {
           var orderIns = Order.wrapToInstance(order);
         if (status == 1) {
           orderIns.remote = 'dingding';
+          orderIns.startReadNum = startReadNum;
           orderIns.complete(function () {
             res.end();
           });

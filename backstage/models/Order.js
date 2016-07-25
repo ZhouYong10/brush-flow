@@ -715,6 +715,7 @@ Order.include({
                     if(self.remote){
                         Order.open().updateById(self._id, {
                             $set: {
+                                startReadNum: self.startReadNum,
                                 remote: self.remote,
                                 status: '已处理',
                                 dealTime:  moment().format('YYYY-MM-DD HH:mm:ss')
@@ -725,6 +726,7 @@ Order.include({
                     }else {
                         Order.open().updateById(self._id, {
                             $set: {
+                                startReadNum: self.startReadNum,
                                 status: '已处理',
                                 dealTime:  moment().format('YYYY-MM-DD HH:mm:ss')
                             }
