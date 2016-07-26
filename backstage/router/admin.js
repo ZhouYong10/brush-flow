@@ -986,6 +986,8 @@ router.get('/WX/like/wait', function (req, res) {
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/like/wait',
+                dingdingOrderNum: global.dingdingOrderNum,
+                weichuanmeiOrderNum: global.weichuanmeiOrderNum,
                 wxReadIsOpen: Order.wxReadIsOpen()
             });
         });
@@ -1055,6 +1057,36 @@ router.get('/open/wx/read/like', function (req, res) {
 router.get('/close/wx/read/like', function (req, res) {
     Order.closeWXReadAuto();
     res.end('ok');
+});
+
+router.get('/dingding/order/num/WXlike', function (req, res) {
+    var dingdingOrderNum = parseInt(req.query.dingdingOrderNum);
+    if(dingdingOrderNum > global.weichuanmeiOrderNum) {
+        res.send({
+            isOk: false,
+            msg: '丁丁的限制量不能大于微传媒的限制量！'
+        });
+    }else {
+        global.dingdingOrderNum = dingdingOrderNum;
+        res.send({
+            isOk: true
+        });
+    }
+});
+
+router.get('/weichuanmei/order/num/WXlike', function (req, res) {
+    var weichuanmeiOrderNum = parseInt(req.query.weichuanmeiOrderNum);
+    if(weichuanmeiOrderNum < global.dingdingOrderNum) {
+        res.send({
+            isOk: false,
+            msg: '微传媒的限制量不能小于丁丁的限制量！'
+        });
+    }else{
+        global.weichuanmeiOrderNum = weichuanmeiOrderNum;
+        res.send({
+            isOk: true
+        });
+    }
 });
 
 

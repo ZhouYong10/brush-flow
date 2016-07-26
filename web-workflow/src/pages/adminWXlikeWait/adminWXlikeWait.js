@@ -35,6 +35,48 @@ new Vue({
                 .then(function (data) {
                     self.isOpen = 'no';
                 });
+        },
+        dingding: function() {
+            var self = this;
+            layer.config({
+                extend: 'extend/layer.ext.js'
+            });
+            var index = layer.prompt({
+                formType: 2,
+                title: '请输入限制丁丁的单个订单阅读量！',
+                offset: '6%'
+            }, function (value, index) {
+                self.$http.get('/admin/dingding/order/num/WXlike', {dingdingOrderNum: value})
+                    .then(function (data) {
+                        layer.close(index);
+                        if(data.data.isOk) {
+                            $('#dingdingNum').text('丁丁限量(' + value + ')')
+                        }else{
+                            layer.msg(data.data.msg);
+                        }
+                    });
+            });
+        },
+        weichuanmei: function() {
+            var self = this;
+            layer.config({
+                extend: 'extend/layer.ext.js'
+            });
+            var index = layer.prompt({
+                formType: 2,
+                title: '请输入限制微传媒的单个订单阅读量！',
+                offset: '6%'
+            }, function (value, index) {
+                self.$http.get('/admin/weichuanmei/order/num/WXlike', {weichuanmeiOrderNum: value})
+                    .then(function (data) {
+                        layer.close(index);
+                        if(data.data.isOk) {
+                            $('#weichuanmeiNum').text('微传媒限量(' + value + ')')
+                        }else{
+                            layer.msg(data.data.msg);
+                        }
+                    });
+            });
         }
     }
 });

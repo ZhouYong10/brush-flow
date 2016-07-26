@@ -31,10 +31,18 @@
                     <div id="openOrClose" class="am-form am-form-inline">
                         <input type="hidden" v-model="isOpen" value="<%= wxReadIsOpen %>">
                         <a class="am-btn am-btn-success am-radius am-btn-sm" @click="open" v-if="isOpen == 'no'">
-                           开启
+                           开启推客
                         </a>
                         <a class="am-btn am-btn-success am-radius am-btn-sm" @click="close" v-if="isOpen == 'yes'">
-                            关闭
+                            关闭推客
+                        </a>
+
+                        <a id="dingdingNum" class="am-btn am-btn-success am-radius am-btn-sm" @click="dingding">
+                            丁丁限量(<%= dingdingOrderNum %>)
+                        </a>
+
+                        <a id="weichuanmeiNum" class="am-btn am-btn-success am-radius am-btn-sm" @click="weichuanmei">
+                            微传媒限量(<%= weichuanmeiOrderNum %>)
                         </a>
                     </div>
 

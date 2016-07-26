@@ -78,7 +78,8 @@ function noKey(callback) {
 }
 
 function yesKey(callback) {
-    var forwardNum = global.forwardNum ? global.forwardNum : 5000;
+    //var forwardNum = global.forwardNum ? global.forwardNum : 5000;
+    var forwardNum = global.weichuanmeiOrderNum;
     Order.open().findOne({
         status: '未处理',
         type: 'wx',

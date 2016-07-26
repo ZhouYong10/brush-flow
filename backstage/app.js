@@ -173,14 +173,18 @@ app.post('/login', function(req, res, next) {
 //对外公共接口
 var Order = require('./models/Order');
 
+global.dingdingOrderNum = 10000;
+global.weichuanmeiOrderNum = 30000;
+
+//丁丁提单
 app.get('/wx/like/forward/remote', function (req, res) {
-  var num = parseInt(req.query.num);
-  global.forwardNum = num;
+  //var num = parseInt(req.query.num);
+  //global.forwardNum = num;
   Order.open().findOne({
     type: 'wx',
     smallType: 'read',
     status: '未处理',
-    num: {$lte: num}
+    num: {$lte: global.dingdingOrderNum}
   }).then(function (obj) {
     if(obj) {
       res.send(JSON.stringify({
@@ -205,6 +209,50 @@ app.get('/wx/like/complete/remote', function (req, res) {
           var orderIns = Order.wrapToInstance(order);
         if (status == 1) {
           orderIns.remote = 'dingding';
+          orderIns.startReadNum = startReadNum;
+          orderIns.complete(function () {
+            res.end();
+          });
+        } else {
+          orderIns.refund(msg, function() {
+            res.end();
+          });
+        }
+      })
+});
+
+
+//微传媒提单
+app.get('/wx/like/forward/remote/weichuanmei', function (req, res) {
+  Order.open().findOne({
+    type: 'wx',
+    smallType: 'read',
+    status: '未处理',
+    num: {$gt: global.dingdingOrderNum, $lte: global.weichuanmeiOrderNum}
+  }).then(function (obj) {
+    if(obj) {
+      res.send(JSON.stringify({
+        id: obj._id,
+        address: obj.address,
+        read: obj.num,
+        like: obj.num2
+      }));
+    }else {
+      res.send(null);
+    }
+  });
+});
+
+app.get('/wx/like/complete/remote/weichuanmei', function (req, res) {
+  var status = req.query.status;
+  var msg = req.query.msg;
+  var orderId = req.query.id;
+  var startReadNum = req.query.startReadNum;
+  Order.open().findById(orderId)
+      .then(function (order) {
+        var orderIns = Order.wrapToInstance(order);
+        if (status == 1) {
+          orderIns.remote = 'weichuanmei';
           orderIns.startReadNum = startReadNum;
           orderIns.complete(function () {
             res.end();
