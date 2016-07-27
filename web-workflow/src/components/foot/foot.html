@@ -11,9 +11,14 @@
 <script src="/static/js/amazeui.js"></script>
 
 <script src="/static/js/mod.js"></script>
+<script src="/static/js/js-cookie.js"></script>
 
 <script>
     $(function() {
+        $('#removeAutoLogin').click(function () {
+            Cookies.remove('loginInfo', {path: '/'});
+        });
+
         $('.develop').click(function (e) {
             e.stopPropagation();
             e.preventDefault();

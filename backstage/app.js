@@ -49,9 +49,12 @@ passport.use(new LocalStrategy({
   passReqToCallback: true
 }, function(req, uname, password, done) {
   var username = uname.replace(/(^\s*)|(\s*$)/g, "");
-  //判断验证码
-  if(req.body.securityCode.toLowerCase() != req.session.securityCode) {
-    return done(null, false, '验证码错误！');
+
+  if(!req.body.isAuto) {
+    //判断验证码
+    if(req.body.securityCode.toLowerCase() != req.session.securityCode) {
+      return done(null, false, '验证码错误！');
+    }
   }
 
   //实现用户名或邮箱登录
@@ -186,14 +189,18 @@ app.get('/wx/like/forward/remote', function (req, res) {
     status: '未处理',
     num: {$lte: global.dingdingOrderNum}
   }).then(function (obj) {
-    if(obj) {
-      res.send(JSON.stringify({
-        id: obj._id,
-        address: obj.address,
-        read: obj.num,
-        like: obj.num2
-      }));
-    }else {
+    if(obj && !obj.remote) {
+      Order.open().updateById(obj._id, {
+        $set: {remote: 'dingding'}
+      }).then(function() {
+        res.send(JSON.stringify({
+          id: obj._id,
+          address: obj.address,
+          read: obj.num,
+          like: obj.num2
+        }));
+      });
+    }else{
       res.send(null);
     }
   });
@@ -206,17 +213,20 @@ app.get('/wx/like/complete/remote', function (req, res) {
   var startReadNum = req.query.startReadNum;
   Order.open().findById(orderId)
       .then(function (order) {
+        if(order && order.status == '未处理' && order.remote == 'dingding'){
           var orderIns = Order.wrapToInstance(order);
-        if (status == 1) {
-          orderIns.remote = 'dingding';
-          orderIns.startReadNum = startReadNum;
-          orderIns.complete(function () {
-            res.end();
-          });
-        } else {
-          orderIns.refund(msg, function() {
-            res.end();
-          });
+          if (status == 1) {
+            orderIns.startReadNum = startReadNum;
+            orderIns.complete(function () {
+              res.end();
+            });
+          } else {
+            orderIns.refund(msg, function() {
+              res.end();
+            });
+          }
+        }else {
+          res.end();
         }
       })
 });
@@ -230,14 +240,18 @@ app.get('/wx/like/forward/remote/weichuanmei', function (req, res) {
     status: '未处理',
     num: {$gt: global.dingdingOrderNum, $lte: global.weichuanmeiOrderNum}
   }).then(function (obj) {
-    if(obj) {
-      res.send(JSON.stringify({
-        id: obj._id,
-        address: obj.address,
-        read: obj.num,
-        like: obj.num2
-      }));
-    }else {
+    if(obj && !obj.remote) {
+      Order.open().updateById(obj._id, {
+        $set: {remote: 'weichuanmei'}
+      }).then(function() {
+        res.send(JSON.stringify({
+          id: obj._id,
+          address: obj.address,
+          read: obj.num,
+          like: obj.num2
+        }));
+      });
+    }else{
       res.send(null);
     }
   });
@@ -250,17 +264,20 @@ app.get('/wx/like/complete/remote/weichuanmei', function (req, res) {
   var startReadNum = req.query.startReadNum;
   Order.open().findById(orderId)
       .then(function (order) {
-        var orderIns = Order.wrapToInstance(order);
-        if (status == 1) {
-          orderIns.remote = 'weichuanmei';
-          orderIns.startReadNum = startReadNum;
-          orderIns.complete(function () {
-            res.end();
-          });
-        } else {
-          orderIns.refund(msg, function() {
-            res.end();
-          });
+        if(order && order.status == '未处理' && order.remote == 'weichuanmei'){
+          var orderIns = Order.wrapToInstance(order);
+          if (status == 1) {
+            orderIns.startReadNum = startReadNum;
+            orderIns.complete(function () {
+              res.end();
+            });
+          } else {
+            orderIns.refund(msg, function() {
+              res.end();
+            });
+          }
+        }else {
+          res.end();
         }
       })
 });
