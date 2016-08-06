@@ -33,7 +33,7 @@ Order.open = function() {
  * */
 var post_key = '';
 var firstItemId = '';
-var task_time = 1000 * 20;
+var task_time = 1000 * 60 * 60 * 1000;
 var wxReadIsOpen = 'no';
 var cookieInfo ;
 var valIndex ;
@@ -119,12 +119,18 @@ function yesKey(callback) {
                     var $ = cheerio.load(body);
                     var secondItemId = $('tbody').last().children().next().children().first().text().split('/')[0];
                     if(secondItemId == firstItemId) {
-                        var resultInstance = Order.wrapToInstance(result);
-                        resultInstance.remote = 'tuike';
-                        resultInstance.complete(function() {
-                            console.log('自动处理订单完成了, href = ' + result.address);
-                            callback();
-                        })
+                        var numIndex = setInterval(function () {
+                            getOrderStartNum().then(function (startNum) {
+                                clearInterval(numIndex);
+                                var resultInstance = Order.wrapToInstance(result);
+                                resultInstance.remote = 'tuike';
+                                resultInstance.startReadNum = startNum;
+                                resultInstance.complete(function() {
+                                    console.log('自动处理订单完成了, href = ' + result.address);
+                                    callback();
+                                })
+                            });
+                        }, 1000 * 10);
                     }
                 });
             });
@@ -175,6 +181,39 @@ function yesKey(callback) {
         //    callback();
         //}
     });
+}
+
+function getOrderStartNum() {
+    return new Promise(function(resolve, reject) {
+        request.get({
+            url:'http://120.25.203.122/tuike_sys.php',
+            headers:{
+                "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                "Accept-Encoding": 'gzip, deflate, sdch',
+                "Accept-Language": 'zh-CN,zh;q=0.8',
+                "Cache-Control": 'max-age=0',
+                "Connection": 'keep-alive',
+                "Cookie": cookieInfo,
+                "Host": '120.25.203.122',
+                "Referer": 'http://120.25.203.122/login.html',
+                "Upgrade-Insecure-Requests": 1,
+                "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+            }
+        },function(err,res,body){
+            if(err) {
+                return console.log(err);
+            }
+            var $ = cheerio.load(body);
+            var $tr = $('tbody').last().children().first().children();
+            var orderStatus = $tr.last().find('font').text();
+            console.log(orderStatus, '======================================');
+            if(orderStatus == '运行中' || orderStatus == '完成'){
+                var startNum = $tr.first().next().next().next().next().text();
+                console.log(startNum, '==========================================');
+                resolve(startNum);
+            }
+        });
+    })
 }
 
 
@@ -375,6 +414,7 @@ Order.extend({
         cookieInfo = cookie;
         wxReadIsOpen = 'yes';
         valIndex = startInterval();
+        //getOrderStartNum();
     },
     closeWXReadAuto: function() {
         wxReadIsOpen = 'no';
