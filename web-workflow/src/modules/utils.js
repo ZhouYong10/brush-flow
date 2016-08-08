@@ -90,6 +90,9 @@ module.exports = {
     min200: function(val) {
         return parseInt(val) >= 200;
     },
+    min800: function(val) {
+        return parseInt(val) >= 800;
+    },
     min1000: function(val) {
         return parseInt(val) >= 1000;
     },

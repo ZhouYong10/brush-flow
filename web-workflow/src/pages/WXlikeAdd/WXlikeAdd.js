@@ -43,7 +43,7 @@ new Vue({
             return parseInt(like) <= parseInt(read/10);
         },
         isnum: Utils.isNum,
-        min200: Utils.min200,
+        min800: Utils.min800,
         maxprice: function() {
             return parseFloat(this.price * this.num + this.price2 * this.num2) <= parseFloat(this.funds);
         }
