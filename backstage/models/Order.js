@@ -42,13 +42,16 @@ function startInterval() {
     var random = (Math.random() / 3 * 100).toFixed(0);
     task_time = random >= 5 ? random * 1000 : 5 * 1000;
     return setInterval(function() {
+        console.log('开始提单=====================================');
         noKey(clearTime);
     }, task_time);
 }
 
 function clearTime() {
     clearInterval(valIndex);
-    valIndex = startInterval();
+    if(wxReadIsOpen == 'yes'){
+        valIndex = startInterval();
+    }
 }
 
 function noKey(callback) {
@@ -418,7 +421,7 @@ Order.extend({
     },
     closeWXReadAuto: function() {
         wxReadIsOpen = 'no';
-        clearInterval(valIndex);
+        //clearInterval(valIndex);
     },
     wxReadIsOpen: function() {
         return wxReadIsOpen;
