@@ -99,7 +99,7 @@ router.get('/video/get/price', function (req, res) {
         .then(function (user) {
             var address = req.query.address;
             var arr = address.split('/')[2].split('.');
-            arr.shift();
+            //arr.shift();
             var mainUrl = arr.join('.');
             Product.open().findOne({
                 type: 'flow',
