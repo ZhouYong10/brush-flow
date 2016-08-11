@@ -109,46 +109,46 @@ Task.include({
     success: function() {
             var self = this;
         return new Promise(function(resolve, reject) {
-            User.open().findById(self.taskUserId).then(function(user) {
-                if(user) {
-                    User.open().updateById(self.taskUserId, {
-                        $set: {
-                            funds: (parseFloat(self.getPriceByRole(user.role)) + parseFloat(user.funds)).toFixed(4)
-                        }
-                    }).then(function() {
-                        self.profitToTaskUser(user, function() {
-                            console.log('self.userId:   ', self.userId);
-                            User.open().findById(self.userId).then(function(orderUser) {
-                                self.profitToOrderUser(orderUser, function() {
-                                    Task.open().updateById(self._id, {$set: {
-                                        taskStatus: '完成',
-                                        successTime: moment().format('YYYY-MM-DD HH:mm:ss')
-                                    }}).then(function() {
-                                        Order.open().findById(self.orderId).then(function(order) {
-                                            var surplus = (parseFloat(order.surplus) - parseFloat(self.releasePrice)).toFixed(4);
-                                            Order.open().updateById(order._id, {$set: {
-                                                surplus: surplus
-                                            }}).then(function() {
+            Task.open().updateById(self._id, {$set: {
+                taskStatus: '完成',
+                successTime: moment().format('YYYY-MM-DD HH:mm:ss')
+            }}).then(function() {
+                Order.open().findById(self.orderId).then(function(order) {
+                    var surplus = (parseFloat(order.surplus) - parseFloat(self.releasePrice)).toFixed(4);
+                    Order.open().updateById(order._id, {$set: {
+                        surplus: surplus
+                    }}).then(function() {
+                        User.open().findById(self.taskUserId).then(function(user) {
+                            if(user) {
+                                User.open().updateById(self.taskUserId, {
+                                    $set: {
+                                        funds: (parseFloat(self.getPriceByRole(user.role)) + parseFloat(user.funds)).toFixed(4)
+                                    }
+                                }).then(function() {
+                                    self.profitToTaskUser(user, function() {
+                                        console.log('self.userId:   ', self.userId);
+                                        User.open().findById(self.userId).then(function(orderUser) {
+                                            self.profitToOrderUser(orderUser, function() {
                                                 resolve();
                                             })
                                         })
                                     })
                                 })
-                            })
+                            }else{
+                                Task.open().removeById(self._id).then(function() {
+                                    console.log('订单用户已不存在。。。。,已删除该订单。。。');
+                                    Order.open().updateById(self.orderId, {
+                                        $set: {status: '已发布'},
+                                        $inc: {taskNum: -1}
+                                    }).then(function() {
+                                        console.log('任务已做数量减1.。。。。。。。。。。。');
+                                        resolve();
+                                    })
+                                })
+                            }
                         })
                     })
-                }else{
-                    Task.open().removeById(self._id).then(function() {
-                        console.log('订单用户已不存在。。。。,已删除该订单。。。');
-                        Order.open().updateById(self.orderId, {
-                            $set: {status: '已发布'},
-                            $inc: {taskNum: -1}
-                        }).then(function() {
-                            console.log('任务已做数量减1.。。。。。。。。。。。');
-                            resolve();
-                        })
-                    })
-                }
+                })
             })
         })
     },
@@ -265,7 +265,7 @@ function followedByPayment(tasks) {
         var task = tasks.shift();
         var taskCreateTime = task._id.getTimestamp();
         var timeNow = new Date().getTime();
-        if((timeNow - taskCreateTime) > 1000 * 60 * 60) {
+        if((timeNow - taskCreateTime) > 1000 ) {
             var taskIns = Task.wrapToInstance(task);
             taskIns.success().then(function () {
                 console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);
