@@ -388,7 +388,7 @@ router.get('/like/add', function (req, res) {
                             var myLikePrice = likeIns.getPriceByRole(user.role);
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('WXlikeAdd', {
-                                    title: '添加微信图文点赞任务',
+                                    title: '添加微信图文阅读点赞任务',
                                     money: user.funds,
                                     username: user.username,
                                     userStatus: user.status,
@@ -408,10 +408,10 @@ router.post('/like/add', function (req, res) {
     if(!orderInfo.address){
         return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
-    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 200) {
-        return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低200起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 500) {
+        return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低500起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
-    if(orderInfo.num2 && !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) && orderInfo.num2 > (orderInfo.num / 10)) {
+    if(orderInfo.num2 && !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) && orderInfo.num2 > (orderInfo.num / 25 * 2)) {
         return res.send('<h1>点赞数量必须为正整数,且不能大于阅读数量的10%!.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
 
@@ -434,6 +434,34 @@ router.post('/like/add', function (req, res) {
             }, function(msg) {
                 res.redirect('/wx/like');
             })
+        });
+});
+
+router.get('/like/bulk/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'read'})
+                .then(function(read) {
+                    var readIns = Product.wrapToInstance(read);
+                    var myReadPrice = readIns.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'wx', smallType: 'like'})
+                        .then(function(like) {
+                            var likeIns = Product.wrapToInstance(like);
+                            var myLikePrice = likeIns.getPriceByRole(user.role);
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('WXlikeBulkAdd', {
+                                    title: '批量添加微信图文阅读点赞任务',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    price: myReadPrice,
+                                    price2: myLikePrice,
+                                    orderFlag: orderFlag
+                                });
+                            })
+                        });
+                });
         });
 });
 
