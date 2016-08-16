@@ -26,6 +26,8 @@
                 <div class="am-panel am-panel-danger">
                     <div class="am-panel-hd prompt-title">提示</div>
                     <div class="am-panel-bd">
+                        1: 微信阅读￥ <%= price %>/个, 微信点赞￥ <%= price2 %>/个。<br/>
+
                         1.多个平台提交任务会导致量不足，责任自负。<br/>
 
                         2.微信点赞数量不能大于阅读数量的10%，否则无法执行。<br/>
@@ -38,13 +40,6 @@
 
                 <form class="am-form am-form-horizontal" method="post" action="/wx/like/add">
 
-
-                    <div class="am-form-group">
-                        <div class="am-u-sm-12 am-u-lg-12">
-                            <p class="disable">微信阅读￥ <%= price %>/个, 微信点赞￥ <%= price2 %>/个</p>
-                        </div>
-                    </div>
-
                     <div class="am-form-group">
                         <div class="am-u-sm-12 am-u-lg-12">
                             <textarea id="taskRemark" class="am-radius" rows="12" placeholder="批量添加任务" name="remark"></textarea>
@@ -54,6 +49,7 @@
                     <div class="am-form-group">
                         <div class="am-u-sm-12 am-u-lg-12">
                             <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            <button class="am-btn am-btn-primary am-radius">导入excel</button>
                         </div>
                     </div>
                 </form>
