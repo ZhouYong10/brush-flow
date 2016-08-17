@@ -2,7 +2,7 @@
     <div class="am-panel am-panel-danger">
         <div class="am-panel-hd prompt-title">提示</div>
         <div class="am-panel-bd">
-            1: 微信阅读￥ <%= price %>/个, 微信点赞￥ <%= price2 %>/个。<br/>
+            1: 微信阅读￥ {{price}}/个, 微信点赞￥ {{price2}}/个。<br/>
 
             1.多个平台提交任务会导致量不足，责任自负。<br/>
 
@@ -18,14 +18,14 @@
 
         <div class="am-form-group">
             <div class="am-u-sm-12 am-u-lg-12">
-                <textarea id="taskRemark" class="am-radius" rows="12" placeholder="批量添加任务" v-model="orders"></textarea>
+                <textarea id="taskRemark" class="am-radius" rows="12" placeholder="批量添加任务" v-model="itemsTxt"></textarea>
             </div>
         </div>
 
         <div class="am-form-group">
             <div class="am-u-sm-12 am-u-lg-12">
                 <button class="am-btn am-btn-primary am-radius" @click.stop.prevent="parseTxt">提交任务</button>
-                <button class="am-btn am-btn-primary am-radius" @click.stop.prevent="parseExcel">导入excel</button>
+                <!--<button class="am-btn am-btn-primary am-radius" @click.stop.prevent="parseExcel">导入excel</button>-->
             </div>
         </div>
     </form>
