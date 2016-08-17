@@ -19,40 +19,45 @@
 
     <div id="app-content" class="app-content am-g">
 
-        <div id="wxLike" class="am-panel am-panel-primary">
+        <div class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+            <div id="wxLike" class="am-panel-bd">
 
-                <div class="am-panel am-panel-danger">
-                    <div class="am-panel-hd prompt-title">提示</div>
-                    <div class="am-panel-bd">
-                        1: 微信阅读￥ <%= price %>/个, 微信点赞￥ <%= price2 %>/个。<br/>
+                <component :is="currentView" :view.sync="currentView"></component>
 
-                        1.多个平台提交任务会导致量不足，责任自负。<br/>
+                <!--<div>-->
+                    <!--<div class="am-panel am-panel-danger">-->
+                        <!--<div class="am-panel-hd prompt-title">提示</div>-->
+                        <!--<div class="am-panel-bd">-->
+                            <!--1: 微信阅读￥ <%= price %>/个, 微信点赞￥ <%= price2 %>/个。<br/>-->
 
-                        2.微信点赞数量不能大于阅读数量的10%，否则无法执行。<br/>
+                            <!--1.多个平台提交任务会导致量不足，责任自负。<br/>-->
 
-                        3.微信阅读最低速度8个/分钟，最高速度137个/分钟。<br/>
+                            <!--2.微信点赞数量不能大于阅读数量的10%，否则无法执行。<br/>-->
 
-                        4.个别任务会有延时，显示完成后半小时之后会显示。<br/>
-                    </div>
-                </div>
+                            <!--3.微信阅读最低速度8个/分钟，最高速度137个/分钟。<br/>-->
 
-                <form class="am-form am-form-horizontal" method="post" action="/wx/like/add">
+                            <!--4.个别任务会有延时，显示完成后半小时之后会显示。<br/>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="am-form-group">
-                        <div class="am-u-sm-12 am-u-lg-12">
-                            <textarea id="taskRemark" class="am-radius" rows="12" placeholder="批量添加任务" name="remark"></textarea>
-                        </div>
-                    </div>
+                    <!--<form class="am-form am-form-horizontal" method="post" action="/wx/like/add">-->
 
-                    <div class="am-form-group">
-                        <div class="am-u-sm-12 am-u-lg-12">
-                            <button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
-                            <button class="am-btn am-btn-primary am-radius">导入excel</button>
-                        </div>
-                    </div>
-                </form>
+                        <!--<div class="am-form-group">-->
+                            <!--<div class="am-u-sm-12 am-u-lg-12">-->
+                                <!--<textarea id="taskRemark" class="am-radius" rows="12" placeholder="批量添加任务" name="remark"></textarea>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<div class="am-form-group">-->
+                            <!--<div class="am-u-sm-12 am-u-lg-12">-->
+                                <!--<button type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>-->
+                                <!--<button class="am-btn am-btn-primary am-radius">导入excel</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</form>-->
+                <!--</div>-->
+
 
             </div>
         </div>
