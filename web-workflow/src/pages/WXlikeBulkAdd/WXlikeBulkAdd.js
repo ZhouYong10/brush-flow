@@ -109,6 +109,10 @@ function checkOrder(order) {
         order.$set('noErr', false);
         order.$set('errMsg', order.errMsg + '阅读数量必须是数字. ');
     }
+    if(Utils.isNum(order.num) && !Utils.min500(order.num)){
+        order.$set('noErr', false);
+        order.$set('errMsg', order.errMsg + '阅读数量最低500起. ');
+    }
     if(Utils.isNum(order.num) && !Utils.isNum(order.num2)){
         order.num2 = parseInt(order.num / 1000 * 5);
     }
