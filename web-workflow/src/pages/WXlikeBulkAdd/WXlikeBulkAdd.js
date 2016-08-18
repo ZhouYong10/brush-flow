@@ -115,10 +115,12 @@ function checkOrder(order) {
     }
     if(Utils.isNum(order.num) && !Utils.isNum(order.num2)){
         order.num2 = parseInt(order.num / 1000 * 5);
+        order.$set('totalPrice', (order.price * order.num + order.price2 * (order.num2 - parseInt(order.num / 1000 * 5))).toFixed(4));
+    }else{
+        order.$set('totalPrice', (order.price * order.num + order.price2 * order.num2).toFixed(4));
     }
     if(Utils.isNum(order.num) && Utils.isNum(order.num2) && !(parseInt(order.num2) <= parseInt(order.num / 25 * 2))) {
         order.$set('noErr', false);
         order.$set('errMsg', order.errMsg + '点赞数量不能大于阅读数量的8%. ');
     }
-    order.$set('totalPrice', (order.price * order.num + order.price2 * (order.num2 - parseInt(order.num / 1000 * 5))).toFixed(4));
 }
