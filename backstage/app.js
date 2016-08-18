@@ -176,8 +176,8 @@ app.post('/login', function(req, res, next) {
 //对外公共接口
 var Order = require('./models/Order');
 
-global.dingdingOrderNum = 10000;
-global.weichuanmeiOrderNum = 30000;
+global.dingdingOrderNum = 1;
+global.weichuanmeiOrderNum = 3;
 
 //丁丁提单
 app.get('/wx/like/forward/remote', function (req, res) {
