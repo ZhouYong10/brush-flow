@@ -423,17 +423,27 @@ router.post('/like/add', function (req, res) {
         .then(function (user) {
 
             var order = Order.wrapToInstance(orderInfo);
-            order.checkRandomStr(req).then(function() {
+            if(orderInfo.orderFlag) {
+                order.checkRandomStr(req).then(function() {
+                    order.createAndSaveTwo(user, {type: 'wx', smallType: 'read'}, {type: 'wx', smallType: 'like'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'wxLike': 1});
+                            res.redirect('/wx/like');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }, function(msg) {
+                    res.redirect('/wx/like');
+                })
+            }else {
                 order.createAndSaveTwo(user, {type: 'wx', smallType: 'read'}, {type: 'wx', smallType: 'like'})
-                    .then(function () {
+                    .then(function (result) {
                         socketIO.emit('updateNav', {'wxLike': 1});
-                        res.redirect('/wx/like');
+                        res.send({funds: result.funds, msg: '提交成功！'});
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                     });
-            }, function(msg) {
-                res.redirect('/wx/like');
-            })
+            }
         });
 });
 

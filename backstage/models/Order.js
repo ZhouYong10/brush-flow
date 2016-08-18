@@ -88,7 +88,7 @@ function yesKey(callback) {
         type: 'wx',
         smallType: {$in: ['read', 'like']},
         num: {$gt: forwardNum}
-    }).then(function (result) {
+    }).then(function (result) {address
         if(result && !result.remote) {
             Order.open().updateById(result._id, {
                 $set: {remote: 'tuike'}

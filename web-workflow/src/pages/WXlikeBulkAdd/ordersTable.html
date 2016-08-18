@@ -7,7 +7,7 @@
             <th>标题</th>
             <th>数量</th>
             <th>总价</th>
-            <th>错误提示</th>
+            <th>信息提示</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -44,9 +44,9 @@
                 </a>
             </td>
             <td class="am-text-middle">
-                <a v-if="!order.noErr" class="am-btn am-btn-primary am-radius am-btn-xs" @click="edit(order)">修改</a>
+                <a v-if="order.noErr != 'edit' && order.noErr != 'committed'" class="am-btn am-btn-primary am-radius am-btn-xs" @click="edit(order)">修改</a>
                 <a v-if="order.noErr == 'edit'" class="am-btn am-btn-primary am-radius am-btn-xs" @click="save(order)">保存</a>
-                <a v-if="order.noErr == true" class="am-btn am-btn-primary am-radius am-btn-xs" @click="commit(order)">提交</a>
+                <a v-if="order.noErr == true && order.noErr != 'committed'" class="am-btn am-btn-primary am-radius am-btn-xs" @click="commit(order)">提交</a>
             </td>
         </tr>
 

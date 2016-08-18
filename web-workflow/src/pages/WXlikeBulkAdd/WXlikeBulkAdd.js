@@ -50,16 +50,11 @@ var ordersAdd = Vue.extend({
                 orders.push($order);
             }
 
-
-
-            console.log(orders);
             this.view = 'tables';
         },
         parseExcel: function() {
             console.log('parseExcel');
             console.log(this.itemsTxt);
-
-
             this.view = 'tables';
         }
     }
@@ -78,12 +73,15 @@ var ordersTable = Vue.extend({
             checkOrder(order);
         },
         commit: function(order) {
-
+            order.noErr = 'committed';
+            this.$http.post('/wx/like/add', {address: order.address, title: order.title, num: order.num, num2: order.num2})
+                .then(function (res) {
+                    order.errMsg = res.data.msg;
+                    $('.userCash').text(res.data.funds);
+                });
         }
     }
 });
-
-//Vue.use(require('vue-validator'));
 
 new Vue({
     el: '#wxLike',
@@ -97,36 +95,6 @@ new Vue({
         add: ordersAdd,
         tables: ordersTable
     }
-
-    //methods: {
-    //    parseAddress: function() {
-    //        var self = this;
-    //        Utils.wxParseAddress(self.$http, self.address)
-    //            .then(function(title) {
-    //                self.articleTitle = title;
-    //            },function(message) {
-    //                alert(message);
-    //            })
-    //    },
-    //    total: function() {
-    //        this.totalPrice = (this.price * this.num + this.price2 * this.num2).toFixed(4);
-    //    }
-    //},
-    //validators: {
-    //    isaddress: function(val) {
-    //        return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(val);
-    //    },
-    //    minnum: function(val) {
-    //        var like = val ? val : 0;
-    //        var read = this.num ? this.num : 0;
-    //        return parseInt(like) <= parseInt(read/10);
-    //    },
-    //    isnum: Utils.isNum,
-    //    min200: Utils.min200,
-    //    maxprice: function() {
-    //        return parseFloat(this.price * this.num + this.price2 * this.num2) <= parseFloat(this.funds);
-    //    }
-    //}
 });
 
 function checkOrder(order) {
