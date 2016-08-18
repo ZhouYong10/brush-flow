@@ -7,7 +7,7 @@ var Utils = require('utils');
 
 var ordersAdd = Vue.extend({
     template: __inline('ordersAdd.html'),
-    props: ['view', 'price', 'price2'],
+    props: ['view', 'price', 'price2', 'orders'],
     data: function(){
         return {
             itemsTxt: ''
@@ -16,18 +16,38 @@ var ordersAdd = Vue.extend({
     methods: {
         parseTxt: function() {
             var self = this;
+            if(self.itemsTxt == '') {
+                return alert('请填写要提交的订单信息！');
+            }
+
             console.log('parseTxt');
-            var orders = [];
+            var orders = self.orders;
             var items = self.itemsTxt.split(/[\r\n]/);
             for(var i = 0; i < items.length; i++) {
                 var item = items[i];
                 var orderData = item.split(/[ ]+/);
-                var order = {errMsg: '', noErr: true, price: self.price, price2: self.price2};
-                order.address = orderData[0];
-                order.num = orderData[1];
-                order.num2 = orderData[2];
-                checkOrder(order, self.$http);
-                orders.push(order);
+                var $order = new Vue({data: {
+                    errMsg: '',
+                    noErr: true,
+                    price: self.price,
+                    price2: self.price2,
+                    totalPrice: 0,
+                    title: ''
+                }});
+                $order.address = orderData[0];
+                $order.num = orderData[1];
+                $order.num2 = orderData[2];
+                checkOrder($order);
+                (function(order) {
+                    Utils.wxParseAddress(self.$http, $order.address)
+                        .then(function (title) {
+                            order.title =  title;
+                        }, function (message) {
+                            order.errMsg = order.errMsg + message + '. ';
+                        });
+                })($order);
+
+                orders.push($order);
             }
 
 
@@ -46,7 +66,21 @@ var ordersAdd = Vue.extend({
 });
 
 var ordersTable = Vue.extend({
-    template: __inline('ordersTable.html')
+    template: __inline('ordersTable.html'),
+    props: ['orders'],
+    methods: {
+        edit: function(order) {
+            order.noErr = 'edit';
+        },
+        save: function(order) {
+            order.noErr = true;
+            order.errMsg = '';
+            checkOrder(order);
+        },
+        commit: function(order) {
+
+        }
+    }
 });
 
 //Vue.use(require('vue-validator'));
@@ -56,7 +90,8 @@ new Vue({
     data: {
         readPrice: '',
         likePrice: '',
-        currentView: 'add'
+        currentView: 'add',
+        orders: []
     },
     components: {
         add: ordersAdd,
@@ -94,29 +129,22 @@ new Vue({
     //}
 });
 
-function checkOrder(order, $http) {
+function checkOrder(order) {
     if(!/((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(order.address)) {
-        order.noErr = false;
-        order.errMsg += '请填写合法的url地址. ';
+        order.$set('noErr', false);
+        order.$set('errMsg', order.errMsg + '请填写合法的url地址. ');
     }
-    Utils.wxParseAddress($http, order.address)
-        .then(function (title) {
-            order.title = title;
-        }, function (message) {
-            order.errMsg += message + '. ';
-        });
     if(!Utils.isNum(order.num)){
-        order.noErr = false;
-        order.errMsg += '阅读数量必须是数字. ';
+        order.$set('noErr', false);
+        order.$set('errMsg', order.errMsg + '阅读数量必须是数字. ');
     }
     if(!Utils.isNum(order.num2)){
-        order.noErr = false;
-        order.errMsg += '点赞数量必须是数字. ';
+        order.$set('noErr', false);
+        order.$set('errMsg', order.errMsg + '点赞数量必须是数字. ');
     }
     if(Utils.isNum(order.num) && Utils.isNum(order.num2) && !(parseInt(order.num2) <= parseInt(order.num / 25 * 2))) {
-        order.noErr = false;
-        order.errMsg += '点赞数量不能大于阅读数量的8%. ';
+        order.$set('noErr', false);
+        order.$set('errMsg', order.errMsg + '点赞数量不能大于阅读数量的8%. ');
     }
-
-    order.totalPrice = (order.price * order.num + order.price2 * order.num2).toFixed(4);
+    order.$set('totalPrice', (order.price * order.num + order.price2 * order.num2).toFixed(4));
 }

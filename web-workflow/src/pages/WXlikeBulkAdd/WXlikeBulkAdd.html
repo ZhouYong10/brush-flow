@@ -26,7 +26,7 @@
                 <input type="hidden" value="<%= price %>" v-model="readPrice">
                 <input type="hidden" value="<%= price2 %>" v-model="likePrice">
 
-                <component :is="currentView" :view.sync="currentView" :price="readPrice" :price2="likePrice"></component>
+                <component :is="currentView" :view.sync="currentView" :orders.sync="orders" :price="readPrice" :price2="likePrice"></component>
 
                 <!--<div>-->
                     <!--<div class="am-panel am-panel-danger">-->
