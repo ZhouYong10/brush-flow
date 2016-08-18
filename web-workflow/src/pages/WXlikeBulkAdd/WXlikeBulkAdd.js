@@ -27,6 +27,9 @@ var ordersAdd = Vue.extend({
                 var item = items[i];
                 var orderData = item.split(/[ ]+/);
                 var $order = new Vue({data: {
+                    address: '',
+                    num: '',
+                    num2: '',
                     errMsg: '',
                     noErr: true,
                     price: self.price,
@@ -106,13 +109,12 @@ function checkOrder(order) {
         order.$set('noErr', false);
         order.$set('errMsg', order.errMsg + '阅读数量必须是数字. ');
     }
-    if(!Utils.isNum(order.num2)){
-        order.$set('noErr', false);
-        order.$set('errMsg', order.errMsg + '点赞数量必须是数字. ');
+    if(Utils.isNum(order.num) && !Utils.isNum(order.num2)){
+        order.num2 = parseInt(order.num / 1000 * 5);
     }
     if(Utils.isNum(order.num) && Utils.isNum(order.num2) && !(parseInt(order.num2) <= parseInt(order.num / 25 * 2))) {
         order.$set('noErr', false);
         order.$set('errMsg', order.errMsg + '点赞数量不能大于阅读数量的8%. ');
     }
-    order.$set('totalPrice', (order.price * order.num + order.price2 * order.num2).toFixed(4));
+    order.$set('totalPrice', (order.price * order.num + order.price2 * (order.num2 - parseInt(order.num / 1000 * 5))).toFixed(4));
 }
