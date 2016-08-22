@@ -3,10 +3,66 @@
  */
 var request = require('request');
 var cheerio = require('cheerio');
+var querystring = require('querystring');
+var http = require('http');
+var https       = require('https');
+var url         = require('url');
+
 
 var Product = require('./Product');
 
 module.exports = {
+    getReadNum:  function (uri, param, opts) {
+        return new Promise(function (resolve, reject) {
+            if (!opts) {
+                opts = {};
+            }
+            if (opts.hasOwnProperty('form-data') && !opts['form-data']) {
+                var postData = param;
+            } else {
+                var postData = querystring.stringify(param);
+            }
+            var option        = url.parse(uri);
+            option['method']  = 'POST';
+            option['headers'] = {
+                'Content-Type':   'application/x-www-form-urlencoded',
+                'Content-Length': postData.length
+            }
+            if (opts.hasOwnProperty('headers')) {
+                for (var i in opts['headers']) {
+                    option['headers'][i] = opts['headers'][i];
+                }
+            }
+            if (option['protocol'] == 'http:') {
+                var p = http;
+            } else {
+                var p = https;
+            }
+            var req = p.request(option, function (res) {
+                //debug('STATUS: ' + res.statusCode);
+                //debug('HEADERS: ' + JSON.stringify(res.headers));
+                res.setEncoding('utf8');
+                var body = '';
+                res.on('data', function (chunk) {
+                    //console.log(chunk);
+                    body = body + chunk;
+                });
+                res.on('end', function () {
+                    //debug(body);
+                    resolve(body);
+                });
+                res.on('error', function (e) {
+                    reject(e);
+                });
+            });
+            req.on('error', function (e) {
+                reject(e);
+            });
+
+            req.write(postData);
+            req.end();
+        });
+    },
     parseWxTitle: function (address) {
         return new Promise(function (resolve, reject) {
             request({

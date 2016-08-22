@@ -11,6 +11,7 @@ var Withdraw = require('../models/Withdraw');
 var Product = require('../models/Product');
 var Order = require('../models/Order');
 var Task = require('../models/Task');
+var Address = require('../models/Address');
 
 var moment = require('moment');
 var Formidable = require('formidable');
@@ -655,18 +656,27 @@ router.get('/order/handle/release', function (req, res) {
 router.get('/order/complete', function (req, res) {
     var orderId = req.query.id;
     var url = req.query.url;
-    var startReadNum = req.query.info;
     Order.open().findById(orderId)
         .then(function(order) {
-            if(order.status != '已处理'){
-                var orderIns = Order.wrapToInstance(order);
-                orderIns.startReadNum = startReadNum;
-                orderIns.complete(function() {
-                    res.redirect(url);
-                });
-            }else {
-                res.redirect(url);
-            }
+            Address.getReadNum('http://120.55.191.152:8080/getext', {
+                "appkey": "651c48b66e",
+                "url": order.address
+            }).then(function (result) {
+                var jResult = JSON.parse(result);
+                if(jResult.status == 1) {
+                    if(order.status != '已处理'){
+                        var orderIns = Order.wrapToInstance(order);
+                        orderIns.startReadNum = jResult.data.readNum;
+                        orderIns.complete(function() {
+                            res.redirect(url);
+                        });
+                    }else {
+                        res.redirect(url);
+                    }
+                }else {
+                    res.end('获取阅读初始量失败： ' + jResult.msg);
+                }
+            });
         })
 });
 
