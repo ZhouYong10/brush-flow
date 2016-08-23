@@ -658,7 +658,6 @@ router.get('/order/complete', function (req, res) {
     var url = req.query.url;
     Order.open().findById(orderId)
         .then(function(order) {
-            console.log(order, '====================================');
             if(order.smallType == 'read'){
                 Address.getReadNum('http://120.55.191.152:8080/getext', {
                     "appkey": "651c48b66e",
