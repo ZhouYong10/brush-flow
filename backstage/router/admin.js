@@ -658,25 +658,38 @@ router.get('/order/complete', function (req, res) {
     var url = req.query.url;
     Order.open().findById(orderId)
         .then(function(order) {
-            Address.getReadNum('http://120.55.191.152:8080/getext', {
-                "appkey": "651c48b66e",
-                "url": order.address
-            }).then(function (result) {
-                var jResult = JSON.parse(result);
-                if(jResult.status == 1) {
-                    if(order.status != '已处理'){
-                        var orderIns = Order.wrapToInstance(order);
-                        orderIns.startReadNum = jResult.data.readNum;
-                        orderIns.complete(function() {
+            console.log(order, '====================================');
+            if(order.smallType == 'read'){
+                Address.getReadNum('http://120.55.191.152:8080/getext', {
+                    "appkey": "651c48b66e",
+                    "url": order.address
+                }).then(function (result) {
+                    var jResult = JSON.parse(result);
+                    if(jResult.status == 1) {
+                        if(order.status != '已处理'){
+                            var orderIns = Order.wrapToInstance(order);
+                            orderIns.startReadNum = jResult.data.readNum;
+                            orderIns.complete(function() {
+                                res.redirect(url);
+                            });
+                        }else {
                             res.redirect(url);
-                        });
+                        }
                     }else {
-                        res.redirect(url);
+                        res.end('获取阅读初始量失败： ' + jResult.msg);
                     }
+                });
+            }else {
+                if(order.status != '已处理'){
+                    var orderIns = Order.wrapToInstance(order);
+                    orderIns.complete(function() {
+                        res.redirect(url);
+                    });
                 }else {
-                    res.end('获取阅读初始量失败： ' + jResult.msg);
+                    res.redirect(url);
                 }
-            });
+            }
+
         })
 });
 
