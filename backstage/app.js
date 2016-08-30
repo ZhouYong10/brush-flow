@@ -180,7 +180,8 @@ global.dingdingOrderNum = 1;
 global.weichuanmeiOrderNum = 3;
 
 //丁丁提单
-app.get('/wx/like/forward/remote', function (req, res) {
+//app.get('/wx/like/forward/remote', function (req, res) {
+app.get('/wx/like/forward/remote/get/order', function (req, res) {  //替代丁丁接单的接口地址
   //var num = parseInt(req.query.num);
   //global.forwardNum = num;
   Order.open().findOne({
@@ -191,7 +192,7 @@ app.get('/wx/like/forward/remote', function (req, res) {
   }).then(function (obj) {
     if(obj && !obj.remote) {
       Order.open().updateById(obj._id, {
-        $set: {remote: 'dingding'}
+        $set: {remote: 'daiding'}
       }).then(function() {
         res.send(JSON.stringify({
           id: obj._id,
@@ -206,14 +207,15 @@ app.get('/wx/like/forward/remote', function (req, res) {
   });
 });
 
-app.get('/wx/like/complete/remote', function (req, res) {
+//app.get('/wx/like/complete/remote', function (req, res) {
+app.get('/wx/like/forward/complete/remote', function (req, res) {  //替代丁丁接单的接口地址
   var status = req.query.status;
   var msg = req.query.msg;
   var orderId = req.query.id;
   var startReadNum = req.query.startReadNum;
   Order.open().findById(orderId)
       .then(function (order) {
-        if(order && order.status == '未处理' && order.remote == 'dingding'){
+        if(order && order.status == '未处理' && order.remote == 'daiding'){
           var orderIns = Order.wrapToInstance(order);
           if (status == 1) {
             orderIns.startReadNum = startReadNum;

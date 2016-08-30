@@ -1086,7 +1086,7 @@ router.get('/dingding/order/num/WXlike', function (req, res) {
     if(dingdingOrderNum > global.weichuanmeiOrderNum) {
         res.send({
             isOk: false,
-            msg: '丁丁的限制量不能大于微传媒的限制量！'
+            msg: '代丁的限制量不能大于微传媒的限制量！'
         });
     }else {
         global.dingdingOrderNum = dingdingOrderNum;
@@ -1101,7 +1101,7 @@ router.get('/weichuanmei/order/num/WXlike', function (req, res) {
     if(weichuanmeiOrderNum < global.dingdingOrderNum) {
         res.send({
             isOk: false,
-            msg: '微传媒的限制量不能小于丁丁的限制量！'
+            msg: '微传媒的限制量不能小于代丁的限制量！'
         });
     }else{
         global.weichuanmeiOrderNum = weichuanmeiOrderNum;
