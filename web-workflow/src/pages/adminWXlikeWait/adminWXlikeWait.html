@@ -59,13 +59,14 @@
                                 <th>价格</th>
                                 <th>备注</th>
                                 <th>返利</th>
+                                <th>标记对象</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
 
                             <% for(var i = 0; i < orders.length; i++){ %>
-                            <tr>
+                            <tr class="<% if(orders[i].remote){ %> am-danger <% } %>">
                                 <td class="am-text-middle"><%= i + 1  %></td>
                                 <td class="am-text-middle"><%= orders[i].user %></td>
                                 <td class="am-text-middle"><%= orders[i].createTime %></td>
@@ -95,6 +96,19 @@
                                     A: <%= orders[i].adminProfit %><br/>
                                     B: <%= orders[i].topProfit %><br/>
                                     C: <%= orders[i].superProfit %><br/>
+                                </td>
+                                <td class="am-text-middle">
+                                    <% if(orders[i].remote == 'daiding'){ %>
+                                    代丁
+                                    <% } %>
+
+                                    <% if(orders[i].remote == 'weichuanmei'){ %>
+                                    微传媒
+                                    <% } %>
+
+                                    <% if(orders[i].remote == 'tuike'){ %>
+                                    推客
+                                    <% } %>
                                 </td>
                                 <td class="am-text-middle">
                                     <a class="am-btn am-btn-primary am-radius am-btn-xs"
