@@ -103,10 +103,12 @@ new Vue({
         isnum: Utils.isNum,
         min20: Utils.min20,
         maxprice: function(num) {
+            var myFansPrice = this.myFansPrice ? this.myFansPrice : 0;
+            var myReplyPrice = this.myReplyPrice ? this.myReplyPrice : 0;
             if(this.isReply){
-                return (parseFloat(this.myFansPrice) + parseFloat(this.myReplyPrice)) * parseInt(num ? num : 0) <= parseFloat(this.funds);
+                return (parseFloat(myFansPrice) + parseFloat(myReplyPrice)) * parseInt(num ? num : 0) <= parseFloat(this.funds);
             }else {
-                return parseFloat(this.myFansPrice) * parseInt(num ? num : 0) <= parseFloat(this.funds);
+                return parseFloat(myFansPrice) * parseInt(num ? num : 0) <= parseFloat(this.funds);
             }
         },
         isfloat: Utils.isfloat,
