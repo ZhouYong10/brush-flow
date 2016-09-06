@@ -12,22 +12,29 @@ new Vue({
         isOpen: 'no'
     },
     methods: {
+        //open: function() {
+        //    var self = this;
+        //    layer.config({
+        //        extend: 'extend/layer.ext.js'
+        //    });
+        //    var index = layer.prompt({
+        //        formType: 2,
+        //        title: '请输入cookie信息！',
+        //        offset: '6%'
+        //    }, function (value, index) {
+        //        self.$http.get('/admin/open/wx/read/like', {cookie: value})
+        //            .then(function (data) {
+        //                layer.close(index);
+        //                self.isOpen = 'yes';
+        //            });
+        //    });
+        //},
         open: function() {
             var self = this;
-            layer.config({
-                extend: 'extend/layer.ext.js'
-            });
-            var index = layer.prompt({
-                formType: 2,
-                title: '请输入cookie信息！',
-                offset: '6%'
-            }, function (value, index) {
-                self.$http.get('/admin/open/wx/read/like', {cookie: value})
-                    .then(function (data) {
-                        layer.close(index);
-                        self.isOpen = 'yes';
-                    });
-            });
+            self.$http.get('/admin/open/wx/read/like')
+                .then(function () {
+                    self.isOpen = 'yes';
+                });
         },
         close: function() {
             var self = this;

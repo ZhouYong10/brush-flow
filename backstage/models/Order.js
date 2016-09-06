@@ -5,6 +5,7 @@ var db = require('../dbWrap');
 var User = require('./User');
 var Product = require('./Product');
 var Profit = require('./Profit');
+var Address = require('./Address');
 var request = require('request');
 var cheerio = require('cheerio');
 
@@ -43,7 +44,7 @@ function startInterval() {
     task_time = random >= 5 ? random * 1000 : 5 * 1000;
     return setInterval(function() {
         console.log('开始提单=====================================');
-        noKey(clearTime);
+        commitOrder(clearTime);
     }, task_time);
 }
 
@@ -54,170 +55,222 @@ function clearTime() {
     }
 }
 
-function noKey(callback) {
-    request.get({
-        url:'http://120.25.203.122/tuike_sys.php',
-        headers:{
-            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            "Accept-Encoding": 'gzip, deflate, sdch',
-            "Accept-Language": 'zh-CN,zh;q=0.8',
-            "Cache-Control": 'max-age=0',
-            "Connection": 'keep-alive',
-            "Cookie": cookieInfo,
-            "Host": '120.25.203.122',
-            "Referer": 'http://120.25.203.122/login.html',
-            "Upgrade-Insecure-Requests": 1,
-            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-        }
-    },function(err,res,body){
-        if(err) {
-            return console.log(err);
-        }
-        var $ = cheerio.load(body);
-        post_key = $('#post_key').val();
-        firstItemId = $('tbody').last().children().children().first().text().split('/')[0];
-        yesKey(callback);
-    });
-}
-
-function yesKey(callback) {
-    //var forwardNum = global.forwardNum ? global.forwardNum : 5000;
-    var forwardNum = global.weichuanmeiOrderNum;
+function commitOrder(cb) {
     Order.open().findOne({
         status: '未处理',
         type: 'wx',
         smallType: {$in: ['read', 'like']},
-        num: {$gt: forwardNum}
-    }).then(function (result) {address
+        num: {$gt: global.weichuanmeiOrderNum}
+    }).then(function (result) {
         if(result && !result.remote) {
-            Order.open().updateById(result._id, {
-                $set: {remote: 'tuike'}
-            }).then(function() {
-                request.post({
-                    url:'http://120.25.203.122/tuike_sys.php',
-                    headers:{
-                        "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                        "Accept-Encoding": 'gzip, deflate, sdch',
-                        "Accept-Language": 'zh-CN,zh;q=0.8',
-                        "Cache-Control": 'max-age=0',
-                        "Connection": 'keep-alive',
-                        "Cookie": cookieInfo,
-                        "Host": '120.25.203.122',
-                        "Referer": 'http://120.25.203.122/tuike_sys.php',
-                        "Upgrade-Insecure-Requests": 1,
-                        "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-                    },
-                    formData: {
-                        url: result.address,
-                        speed: result.speed ? result.speed : 167,
-                        read_cnt: result.num,
-                        post_key: post_key,
-                        like_cnt: result.num2 ? result.num2 : 0,
-                        like: (result.num2 / result.num).toFixed(3)
-                    }
-                },function(err,res,body){
-                    if(err) {
-                        return console.log(err);
-                    }
-                    var $ = cheerio.load(body);
-                    var secondItemId = $('tbody').last().children().next().children().first().text().split('/')[0];
-                    if(secondItemId == firstItemId) {
-                        var numIndex = setInterval(function () {
-                            getOrderStartNum().then(function (startNum) {
-                                clearInterval(numIndex);
-                                var resultInstance = Order.wrapToInstance(result);
-                                resultInstance.remote = 'tuike';
-                                resultInstance.startReadNum = startNum;
-                                resultInstance.complete(function() {
-                                    console.log('自动处理订单完成了, href = ' + result.address);
-                                    callback();
-                                })
+            var orderIns = Order.wrapToInstance(result);
+            Address.getReadNum('http://120.55.191.152:8080/getext', {
+                "appkey": "651c48b66e",
+                "url": orderIns.address
+            }).then(function (data) {
+                var jResult = JSON.parse(data);
+                if(jResult.status == 1) {
+                    orderIns.startReadNum = jResult.data.readNum;
+                    request('http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo?server=20&user=18682830727&password=123456&url='
+                        + encodeURIComponent(orderIns.address) + '&read=' + orderIns.num + '&praise=' + orderIns.num2 + '&frequency='
+                        + orderIns.speed, function(err,res,body){
+                        if(JSON.parse(body).Data == 'ok'){
+                            orderIns.remote = 'tuike';
+                            orderIns.complete(function() {
+                                console.log('自动处理订单完成了, href = ' + result.address);
+                                cb();
                             });
-                        }, 1000 * 10);
-                    }
-                });
+                        }else {
+                            orderIns.refund('文章地址解析失败', function() {
+                                cb();
+                            });
+                        }
+                    });
+                    //request.post({
+                    //    url:'http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo',
+                    //    formData: {
+                    //        server: 20,
+                    //        user: '18682830727',
+                    //        password: '123456',
+                    //        url: encodeURIComponent(orderIns.address),
+                    //        read: orderIns.num,
+                    //        praise: orderIns.num2,
+                    //        frequency: orderIns.speed
+                    //    }
+                    //},function(err,res,body){
+                    //    console.log(err, 'err ====================================');
+                    //    console.log(body, 'body ====================================');
+                    //    orderIns.remote = 'tuike';
+                    //
+                    //    console.log(orderIns, '----------------------------------------------------');
+                    //    //orderIns.complete(function() {
+                    //    //    console.log('自动处理订单完成了, href = ' + result.address);
+                    //    //    cb();
+                    //    //});
+                    //});
+                }else {
+                    console.log(jResult, 'jResult ====================================');
+                    orderIns.refund(jResult.msg, function() {
+                        cb();
+                    });
+                }
             });
         }else{
-            callback();
+            console.log('没有抓取到订单 ====================================');
+            cb();
         }
-
-
-        //if (result) {
-        //    request.post({
-        //        url:'http://120.25.203.122/tuike_sys.php',
-        //        headers:{
-        //            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        //            "Accept-Encoding": 'gzip, deflate, sdch',
-        //            "Accept-Language": 'zh-CN,zh;q=0.8',
-        //            "Cache-Control": 'max-age=0',
-        //            "Connection": 'keep-alive',
-        //            "Cookie": cookieInfo,
-        //            "Host": '120.25.203.122',
-        //            "Referer": 'http://120.25.203.122/tuike_sys.php',
-        //            "Upgrade-Insecure-Requests": 1,
-        //            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-        //        },
-        //        formData: {
-        //            url: result.address,
-        //            speed: result.speed ? result.speed : 167,
-        //            read_cnt: result.num,
-        //            post_key: post_key,
-        //            like_cnt: result.num2 ? result.num2 : 0,
-        //            like: (result.num2 / result.num).toFixed(3)
-        //        }
-        //    },function(err,res,body){
-        //        if(err) {
-        //            return console.log(err);
-        //        }
-        //        var $ = cheerio.load(body);
-        //        var secondItemId = $('tbody').last().children().next().children().first().text().split('/')[0];
-        //        if(secondItemId == firstItemId) {
-        //            var resultInstance = Order.wrapToInstance(result);
-        //            resultInstance.remote = 'tuike';
-        //            resultInstance.complete(function() {
-        //                console.log('自动处理订单完成了, href = ' + result.address);
-        //                callback();
-        //            })
-        //        }
-        //    });
-        //}else {
-        //    callback();
-        //}
     });
 }
 
-function getOrderStartNum() {
-    return new Promise(function(resolve, reject) {
-        request.get({
-            url:'http://120.25.203.122/tuike_sys.php',
-            headers:{
-                "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                "Accept-Encoding": 'gzip, deflate, sdch',
-                "Accept-Language": 'zh-CN,zh;q=0.8',
-                "Cache-Control": 'max-age=0',
-                "Connection": 'keep-alive',
-                "Cookie": cookieInfo,
-                "Host": '120.25.203.122',
-                "Referer": 'http://120.25.203.122/login.html',
-                "Upgrade-Insecure-Requests": 1,
-                "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-            }
-        },function(err,res,body){
-            if(err) {
-                return console.log(err);
-            }
-            var $ = cheerio.load(body);
-            var $tr = $('tbody').last().children().first().children();
-            var orderStatus = $tr.last().find('font').text();
-            console.log(orderStatus, '======================================');
-            if(orderStatus == '运行中' || orderStatus == '完成'){
-                var startNum = $tr.first().next().next().next().next().text();
-                console.log(startNum, '==========================================');
-                resolve(startNum);
-            }
-        });
-    })
-}
+
+
+///*
+// * wx read and like
+// * */
+//var post_key = '';
+//var firstItemId = '';
+//var task_time = 1000 * 60 * 60 * 1000;
+//var wxReadIsOpen = 'no';
+//var cookieInfo ;
+//var valIndex ;
+//
+//function startInterval() {
+//    var random = (Math.random() / 3 * 100).toFixed(0);
+//    task_time = random >= 5 ? random * 1000 : 5 * 1000;
+//    return setInterval(function() {
+//        console.log('开始提单=====================================');
+//        noKey(clearTime);
+//    }, task_time);
+//}
+//
+//function clearTime() {
+//    clearInterval(valIndex);
+//    if(wxReadIsOpen == 'yes'){
+//        valIndex = startInterval();
+//    }
+//}
+//
+//function noKey(callback) {
+//    request.get({
+//        url:'http://120.25.203.122/tuike_sys.php',
+//        headers:{
+//            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+//            "Accept-Encoding": 'gzip, deflate, sdch',
+//            "Accept-Language": 'zh-CN,zh;q=0.8',
+//            "Cache-Control": 'max-age=0',
+//            "Connection": 'keep-alive',
+//            "Cookie": cookieInfo,
+//            "Host": '120.25.203.122',
+//            "Referer": 'http://120.25.203.122/login.html',
+//            "Upgrade-Insecure-Requests": 1,
+//            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+//        }
+//    },function(err,res,body){
+//        if(err) {
+//            return console.log(err);
+//        }
+//        var $ = cheerio.load(body);
+//        post_key = $('#post_key').val();
+//        firstItemId = $('tbody').last().children().children().first().text().split('/')[0];
+//        yesKey(callback);
+//    });
+//}
+//
+//function yesKey(callback) {
+//    //var forwardNum = global.forwardNum ? global.forwardNum : 5000;
+//    var forwardNum = global.weichuanmeiOrderNum;
+//    Order.open().findOne({
+//        status: '未处理',
+//        type: 'wx',
+//        smallType: {$in: ['read', 'like']},
+//        num: {$gt: forwardNum}
+//    }).then(function (result) {address
+//        if(result && !result.remote) {
+//            Order.open().updateById(result._id, {
+//                $set: {remote: 'tuike'}
+//            }).then(function() {
+//                request.post({
+//                    url:'http://120.25.203.122/tuike_sys.php',
+//                    headers:{
+//                        "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+//                        "Accept-Encoding": 'gzip, deflate, sdch',
+//                        "Accept-Language": 'zh-CN,zh;q=0.8',
+//                        "Cache-Control": 'max-age=0',
+//                        "Connection": 'keep-alive',
+//                        "Cookie": cookieInfo,
+//                        "Host": '120.25.203.122',
+//                        "Referer": 'http://120.25.203.122/tuike_sys.php',
+//                        "Upgrade-Insecure-Requests": 1,
+//                        "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+//                    },
+//                    formData: {
+//                        url: result.address,
+//                        speed: result.speed ? result.speed : 167,
+//                        read_cnt: result.num,
+//                        post_key: post_key,
+//                        like_cnt: result.num2 ? result.num2 : 0,
+//                        like: (result.num2 / result.num).toFixed(3)
+//                    }
+//                },function(err,res,body){
+//                    if(err) {
+//                        return console.log(err);
+//                    }
+//                    var $ = cheerio.load(body);
+//                    var secondItemId = $('tbody').last().children().next().children().first().text().split('/')[0];
+//                    if(secondItemId == firstItemId) {
+//                        var numIndex = setInterval(function () {
+//                            getOrderStartNum().then(function (startNum) {
+//                                clearInterval(numIndex);
+//                                var resultInstance = Order.wrapToInstance(result);
+//                                resultInstance.remote = 'tuike';
+//                                resultInstance.startReadNum = startNum;
+//                                resultInstance.complete(function() {
+//                                    console.log('自动处理订单完成了, href = ' + result.address);
+//                                    callback();
+//                                })
+//                            });
+//                        }, 1000 * 10);
+//                    }
+//                });
+//            });
+//        }else{
+//            callback();
+//        }
+//    });
+//}
+//
+//function getOrderStartNum() {
+//    return new Promise(function(resolve, reject) {
+//        request.get({
+//            url:'http://120.25.203.122/tuike_sys.php',
+//            headers:{
+//                "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+//                "Accept-Encoding": 'gzip, deflate, sdch',
+//                "Accept-Language": 'zh-CN,zh;q=0.8',
+//                "Cache-Control": 'max-age=0',
+//                "Connection": 'keep-alive',
+//                "Cookie": cookieInfo,
+//                "Host": '120.25.203.122',
+//                "Referer": 'http://120.25.203.122/login.html',
+//                "Upgrade-Insecure-Requests": 1,
+//                "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+//            }
+//        },function(err,res,body){
+//            if(err) {
+//                return console.log(err);
+//            }
+//            var $ = cheerio.load(body);
+//            var $tr = $('tbody').last().children().first().children();
+//            var orderStatus = $tr.last().find('font').text();
+//            console.log(orderStatus, '======================================');
+//            if(orderStatus == '运行中' || orderStatus == '完成'){
+//                var startNum = $tr.first().next().next().next().next().text();
+//                console.log(startNum, '==========================================');
+//                resolve(startNum);
+//            }
+//        });
+//    })
+//}
 
 
 /*
