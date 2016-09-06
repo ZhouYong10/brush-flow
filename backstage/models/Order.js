@@ -72,15 +72,19 @@ function commitOrder(cb) {
                 if(jResult.status == 1) {
                     orderIns.startReadNum = jResult.data.readNum;
                     request('http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo?server=20&user=18682830727&password=123456&url='
-                        + encodeURIComponent(orderIns.address) + '&read=' + orderIns.num + '&praise=' + orderIns.num2 + '&frequency='
-                        + orderIns.speed, function(err,res,body){
+                        + encodeURIComponent(orderIns.address) + '&read=' + orderIns.num + '&praise=' + orderIns.num2 + '&frequency=10000',
+                        function(err,res,body){
+                        console.log(body, 'body =================================');
+                        console.log(JSON.parse(body).Data, 'JSON.parse(body).Data =================================');
                         if(JSON.parse(body).Data == 'ok'){
+                            console.log('-------------------------- =================================');
                             orderIns.remote = 'tuike';
                             orderIns.complete(function() {
                                 console.log('自动处理订单完成了, href = ' + result.address);
                                 cb();
                             });
                         }else {
+                            console.log('文章地址解析失败-------------------------- =================================');
                             orderIns.refund('文章地址解析失败', function() {
                                 cb();
                             });

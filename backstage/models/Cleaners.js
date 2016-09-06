@@ -32,7 +32,7 @@ function remove(model, date) {
             var result = results[i];
             var ts = result._id.getTimestamp();
             if(ts < date){
-                if(result.type && result.type == 'handle'){
+                if(result.type == 'handle'){
                     if(result.status == '已退款' || result.status == '已完成'){
                         Task.open().find({orderId: result._id})
                             .then(function (tasks) {
