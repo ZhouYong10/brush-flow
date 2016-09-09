@@ -23,7 +23,9 @@ function getDateStr(AddDayCount) {
 
 function removePhoto(path) {
     var photoPath = global.handleExam + '..' + path;
-    fs.unlinkSync(photoPath);
+    fs.unlink(photoPath, function() {
+
+    });
 }
 
 function remove(model, date) {
@@ -34,23 +36,7 @@ function remove(model, date) {
             if(ts < date){
                 if(result.type == 'handle'){
                     if(result.status == '已退款' || result.status == '已完成'){
-                        Task.open().find({orderId: result._id})
-                            .then(function (tasks) {
-                                for (var j = 0; j < tasks.length; j++) {
-                                    var task = tasks[j];
-                                    if (task.taskPhoto) {
-                                        removePhoto(task.taskPhoto);
-                                    }
-                                    Task.open().remove(task);
-                                }
-                            });
-                        if(result.codePhoto) {
-                            removePhoto(result.codePhoto);
-                        }
-                        if(result.photo) {
-                            removePhoto(result.photo);
-                        }
-                        model.open().remove(result);
+                        removeTask(result, model);
                     }
                 }else {
                     model.open().remove(result);
@@ -60,7 +46,38 @@ function remove(model, date) {
     })
 }
 
+function removeTask(order, model) {
+    var result = order;
+    removePhoto(result.codePhoto);
+    removePhoto(result.photo);
+    model.open().removeById(result._id);
+
+    Task.open().find({orderId: result._id + ''})
+        .then(function (tasks) {
+            for (var j = 0; j < tasks.length; j++) {
+                var task = tasks[j];
+                removeTaskOrder(task)
+            }
+        });
+
+    function removeTaskOrder(task) {
+        if (task.taskPhoto) {
+            removePhoto(task.taskPhoto);
+        }
+        Task.open().remove(task);
+    }
+}
+
 module.exports = {
+    test: function() {
+        var older = Date.parse(getDateStr(-30));
+        remove(Feedback, older);
+        remove(Order, older);
+        //remove(Placard, older);
+        remove(Profit, older);
+        remove(Recharge, older);
+        remove(Withdraw, older);
+    },
     seconds: function () {
         var rule = new Schedule.RecurrenceRule();
         var times = [];
@@ -75,6 +92,13 @@ module.exports = {
             c++;
             console.log(c, '---------------------==============================');
             console.log(getDateStr(-30), '---------------------==============================');
+            //var older = Date.parse(getDateStr(-30));
+            //remove(Feedback, older);
+            //remove(Order, older);
+            ////remove(Placard, older);
+            //remove(Profit, older);
+            //remove(Recharge, older);
+            //remove(Withdraw, older);
         });
     },
     timeOfDay: function() {
@@ -85,6 +109,7 @@ module.exports = {
 
         Schedule.scheduleJob(rule, function() {
             var older = Date.parse(getDateStr(-30));
+            console.log('开始清理数据了 ===============================================');
             remove(Feedback, older);
             remove(Order, older);
             //remove(Placard, older);

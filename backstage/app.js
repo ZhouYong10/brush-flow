@@ -30,6 +30,7 @@ var Cleaners = require('./models/Cleaners');
 Cleaners.timeOfDay();
 
 
+
 passport.serializeUser(function (user, done) {
   done(null, user._id);
 });
@@ -83,6 +84,10 @@ passport.use(new LocalStrategy({
 }));
 
 var app = express();
+
+//app.get('/clear', function (req, res) {
+//  Cleaners.test();
+//});
 
 // view engine setup
 app.engine('.html', require('ejs').__express);
