@@ -1347,6 +1347,25 @@ router.get('/error/already', function (req, res) {
     });
 });
 
+router.get('/search/error/order', function (req, res) {
+    Order.open().findPages({
+            user: new RegExp(req.query.username)
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminErrorAlre', {
+                title: '错误信息管理 / 待处理错误报告',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/error/already'
+            });
+        }, function (error) {
+            res.send('获取报错信息失败： ' + error);
+        });
+});
+
+
 router.get('/redirect/aim/order', function (req, res) {
     var orderId = req.query.id, type = req.query.type, smallType = req.query.smallType,
         render = '', title = '', money = req.session.systemFunds, freezeFunds = req.session.freezeFunds,
