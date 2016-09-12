@@ -13,7 +13,7 @@ new Vue({
     validators: {
         isfloat: Utils.isfloat,
         mustOne: function(funds) {
-            return parseFloat(funds) >= 1;
+            return parseFloat(funds) >= 5;
         },
         mintotal: function(funds) {
             var val = funds.trim();

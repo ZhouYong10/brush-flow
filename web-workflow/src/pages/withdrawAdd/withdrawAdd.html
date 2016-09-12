@@ -42,7 +42,7 @@
                                        placeholder="请填写提现金额，为保证提现成功，尽量提取正整数。" name="funds"
                                 v-validate:funds="{required: true, isfloat: true, mintotal: true, mustOne: true}">
                                 <span class="tips" v-if="$withdraw.funds.required">提现金额不能为空!</span>
-                                <span class="tips" v-if="$withdraw.funds.mustOne">提现金额不能少于1元!</span>
+                                <span class="tips" v-if="$withdraw.funds.mustOne">提现金额不能少于5元!</span>
                                 <span class="tips" v-if="$withdraw.funds.isfloat">请输入合法的提现金额!</span>
                                 <span class="tips" v-if="$withdraw.funds.mintotal">您的账户当前没有这么多资金!</span>
                             </div>
