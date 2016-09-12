@@ -1010,7 +1010,8 @@ router.get('/WX/like/wait', function (req, res) {
                 path: '/admin/WX/like/wait',
                 dingdingOrderNum: global.dingdingOrderNum,
                 weichuanmeiOrderNum: global.weichuanmeiOrderNum,
-                wxReadIsOpen: Order.wxReadIsOpen()
+                wxReadIsOpen: Order.wxReadIsOpen(),
+                readSpeed: global.readSpeed
             });
         });
 });
@@ -1109,6 +1110,12 @@ router.get('/weichuanmei/order/num/WXlike', function (req, res) {
             isOk: true
         });
     }
+});
+
+router.get('/WXlike/read/speed', function (req, res) {
+    var readSpeed = parseInt(req.query.readSpeed);
+    global.readSpeed = parseInt(readSpeed);
+    res.end(readSpeed + '');
 });
 
 

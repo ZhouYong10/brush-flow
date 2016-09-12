@@ -84,6 +84,24 @@ new Vue({
                         }
                     });
             });
+        },
+        readSpeed: function() {
+            var self = this;
+            layer.config({
+                extend: 'extend/layer.ext.js'
+            });
+            var index = layer.prompt({
+                formType: 2,
+                title: '请输入任务执行速度（/分）！',
+                offset: '6%'
+            }, function (value, index) {
+                self.$http.get('/admin/WXlike/read/speed', {readSpeed: value})
+                    .then(function (result) {
+                        console.log(result, '-------------------------');
+                        layer.close(index);
+                        $('#readSpeed').text(result.data);
+                    });
+            });
         }
     }
 });
