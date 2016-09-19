@@ -475,6 +475,38 @@ router.get('/like/bulk/add', function (req, res) {
         });
 });
 
+
+
+router.get('/comment', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'comment'
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 50);
+                    res.render('WXcomment', {
+                        title: '微信/图文评论',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/comment'
+                    })
+                });
+        });
+});
+
+
+
+
+
+
+
 router.get('/code', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
