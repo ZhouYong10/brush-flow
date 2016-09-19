@@ -501,6 +501,29 @@ router.get('/comment', function (req, res) {
         });
 });
 
+router.get('/comment/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'comment'})
+                .then(function(comment) {
+                    console.log(comment, '============================================');
+                    var commentIns = Product.wrapToInstance(comment);
+                    var myCommentPrice = commentIns.getPriceByRole(user.role);
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WXcommentAdd', {
+                            title: '添加微信图文评论任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myCommentPrice,
+                            orderFlag: orderFlag
+                        });
+                    })
+                });
+        });
+});
+
 
 
 

@@ -1,5 +1,5 @@
 /**
- * Created by ubuntu64 on 3/15/16.
+ * Created by ubuntu64 on 4/13/16.
  */
 var Vue = require('vue');
 Vue.use(require('vue-validator'));
@@ -8,44 +8,51 @@ Vue.use(require('vue-resource'));
 var Utils = require('utils');
 
 new Vue({
-    el: '#wxLike',
+    el: '#forumReply',
     data: {
-        price: '',
-        price2: '',
         address: '',
-        articleTitle: '',
-        totalPrice: 0,
+        title: '',
+        smallType: '',
+        addName: '',
         num: '',
-        num2: '',
-        funds: 0
+        remark: '【每行一条内容】',
+        totalPrice: 0,
+        funds: ''
     },
     methods: {
         parseAddress: function() {
             var self = this;
             Utils.wxParseAddress(self.$http, self.address)
                 .then(function(title) {
-                    self.articleTitle = title;
+                    self.title = title;
                 },function(message) {
                     alert(message);
                 })
         },
-        total: function() {
-            this.totalPrice = (this.price * this.num + this.price2 * this.num2).toFixed(4);
+        getTotalPrice: function() {
+            var self = this;
+            self.num = $('#contentSelf').val().split('\n').length;
+            var totalPrice = (self.price * self.num).toFixed(4);
+            if(totalPrice < 0.5) {
+                self.totalPrice = 0.5;
+            }else {
+                self.totalPrice = totalPrice;
+            }
         }
     },
     validators: {
         isaddress: function(val) {
             return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(val);
         },
-        minnum: function(val) {
-            var like = val ? val : 0;
-            var read = this.num ? this.num : 0;
-            return parseInt(like) <= parseInt(read/25*2);
-        },
         isnum: Utils.isNum,
-        min500: Utils.min500,
         maxprice: function() {
-            return parseFloat(this.price * this.num + this.price2 * this.num2) <= parseFloat(this.funds);
+            var self = this;
+            var content = $('#contentSelf').val();
+            if(content){
+                return parseFloat(self.price * content.split('\n').length) <= parseFloat(this.funds);
+            }else {
+                return true;
+            }
         }
     }
 });
