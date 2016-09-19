@@ -65,6 +65,21 @@ module.exports = {
             }, reject);
         })
     },
+    newPlacard: function() {
+        return new Promise(function(resolve, reject) {
+            haveCollection(function () {
+                collection.find()
+                    .sort({'_id': -1})
+                    .limit(1)
+                    .toArray(function (error, result) {
+                        if (error) {
+                            reject(error);
+                        }
+                        resolve(result[0]);
+                    })
+            }, reject);
+        })
+    },
     findPages: function(obj, page, sortObj) {
         var sortBy = sortObj ? sortObj : {'_id': -1};
         var userObj = obj ? obj : null;

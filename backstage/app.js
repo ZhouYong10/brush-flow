@@ -289,6 +289,13 @@ app.get('/wx/like/complete/remote/weichuanmei', function (req, res) {
       })
 });
 
+app.get('/new/placard', function (req, res) {
+  Placard.open().newPlacard()
+      .then(function (obj) {
+    res.send(obj);
+  });
+});
+
 //拦截未登录
 app.use(function(req, res, next) {
   if(req.isAuthenticated()){

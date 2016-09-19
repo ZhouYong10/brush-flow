@@ -50,27 +50,6 @@
     </div>
 </div>
 
-<template>
-    <div style="padding: 0 8px; font-size: 1.4em;">
-        <ul class="am-list">
-
-            <% for(var i = 0; i < placards.length && i < 3; i++) { %>
-            <li>
-                <a>
-                    <span>【<%= placards[i].placardName %>】 </span>
-                    <span><%= placards[i].sendTime %> &nbsp;</span>
-                    <span><%= placards[i].placardContent %></span>
-                    <% if(i == 0 || i == 1){ %>
-                    <img src="/static/images/new-placard.gif" style="display: inline;" width="38">
-                    <% } %>
-                </a>
-            </li>
-            <% } %>
-
-        </ul>
-    </div>
-</template>
-
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
@@ -96,16 +75,6 @@
                 }
             }
         });
-
-        if(!location.search && $(window).width() > 600){
-            layer.open({
-                type: 1,
-                title: ['最新公告', 'color: #f00; font-size: 15px; text-align: center;'],
-                offset: '16%',
-                area: '600px',
-                content: $('template').html()
-            })
-        }
     })
 </script>
 

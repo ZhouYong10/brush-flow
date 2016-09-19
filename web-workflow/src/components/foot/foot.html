@@ -12,9 +12,33 @@
 
 <script src="/static/js/mod.js"></script>
 <script src="/static/js/js-cookie.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
+
 
 <script>
     $(function() {
+        var isIndex = location.pathname == '/';
+        var isAdmin = location.pathname.split('/')[1] == 'admin';
+        if(!isIndex && !isAdmin){
+            $.get('/new/placard', function (result) {
+                var content = '<div style="padding: 0 8px; font-size: 1.4em;">' +
+                        '<ul class="am-list"><li><a>' +
+                        '<span>【' + result.placardName + '】 </span>' +
+                        '<span>' + result.sendTime + ' &nbsp;</span>' +
+                        '<span>' + result.placardContent + '</span>' +
+                        '<img src="/static/images/new-placard.gif" style="display: inline;" width="38">' +
+                        '</a></li></ul></div>';
+                layer.open({
+                    type: 1,
+                    title: ['最新公告', 'color: #f00; font-size: 18px; text-align: center; background-color: #0E90D2;'],
+                    shade: 0,
+                    offset: 'rb',
+                    area: '310px',
+                    content: content
+                })
+            });
+        }
+
         $('#removeAutoLogin').click(function () {
             Cookies.remove('loginInfo', {path: '/'});
         });
