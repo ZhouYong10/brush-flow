@@ -10,10 +10,9 @@ var Utils = require('utils');
 new Vue({
     el: '#forumReply',
     data: {
+        price: '',
         address: '',
         title: '',
-        smallType: '',
-        addName: '',
         num: '',
         remark: '【每行一条内容】',
         totalPrice: 0,
@@ -32,7 +31,7 @@ new Vue({
         getTotalPrice: function() {
             var self = this;
             self.num = $('#contentSelf').val().split('\n').length;
-            var totalPrice = (self.price * self.num).toFixed(4);
+            var totalPrice = (parseFloat(self.price) * self.num).toFixed(4);
             if(totalPrice < 0.5) {
                 self.totalPrice = 0.5;
             }else {
@@ -44,12 +43,10 @@ new Vue({
         isaddress: function(val) {
             return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(val);
         },
-        isnum: Utils.isNum,
-        maxprice: function() {
+        maxprice: function(val) {
             var self = this;
-            var content = $('#contentSelf').val();
-            if(content){
-                return parseFloat(self.price * content.split('\n').length) <= parseFloat(this.funds);
+            if(val){
+                return parseFloat(parseFloat(self.price) * val.split('\n').length) <= parseFloat(self.funds);
             }else {
                 return true;
             }

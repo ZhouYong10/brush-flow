@@ -54,7 +54,7 @@ new Vue({
             var self = this;
             var content = $('#contentSelf').val();
             if(content){
-                return parseFloat(self.price * content.split('\n').length) <= parseFloat(this.funds);
+                return parseFloat(self.price * content.split('\n').length) <= parseFloat(self.funds);
             }else {
                 return true;
             }

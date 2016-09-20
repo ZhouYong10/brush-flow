@@ -60,6 +60,7 @@
                             <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <p class="disable">￥ <%= price %></p>
+                                <input type="hidden" v-model="price" value="<%= price %>">
                             </div>
                         </div>
 
@@ -125,7 +126,7 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
-<script src="/static/plugins/laydate/laydate.js"></script>
+<!--<script src="/static/plugins/laydate/laydate.js"></script>-->
 
 <script>
     require('WXcommentAdd');
