@@ -34,12 +34,11 @@
                             <th>#</th>
                             <th>用户</th>
                             <th>下单日期</th>
-                            <th>类型</th>
                             <th>地址</th>
                             <th>标题</th>
-                            <th>数量/速度</th>
+                            <th>评论内容</th>
+                            <th>评论数量</th>
                             <th>价格</th>
-                            <th>备注</th>
                             <th>返利</th>
                             <th>操作</th>
                         </tr>
@@ -53,7 +52,6 @@
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].user %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
-                            <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
                             <td class="am-text-middle">
                                 <input type="text" value="<%= orders[i].address %>" style="width: 56px;"><br/>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
@@ -66,15 +64,14 @@
                                 </a>
                             </td>
                             <td class="am-text-middle">
-                                数量: <%= orders[i].num %> <br/>
-                                速度: <%= orders[i].speed %>/分
-                            </td>
-                            <td class="am-text-middle"><%= orders[i].totalPrice %></td>
-                            <td class="am-text-middle">
-                                <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
-                                    <%= orders[i].remark %>
+                                <a class="am-text-truncate text-break" title="<%= orders[i].content.split('\r\n').join(' 【&】 ') %>">
+                                    <%= orders[i].content.split('\r\n').join(' 【&】 ') %>
                                 </a>
                             </td>
+                            <td class="am-text-middle">
+                                <%= orders[i].num %> / 条
+                            </td>
+                            <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                             <td class="am-text-middle">
                                 A: <%= orders[i].adminProfit %><br/>
                                 B: <%= orders[i].topProfit %><br/>
