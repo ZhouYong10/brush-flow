@@ -103,7 +103,7 @@
                             <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
                             <div class="am-u-sm-8 am-u-lg-10">
                                 <span class="disable">￥ {{totalPrice}} ; 合计: {{num}} 条</span>
-                                <span class="tips">( 0.5金币起做,不足按0.5金币计算 )</span><br/>
+                                <span class="tips">( 最低5条起评，不足5条按5条计算 )</span><br/>
                                 <span class="tips" v-if="$forumcomment.content.maxprice">您的余额不足，请充值!</span>
                                 <input type="hidden" v-model="funds" value="<%= money %>">
                             </div>

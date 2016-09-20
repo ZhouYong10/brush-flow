@@ -30,7 +30,7 @@
                                 任务地址
                             </label>
                             <div class="am-u-sm-9 taskTypeWrap">
-                                <form id="search" method="get" action="/WX/account/search/like">
+                                <form id="search" method="get" action="/WX/account/search/comment">
                                     <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
                                            name="account" placeholder="请输入任务地址"
                                            v-validate:account="{required: true}">
@@ -46,10 +46,6 @@
                             <a href="/WX/comment/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
                                 <i class="am-icon-plus"></i>
                                 新增任务
-                            </a>&nbsp;&nbsp;
-                            <a href="/WX/like/bulk/add" class="am-btn am-btn-primary am-radius am-btn-sm addTask">
-                                <i class="am-icon-plus-circle"></i>
-                                批量添加
                             </a>
                         </div>
                     </validator>

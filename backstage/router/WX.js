@@ -531,8 +531,8 @@ router.post('/comment/add', function (req, res) {
     if(orderInfo.content == '') {
         return res.send('<h1>评论内容不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
-    orderInfo.num = orderInfo.content.split('\n').length;
-
+    var num = orderInfo.content.split('\n').length;
+    orderInfo.num = (num > 5) ? num : 5;
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);
@@ -550,7 +550,30 @@ router.post('/comment/add', function (req, res) {
         });
 });
 
-
+router.get('/account/search/comment', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'comment',
+                    address: req.query.account
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WXcomment', {
+                        title: '微信/图文评论',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/comment'
+                    })
+                });
+        });
+});
 
 
 

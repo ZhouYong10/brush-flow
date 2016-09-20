@@ -30,13 +30,10 @@ new Vue({
         },
         getTotalPrice: function() {
             var self = this;
-            self.num = $('#contentSelf').val().split('\n').length;
+            var num = $('#contentSelf').val().split('\n').length;
+            self.num = (num > 5) ? num : 5;
             var totalPrice = (parseFloat(self.price) * self.num).toFixed(4);
-            if(totalPrice < 0.5) {
-                self.totalPrice = 0.5;
-            }else {
-                self.totalPrice = totalPrice;
-            }
+            self.totalPrice = totalPrice;
         }
     },
     validators: {
