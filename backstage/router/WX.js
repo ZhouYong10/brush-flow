@@ -486,7 +486,7 @@ router.get('/comment', function (req, res) {
                     smallType: 'comment'
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results, 50);
+                    Order.addSchedule(obj.results, 0.5);
                     res.render('WXcomment', {
                         title: '微信/图文评论',
                         money: user.funds,
@@ -506,7 +506,6 @@ router.get('/comment/add', function (req, res) {
         .then(function (user) {
             Product.open().findOne({type: 'wx', smallType: 'comment'})
                 .then(function(comment) {
-                    console.log(comment, '============================================');
                     var commentIns = Product.wrapToInstance(comment);
                     var myCommentPrice = commentIns.getPriceByRole(user.role);
                     Order.getRandomStr(req).then(function(orderFlag) {
@@ -524,7 +523,32 @@ router.get('/comment/add', function (req, res) {
         });
 });
 
+router.post('/comment/add', function (req, res) {
+    var orderInfo = req.body;
+    if(!orderInfo.address){
+        return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(orderInfo.content == '') {
+        return res.send('<h1>评论内容不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    orderInfo.num = orderInfo.content.split('\n').length;
 
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var order = Order.wrapToInstance(orderInfo);
+            order.checkRandomStr(req).then(function() {
+                order.createAndSave(user, {type: 'wx', smallType: 'comment'})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'wxComment': 1});
+                        res.redirect('/wx/comment');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/wx/comment');
+            })
+        });
+});
 
 
 

@@ -85,6 +85,7 @@ router.get('/update/header/nav', function (req, res) {
         flow: 0,
         wxArticle: 0,
         wxLike: 0,
+        wxComment: 0,
         wxReply: 0,
         wxFriend: 0,
         wxCode: 0,
@@ -132,6 +133,9 @@ router.get('/update/header/nav', function (req, res) {
                                                 break;
                                                 case 'read': case 'like':
                                                 updateNav.wxLike += 1;
+                                                break;
+                                                case 'comment':
+                                                updateNav.wxComment += 1;
                                                 break;
                                                 case 'fans': case 'fansReply':
                                                 updateNav.wxReply += 1;
@@ -1118,6 +1122,43 @@ router.get('/WXlike/read/speed', function (req, res) {
     res.end(readSpeed + '');
 });
 
+
+router.get('/WX/comment/wait', function (req, res) {
+    Order.open().findPages({
+            type: 'wx',
+            smallType: 'comment',
+            status: '未处理'
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXcommentWait', {
+                title: '微信任务管理 / 待处理微信图文评论任务',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/comment/wait'
+            });
+        });
+});
+
+router.get('/WX/comment/already', function (req, res) {
+    var search = {
+        type: 'wx',
+        smallType: 'comment',
+        status: {$ne: '未处理'}
+    };
+    Order.open().findPages(search, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXcommentAlre', {
+                title: '微信任务管理 / 已处理微信图文评论任务',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/comment/already'
+            });
+        });
+});
 
 
 router.get('/WX/reply/wait', function (req, res) {
