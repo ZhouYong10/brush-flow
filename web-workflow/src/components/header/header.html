@@ -8,17 +8,14 @@
                 <h1 class="am-hide-sm">
                     网络营销系统
                 </h1>
-            </a>
-            <!--<a href="#phone-link" class="am-show-sm">-->
-                <!--<i class="am-header-icon am-icon-money"></i>-->
-                <!--￥<%= money %>-->
-            <!--</a>-->
-            <a href="#phone-link" class="am-show-sm">
-                ￥<span class="userCash"><%= money %></span>
+                &nbsp;&nbsp;
+                <div class="am-hide-lg-only" style="font-size: 1.5em;">
+                    ￥<span class="userCash am-hide-lg-only"><%= money %></span>
+                </div>
             </a>
         </div>
 
-        <h1 class="am-header-title am-hide-sm">
+        <h1 class="am-header-title am-show-lg-only">
             可用余额: ￥<span class="userCash"><%= money %></span>
             <input id="userStatus" type="hidden" value="<%= userStatus %>">
         </h1>
