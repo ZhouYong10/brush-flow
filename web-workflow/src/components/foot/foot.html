@@ -30,7 +30,7 @@
         var isAdmin = location.pathname.split('/')[1] == 'admin';
         if(!isIndex && !isAdmin){
             $.get('/new/placard', function (result) {
-                var content = '<div style="padding: 0 8px; font-size: 1.4em;">' +
+                var content = '<div style="padding: 0 8px; font-size: 1.3em;">' +
                         '<ul class="am-list"><li><a>' +
                         '<span>【' + result.placardName + '】 </span>' +
                         '<span>' + result.sendTime + ' &nbsp;</span>' +
