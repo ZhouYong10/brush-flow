@@ -418,6 +418,7 @@ Order.extend({
         }
     },
     getOrder: function getOrder(req) {
+        var picField;
         return new Promise(function(resolve, reject) {
             var order = {};
             var form = new Formidable.IncomingForm();
@@ -433,18 +434,24 @@ Order.extend({
             }).on('field', function(field, value) {
                 order[field] = value;
             }).on('file', function(field, file) { //上传文件
+                picField = field;
                 var filePath = file.path;
                 var fileExt = filePath.substring(filePath.lastIndexOf('.'));
                 var newFileName = new Date().getTime() + '-' + file.hash + fileExt;
                 var newFilePath = path.join(logoDir + newFileName);
-                order[field] = '/handle_example/' + moment().format('YYYY-MM-DD') + '/' + newFileName;
                 try{
                     fs.renameSync(filePath, newFilePath);
+                    order[picField] = '/handle_example/' + moment().format('YYYY-MM-DD') + '/' + newFileName;
                 }catch (e){
-                    reject('图片上传失败： ' + e);
+                    console.log('图片上传失败： ' + e);
+                    reject('图片上传失败!');
                 }
             }).on('end', function() {
-                resolve(order);
+                if(order[picField]){
+                    resolve(order);
+                }else {
+                    reject('图片上传失败!');
+                }
             });
             form.parse(req);
         })
