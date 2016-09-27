@@ -100,7 +100,7 @@ router.post('/WX/fans/add', function (req, res) {
                     res.redirect('/artificial/WX/fans');
                 })
             });
-    }, function() {
+    }, function(err) {
         res.end('提交表单失败： ',err); //各种错误
     });
 });
@@ -172,7 +172,7 @@ router.post('/WX/friend/add', function (req, res) {
                     res.redirect('/artificial/WX/friend');
                 })
             });
-    }, function() {
+    }, function(err) {
         res.end('提交表单失败： ',err); //各种错误
     });
 });
@@ -244,7 +244,7 @@ router.post('/WX/vote/add', function (req, res) {
                     res.redirect('/artificial/WX/vote');
                 })
             });
-    }, function() {
+    }, function(err) {
         res.end('提交表单失败： ',err); //各种错误
     });
 });
@@ -334,7 +334,7 @@ router.post('/WX/code/add', function (req, res) {
                     res.redirect('/artificial/WX/code');
                 })
             });
-    }, function() {
+    }, function(err) {
         res.end('提交表单失败： ',err); //各种错误
     });
 });
@@ -424,7 +424,7 @@ router.post('/WX/article/add', function (req, res) {
                     res.redirect('/artificial/WX/article');
                 })
             });
-    }, function() {
+    }, function(err) {
         res.end('提交表单失败： ',err); //各种错误
     });
 });

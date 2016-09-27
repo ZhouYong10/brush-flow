@@ -447,11 +447,7 @@ Order.extend({
                     reject('图片上传失败!');
                 }
             }).on('end', function() {
-                if(order[picField]){
-                    resolve(order);
-                }else {
-                    reject('图片上传失败!');
-                }
+                resolve(order);
             });
             form.parse(req);
         })
