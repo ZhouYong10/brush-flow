@@ -84,6 +84,7 @@ router.get('/update/header/nav', function (req, res) {
         reply: 0,
         flow: 0,
         wxArticle: 0,
+        wxLikeQuick: 0,
         wxLike: 0,
         wxComment: 0,
         wxReply: 0,
@@ -133,6 +134,9 @@ router.get('/update/header/nav', function (req, res) {
                                                 break;
                                                 case 'read': case 'like':
                                                 updateNav.wxLike += 1;
+                                                break;
+                                                case 'readQuick': case 'likeQuick':
+                                                updateNav.wxLikeQuick += 1;
                                                 break;
                                                 case 'comment':
                                                 updateNav.wxComment += 1;
@@ -997,6 +1001,67 @@ router.get('/WX/article/already', function (req, res) {
             });
         });
 });
+
+
+router.get('/WX/like/quick/wait', function (req, res) {
+    Order.open().findPages({
+            type: 'wx',
+            smallType: {$in: ['readQuick', 'likeQuick']},
+            quick: true,
+            status: '未处理'
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXlikeQuickWait', {
+                title: '微信任务管理 / 待处理阅读点赞快速任务',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/like/quick/wait',
+                wxReadIsOpen: Order.wxReadQuickIsOpen()
+            });
+        });
+});
+
+router.get('/open/wx/read/like/quick', function (req, res) {
+    console.log(req.query, '===========================');
+    Order.openWXReadQuickAuto(req.query.cookie);
+    res.end('ok');
+});
+
+router.get('/close/wx/read/like/quick', function (req, res) {
+    Order.closeWXReadQuickAuto();
+    res.end('ok');
+});
+
+router.get('/WX/like/quick/already', function (req, res) {
+    var search = {
+        type: 'wx',
+        smallType: {$in: ['readQuick', 'likeQuick']},
+        quick: true,
+        status: {$ne: '未处理'}
+    };
+    Order.open().findPages(search, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            Order.open().find(search).then(function(allObj) {
+                var readTotal = 0;
+                for(var i = 0; i < allObj.length; i++) {
+                    readTotal += parseInt(allObj[i].num);
+                }
+                res.render('adminWXlikeQuickAlre', {
+                    title: '微信任务管理 / 已处理阅读点赞快速任务',
+                    money: req.session.systemFunds,
+                    freezeFunds: req.session.freezeFunds,
+                    orders: obj.results,
+                    pages: obj.pages,
+                    path: '/admin/WX/like/quick/already',
+                    readTotal: readTotal
+                });
+            })
+        });
+});
+
+
 
 router.get('/WX/like/wait', function (req, res) {
     Order.open().findPages({

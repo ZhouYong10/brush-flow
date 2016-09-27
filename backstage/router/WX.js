@@ -477,6 +477,164 @@ router.get('/like/bulk/add', function (req, res) {
 
 
 
+
+
+router.get('/like/quick', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'readQuick',
+                    quick: true
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 100);
+                    res.render('WXlikeQuick', {
+                        title: '图文阅读/点赞快速任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/like/quick'
+                    })
+                });
+        });
+});
+
+router.get('/account/search/like/quick', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                    userId: user._id,
+                    type: 'wx',
+                    smallType: 'readQuick',
+                    quick: true,
+                    address: req.query.account
+                }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WXlikeQuick', {
+                        title: '图文阅读/点赞快速任务',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/like/quick'
+                    })
+                });
+        });
+});
+
+router.get('/like/quick/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'readQuick'})
+                .then(function(read) {
+                    var readIns = Product.wrapToInstance(read);
+                    var myReadPrice = readIns.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'wx', smallType: 'likeQuick'})
+                        .then(function(like) {
+                            var likeIns = Product.wrapToInstance(like);
+                            var myLikePrice = likeIns.getPriceByRole(user.role);
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('WXlikeQuickAdd', {
+                                    title: '添加微信图文阅读点赞快速任务',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    price: myReadPrice,
+                                    price2: myLikePrice,
+                                    orderFlag: orderFlag
+                                });
+                            })
+                        });
+                });
+        });
+});
+
+router.post('/like/quick/add', function (req, res) {
+    var orderInfo = req.body;
+    if(!orderInfo.address){
+        return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 500) {
+        return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低500起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(orderInfo.num2 && !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) && orderInfo.num2 > (orderInfo.num / 25 * 2)) {
+        return res.send('<h1>点赞数量必须为正整数,且不能大于阅读数量的10%!.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+
+    orderInfo.quick = true;
+    orderInfo.num = parseInt(orderInfo.num);
+    if(orderInfo.num2 == ''){
+        orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
+    }
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+
+            var order = Order.wrapToInstance(orderInfo);
+            if(orderInfo.orderFlag) {
+                order.checkRandomStr(req).then(function() {
+                    order.createAndSaveTwo(user, {type: 'wx', smallType: 'readQuick'}, {type: 'wx', smallType: 'likeQuick'})
+                        .then(function () {
+                            socketIO.emit('updateNav', {'wxLikeQuick': 1});
+                            res.redirect('/wx/like/quick');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }, function(msg) {
+                    res.redirect('/wx/like/quick');
+                })
+            }else {
+                order.createAndSaveTwo(user, {type: 'wx', smallType: 'readQuick'}, {type: 'wx', smallType: 'likeQuick'})
+                    .then(function (result) {
+                        socketIO.emit('updateNav', {'wxLikeQuick': 1});
+                        res.send({funds: result.funds, msg: '提交成功！'});
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }
+        });
+});
+
+router.get('/like/quick/bulk/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'readQuick'})
+                .then(function(read) {
+                    var readIns = Product.wrapToInstance(read);
+                    var myReadPrice = readIns.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'wx', smallType: 'likeQuick'})
+                        .then(function(like) {
+                            var likeIns = Product.wrapToInstance(like);
+                            var myLikePrice = likeIns.getPriceByRole(user.role);
+                            Order.getRandomStr(req).then(function(orderFlag) {
+                                res.render('WXlikeQuickBulkAdd', {
+                                    title: '批量添加微信图文阅读点赞快速任务',
+                                    money: user.funds,
+                                    username: user.username,
+                                    userStatus: user.status,
+                                    role: user.role,
+                                    price: myReadPrice,
+                                    price2: myLikePrice,
+                                    orderFlag: orderFlag
+                                });
+                            })
+                        });
+                });
+        });
+});
+
+
+
+
+
 router.get('/comment', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
