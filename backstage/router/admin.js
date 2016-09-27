@@ -667,7 +667,7 @@ router.get('/order/complete', function (req, res) {
     Order.open().findById(orderId)
         .then(function(order) {
             if(order.smallType == 'read'){
-                Address.getReadNum('http://120.55.191.152:8080/getext', {
+                Address.getReadNum('http://sun.71plus.cn:13000/api/getArticleExt', {
                     "appkey": "651c48b66e",
                     "url": order.address
                 }).then(function (result) {

@@ -65,7 +65,7 @@ function commitOrder(cb) {
                 $set: {remote: 'tuike'}
             }).then(function () {
                 var orderIns = Order.wrapToInstance(result);
-                Address.getReadNum('http://120.55.191.152:8080/getext', {
+                Address.getReadNum('http://sun.71plus.cn:13000/api/getArticleExt', {
                     "appkey": "651c48b66e",
                     "url": orderIns.address
                 }).then(function (data) {
