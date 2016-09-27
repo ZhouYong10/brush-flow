@@ -418,6 +418,8 @@ Order.extend({
         }
     },
     getOrder: function getOrder(req) {
+        var filePath;
+        var newFilePath;
         return new Promise(function(resolve, reject) {
             var order = {};
             var form = new Formidable.IncomingForm();
@@ -433,13 +435,13 @@ Order.extend({
             }).on('field', function(field, value) {
                 order[field] = value;
             }).on('file', function(field, file) { //上传文件
-                var filePath = file.path;
+                filePath = file.path;
                 var fileExt = filePath.substring(filePath.lastIndexOf('.'));
                 var newFileName = new Date().getTime() + '-' + file.hash + fileExt;
-                var newFilePath = path.join(logoDir + newFileName);
-                fs.renameSync(filePath, newFilePath);
+                newFilePath = path.join(logoDir + newFileName);
                 order[field] = '/handle_example/' + moment().format('YYYY-MM-DD') + '/' + newFileName;
             }).on('end', function() {
+                fs.renameSync(filePath, newFilePath);
                 resolve(order);
             });
             form.parse(req);
