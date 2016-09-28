@@ -515,7 +515,7 @@ router.get('/account/search/like/quick', function (req, res) {
                     address: req.query.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results);
+                    Order.addSchedule(obj.results, 100);
                     res.render('WXlikeQuick', {
                         title: '图文阅读/点赞快速任务',
                         money: user.funds,
