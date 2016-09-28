@@ -705,7 +705,7 @@ router.get('/order/complete', function (req, res) {
         .then(function(order) {
             var orderIns = Order.wrapToInstance(order);
             if(orderIns.status == '未处理'){
-                if(orderIns.smallType == 'read'){
+                if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
                     orderIns.startReadNum = startReadNum;
                 }
                 orderIns.complete(function() {

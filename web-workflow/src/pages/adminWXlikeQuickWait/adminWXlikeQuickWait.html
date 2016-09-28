@@ -29,13 +29,13 @@
                 <div class="am-panel-bd am-scrollable-horizontal">
 
                     <div id="openOrClose" class="am-form am-form-inline">
-                        <input type="hidden" v-model="isOpen" value="<%= wxReadIsOpen %>">
-                        <a class="am-btn am-btn-success am-radius am-btn-sm" @click="open" v-if="isOpen == 'no'">
-                           开启微刷
-                        </a>
-                        <a class="am-btn am-btn-success am-radius am-btn-sm" @click="close" v-if="isOpen == 'yes'">
-                            关闭微刷
-                        </a>
+                        <!--<input type="hidden" v-model="isOpen" value="<%= wxReadIsOpen %>">-->
+                        <!--<a class="am-btn am-btn-success am-radius am-btn-sm" @click="open" v-if="isOpen == 'no'">-->
+                           <!--开启微刷-->
+                        <!--</a>-->
+                        <!--<a class="am-btn am-btn-success am-radius am-btn-sm" @click="close" v-if="isOpen == 'yes'">-->
+                            <!--关闭微刷-->
+                        <!--</a>-->
 
                         <!--<a id="dingdingNum" class="am-btn am-btn-success am-radius am-btn-sm" @click="dingding">-->
                             <!--代丁限量(<%= dingdingOrderNum %>)-->
@@ -119,8 +119,11 @@
                                     <% } %>
                                 </td>
                                 <td class="am-text-middle">
-                                    <a class="am-btn am-btn-primary am-radius am-btn-xs"
+                                    <!--<a class="am-btn am-btn-primary am-radius am-btn-xs"-->
+                                       <!--href="/admin/order/complete?id=<%= orders[i]._id %>&url=<%= path %>">完成 </a>-->
+                                    <a class="am-btn am-btn-primary am-radius am-btn-xs orderComplete"
                                        href="/admin/order/complete?id=<%= orders[i]._id %>&url=<%= path %>">完成 </a>
+
                                     <a class="am-btn am-btn-primary am-radius am-btn-xs orderRefund"
                                        href="/admin/order/refund?id=<%= orders[i]._id %>&url=<%= path %>">拒绝</a>
                                 </td>
