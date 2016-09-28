@@ -662,43 +662,7 @@ router.get('/order/handle/release', function (req, res) {
 * order complete
 * */
 //自动获取初始阅读量
-//router.get('/order/complete', function (req, res) {
-//    var orderId = req.query.id;
-//    var url = req.query.url;
-//    Order.open().findById(orderId)
-//        .then(function(order) {
-//            var orderIns = Order.wrapToInstance(order);
-//            if(orderIns.status == '未处理'){
-//                if(orderIns.smallType == 'read'){
-//                    Address.getReadNum('http://120.55.191.152:8080/getext', {
-//                        "appkey": "651c48b66e",
-//                        "url": orderIns.address
-//                    }).then(function (result) {
-//                        var jResult = JSON.parse(result);
-//                        if(jResult.status == 1) {
-//                            orderIns.startReadNum = jResult.data.readNum;
-//                            orderIns.complete(function() {
-//                                res.redirect(url);
-//                            });
-//                        }else {
-//                            res.end('获取阅读初始量失败： ' + jResult.msg);
-//                        }
-//                    });
-//                }else {
-//                    orderIns.complete(function() {
-//                        res.redirect(url);
-//                    });
-//                }
-//            }else {
-//                res.redirect(url);
-//            }
-//        })
-//});
-
-
-//手动获取初始阅读量
 router.get('/order/complete', function (req, res) {
-    var startReadNum = parseInt(req.query.info);
     var orderId = req.query.id;
     var url = req.query.url;
     Order.open().findById(orderId)
@@ -706,16 +670,53 @@ router.get('/order/complete', function (req, res) {
             var orderIns = Order.wrapToInstance(order);
             if(orderIns.status == '未处理'){
                 if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
-                    orderIns.startReadNum = startReadNum;
+                    Address.getReadNum('http://120.55.191.152:8080/getext2', {
+                        "appkey": "651c48b66e",
+                        "url": orderIns.address
+                    }).then(function (result) {
+                        console.log(result, '=============================');
+                        var jResult = JSON.parse(result);
+                        if(jResult.status == 1) {
+                            orderIns.startReadNum = jResult.data.readNum;
+                            orderIns.complete(function() {
+                                res.redirect(url);
+                            });
+                        }else {
+                            res.end('获取阅读初始量失败： ' + jResult.msg);
+                        }
+                    });
+                }else {
+                    orderIns.complete(function() {
+                        res.redirect(url);
+                    });
                 }
-                orderIns.complete(function() {
-                    res.redirect(url);
-                });
             }else {
                 res.redirect(url);
             }
         })
 });
+
+
+//手动获取初始阅读量
+//router.get('/order/complete', function (req, res) {
+//    var startReadNum = parseInt(req.query.info);
+//    var orderId = req.query.id;
+//    var url = req.query.url;
+//    Order.open().findById(orderId)
+//        .then(function(order) {
+//            var orderIns = Order.wrapToInstance(order);
+//            if(orderIns.status == '未处理'){
+//                if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
+//                    orderIns.startReadNum = startReadNum;
+//                }
+//                orderIns.complete(function() {
+//                    res.redirect(url);
+//                });
+//            }else {
+//                res.redirect(url);
+//            }
+//        })
+//});
 
 
 router.get('/order/refund', function (req, res) {

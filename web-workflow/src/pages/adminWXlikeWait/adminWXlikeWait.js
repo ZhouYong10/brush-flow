@@ -108,7 +108,7 @@ new Vue({
 $(function () {
     Utils.clipboard();
     Utils.layPrompt('请输入拒绝接单的理由！', '.orderRefund');
-    Utils.layPrompt('请输入订单初始阅读量！', '.orderComplete');
+    //Utils.layPrompt('请输入订单初始阅读量！', '.orderComplete');
     Utils.breakText();
     Utils.layPage();
 });
