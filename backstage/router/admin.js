@@ -698,25 +698,25 @@ router.get('/order/complete', function (req, res) {
 
 
 //手动获取初始阅读量
-//router.get('/order/complete', function (req, res) {
-//    var startReadNum = parseInt(req.query.info);
-//    var orderId = req.query.id;
-//    var url = req.query.url;
-//    Order.open().findById(orderId)
-//        .then(function(order) {
-//            var orderIns = Order.wrapToInstance(order);
-//            if(orderIns.status == '未处理'){
-//                if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
-//                    orderIns.startReadNum = startReadNum;
-//                }
-//                orderIns.complete(function() {
-//                    res.redirect(url);
-//                });
-//            }else {
-//                res.redirect(url);
-//            }
-//        })
-//});
+router.get('/order/complete/handle', function (req, res) {
+    var startReadNum = parseInt(req.query.info);
+    var orderId = req.query.id;
+    var url = req.query.url;
+    Order.open().findById(orderId)
+        .then(function(order) {
+            var orderIns = Order.wrapToInstance(order);
+            if(orderIns.status == '未处理'){
+                if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
+                    orderIns.startReadNum = startReadNum;
+                }
+                orderIns.complete(function() {
+                    res.redirect(url);
+                });
+            }else {
+                res.redirect(url);
+            }
+        })
+});
 
 
 router.get('/order/refund', function (req, res) {
@@ -1518,6 +1518,10 @@ router.get('/redirect/aim/order', function (req, res) {
                     render = 'adminWXlikeAlre';
                     title = '微信任务管理 / 已处理微信阅读点赞任务';
                         break;
+                    case 'readQuick': case 'likeQuick':
+                    render = 'adminWXlikeQuickAlre';
+                    title = '微信任务管理 / 已处理微信阅读点赞快速任务';
+                    break;
                     case 'fans':
                         render = 'adminWXreplyAlre';
                         title = '微信任务管理 / 已处理公众粉丝回复任务';

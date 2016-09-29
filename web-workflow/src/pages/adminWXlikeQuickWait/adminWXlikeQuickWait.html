@@ -119,13 +119,20 @@
                                     <% } %>
                                 </td>
                                 <td class="am-text-middle">
-                                    <a class="am-btn am-btn-primary am-radius am-btn-xs"
-                                       href="/admin/order/complete?id=<%= orders[i]._id %>&url=<%= path %>">完成 </a>
-                                    <!--<a class="am-btn am-btn-primary am-radius am-btn-xs orderComplete"-->
-                                       <!--href="/admin/order/complete?id=<%= orders[i]._id %>&url=<%= path %>">完成 </a>-->
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs" title="自动获取初始阅读量"
+                                           href="/admin/order/complete?id=<%= orders[i]._id %>&url=<%= path %>">自动 </a>
+                                    </div>
 
-                                    <a class="am-btn am-btn-primary am-radius am-btn-xs orderRefund"
-                                       href="/admin/order/refund?id=<%= orders[i]._id %>&url=<%= path %>">拒绝</a>
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs orderComplete" title="手动填写初始阅读量"
+                                           href="/admin/order/complete/handle?id=<%= orders[i]._id %>&url=<%= path %>">手动 </a>
+                                    </div>
+
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs orderRefund"
+                                           href="/admin/order/refund?id=<%= orders[i]._id %>&url=<%= path %>">拒绝</a>
+                                    </div>
                                 </td>
                             </tr>
                             <% } %>
