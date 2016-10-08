@@ -670,11 +670,10 @@ router.get('/order/complete', function (req, res) {
             var orderIns = Order.wrapToInstance(order);
             if(orderIns.status == '未处理'){
                 if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
-                    Address.getReadNum('http://120.55.191.152:8080/getext2', {
+                    Address.getReadNum('http://120.55.191.152:8080/getext', {
                         "appkey": "651c48b66e",
                         "url": orderIns.address
                     }).then(function (result) {
-                        console.log(result, '=============================');
                         var jResult = JSON.parse(result);
                         if(jResult.status == 1) {
                             orderIns.startReadNum = jResult.data.readNum;
