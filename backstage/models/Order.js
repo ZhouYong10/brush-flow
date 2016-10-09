@@ -544,7 +544,7 @@ function stopFans() {
     clearInterval(wxSetIntIndex);
 }
 
-global.readSpeed = 50;
+global.readSpeed = 1;
 Order.extend({
     getRandomStr: function(req) {
         return new Promise(function(resolve, reject) {
