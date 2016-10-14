@@ -50,14 +50,16 @@ new Vue({
             });
             var index = layer.prompt({
                 formType: 2,
-                title: '请输入限制代丁的单个订单阅读量！',
+                //title: '请输入限制代丁的单个订单阅读量！',
+                title: '请输入限制丁丁的单个订单阅读量！',
                 offset: '6%'
             }, function (value, index) {
                 self.$http.get('/admin/dingding/order/num/WXlike', {dingdingOrderNum: value})
                     .then(function (data) {
                         layer.close(index);
                         if(data.data.isOk) {
-                            $('#dingdingNum').text('代丁限量(' + value + ')')
+                            //$('#dingdingNum').text('代丁限量(' + value + ')')
+                            $('#dingdingNum').text('丁丁限量(' + value + ')')
                         }else{
                             layer.msg(data.data.msg);
                         }

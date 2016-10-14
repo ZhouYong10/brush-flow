@@ -38,7 +38,8 @@
                         </a>
 
                         <a id="dingdingNum" class="am-btn am-btn-success am-radius am-btn-sm" @click="dingding">
-                            代丁限量(<%= dingdingOrderNum %>)
+                            <!--代丁限量(<%= dingdingOrderNum %>)-->
+                            丁丁限量(<%= dingdingOrderNum %>)
                         </a>
 
                         <a id="weichuanmeiNum" class="am-btn am-btn-success am-radius am-btn-sm" @click="weichuanmei">
@@ -102,8 +103,12 @@
                                     C: <%= orders[i].superProfit %><br/>
                                 </td>
                                 <td class="am-text-middle">
-                                    <% if(orders[i].remote == 'daiding'){ %>
-                                    代丁
+                                    <!--<% if(orders[i].remote == 'daiding'){ %>-->
+                                    <!--代丁-->
+                                    <!--<% } %>-->
+
+                                    <% if(orders[i].remote == 'dingding'){ %>
+                                    丁丁
                                     <% } %>
 
                                     <% if(orders[i].remote == 'weichuanmei'){ %>
