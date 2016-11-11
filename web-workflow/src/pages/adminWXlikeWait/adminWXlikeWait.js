@@ -73,7 +73,7 @@ new Vue({
             });
             var index = layer.prompt({
                 formType: 2,
-                title: '请输入限制微传媒的单个订单阅读量！',
+                title: '请输入限制微帮的单个订单阅读量！',
                 offset: '6%'
             }, function (value, index) {
                 self.$http.get('/admin/weichuanmei/order/num/WXlike', {weichuanmeiOrderNum: value})

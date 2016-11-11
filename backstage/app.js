@@ -242,54 +242,54 @@ app.get('/wx/like/complete/remote', function (req, res) {
 
 
 //微传媒提单
-app.get('/wx/like/forward/remote/weichuanmei', function (req, res) {
-  Order.open().findOne({
-    type: 'wx',
-    smallType: 'read',
-    status: '未处理',
-    num: {$gt: global.dingdingOrderNum, $lte: global.weichuanmeiOrderNum}
-  }).then(function (obj) {
-    if(obj && !obj.remote) {
-      Order.open().updateById(obj._id, {
-        $set: {remote: 'weichuanmei'}
-      }).then(function() {
-        res.send(JSON.stringify({
-          id: obj._id,
-          address: obj.address,
-          read: obj.num,
-          like: obj.num2
-        }));
-      });
-    }else{
-      res.send(null);
-    }
-  });
-});
-
-app.get('/wx/like/complete/remote/weichuanmei', function (req, res) {
-  var status = req.query.status;
-  var msg = req.query.msg;
-  var orderId = req.query.id;
-  var startReadNum = req.query.startReadNum;
-  Order.open().findById(orderId)
-      .then(function (order) {
-        if(order && order.status == '未处理' && order.remote == 'weichuanmei'){
-          var orderIns = Order.wrapToInstance(order);
-          if (status == 1) {
-            orderIns.startReadNum = startReadNum;
-            orderIns.complete(function () {
-              res.end();
-            });
-          } else {
-            orderIns.refund(msg, function() {
-              res.end();
-            });
-          }
-        }else {
-          res.end();
-        }
-      })
-});
+//app.get('/wx/like/forward/remote/weichuanmei', function (req, res) {
+//  Order.open().findOne({
+//    type: 'wx',
+//    smallType: 'read',
+//    status: '未处理',
+//    num: {$gt: global.dingdingOrderNum, $lte: global.weichuanmeiOrderNum}
+//  }).then(function (obj) {
+//    if(obj && !obj.remote) {
+//      Order.open().updateById(obj._id, {
+//        $set: {remote: 'weichuanmei'}
+//      }).then(function() {
+//        res.send(JSON.stringify({
+//          id: obj._id,
+//          address: obj.address,
+//          read: obj.num,
+//          like: obj.num2
+//        }));
+//      });
+//    }else{
+//      res.send(null);
+//    }
+//  });
+//});
+//
+//app.get('/wx/like/complete/remote/weichuanmei', function (req, res) {
+//  var status = req.query.status;
+//  var msg = req.query.msg;
+//  var orderId = req.query.id;
+//  var startReadNum = req.query.startReadNum;
+//  Order.open().findById(orderId)
+//      .then(function (order) {
+//        if(order && order.status == '未处理' && order.remote == 'weichuanmei'){
+//          var orderIns = Order.wrapToInstance(order);
+//          if (status == 1) {
+//            orderIns.startReadNum = startReadNum;
+//            orderIns.complete(function () {
+//              res.end();
+//            });
+//          } else {
+//            orderIns.refund(msg, function() {
+//              res.end();
+//            });
+//          }
+//        }else {
+//          res.end();
+//        }
+//      })
+//});
 
 app.get('/new/placard', function (req, res) {
   Placard.open().newPlacard()

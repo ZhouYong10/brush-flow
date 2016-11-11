@@ -126,6 +126,57 @@ function commitOrder(cb) {
 
 
 /*
+ * wx read and like 微信帮帮接口
+ * */
+setInterval(function () {
+    console.log('微帮开始提单　=====================================');
+    commitOrderToWeiBang().then(function (msg) {
+        console.log(msg);
+    });
+}, 1000 * 10);
+
+
+function commitOrderToWeiBang() {
+    return new Promise(function(resolve) {
+        Order.open().findOne({
+            status: '未处理',
+            type: 'wx',
+            smallType: {$in: ['read', 'like']},
+            num: {$gt: global.dingdingOrderNum, $lte: global.weichuanmeiOrderNum}
+        }).then(function (order) {
+            if(order) {
+                Address.postWeiBang('http://sun.71plus.cn:13000/api/placeOrder',{
+                    "appkey": "xIwp2ohi",
+                    "url": order.address,
+                    "taskReadNum": parseInt(order.num),
+                    "taskLikeNum": parseInt(order.num2),
+                    "readPerMinute": 300,
+                    "forceStopAfterHours": 46
+                }).then(function (result) {
+                    var result_json = JSON.parse(result);
+                    if(result_json.status == 1) {
+                        var orderIns = Order.wrapToInstance(order);
+                        orderIns.startReadNum = result_json.data.startReadNum;
+                        orderIns.remote = 'weibang';
+                        orderIns.complete(function() {
+                            resolve('微信帮帮忙，自动处理订单完成了, href = ' + orderIns.address);
+                        });
+                    }else{
+                        resolve(result_json.message + '====================================');
+                    }
+                });
+            }else{
+                resolve('没有抓取到订单 ====================================');
+            }
+        });
+    });
+
+
+
+}
+
+
+/*
  * wx read and like 微刷平台对接
  * */
 var post_keyQuick = '';
