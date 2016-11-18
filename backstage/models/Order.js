@@ -72,7 +72,7 @@ function commitOrder(cb) {
                     var jResult = JSON.parse(data);
                     if(jResult.status == 1) {
                         orderIns.startReadNum = jResult.data.readNum;
-                        request('http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo?server=20&user=18682830727&password=123456&url='
+                        request('http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
                             + encodeURIComponent(orderIns.address) + '&read=' + orderIns.num + '&praise=' + orderIns.num2 + '&frequency=10000',
                             function(err,res,body){
                                 if(JSON.parse(body).Data == 'ok'){
@@ -82,6 +82,8 @@ function commitOrder(cb) {
                                     });
                                 }else {
                                     console.log('文章地址解析失败-------------------------- =================================');
+                                    console.log(err, 'error  ==============================');
+                                    console.log(body, 'body  ==============================');
                                     orderIns.refund('文章地址解析失败', function() {
                                         cb();
                                     });
