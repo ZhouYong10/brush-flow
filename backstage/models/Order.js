@@ -147,7 +147,7 @@ function commitOrderToWeiBang() {
             num: {$gt: global.dingdingOrderNum, $lte: global.weichuanmeiOrderNum}
         }).then(function (order) {
             if(order) {
-                Address.postWeiBang('http://sun.71plus.cn:13000/api/placeOrder',{
+                Address.postWeiBang('http://sun.71plus.cn:13000/api2/placeOrder',{
                     "appkey": "xIwp2ohi",
                     "url": order.address,
                     "taskReadNum": parseInt(order.num),
