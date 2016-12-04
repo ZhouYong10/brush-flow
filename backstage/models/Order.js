@@ -153,7 +153,7 @@ function commitOrderToWeiBang() {
                     "taskReadNum": parseInt(order.num),
                     "taskLikeNum": parseInt(order.num2),
                     "readPerMinute": 200,
-                    "forceStopAfterHours": 46
+                    "forceStopAfterHours": 46 * 60
                 }).then(function (result) {
                     var result_json = JSON.parse(result);
                     if(result_json.status == 1) {
