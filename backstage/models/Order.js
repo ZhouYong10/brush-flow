@@ -32,25 +32,22 @@ Order.open = function() {
 /*
  * wx read and like 代替推客的接口
  * */
-var task_time = 1000 * 60 * 60 * 1000;
 var wxReadIsOpen = 'no';
-var cookieInfo ;
-var valIndex ;
+var noOrderIndex;
 
 function startInterval() {
-    var random = (Math.random() / 3 * 100).toFixed(0);
-    task_time = random >= 5 ? random * 1000 : 5 * 1000;
-    return setInterval(function() {
-        console.log('开始提单=====================================');
-        commitOrder(clearTime);
-    }, task_time);
+    commitOrder(clearTime);
 }
 
 function clearTime() {
-    clearInterval(valIndex);
-    if(wxReadIsOpen == 'yes'){
-        valIndex = startInterval();
-    }
+    clearInterval(noOrderIndex);
+    noOrderIndex = setInterval(function () {
+        if(wxReadIsOpen == 'yes'){
+            startInterval();
+        }else{
+            clearInterval(noOrderIndex);
+        }
+    }, 10 * 1000);
 }
 
 function commitOrder(cb) {
@@ -60,67 +57,41 @@ function commitOrder(cb) {
         smallType: {$in: ['read', 'like']},
         num: {$gt: global.weichuanmeiOrderNum}
     }).then(function (result) {
-        if(result && !result.remote) {
-            Order.open().updateById(result._id, {
-                $set: {remote: 'tuike'}
-            }).then(function () {
-                var orderIns = Order.wrapToInstance(result);
-                Address.getReadNum('http://120.55.191.152:8080/getext', {
-                    "appkey": "651c48b66e",
-                    "url": orderIns.address
-                }).then(function (data) {
-                    var jResult = JSON.parse(data);
-                    if(jResult.status == 1) {
-                        orderIns.startReadNum = jResult.data.readNum;
-                        request('http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
-                            + encodeURIComponent(orderIns.address) + '&read=' + orderIns.num + '&praise=' + orderIns.num2 + '&frequency=10000',
-                            function(err,res,body){
-                                if(JSON.parse(body).Data == 'ok'){
-                                    orderIns.complete(function() {
-                                        console.log('自动处理订单完成了, href = ' + result.address);
-                                        cb();
-                                    });
-                                }else {
-                                    console.log('文章地址解析失败-------------------------- =================================');
-                                    console.log(err, 'error  ==============================');
-                                    console.log(body, 'body  ==============================');
-                                    orderIns.refund('文章地址解析失败', function() {
-                                        cb();
-                                    });
-                                }
-                            });
-                        //request.post({
-                        //    url:'http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo',
-                        //    formData: {
-                        //        server: 20,
-                        //        user: '18682830727',
-                        //        password: '123456',
-                        //        url: encodeURIComponent(orderIns.address),
-                        //        read: orderIns.num,
-                        //        praise: orderIns.num2,
-                        //        frequency: orderIns.speed
-                        //    }
-                        //},function(err,res,body){
-                        //    console.log(err, 'err ====================================');
-                        //    console.log(body, 'body ====================================');
-                        //    orderIns.remote = 'tuike';
-                        //
-                        //    console.log(orderIns, '----------------------------------------------------');
-                        //    //orderIns.complete(function() {
-                        //    //    console.log('自动处理订单完成了, href = ' + result.address);
-                        //    //    cb();
-                        //    //});
-                        //});
+        if(result) {
+            var orderIns = Order.wrapToInstance(result);
+            request('http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
+                + encodeURIComponent(orderIns.address) + '&read=' + orderIns.num + '&praise=' + orderIns.num2 + '&frequency=10000',
+                function(err,res,body){
+                    if(JSON.parse(body).Data == 'ok'){
+                        Order.open().updateById(orderIns._id, {
+                            $set: {remote: 'tuike'}
+                        });
+                        clearInterval(noOrderIndex);
+                        var indexGetReadNum = setInterval(function () {
+                            request('http://112.74.69.75:9092/wx_Order_GetOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
+                                + encodeURIComponent(orderIns.address),
+                                function(err,res,body){
+                                    if(JSON.parse(body)[0]){
+                                        var startReadNum = parseInt(JSON.parse(body)[0].start_quantity);
+                                        if(startReadNum != 0) {
+                                            orderIns.startReadNum = startReadNum;
+                                            orderIns.remote = 'tuike';
+                                            clearInterval(indexGetReadNum);
+                                            orderIns.complete(function() {
+                                                console.log('推客，自动处理订单完成了, href = ' + result.address);
+                                                cb();
+                                            });
+                                        }
+                                    }
+                                });
+                        }, 10 * 1000);
                     }else {
-                        console.log(jResult, 'jResult ====================================');
-                        orderIns.refund(jResult.msg, function() {
+                        orderIns.refund('文章地址解析失败', function() {
                             cb();
                         });
                     }
                 });
-            });
-        }else{
-            console.log('没有抓取到订单 ====================================');
+        }else {
             cb();
         }
     });
@@ -131,7 +102,6 @@ function commitOrder(cb) {
  * wx read and like 微信帮帮接口
  * */
 setInterval(function () {
-    console.log('微帮开始提单　=====================================');
     commitOrderToWeiBang().then(function (msg) {
         console.log(msg);
     });
@@ -167,8 +137,6 @@ function commitOrderToWeiBang() {
                         resolve(result_json.message + '====================================');
                     }
                 });
-            }else{
-                resolve('没有抓取到订单 ====================================');
             }
         });
     });
@@ -708,14 +676,11 @@ Order.extend({
         return wxReadIsOpenQuick;
     },
     openWXReadAuto: function(cookie) {
-        cookieInfo = cookie;
         wxReadIsOpen = 'yes';
-        valIndex = startInterval();
-        //getOrderStartNum();
+        startInterval();
     },
     closeWXReadAuto: function() {
         wxReadIsOpen = 'no';
-        //clearInterval(valIndex);
     },
     wxReadIsOpen: function() {
         return wxReadIsOpen;
