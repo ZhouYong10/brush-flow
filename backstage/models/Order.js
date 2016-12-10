@@ -33,24 +33,14 @@ Order.open = function() {
  * wx read and like 代替推客的接口
  * */
 var wxReadIsOpen = 'no';
-var noOrderIndex;
 
 function startInterval() {
-    commitOrder(clearTime);
+    if(wxReadIsOpen == 'yes'){
+        commitOrder();
+    }
 }
 
-function clearTime() {
-    clearInterval(noOrderIndex);
-    noOrderIndex = setInterval(function () {
-        if(wxReadIsOpen == 'yes'){
-            startInterval();
-        }else{
-            clearInterval(noOrderIndex);
-        }
-    }, 10 * 1000);
-}
-
-function commitOrder(cb) {
+function commitOrder() {
     Order.open().findOne({
         status: '未处理',
         type: 'wx',
@@ -66,7 +56,6 @@ function commitOrder(cb) {
                         Order.open().updateById(orderIns._id, {
                             $set: {remote: 'tuike'}
                         });
-                        clearInterval(noOrderIndex);
                         var indexGetReadNum = setInterval(function () {
                             request('http://112.74.69.75:9092/wx_Order_GetOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
                                 + encodeURIComponent(orderIns.address),
@@ -75,11 +64,10 @@ function commitOrder(cb) {
                                         var startReadNum = parseInt(JSON.parse(body)[0].start_quantity);
                                         if(startReadNum != 0) {
                                             orderIns.startReadNum = startReadNum;
-                                            orderIns.remote = 'tuike';
                                             clearInterval(indexGetReadNum);
                                             orderIns.complete(function() {
                                                 console.log('推客，自动处理订单完成了, href = ' + result.address);
-                                                cb();
+                                                startInterval();
                                             });
                                         }
                                     }
@@ -87,12 +75,16 @@ function commitOrder(cb) {
                         }, 10 * 1000);
                     }else {
                         orderIns.refund('文章地址解析失败', function() {
-                            cb();
+                            setTimeout(function () {
+                                startInterval();
+                            }, 300 * 1000);
                         });
                     }
                 });
         }else {
-            cb();
+            setTimeout(function () {
+                startInterval();
+            }, 20 * 1000);
         }
     });
 }
