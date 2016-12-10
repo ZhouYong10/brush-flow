@@ -670,18 +670,20 @@ router.get('/order/complete', function (req, res) {
             var orderIns = Order.wrapToInstance(order);
             if(orderIns.status == '未处理'){
                 if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
-                    Address.getReadNum('http://120.55.191.152:8080/getext', {
-                        "appkey": "651c48b66e",
+                    //Address.getReadNum('http://120.55.191.152:8080/getext', {  //微信帮接口，
+                    Address.getReadNum('http://47.90.59.96:8080/read/read/getReadNumByCode', {
+                        //"appkey": "651c48b66e", //微信帮
+                        "key": "test_111222",
                         "url": orderIns.address
                     }).then(function (result) {
                         var jResult = JSON.parse(result);
-                        if(jResult.status == 1) {
-                            orderIns.startReadNum = jResult.data.readNum;
+                        if(jResult.result == 'succ') {
+                            orderIns.startReadNum = jResult.data.read_num;
                             orderIns.complete(function() {
                                 res.redirect(url);
                             });
                         }else {
-                            res.end('获取阅读初始量失败： ' + jResult.msg);
+                            res.end('获取阅读初始量失败');
                         }
                     });
                 }else {
