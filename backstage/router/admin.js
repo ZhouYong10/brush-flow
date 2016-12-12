@@ -671,19 +671,23 @@ router.get('/order/complete', function (req, res) {
             if(orderIns.status == '未处理'){
                 if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
                     //Address.getReadNum('http://120.55.191.152:8080/getext', {  //微信帮接口，
-                    Address.getReadNum('http://47.90.59.96:8080/read/read/getReadNumByCode', {
+                    Address.getReadNum('http://wxapi.vy360.cn/read/getReadNum', {
                         //"appkey": "651c48b66e", //微信帮
-                        "key": "test_111222",
+                        "key": "wxkey_1003930471_Ht32U",
                         "url": orderIns.address
                     }).then(function (result) {
                         var jResult = JSON.parse(result);
-                        if(jResult.result == 'succ') {
-                            orderIns.startReadNum = jResult.data.read_num;
+                        if(jResult.result == 'succ' && jResult.wxdata.code == 1) {
+                            orderIns.startReadNum = jResult.wxdata.read_num;
                             orderIns.complete(function() {
                                 res.redirect(url);
                             });
-                        }else {
-                            res.end('获取阅读初始量失败');
+                        }else if(jResult.userdata && jResult.userdata.status == -1) {
+                            res.end('获取阅读初始量失败: 账户被停用。');
+                        }else if(jResult.userdata && jResult.userdata.can_count < 0){
+                            res.end('获取阅读初始量失败: 账户剩余次数已经用完，请充值。');
+                        }else{
+                            res.end('获取阅读初始量失败: 可能由于服务器限制，请再试一次。');
                         }
                     });
                 }else {
