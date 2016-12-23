@@ -181,8 +181,8 @@ app.post('/login', function(req, res, next) {
 //对外公共接口
 var Order = require('./models/Order');
 
-global.dingdingOrderNum = 1;
-global.weichuanmeiOrderNum = 3;
+global.weichuanmeiOrderNum = 1;
+global.dingdingOrderNum = 3;
 
 //丁丁提单
 app.get('/wx/like/forward/remote', function (req, res) {
@@ -193,7 +193,7 @@ app.get('/wx/like/forward/remote', function (req, res) {
     type: 'wx',
     smallType: 'read',
     status: '未处理',
-    num: {$lte: global.dingdingOrderNum}
+    num: {$gt: global.weichuanmeiOrderNum, $lte: global.dingdingOrderNum}
   }).then(function (obj) {
     if(obj && !obj.remote) {
       Order.open().updateById(obj._id, {

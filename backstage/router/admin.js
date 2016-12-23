@@ -1101,8 +1101,8 @@ router.get('/WX/like/wait', function (req, res) {
                 orders: obj.results,
                 pages: obj.pages,
                 path: '/admin/WX/like/wait',
-                dingdingOrderNum: global.dingdingOrderNum,
                 weichuanmeiOrderNum: global.weichuanmeiOrderNum,
+                dingdingOrderNum: global.dingdingOrderNum,
                 wxReadIsOpen: Order.wxReadIsOpen(),
                 readSpeed: global.readSpeed
             });
@@ -1177,11 +1177,11 @@ router.get('/close/wx/read/like', function (req, res) {
 
 router.get('/dingding/order/num/WXlike', function (req, res) {
     var dingdingOrderNum = parseInt(req.query.dingdingOrderNum);
-    if(dingdingOrderNum > global.weichuanmeiOrderNum) {
+    if(dingdingOrderNum < global.weichuanmeiOrderNum) {
         res.send({
             isOk: false,
             //msg: '代丁的限制量不能大于微传媒的限制量！'
-            msg: '丁丁的限制量不能大于微传媒的限制量！'
+            msg: '丁丁的限制量不能小于微帮的限制量！'
         });
     }else {
         global.dingdingOrderNum = dingdingOrderNum;
@@ -1193,10 +1193,10 @@ router.get('/dingding/order/num/WXlike', function (req, res) {
 
 router.get('/weichuanmei/order/num/WXlike', function (req, res) {
     var weichuanmeiOrderNum = parseInt(req.query.weichuanmeiOrderNum);
-    if(weichuanmeiOrderNum < global.dingdingOrderNum) {
+    if(weichuanmeiOrderNum > global.dingdingOrderNum) {
         res.send({
             isOk: false,
-            msg: '微传媒的限制量不能小于代丁的限制量！'
+            msg: '微帮的限制量不能大于丁丁的限制量！'
         });
     }else{
         global.weichuanmeiOrderNum = weichuanmeiOrderNum;

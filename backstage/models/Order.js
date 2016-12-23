@@ -45,7 +45,7 @@ function commitOrder() {
         status: '未处理',
         type: 'wx',
         smallType: {$in: ['read', 'like']},
-        num: {$gt: global.weichuanmeiOrderNum}
+        num: {$gt: global.dingdingOrderNum}
     }).then(function (result) {
         if(result) {
             var orderIns = Order.wrapToInstance(result);
@@ -106,7 +106,7 @@ function commitOrderToWeiBang() {
             status: '未处理',
             type: 'wx',
             smallType: {$in: ['read', 'like']},
-            num: {$gt: global.dingdingOrderNum, $lte: global.weichuanmeiOrderNum}
+            num: {$lte: global.weichuanmeiOrderNum}
         }).then(function (order) {
             if(order) {
                 Address.postWeiBang('http://sun.71plus.cn:13000/api2/placeOrder',{
