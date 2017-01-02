@@ -66,7 +66,6 @@ function commitOrder() {
                                             orderIns.startReadNum = startReadNum;
                                             clearInterval(indexGetReadNum);
                                             orderIns.complete(function() {
-                                                console.log('推客，自动处理订单完成了, href = ' + result.address);
                                                 startInterval();
                                             });
                                         }
@@ -99,14 +98,12 @@ setInterval(function () {
 }, 1000 * 10);
 
 function commitOrderToWeiBang() {
-    console.log('微信帮帮忙 提交订单了。。。。。。。。。。。。。。。。。。');
     Order.open().findOne({
         status: '未处理',
         type: 'wx',
         smallType: {$in: ['read', 'like']},
         num: {$lte: global.weichuanmeiOrderNum}
     }).then(function (order) {
-        console.log(order._id.toString() != commitOrderId, 'order._id.toString() != commitOrderId');
         if(order && order._id.toString() != commitOrderId) {
             commitOrderId = order._id.toString();
             var orderIns = Order.wrapToInstance(order);
@@ -122,9 +119,7 @@ function commitOrderToWeiBang() {
                 if(result_json.status == 1) {
                     orderIns.startReadNum = result_json.data.startReadNum;
                     orderIns.remote = 'weibang';
-                    orderIns.complete(function() {
-                        console.log('微信帮帮忙，自动处理订单完成了, href = ' + orderIns.address);
-                    });
+                    orderIns.complete();
                 }else{
                     orderIns.refund(result_json.message);
                 }
