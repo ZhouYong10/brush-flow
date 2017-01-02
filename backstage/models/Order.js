@@ -77,7 +77,7 @@ function commitOrder() {
                         orderIns.refund('文章地址解析失败', function() {
                             setTimeout(function () {
                                 startInterval();
-                            }, 300 * 1000);
+                            }, 10 * 1000);
                         });
                     }
                 });
@@ -93,9 +93,10 @@ function commitOrder() {
 /*
  * wx read and like 微信帮帮接口
  * */
-(function() {
-    commitOrderToWeiBang()
-})();
+var commitOrderId;
+setInterval(function () {
+    commitOrderToWeiBang();
+}, 1000 * 10);
 
 function commitOrderToWeiBang() {
     console.log('微信帮帮忙 提交订单了。。。。。。。。。。。。。。。。。。');
@@ -105,80 +106,77 @@ function commitOrderToWeiBang() {
         smallType: {$in: ['read', 'like']},
         num: {$lte: global.weichuanmeiOrderNum}
     }).then(function (order) {
-        if(order) {
+        if(order && order._id != commitOrderId) {
+            commitOrderId = order._id;
+            var orderIns = Order.wrapToInstance(order);
             Address.postWeiBang('http://sun.71plus.cn:13000/api2/placeOrder',{
                 "appkey": "xIwp2ohi",
-                "url": order.address,
-                "taskReadNum": parseInt(order.num),
-                "taskLikeNum": parseInt(order.num2),
+                "url": orderIns.address,
+                "taskReadNum": parseInt(orderIns.num),
+                "taskLikeNum": parseInt(orderIns.num2),
                 "readPerMinute": 200,
                 "forceStopAfterHours": 46 * 60
             }).then(function (result) {
                 var result_json = JSON.parse(result);
                 if(result_json.status == 1) {
-                    var orderIns = Order.wrapToInstance(order);
                     orderIns.startReadNum = result_json.data.startReadNum;
                     orderIns.remote = 'weibang';
                     orderIns.complete(function() {
                         console.log('微信帮帮忙，自动处理订单完成了, href = ' + orderIns.address);
-                        commitOrderToWeiBang();
                     });
                 }else{
-                    console.log('微信帮帮忙提单失败：　' + result_json.message);
-                    setTimeout(function () {
-                        commitOrderToWeiBang();
-                    }, 1000 * 20);
+                    orderIns.refund(result_json.message);
                 }
             });
-        }else {
-            setTimeout(function () {
-                commitOrderToWeiBang();
-            }, 1000 * 20);
         }
     });
 }
 
 
-//
-//setInterval(function () {
-//    commitOrderToWeiBang().then(function (msg) {
-//        console.log(msg);
-//    });
-//}, 1000 * 10);
-//
+
+//(function() {
+//    commitOrderToWeiBang()
+//})();
 //
 //function commitOrderToWeiBang() {
-//    return new Promise(function(resolve) {
-//        Order.open().findOne({
-//            status: '未处理',
-//            type: 'wx',
-//            smallType: {$in: ['read', 'like']},
-//            num: {$lte: global.weichuanmeiOrderNum}
-//        }).then(function (order) {
-//            if(order) {
-//                console.log('提交订单了。。。。。。。。。。。。。。。。。。');
-//                Address.postWeiBang('http://sun.71plus.cn:13000/api2/placeOrder',{
-//                    "appkey": "xIwp2ohi",
-//                    "url": order.address,
-//                    "taskReadNum": parseInt(order.num),
-//                    "taskLikeNum": parseInt(order.num2),
-//                    "readPerMinute": 200,
-//                    "forceStopAfterHours": 46 * 60
-//                }).then(function (result) {
-//                    var result_json = JSON.parse(result);
-//                    if(result_json.status == 1) {
-//                        var orderIns = Order.wrapToInstance(order);
-//                        orderIns.startReadNum = result_json.data.startReadNum;
-//                        orderIns.remote = 'weibang';
-//                        orderIns.complete(function() {
-//                            resolve('微信帮帮忙，自动处理订单完成了, href = ' + orderIns.address);
-//                        });
-//                    }else{
-//                        resolve(result_json.message + '====================================');
-//                    }
-//                });
-//            }
-//        });
+//    console.log('微信帮帮忙 提交订单了。。。。。。。。。。。。。。。。。。');
+//    Order.open().findOne({
+//        status: '未处理',
+//        type: 'wx',
+//        smallType: {$in: ['read', 'like']},
+//        num: {$lte: global.weichuanmeiOrderNum}
+//    }).then(function (order) {
+//        if(order) {
+//            var orderIns = Order.wrapToInstance(order);
+//            Address.postWeiBang('http://sun.71plus.cn:13000/api2/placeOrder',{
+//                "appkey": "xIwp2ohi",
+//                "url": orderIns.address,
+//                "taskReadNum": parseInt(orderIns.num),
+//                "taskLikeNum": parseInt(orderIns.num2),
+//                "readPerMinute": 200,
+//                "forceStopAfterHours": 46 * 60
+//            }).then(function (result) {
+//                var result_json = JSON.parse(result);
+//                if(result_json.status == 1) {
+//                    orderIns.startReadNum = result_json.data.startReadNum;
+//                    orderIns.remote = 'weibang';
+//                    orderIns.complete(function() {
+//                        console.log('微信帮帮忙，自动处理订单完成了, href = ' + orderIns.address);
+//                        commitOrderToWeiBang();
+//                    });
+//                }else{
+//                    orderIns.refund(result_json.message, function() {
+//                        setTimeout(function () {
+//                            commitOrderToWeiBang();
+//                        }, 10 * 1000);
+//                    });
+//                }
+//            });
+//        }else {
+//            setTimeout(function () {
+//                commitOrderToWeiBang();
+//            }, 1000 * 60);
+//        }
 //    });
 //}
 
