@@ -106,8 +106,9 @@ function commitOrderToWeiBang() {
         smallType: {$in: ['read', 'like']},
         num: {$lte: global.weichuanmeiOrderNum}
     }).then(function (order) {
-        if(order && order._id != commitOrderId) {
-            commitOrderId = order._id;
+        console.log(order._id.toString() != commitOrderId, 'order._id.toString() != commitOrderId');
+        if(order && order._id.toString() != commitOrderId) {
+            commitOrderId = order._id.toString();
             var orderIns = Order.wrapToInstance(order);
             Address.postWeiBang('http://sun.71plus.cn:13000/api2/placeOrder',{
                 "appkey": "xIwp2ohi",
