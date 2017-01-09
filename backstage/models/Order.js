@@ -107,7 +107,7 @@ function commitOrderToWeiBang() {
         if(order && order._id.toString() != commitOrderId) {
             commitOrderId = order._id.toString();
             var orderIns = Order.wrapToInstance(order);
-            Address.postWeiBang('http://sun.71plus.cn:13000/api2/placeOrder',{
+            Address.postWeiBang('http://115.29.100.83:13000/api2/placeOrder',{
                 "appkey": "xIwp2ohi",
                 "url": orderIns.address,
                 "taskReadNum": parseInt(orderIns.num),
