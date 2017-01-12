@@ -489,7 +489,7 @@ router.get('/like/quick', function (req, res) {
                     quick: true
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results, 100);
+                    Order.addSchedule(obj.results, 250);
                     res.render('WXlikeQuick', {
                         title: '图文阅读/点赞快速任务',
                         money: user.funds,
