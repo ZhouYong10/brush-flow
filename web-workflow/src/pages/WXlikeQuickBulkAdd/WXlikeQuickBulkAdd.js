@@ -104,23 +104,27 @@ function checkOrder(order) {
     if(!/((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(order.address)) {
         order.$set('noErr', false);
         order.$set('errMsg', order.errMsg + '请填写合法的url地址. ');
+        return;
     }
     if(!Utils.isNum(order.num)){
         order.$set('noErr', false);
-        order.$set('errMsg', order.errMsg + '阅读数量必须是数字. ');
+        order.$set('errMsg', order.errMsg + '阅读数量必须是正整数. ');
+        return;
     }
     if(Utils.isNum(order.num) && !Utils.min500(order.num)){
         order.$set('noErr', false);
         order.$set('errMsg', order.errMsg + '阅读数量最低500起. ');
+        return;
+    }
+    if(Utils.isNum(order.num) && Utils.isNum(order.num2) && !(parseInt(order.num2) <= parseInt(order.num*3/100))) {
+        order.$set('noErr', false);
+        order.$set('errMsg', order.errMsg + '点赞数量不能大于阅读数量的3%. ');
+        return;
     }
     if(Utils.isNum(order.num) && !Utils.isNum(order.num2)){
         order.num2 = parseInt(order.num / 1000 * 5);
         order.$set('totalPrice', (order.price * order.num + order.price2 * (order.num2 - parseInt(order.num / 1000 * 5))).toFixed(4));
     }else{
         order.$set('totalPrice', (order.price * order.num + order.price2 * order.num2).toFixed(4));
-    }
-    if(Utils.isNum(order.num) && Utils.isNum(order.num2) && !(parseInt(order.num2) <= parseInt(order.num / 25 * 2))) {
-        order.$set('noErr', false);
-        order.$set('errMsg', order.errMsg + '点赞数量不能大于阅读数量的8%. ');
     }
 }

@@ -40,7 +40,7 @@ new Vue({
         minnum: function(val) {
             var like = val ? val : 0;
             var read = this.num ? this.num : 0;
-            return parseInt(like) <= parseInt(read/25*2);
+            return parseInt(like) <= parseInt(read*3/100);
         },
         isnum: Utils.isNum,
         min500: Utils.min500,
