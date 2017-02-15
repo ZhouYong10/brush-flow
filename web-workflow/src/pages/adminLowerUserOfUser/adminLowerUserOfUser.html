@@ -8,7 +8,7 @@
 
     <link rel="import" href="../../components/head/head.html?__inline">
 
-    <link rel="stylesheet" href="./adminManageUser.scss?__inline">
+    <link rel="stylesheet" href="./adminLowerUserOfUser.scss?__inline">
 </head>
 <body>
 
@@ -28,29 +28,6 @@
                 <div class="am-panel-hd"><%= title %></div>
                 <div class="am-panel-bd am-scrollable-horizontal ">
 
-                    <div id="searchForm" class="am-form am-form-inline">
-                        <validator name="search">
-                            <form method="get" action="/admin/search/user">
-                                <div class="am-form-group am-form-group-sm search-title">
-                                    <label for="taskName" class="am-u-sm-3 am-form-label taskTypeLabel">
-                                        用户名
-                                    </label>
-                                    <div class="am-u-sm-9 taskTypeWrap">
-                                        <input id="taskName" type="text" class="am-form-field am-input-sm am-radius"
-                                               placeholder="可模糊搜索" name="username"
-                                        v-validate:username="{required: true}">
-                                    </div>
-                                </div>
-
-                                <div class="am-form-group am-form-group-sm">
-                                    <button class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
-                                        <i class="am-icon-search"></i>
-                                        搜索
-                                    </button>
-                                </div>
-                            </form>
-                        </validator>
-                    </div>
 
                     <div class="am-scrollable-horizontal am-text-center user-content">
                         <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
@@ -102,8 +79,6 @@
                             </tbody>
                         </table>
 
-                        <input type="hidden" value="<%= pages %>" id="pages">
-                        <div id="laypage"></div>
                     </div>
 
                 </div>
@@ -116,11 +91,9 @@
 
 <!--import plugin-->
 <script src="/static/plugins/layer/layer.js"></script>
-<script src="/static/plugins/laypage/laypage.js"></script>
 
 <script>
     require('adminMenuContent');
-    require('adminManageUser');
 </script>
 
 </body>

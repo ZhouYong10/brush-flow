@@ -392,6 +392,34 @@ router.post('/manage/user/add', function (req, res) {
         })
 });
 
+router.get('/lowerUsers/of/user', function (req, res) {
+    User.open().findById(req.query.userId)
+        .then(function (parent) {
+            if(parent.children && parent.children.length > 0){
+                User.open().find({_id: {$in: parent.children}})
+                    .then(function(obj) {
+                        res.render('adminLowerUserOfUser', {
+                            title: '设置 / 用户管理 / ' + parent.username + '的下级用户',
+                            money: req.session.systemFunds,
+                            freezeFunds: req.session.freezeFunds,
+                            users: obj
+                        });
+                    }, function(error) {
+                        throw new Error('查询下级用户信息失败： ' + error)
+                    })
+            }else {
+                res.render('adminLowerUserOfUser', {
+                    title: '设置 / 用户管理 / ' + parent.username + '的下级用户',
+                    money: req.session.systemFunds,
+                    freezeFunds: req.session.freezeFunds,
+                    users: []
+                });
+            }
+        }, function(error) {
+            res.send(error);
+        });
+});
+
 
 
 /*
