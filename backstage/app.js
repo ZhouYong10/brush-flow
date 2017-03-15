@@ -127,7 +127,8 @@ app.get('/auto/recharge', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-  res.render('index', {title: '用户登陆'});
+  //res.render('index', {title: '用户登陆'});
+  res.render('platformClose', {title: '平台暂时关闭'});
 });
 
 app.get('/securityImg', function (req, res) {
