@@ -699,9 +699,10 @@ router.get('/order/complete', function (req, res) {
             if(orderIns.status == '未处理'){
                 if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
                     //Address.getReadNum('http://120.55.191.152:8080/getext', {  //微信帮接口，
-                    Address.getReadNum('http://wxapi.vy360.cn/read/getReadNum', {
+                    Address.getReadNum('http://115.159.216.117:8080/read/getReadNum', {
                         //"appkey": "651c48b66e", //微信帮
-                        "key": "wxkey_1003930471_Ht32U",
+                        //"key": "wxkey_1003930471_Ht32U",   //这是原来的key　还有19224次
+                        "key": "wxkey_20170316_I7bg5O",   //这是新的key 有１万次
                         "url": orderIns.address
                     }).then(function (result) {
                         var jResult = JSON.parse(result);
