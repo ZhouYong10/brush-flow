@@ -231,7 +231,7 @@ app.get('/wx/like/complete/remote', function (req, res) {
               res.end();
             });
           } else {
-            orderIns.refund(msg, function() {
+            orderIns.remoteError(msg).then(function () {
               res.end();
             });
           }

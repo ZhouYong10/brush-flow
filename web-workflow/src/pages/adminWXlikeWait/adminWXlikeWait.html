@@ -38,7 +38,6 @@
                         </a>
 
                         <a id="weichuanmeiNum" class="am-btn am-btn-success am-radius am-btn-sm" @click="weichuanmei">
-                            <!--代丁限量(<%= dingdingOrderNum %>)-->
                             微帮限量(<%= weichuanmeiOrderNum %>)
                         </a>
 
@@ -108,15 +107,30 @@
                                     <!--<% } %>-->
 
                                     <% if(orders[i].remote == 'dingding'){ %>
-                                    丁丁
+                                    丁丁 <br/>
+                                    <% if(orders[i].remoteInfo){ %>
+                                    <a class="am-text-truncate text-break" title="<%= orders[i].remoteInfo %>">
+                                        <%= orders[i].remoteInfo %>
+                                    </a>
+                                    <% } %>
                                     <% } %>
 
                                     <% if(orders[i].remote == 'weichuanmei'){ %>
-                                    微传媒
+                                    微传媒 <br/>
+                                    <% if(orders[i].remoteInfo){ %>
+                                    <a class="am-text-truncate text-break" title="<%= orders[i].remoteInfo %>">
+                                        <%= orders[i].remoteInfo %>
+                                    </a>
+                                    <% } %>
                                     <% } %>
 
                                     <% if(orders[i].remote == 'tuike'){ %>
-                                    推客
+                                    推客 <br/>
+                                    <% if(orders[i].remoteInfo){ %>
+                                    <a class="am-text-truncate text-break" title="<%= orders[i].remoteInfo %>">
+                                        <%= orders[i].remoteInfo %>
+                                    </a>
+                                    <% } %>
                                     <% } %>
                                 </td>
                                 <td class="am-text-middle">

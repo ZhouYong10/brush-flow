@@ -116,12 +116,12 @@ function commitOrderToWeiBang() {
                 "forceStopAfterHours": 46 * 60
             }).then(function (result) {
                 var result_json = JSON.parse(result);
+                orderIns.remote = 'weibang';
                 if(result_json.status == 1) {
                     orderIns.startReadNum = result_json.data.startReadNum;
-                    orderIns.remote = 'weibang';
                     orderIns.complete();
                 }else{
-                    orderIns.refund(result_json.message);
+                    orderIns.remoteError(result_json.message);
                 }
             });
         }
@@ -177,165 +177,6 @@ function commitOrderToWeiBang() {
 //}
 
 
-/*
- * wx read and like 微刷平台对接
- * */
-var post_keyQuick = '';
-var firstItemIdQuick = '';
-var task_timeQuick = 1000 * 60 * 60 * 1000;
-var wxReadIsOpenQuick = 'no';
-var cookieInfoQuick ;
-var valIndexQuick ;
-
-function startIntervalQuick() {
-    var random = (Math.random() / 3 * 100).toFixed(0);
-    task_timeQuick = random >= 5 ? random * 1000 : 5 * 1000;
-    return setInterval(function() {
-        console.log('开始提单=====================================');
-        yesKeyQuick(clearTimeQuick);
-    }, task_timeQuick);
-}
-
-function clearTimeQuick() {
-    clearInterval(valIndexQuick);
-    if(wxReadIsOpenQuick == 'yes'){
-        valIndexQuick = startInterval();
-    }
-}
-
-function noKeyQuick(callback) {
-    request.get({
-        url:'http://www.helloyang.cn/index.asp',
-        headers:{
-            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            "Accept-Encoding": 'gzip, deflate, sdch',
-            "Accept-Language": 'zh-CN,zh;q=0.8',
-            "Cache-Control": 'max-age=0',
-            "Connection": 'keep-alive',
-            "Cookie": cookieInfoQuick,
-            "Host": 'www.helloyang.cn',
-            "Referer": 'http://www.helloyang.cn/login.asp',
-            "Upgrade-Insecure-Requests": 1,
-            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-        }
-    },function(err,res,body){
-        console.log(err, 'err   ================================');
-        console.log(res, 'res   ================================');
-        console.log(body, 'body   ================================');
-        //if(err) {
-        //    return console.log(err);
-        //}
-        //var $ = cheerio.load(body);
-        //post_keyQuick = $('#post_key').val();
-        //firstItemIdQuick = $('tbody').last().children().children().first().text().split('/')[0];
-        //yesKeyQuick(callback);
-    });
-}
-
-function yesKeyQuick(callback) {
-    //var forwardNum = global.forwardNum ? global.forwardNum : 5000;
-    //var forwardNum = global.weichuanmeiOrderNum;
-    Order.open().findOne({
-        status: '未处理',
-        type: 'wx',
-        smallType: {$in: ['readQuick', 'likeQuick']}
-        //num: {$gt: forwardNum}
-    }).then(function (result) {
-        console.log('---------------------------提单自了-----------------------------------');
-        console.log(result);
-        if(result ) {
-            Order.open().updateById(result._id, {
-                $set: {remote: 'weishua'}
-            }).then(function() {
-                request.post({
-                    url:'http://www.helloyang.cn/welcome.asp',
-                    headers:{
-                        "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                        "Accept-Encoding": 'gzip, deflate',
-                        "Accept-Language": 'zh-CN,zh;q=0.8',
-                        "Cache-Control": 'max-age=0',
-                        "Connection": 'keep-alive',
-                        "Content-Type": 'application/x-www-form-urlencoded',
-                        "Cookie": cookieInfoQuick,
-                        "Host": 'www.helloyang.cn',
-                        "Origin": 'http://www.helloyang.cn',
-                        "Referer": 'http://www.helloyang.cn/welcome.asp',
-                        "Upgrade-Insecure-Requests": 1,
-                        "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'
-                    },
-                    formData: {
-                        url_input: result.address,
-                        read_cnt: result.num,
-                        like: result.num2 ? result.num2 : 0,
-                        speed: 999,
-                        lailu: 0,
-                        lailu: 0,
-                        lailu: 0
-                    }
-                },function(err,res,body){
-                    console.log('---------------------------提单自了-----------------------------------');
-                    console.log(err, 'err   ================================');
-                    //console.log(res, 'res   ================================');
-                    console.log(body, 'body   ================================');
-                    //if(err) {
-                    //    return console.log(err);
-                    //}
-                    //var $ = cheerio.load(body);
-                    //var secondItemId = $('tbody').last().children().next().children().first().text().split('/')[0];
-                    //if(secondItemId == firstItemId) {
-                    //    var numIndex = setInterval(function () {
-                    //        getOrderStartNumQuick().then(function (startNum) {
-                    //            clearInterval(numIndex);
-                    //            var resultInstance = Order.wrapToInstance(result);
-                    //            resultInstance.remote = 'tuike';
-                    //            resultInstance.startReadNum = startNum;
-                    //            resultInstance.complete(function() {
-                    //                console.log('自动处理订单完成了, href = ' + result.address);
-                    //                callback();
-                    //            })
-                    //        });
-                    //    }, 1000 * 10);
-                    //}
-                });
-            });
-        }else{
-            noKeyQuick(callback);
-        }
-    });
-}
-
-function getOrderStartNumQuick() {
-    return new Promise(function(resolve, reject) {
-        request.get({
-            url:'http://120.25.203.122/tuike_sys.php',
-            headers:{
-                "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                "Accept-Encoding": 'gzip, deflate, sdch',
-                "Accept-Language": 'zh-CN,zh;q=0.8',
-                "Cache-Control": 'max-age=0',
-                "Connection": 'keep-alive',
-                "Cookie": cookieInfoQuick,
-                "Host": '120.25.203.122',
-                "Referer": 'http://120.25.203.122/login.html',
-                "Upgrade-Insecure-Requests": 1,
-                "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-            }
-        },function(err,res,body){
-            if(err) {
-                return console.log(err);
-            }
-            var $ = cheerio.load(body);
-            var $tr = $('tbody').last().children().first().children();
-            var orderStatus = $tr.last().find('font').text();
-            console.log(orderStatus, '======================================');
-            if(orderStatus == '运行中' || orderStatus == '完成'){
-                var startNum = $tr.first().next().next().next().next().text();
-                console.log(startNum, '==========================================');
-                resolve(startNum);
-            }
-        });
-    })
-}
 
 
 
@@ -692,19 +533,6 @@ Order.extend({
             }
         }
         return orders;
-    },
-    openWXReadQuickAuto: function(cookie) {
-        cookieInfoQuick = cookie;
-        wxReadIsOpenQuick = 'yes';
-        valIndexQuick = startIntervalQuick();
-        //getOrderStartNum();
-    },
-    closeWXReadQuickAuto: function() {
-        wxReadIsOpenQuick = 'no';
-        //clearInterval(valIndex);
-    },
-    wxReadQuickIsOpen: function() {
-        return wxReadIsOpenQuick;
     },
     openWXReadAuto: function(cookie) {
         wxReadIsOpen = 'yes';
@@ -1177,6 +1005,19 @@ Order.include({
                             });
                     });
             });
+    },
+    remoteError: function(msg) {
+        var self = this;
+       return new Promise(function(resolve) {
+           Order.open().updateById(self._id, {
+               $set: {
+                   remote: self.remote,
+                   remoteInfo: msg
+               }
+           }).then(function() {
+               resolve();
+           })
+       })
     },
     refundProfit: function(info, callback) {
         var self = this;
