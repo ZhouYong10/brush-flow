@@ -1070,21 +1070,9 @@ router.get('/WX/like/quick/wait', function (req, res) {
                 freezeFunds: req.session.freezeFunds,
                 orders: obj.results,
                 pages: obj.pages,
-                path: '/admin/WX/like/quick/wait',
-                wxReadIsOpen: Order.wxReadQuickIsOpen()
+                path: '/admin/WX/like/quick/wait'
             });
         });
-});
-
-router.get('/open/wx/read/like/quick', function (req, res) {
-    console.log(req.query, '===========================');
-    Order.openWXReadQuickAuto(req.query.cookie);
-    res.end('ok');
-});
-
-router.get('/close/wx/read/like/quick', function (req, res) {
-    Order.closeWXReadQuickAuto();
-    res.end('ok');
 });
 
 router.get('/WX/like/quick/already', function (req, res) {
@@ -1195,7 +1183,8 @@ router.get('/search/WX/like/dingding', function (req, res) {
 });
 
 router.get('/open/wx/read/like', function (req, res) {
-    Order.openWXReadAuto(req.query.cookie);
+    //Order.openWXReadAuto(req.query.cookie);
+    Order.openWXReadAuto();
     res.end('ok');
 });
 

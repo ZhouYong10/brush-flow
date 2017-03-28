@@ -29,157 +29,6 @@ Order.open = function() {
     return Order.openCollection('Order');
 };
 
-/*
- * wx read and like 代替推客的接口
- * */
-var wxReadIsOpen = 'no';
-
-function startInterval() {
-    if(wxReadIsOpen == 'yes'){
-        commitOrder();
-    }
-}
-
-function commitOrder() {
-    Order.open().findOne({
-        status: '未处理',
-        type: 'wx',
-        smallType: {$in: ['read', 'like']},
-        num: {$gt: global.dingdingOrderNum}
-    }).then(function (result) {
-        if(result) {
-            var orderIns = Order.wrapToInstance(result);
-            request('http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
-                + encodeURIComponent(orderIns.address) + '&read=' + orderIns.num + '&praise=' + orderIns.num2 + '&frequency=10000',
-                function(err,res,body){
-                    if(JSON.parse(body).Data == 'ok'){
-                        Order.open().updateById(orderIns._id, {
-                            $set: {remote: 'tuike'}
-                        });
-                        var indexGetReadNum = setInterval(function () {
-                            request('http://112.74.69.75:9092/wx_Order_GetOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
-                                + encodeURIComponent(orderIns.address),
-                                function(err,res,body){
-                                    if(JSON.parse(body)[0]){
-                                        var startReadNum = parseInt(JSON.parse(body)[0].start_quantity);
-                                        if(startReadNum != 0) {
-                                            orderIns.startReadNum = startReadNum;
-                                            clearInterval(indexGetReadNum);
-                                            orderIns.complete(function() {
-                                                startInterval();
-                                            });
-                                        }
-                                    }
-                                });
-                        }, 10 * 1000);
-                    }else {
-                        orderIns.refund('文章地址解析失败', function() {
-                            setTimeout(function () {
-                                startInterval();
-                            }, 10 * 1000);
-                        });
-                    }
-                });
-        }else {
-            setTimeout(function () {
-                startInterval();
-            }, 20 * 1000);
-        }
-    });
-}
-
-
-/*
- * wx read and like 微信帮帮接口
- * */
-var commitOrderId;
-setInterval(function () {
-    commitOrderToWeiBang();
-}, 1000 * 10);
-
-function commitOrderToWeiBang() {
-    Order.open().findOne({
-        status: '未处理',
-        type: 'wx',
-        smallType: {$in: ['read', 'like']},
-        num: {$lte: global.weichuanmeiOrderNum}
-    }).then(function (order) {
-        if(order && order._id.toString() != commitOrderId) {
-            commitOrderId = order._id.toString();
-            var orderIns = Order.wrapToInstance(order);
-            Address.postWeiBang('http://115.29.100.83:13000/api2/placeOrder',{
-                "appkey": "xIwp2ohi",
-                "url": orderIns.address,
-                "taskReadNum": parseInt(orderIns.num),
-                "taskLikeNum": parseInt(orderIns.num2),
-                "readPerMinute": 200,
-                "forceStopAfterHours": 46 * 60
-            }).then(function (result) {
-                var result_json = JSON.parse(result);
-                orderIns.remote = 'weibang';
-                if(result_json.status == 1) {
-                    orderIns.startReadNum = result_json.data.startReadNum;
-                    orderIns.complete();
-                }else{
-                    orderIns.remoteError(result_json.message);
-                }
-            });
-        }
-    });
-}
-
-
-
-//(function() {
-//    commitOrderToWeiBang()
-//})();
-//
-//function commitOrderToWeiBang() {
-//    console.log('微信帮帮忙 提交订单了。。。。。。。。。。。。。。。。。。');
-//    Order.open().findOne({
-//        status: '未处理',
-//        type: 'wx',
-//        smallType: {$in: ['read', 'like']},
-//        num: {$lte: global.weichuanmeiOrderNum}
-//    }).then(function (order) {
-//        if(order) {
-//            var orderIns = Order.wrapToInstance(order);
-//            Address.postWeiBang('http://sun.71plus.cn:13000/api2/placeOrder',{
-//                "appkey": "xIwp2ohi",
-//                "url": orderIns.address,
-//                "taskReadNum": parseInt(orderIns.num),
-//                "taskLikeNum": parseInt(orderIns.num2),
-//                "readPerMinute": 200,
-//                "forceStopAfterHours": 46 * 60
-//            }).then(function (result) {
-//                var result_json = JSON.parse(result);
-//                if(result_json.status == 1) {
-//                    orderIns.startReadNum = result_json.data.startReadNum;
-//                    orderIns.remote = 'weibang';
-//                    orderIns.complete(function() {
-//                        console.log('微信帮帮忙，自动处理订单完成了, href = ' + orderIns.address);
-//                        commitOrderToWeiBang();
-//                    });
-//                }else{
-//                    orderIns.refund(result_json.message, function() {
-//                        setTimeout(function () {
-//                            commitOrderToWeiBang();
-//                        }, 10 * 1000);
-//                    });
-//                }
-//            });
-//        }else {
-//            setTimeout(function () {
-//                commitOrderToWeiBang();
-//            }, 1000 * 60);
-//        }
-//    });
-//}
-
-
-
-
-
 ///*
 // * wx read and like 推客接口
 // * */
@@ -328,6 +177,104 @@ function commitOrderToWeiBang() {
 //    })
 //}
 
+/*
+ * wx read and like 代替推客的接口
+ * */
+var wxReadIsOpen = 'no';
+
+function startInterval() {
+    if(wxReadIsOpen == 'yes'){
+        console.log('开始提单了');
+        commitOrder();
+    }
+}
+
+function commitOrder() {
+    Order.open().findOne({
+        status: '未处理',
+        type: 'wx',
+        smallType: {$in: ['read', 'like']},
+        num: {$gt: global.dingdingOrderNum}
+    }).then(function (result) {
+        if(result) {
+            var orderIns = Order.wrapToInstance(result);
+            request('http://112.74.69.75:9092/weixin/wx_Order_SaveOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
+                + encodeURIComponent(orderIns.address) + '&read=' + orderIns.num + '&praise=' + orderIns.num2 + '&frequency=10000',
+                function(err,res,body){
+                    if(JSON.parse(body).Data == 'ok'){
+                        Order.open().updateById(orderIns._id, {
+                            $set: {remote: 'tuike'}
+                        });
+                        var indexGetReadNum = setInterval(function () {
+                            request('http://112.74.69.75:9092/wx_Order_GetOrderInfo?server=20&user=18682830727&password=WDY13419085703&url='
+                                + encodeURIComponent(orderIns.address),
+                                function(err,res,body){
+                                    if(JSON.parse(body)[0]){
+                                        var startReadNum = parseInt(JSON.parse(body)[0].start_quantity);
+                                        if(startReadNum != 0) {
+                                            orderIns.startReadNum = startReadNum;
+                                            clearInterval(indexGetReadNum);
+                                            orderIns.complete(function() {
+                                                startInterval();
+                                            });
+                                        }
+                                    }
+                                });
+                        }, 10 * 1000);
+                    }else {
+                        orderIns.refund('文章地址解析失败', function() {
+                            setTimeout(function () {
+                                startInterval();
+                            }, 10 * 1000);
+                        });
+                    }
+                });
+        }else {
+            setTimeout(function () {
+                startInterval();
+            }, 20 * 1000);
+        }
+    });
+}
+
+/*
+ * wx read and like 微信帮帮接口
+ * */
+var commitOrderId;
+setInterval(function () {
+    commitOrderToWeiBang();
+}, 1000 * 10);
+
+function commitOrderToWeiBang() {
+    Order.open().findOne({
+        status: '未处理',
+        type: 'wx',
+        smallType: {$in: ['read', 'like']},
+        num: {$lte: global.weichuanmeiOrderNum}
+    }).then(function (order) {
+        if(order && order._id.toString() != commitOrderId) {
+            commitOrderId = order._id.toString();
+            var orderIns = Order.wrapToInstance(order);
+            Address.postWeiBang('http://115.29.100.83:13000/api2/placeOrder',{
+                "appkey": "xIwp2ohi",
+                "url": orderIns.address,
+                "taskReadNum": parseInt(orderIns.num),
+                "taskLikeNum": parseInt(orderIns.num2),
+                "readPerMinute": 200,
+                "forceStopAfterHours": 46 * 60
+            }).then(function (result) {
+                var result_json = JSON.parse(result);
+                orderIns.remote = 'weibang';
+                if(result_json.status == 1) {
+                    orderIns.startReadNum = result_json.data.startReadNum;
+                    orderIns.complete();
+                }else{
+                    orderIns.remoteError(result_json.message);
+                }
+            });
+        }
+    });
+}
 
 /*
 * wx fans
@@ -535,6 +482,7 @@ Order.extend({
         return orders;
     },
     openWXReadAuto: function(cookie) {
+        //cookieInfo = cookie;
         wxReadIsOpen = 'yes';
         startInterval();
     },
