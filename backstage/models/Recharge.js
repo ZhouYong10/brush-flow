@@ -74,15 +74,52 @@ Recharge.extend({
             });
         })
     },
-    record: function(record) {
+    record: function(alipayInfo) {
+        return new Promise(function(resolve) {
+            var alipayDate = alipayInfo.alipayId.substr(0, 8),
+                today = moment().format('YYYYMMDD');
+            if(alipayDate < (today)) {
+                resolve({
+                    isOK: false,
+                    message: '该交易号已经过期！'
+                });
+            }else if(!(/^[0-9]*[1-9][0-9]*$/.test(alipayInfo.alipayId))){
+                resolve({
+                    isOK: false,
+                    message: '请输入合法的支付宝交易号!'
+                });
+            } else {
+                Recharge.open().findOne({alipayId: alipayInfo.alipayId})
+                    .then(function (result) {
+                        if (result) {
+                            resolve({
+                                isOK: false,
+                                message: '该交易号已提交充值，不能重提交！若充值未到账，请稍等，或联系平台管理员！'
+                            });
+                        } else {
+                            alipayInfo.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                            alipayInfo.isRecharge = false;
+                            alipayInfo.status = '充值中';
+                            Recharge.open().insert(alipayInfo)
+                                .then(function (result) {
+                                    resolve({
+                                        isOK: true,
+                                        path: '/user/recharge/history'
+                                    });
+                                });
+                        }
+                    });
+            }
+        })
+    },
+    history: function(info){
         return new Promise(function(resolve, reject) {
-            record.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
-            record.isRecharge = false;
-            record.status = '充值中';
-            Recharge.open().insert(record)
-                .then(function(result) {
-                    resolve(result);
-                })
+            Recharge.open().findPages(info.query, info.page)
+                .then(function (obj) {
+                    resolve(obj);
+                }, function (error) {
+                    reject('查询充值记录失败： ' + error);
+                });
         })
     },
     getAlipayIds: function() {

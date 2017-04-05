@@ -59,91 +59,77 @@ router.get('/recharge', function (req, res) {
 });
 
 router.post('/recharge', function (req, res) {
-    var alipayInfo = req.body, alipayDate = alipayInfo.alipayId.substr(0, 8),
-        today = moment().format('YYYYMMDD');
-    if(alipayDate < (today)) {
-        res.send({
-            isOK: false,
-            message: '该交易号已经过期！'
+    var alipayInfo = req.body;
+    alipayInfo.type = 'brush';
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            alipayInfo.username = user.username;
+            alipayInfo.userId = user._id;
+            alipayInfo.userOldFunds = user.funds;
+
+            Recharge.record(alipayInfo)
+                .then(function (info) {
+                    res.send(info);
+                });
         });
-    }else if(!(/^[0-9]*[1-9][0-9]*$/.test(alipayInfo.alipayId))){
-        res.send({
-            isOK: false,
-            message: '请输入合法的支付宝交易号!'
-        });
-    } else {
-        Recharge.open().findOne({alipayId: alipayInfo.alipayId})
-            .then(function (result) {
-                if (result) {
-                    res.send({
-                        isOK: false,
-                        message: '该交易号已充值成功，不能重复充值！'
-                    });
-                } else {
-                    User.open().findById(req.session.passport.user)
-                        .then(function (user) {
-                            alipayInfo.username = user.username;
-                            alipayInfo.userId = user._id;
-                            alipayInfo.userOldFunds = user.funds;
-                            Recharge.record(alipayInfo)
-                                .then(function(record) {
-                                    res.send({
-                                        isOK: true,
-                                        path: '/user/recharge/history'
-                                    });
-                                })
-                        });
-                }
-            });
-    }
 });
 
 router.get('/recharge/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Recharge.open().findPages({
-                userId: user._id
-            }, (req.query.page ? req.query.page : 1))
-                .then(function (obj) {
-                    res.render('rechargeHistory', {
-                        title: '充值记录',
-                        money: user.funds,
-                        recharges: obj.results,
-                        pages: obj.pages,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role
-                    });
-                }, function (error) {
-                    res.send('查询充值记录失败： ' + error);
+            var info = {
+                query: {
+                    type: 'brush',
+                    userId: user._id
+                },
+                page: req.query.page ? req.query.page : 1
+            };
+            Recharge.history(info).then(function (obj) {
+                res.render('rechargeHistory', {
+                    title: '充值记录',
+                    money: user.funds,
+                    recharges: obj.results,
+                    pages: obj.pages,
+                    username: user.username,
+                    userStatus: user.status,
+                    role: user.role
                 });
+            }, function(errMsg) {
+                res.send(errMsg);
+            });
         });
 });
 
 router.get('/search/recharge', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            var query = {userId: user._id};
+            var query = {
+                type: 'brush',
+                userId: user._id
+            };
             if(req.query.funds) {
                 query.funds = req.query.funds;
             }
             if(req.query.createTime) {
                 query.createTime = new RegExp(req.query.createTime);
             }
-            Recharge.open().findPages(query, (req.query.page ? req.query.page : 1))
-                .then(function (obj) {
-                    res.render('rechargeHistory', {
-                        title: '充值记录',
-                        money: user.funds,
-                        recharges: obj.results,
-                        pages: obj.pages,
-                        username: user.username,
-                        userStatus: user.status,
-                        role: user.role
-                    });
-                }, function (error) {
-                    res.send('查询充值记录失败： ' + error);
+            var info = {
+                query: query,
+                page: req.query.page ? req.query.page : 1
+            };
+            Recharge.history(info).then(function (obj) {
+                res.render('rechargeHistory', {
+                    title: '充值记录',
+                    money: user.funds,
+                    recharges: obj.results,
+                    pages: obj.pages,
+                    username: user.username,
+                    userStatus: user.status,
+                    role: user.role
                 });
+            }, function(errMsg) {
+                res.send(errMsg);
+            });
         });
 });
 

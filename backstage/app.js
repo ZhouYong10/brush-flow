@@ -299,6 +299,51 @@ app.get('/new/placard', function (req, res) {
   });
 });
 
+//人工平台充值接口
+app.get('/handle/recharge', function (req, res) {
+  Recharge.record(req.query)
+      .then(function (info) {
+        res.send(info);
+      });
+});
+
+app.get('/handle/recharge/history', function (req, res) {
+  var info = {
+    query: {
+      type: req.query.type,
+      userId: req.query.userId
+    },
+    page: req.query.page
+  };
+  Recharge.history(info).then(function (obj) {
+    res.send(obj);
+  }, function(errMsg) {
+    res.send(errMsg);
+  });
+});
+
+app.get('/handle/search/recharge', function (req, res) {
+  var query = {
+    type: req.query.type,
+    userId: req.query.userId
+  };
+  if(req.query.funds) {
+    query.funds = req.query.funds;
+  }
+  if(req.query.createTime) {
+    query.createTime = new RegExp(req.query.createTime);
+  }
+  var info = {
+    query: query,
+    page: req.query.page
+  };
+  Recharge.history(info).then(function (obj) {
+    res.send(obj);
+  }, function(errMsg) {
+    res.send(errMsg);
+  });
+});
+
 //拦截未登录
 app.use(function(req, res, next) {
   if(req.isAuthenticated()){
