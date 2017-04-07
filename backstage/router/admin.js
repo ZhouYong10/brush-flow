@@ -173,7 +173,8 @@ router.get('/update/header/nav', function (req, res) {
  * manage funds
  * */
 router.get('/recharge/history', function (req, res) {
-    Recharge.open().findPages(null, (req.query.page ? req.query.page : 1))
+    Recharge.open().findPages({type: {$in: ['brush', 'handle']}},
+        (req.query.page ? req.query.page : 1), {'createTime': -1})
         .then(function(obj) {
             res.render('adminRechargeHistory', {
                 title: '资金管理 / 充值记录',

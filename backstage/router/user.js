@@ -60,17 +60,26 @@ router.get('/recharge', function (req, res) {
 
 router.post('/recharge', function (req, res) {
     var alipayInfo = req.body;
-    alipayInfo.type = 'brush';
     User.open().findById(req.session.passport.user)
         .then(function (user) {
+            alipayInfo.type = 'brush';
             alipayInfo.username = user.username;
             alipayInfo.userId = user._id;
             alipayInfo.userOldFunds = user.funds;
-
+            alipayInfo.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
             Recharge.record(alipayInfo)
-                .then(function (info) {
-                    res.send(info);
-                });
+                .then(function (alipayFunds) {
+                    User.open().updateById(user._id, {$set: {
+                        funds: (parseFloat(user.funds) + parseFloat(alipayFunds)).toFixed(4)
+                    }}).then(function() {
+                        res.send({
+                            isOK: true,
+                            path: '/user/recharge/history'
+                        });
+                    })
+                }, function(errInfo) {
+                    res.send(errInfo);
+                })
         });
 });
 
@@ -108,7 +117,7 @@ router.get('/search/recharge', function (req, res) {
                 userId: user._id
             };
             if(req.query.funds) {
-                query.funds = req.query.funds;
+                query.funds = parseFloat(req.query.funds);
             }
             if(req.query.createTime) {
                 query.createTime = new RegExp(req.query.createTime);

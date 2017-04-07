@@ -108,21 +108,38 @@ app.use(passport.session());
 
 
 var Recharge = require('./models/Recharge');
-app.get('/auto/recharge', function (req, res) {
-  var caseValue = req.query.a;
-  switch (caseValue) {
-    case "getsn":
-      Recharge.getAlipayIds()
-          .then(function (ids) {
-            res.send(ids);
-          });
-      break;
-    case "report":
-      Recharge.updateRecord(req.query.result)
-          .then(function (msg) {
-            res.end(msg);
-          });
-      break;
+/*
+* 爱支付
+* */
+//app.get('/auto/recharge', function (req, res) {
+//  var caseValue = req.query.a;
+//  switch (caseValue) {
+//    case "getsn":
+//      Recharge.getAlipayIds()
+//          .then(function (ids) {
+//            res.send(ids);
+//          });
+//      break;
+//    case "report":
+//      Recharge.updateRecord(req.query.result)
+//          .then(function (msg) {
+//            res.end(msg);
+//          });
+//      break;
+//  }
+//});
+
+/*
+* 易支付
+* */
+app.get('/yzf/recharge', function (req, res) {
+  var info = req.query;
+  if(info.key === 'chong@zhi@3.1415'){
+    Recharge.yzfAutoInsert(info);
+    console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+    res.end('1');
+  }else{
+    res.end('<h1>你是假冒的充值记录，别以为我真的不知道！等着被查水表吧！</h1>');
   }
 });
 
