@@ -173,8 +173,7 @@ router.get('/update/header/nav', function (req, res) {
  * manage funds
  * */
 router.get('/recharge/history', function (req, res) {
-    Recharge.open().findPages({type: {$in: ['brush', 'handle']}},
-        (req.query.page ? req.query.page : 1), {'createTime': -1})
+    Recharge.open().findPages({type: 'brush'}, (req.query.page ? req.query.page : 1), {'createTime': -1})
         .then(function(obj) {
             res.render('adminRechargeHistory', {
                 title: '资金管理 / 充值记录',
@@ -190,14 +189,16 @@ router.get('/recharge/history', function (req, res) {
 });
 
 router.get('/search/recharge/by/alipayId', function (req, res) {
-    Recharge.open().findPages({alipayId: req.query.alipayId.replace(/(^\s*)|(\s*$)/g,"")}, (req.query.page ? req.query.page : 1))
-        .then(function(obj) {
+    Recharge.open().find({
+        type: 'brush',
+        alipayId: req.query.alipayId.replace(/(^\s*)|(\s*$)/g,"")
+    }).then(function(obj) {
             res.render('adminRechargeHistory', {
                 title: '资金管理 / 充值记录',
                 money: req.session.systemFunds,
                 freezeFunds: req.session.freezeFunds,
-                recharges: obj.results,
-                pages: obj.pages,
+                recharges: obj,
+                pages: 0,
                 path: '/admin/recharge/history'
             });
         }, function(error) {
@@ -229,9 +230,29 @@ router.get('/hand/recharge', function (req, res) {
     if(isNaN(msg.funds)) {
         res.send('充值金额必须是数字。。。。。。');
     }else {
-        Recharge.hand(msg.id, msg.funds).then(function(backInfo) {
-            res.redirect(msg.url + '?date=' + new Date().getTime());
-        })
+        Recharge.open().findById(msg.id).then(function (record) {
+            if (record.isRecharge) {
+                res.redirect(msg.url + '?date=' + new Date().getTime());
+            } else {
+                User.open().findById(record.userId)
+                    .then(function (user) {
+                        User.open().updateById(user._id, {
+                            $set: {
+                                funds: (parseFloat(user.funds) + parseFloat(msg.funds)).toFixed(4)
+                            }
+                        }).then(function () {
+                            Recharge.open().updateById(record._id, {$set: {
+                                funds: parseFloat(msg.funds),
+                                isRecharge: true,
+                                status: '成功',
+                                userNowFunds: (parseFloat(record.userOldFunds) + parseFloat(msg.funds)).toFixed(4)
+                            }}).then(function () {
+                                res.redirect(msg.url + '?date=' + new Date().getTime());
+                            });
+                        });
+                    });
+            }
+        });
     }
 });
 

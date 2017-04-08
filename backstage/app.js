@@ -136,7 +136,6 @@ app.get('/yzf/recharge', function (req, res) {
   var info = req.query;
   if(info.key === 'chong@zhi@3.1415'){
     Recharge.yzfAutoInsert(info);
-    console.log('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
     res.end('1');
   }else{
     res.end('<h1>你是假冒的充值记录，别以为我真的不知道！等着被查水表吧！</h1>');
@@ -316,50 +315,7 @@ app.get('/new/placard', function (req, res) {
   });
 });
 
-//人工平台充值接口
-app.get('/handle/recharge', function (req, res) {
-  Recharge.record(req.query)
-      .then(function (info) {
-        res.send(info);
-      });
-});
-
-app.get('/handle/recharge/history', function (req, res) {
-  var info = {
-    query: {
-      type: req.query.type,
-      userId: req.query.userId
-    },
-    page: req.query.page
-  };
-  Recharge.history(info).then(function (obj) {
-    res.send(obj);
-  }, function(errMsg) {
-    res.send(errMsg);
-  });
-});
-
-app.get('/handle/search/recharge', function (req, res) {
-  var query = {
-    type: req.query.type,
-    userId: req.query.userId
-  };
-  if(req.query.funds) {
-    query.funds = req.query.funds;
-  }
-  if(req.query.createTime) {
-    query.createTime = new RegExp(req.query.createTime);
-  }
-  var info = {
-    query: query,
-    page: req.query.page
-  };
-  Recharge.history(info).then(function (obj) {
-    res.send(obj);
-  }, function(errMsg) {
-    res.send(errMsg);
-  });
-});
+app.use('/handle', require('./router/handle.js'));
 
 //拦截未登录
 app.use(function(req, res, next) {

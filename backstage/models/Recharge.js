@@ -6,6 +6,7 @@ var Class = require('./Class');
 
 var User = require('./User');
 var moment = require('moment');
+var request = require('request');
 
 
 var Recharge = new Class();
@@ -18,51 +19,8 @@ Recharge.extend({
     open: function() {
         return Recharge.openCollection('Recharge');
     },
-    hand: function(id, funds) {
-        return new Promise(function(resolve, reject) {
-            Recharge.open().findById(id)
-                .then(function (record) {
-                    Recharge.open().findOne({alipayId: record.alipayId, isRecharge: true})
-                        .then(function (recordAlre) {
-                            if(recordAlre) {
-                                Recharge.open().update({alipayId: recordAlre.alipayId, isRecharge: false}, {
-                                    $set: {
-                                        isRecharge: true,
-                                        dec: '已经充值过了还来，滚犊子...!',
-                                        status: '失败'
-                                    }
-                                }).then(function () {
-                                    resolve();
-                                });
-                            }else {
-                                User.open().findById(record.userId)
-                                    .then(function (user) {
-                                        var fundsNow = (parseFloat(user.funds) + parseFloat(funds)).toFixed(4);
-                                        User.open().updateById(user._id, {
-                                            $set: {
-                                                funds: fundsNow
-                                            }
-                                        }).then(function () {
-                                            Recharge.open().updateById(record._id, {
-                                                $set: {
-                                                    funds: funds,
-                                                    isRecharge: true,
-                                                    dec: '充值成功!',
-                                                    status: '成功',
-                                                    userNowFunds: fundsNow
-                                                }
-                                            }).then(function () {
-                                                resolve();
-                                            });
-                                        });
-                                    });
-                            }
-                        });
-                });
-        })
-    },
     handRefuse: function(id, info) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve) {
             Recharge.open().updateById(id, {
                 $set: {
                     dec: info,
@@ -76,45 +34,59 @@ Recharge.extend({
     },
     record: function(alipayInfo) {
         return new Promise(function(resolve, reject) {
-            //查询充值记录是否存在
-            Recharge.open().findOne({
-                alipayId: alipayInfo.alipayId
-            }).then(function (alipay) {
-                //如果充值记录存在
-                if (alipay) {
-                    if (alipay.isRecharge) {
-                        reject({
-                            isOK: false,
-                            message: '该交易号已提交充值，不能重提交！'
-                        });
-                    } else {
-                        if(alipay.funds) {
-                            alipayInfo.isRecharge = true;
-                            alipayInfo.status = '成功';
-                            alipayInfo.userNowFunds = (parseFloat(alipay.funds) + parseFloat(alipayInfo.userOldFunds)).toFixed(4);
-                            Recharge.open().updateById(alipay._id, {
-                                $set: alipayInfo
-                            }).then(function () {
-                                resolve(alipay.funds);
-                            });
-                        }else{
+            var alipayDate = alipayInfo.alipayId.substr(0, 8),
+                today = moment().format('YYYYMMDD');
+            if(alipayDate < (today)) {
+                reject({
+                    isOK: false,
+                    message: '该交易号已经过期！'
+                });
+            }else if(!(/^[0-9]*[1-9][0-9]*$/.test(alipayInfo.alipayId)) || alipayInfo.alipayId.length != 32){
+                reject({
+                    isOK: false,
+                    message: '请输入合法的支付宝交易号!'
+                });
+            } else {
+                //查询充值记录是否存在
+                Recharge.open().findOne({
+                    alipayId: alipayInfo.alipayId
+                }).then(function (alipay) {
+                    //如果充值记录存在
+                    if (alipay) {
+                        if (alipay.isRecharge) {
                             reject({
                                 isOK: false,
                                 message: '该交易号已提交充值，不能重提交！'
                             });
+                        } else {
+                            if(alipay.funds) {
+                                alipayInfo.isRecharge = true;
+                                alipayInfo.status = '成功';
+                                alipayInfo.userNowFunds = (parseFloat(alipay.funds) + parseFloat(alipayInfo.userOldFunds)).toFixed(4);
+                                Recharge.open().updateById(alipay._id, {
+                                    $set: alipayInfo
+                                }).then(function () {
+                                    resolve(alipay.funds);
+                                });
+                            }else{
+                                reject({
+                                    isOK: false,
+                                    message: '该交易号已提交充值，不能重提交！'
+                                });
+                            }
                         }
-                    }
-                } else {
-                    alipayInfo.isRecharge = false;
-                    alipayInfo.status = '充值中';
-                    Recharge.open().insert(alipayInfo).then(function () {
-                        reject({
-                            isOK: true,
-                            path: '/user/recharge/history'
+                    } else {
+                        alipayInfo.isRecharge = false;
+                        alipayInfo.status = '充值中';
+                        Recharge.open().insert(alipayInfo).then(function () {
+                            reject({
+                                isOK: true,
+                                path: '/user/recharge/history'
+                            });
                         });
-                    });
-                }
-            });
+                    }
+                });
+            }
         })
     },
     history: function(info){
@@ -127,13 +99,6 @@ Recharge.extend({
                 });
         })
     },
-    yzfHandleInsert: function(info) {
-        //通过支付宝订单号查询系统内的充值记录
-
-        //如果记录存在并且状态为未充值，则自动充值
-
-        //如果记录不存在，则保存该充值记录
-    },
     yzfAutoInsert: function(info) {
         return new Promise(function (resolve, reject) {
             //查询充值记录是否存在
@@ -143,11 +108,9 @@ Recharge.extend({
                 //如果充值记录存在
                 if (alipay) {
                     if (alipay.isRecharge) {
-                        console.log('111111111111111111111111111');
                         resolve();
                     } else {
                         if (alipay.userId) {
-                            console.log('222222222222222222222222');
                             User.open().findById(alipay.userId).then(function(user) {
                                 if(user) {
                                     User.open().updateById(user._id, {$set: {
@@ -164,17 +127,31 @@ Recharge.extend({
                                         })
                                     })
                                 }else{
-                                    console.log('这是人工平台的充值记录，给人工平台充值');
-                                    resolve();
+                                    var url = 'http://localhost:4000/auto/recharge/to/user?' +
+                                        'userId=' + alipay.userId +
+                                        '&funds=' + info.money;
+                                    request(url, function (err, resp, body) {
+                                        if(body == 'ok'){
+                                            Recharge.open().updateById(alipay._id, {$set: {
+                                                isRecharge: true,
+                                                status: '成功',
+                                                funds: parseFloat(info.money),
+                                                alipayTime: info.PayTime,
+                                                userNowFunds : (parseFloat(alipay.userOldFunds) + parseFloat(info.money)).toFixed(4)
+                                            }}).then(function() {
+                                                resolve();
+                                            })
+                                        }else{
+                                            resolve();
+                                        }
+                                    });
                                 }
                             })
                         } else {
-                            console.log('3333333333333333333');
                             resolve();
                         }
                     }
                 } else {
-                    console.log('44444444444444444444');
                     Recharge.open().insert({
                         alipayId: info.orderid,
                         alipayTime: info.PayTime,
