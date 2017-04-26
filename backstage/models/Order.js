@@ -222,11 +222,9 @@ function commitOrder() {
                                 });
                         }, 10 * 1000);
                     }else {
-                        orderIns.refund('文章地址解析失败', function() {
-                            setTimeout(function () {
-                                startInterval();
-                            }, 10 * 1000);
-                        });
+                        setTimeout(function () {
+                            startInterval();
+                        }, 60 * 1000 * 10);
                     }
                 });
         }else {
