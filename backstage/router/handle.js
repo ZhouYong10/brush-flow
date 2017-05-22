@@ -12,7 +12,16 @@ var moment = require('moment');
 
 var router = require('express').Router();
 
-
+router.get('/get/recharge/num', function (req, res) {
+    Recharge.open().find({
+        type: req.query.type,
+        status: '充值中'
+    }).then(function (recharges) {
+        res.send({
+            num: recharges.length
+        });
+    });
+});
 
 //人工平台充值接口
 router.get('/recharge', function (req, res) {
