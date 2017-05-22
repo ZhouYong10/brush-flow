@@ -127,7 +127,7 @@ Recharge.extend({
                                         })
                                     })
                                 }else{
-                                    var url = 'http://localhost:4000/auto/recharge/to/user?' +
+                                    var url = 'http://www.677777778.cn/auto/recharge/to/user?' +
                                         'userId=' + alipay.userId +
                                         '&funds=' + info.money;
                                     request(url, function (err, resp, body) {
