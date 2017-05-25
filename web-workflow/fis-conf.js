@@ -74,6 +74,23 @@ fis.match('/src/pages/**/(*.html)', {
     useCache: false
 });
 
+fis.match('/{src,static,test,mock}/(**.{js,es6})', {
+        useHash: true
+    })
+    .match('/static/plugins/**.js', {
+        useHash: false
+    })
+    .match('/{src,static}/(**.{css,scss})', {
+        useHash: true,
+        useSprite: true
+    })
+    .match('/static/plugins/**.css', {
+        useHash: false
+    })
+    .match('/{src,static}/(**.{png,jpg,gif})', {
+        useHash: true
+    });
+
 
 /*
 * deal with plugins
@@ -95,6 +112,18 @@ fis.match('/src/pages/**.html', {
     deploy: fis.plugin('local-deliver', {
         to: '../backstage/views'
     })
+});
+
+fis.match('::packager', {
+    postpackager: fis.plugin('loader', {
+        allInOne: {
+            css: '/static/pak/${filepath}_aio.css',
+            js: '/static/pak/${filepath}_aio.js',
+            ignore: '/static/plugins/**.js'
+        },
+        useInlineMap: true
+    }),
+    spriter: fis.plugin('csssprites')
 });
 
 /*
