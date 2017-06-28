@@ -720,27 +720,39 @@ router.get('/order/complete', function (req, res) {
             var orderIns = Order.wrapToInstance(order);
             if(orderIns.status == '未处理'){
                 if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
-                    //Address.getReadNum('http://120.55.191.152:8080/getext', {  //微信帮接口，
-                    Address.getReadNum('http://115.159.216.117:8080/read/getReadNum', {
-                        //"appkey": "651c48b66e", //微信帮
-                        //"key": "wxkey_1003930471_Ht32U",   //这是原来的key　还有19224次
-                        "key": "wxkey_20170316_I7bg5O",   //这是新的key 有１万次
-                        "url": orderIns.address
-                    }).then(function (result) {
-                        var jResult = JSON.parse(result);
-                        if(jResult.result == 'succ' && jResult.wxdata.code == 1) {
-                            orderIns.startReadNum = jResult.wxdata.read_num;
-                            orderIns.complete(function() {
-                                res.redirect(url);
-                            });
-                        }else if(jResult.userdata && jResult.userdata.status == -1) {
-                            res.end('获取阅读初始量失败: 账户被停用。');
-                        }else if(jResult.userdata && jResult.userdata.can_count < 0){
-                            res.end('获取阅读初始量失败: 账户剩余次数已经用完，请充值。');
-                        }else{
-                            res.end('获取阅读初始量失败: 可能由于服务器限制，请再试一次。');
-                        }
+                    Address.readNum(orderIns.address).then(function (num) {
+                        orderIns.startReadNum = num;
+                        orderIns.complete(function () {
+                            res.redirect(url);
+                        });
+                    }, function (msg) {
+                        res.end(msg);
                     });
+                    /*
+                    * 下面是旧接口获取阅读数的方式
+                    * */
+                    //Address.getReadNum('http://120.24.58.35:13000/api2/getArticleInfoAndExt', {  //微信帮接口，
+                    //Address.getReadNum('http://115.159.216.117:8080/read/getReadNum', {
+                    //    "key": "xIwp2ohi", //微信帮
+                        //"key": "wxkey_1003930471_Ht32U",   //这是原来的key　还有19224次
+                        //"key": "wxkey_20170316_I7bg5O",   //这是新的key 有１万次
+                        //"url": orderIns.address
+                    //}).then(function (result) {
+                    //    console.log(result, '=================================');
+                        //var jResult = JSON.parse(result);
+                        //if(jResult.result == 'succ' && jResult.wxdata.code == 1) {
+                        //    orderIns.startReadNum = jResult.wxdata.read_num;
+                        //    orderIns.complete(function() {
+                        //        res.redirect(url);
+                        //    });
+                        //}else if(jResult.userdata && jResult.userdata.status == -1) {
+                        //    res.end('获取阅读初始量失败: 账户被停用。');
+                        //}else if(jResult.userdata && jResult.userdata.can_count < 0){
+                        //    res.end('获取阅读初始量失败: 账户剩余次数已经用完，请充值。');
+                        //}else{
+                        //    res.end('获取阅读初始量失败: 可能由于服务器限制，请再试一次。');
+                        //}
+                    //});
                 }else {
                     orderIns.complete(function() {
                         res.redirect(url);

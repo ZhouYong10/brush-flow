@@ -63,6 +63,20 @@ module.exports = {
             req.end();
         });
     },
+    readNum: function(url) {
+        return new Promise(function (resolve, reject) {
+            request({
+                url: 'http://120.24.58.35:13000/api2/getArticleInfoAndExt?key=xIwp2ohi&url=' + url
+            }, function (err, obj, body) {
+                var result = JSON.parse(body);
+                if(result.status == 1) {
+                    resolve(result.data.readNum);
+                }else{
+                    reject('获取文章阅读数失败，请联系接口管理员。失败状态为：　' + body);
+                }
+            });
+        });
+    },
     getReadNum:  function (uri, param, opts) {
         return new Promise(function (resolve, reject) {
             if (!opts) {
