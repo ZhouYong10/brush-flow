@@ -66,7 +66,7 @@ module.exports = {
     readNum: function(url) {
         return new Promise(function (resolve, reject) {
             request({
-                url: 'http://120.24.58.35:13000/api2/getArticleInfoAndExt?key=xIwp2ohi&url=' + url
+                url: 'http://120.24.58.35:13000/api2/getArticleInfoAndExt?key=xIwp2ohi&url=' + encodeURIComponent (url)
             }, function (err, obj, body) {
                 var result = JSON.parse(body);
                 if(result.status == 1) {
