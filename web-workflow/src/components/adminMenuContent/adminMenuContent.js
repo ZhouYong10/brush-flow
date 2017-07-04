@@ -35,12 +35,13 @@ function updateNav(obj, isAdd) {
     //var wxArticle = parseInt($('.updateNum.wxArticle').text().split(' ')[2]);
     var wxLikeQuick = parseInt($('.updateNum.wxLikeQuick').text().split(' ')[2]);
     var wxLike = parseInt($('.updateNum.wxLike').text().split(' ')[2]);
-    var wxComment = parseInt($('.updateNum.wxComment').text().split(' ')[2]);
+    //var wxComment = parseInt($('.updateNum.wxComment').text().split(' ')[2]);
     var wxReply = parseInt($('.updateNum.wxReply').text().split(' ')[2]);
     var wxFriend = parseInt($('.updateNum.wxFriend').text().split(' ')[2]);
     //var wxCode = parseInt($('.updateNum.wxCode').text().split(' ')[2]);
     //var wxNum = wxArticle + wxLikeQuick + wxLike + wxComment + wxReply + wxFriend + wxCode;
-    var wxNum = wxLikeQuick + wxLike + wxComment + wxReply + wxFriend;
+    //var wxNum = wxLikeQuick + wxLike + wxComment + wxReply + wxFriend;
+    var wxNum = wxLikeQuick + wxLike + wxReply + wxFriend;
     if(wxNum > 0) {
         $('.tips.wxArticle.wxLikeQuick.wxLike.wxComment.wxReply.wxFriend.wxCode').css('display', 'inline');
     }
