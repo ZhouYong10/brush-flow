@@ -411,13 +411,14 @@ router.post('/like/add', function (req, res) {
     if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 500) {
         return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低500起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
-    if(orderInfo.num2 && !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) && orderInfo.num2 > (orderInfo.num *3/100)) {
-        return res.send('<h1>点赞数量必须为正整数,且不能大于阅读数量的3%!.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    if(orderInfo.num2 && !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) && orderInfo.num2 > (orderInfo.num *0.5/100)) {
+        return res.send('<h1>点赞数量必须为正整数,且不能大于阅读数量的0.5%!.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
 
     orderInfo.num = parseInt(orderInfo.num);
     if(orderInfo.num2 == ''){
-        orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
+        //orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
+        orderInfo.num2 = 0;
     }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
@@ -566,14 +567,15 @@ router.post('/like/quick/add', function (req, res) {
     if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 500) {
         return res.send('<h1>需要添加的粉丝数量不能为空,且必须是正整数， 最低500起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
-    if(orderInfo.num2 && !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) && orderInfo.num2 > (orderInfo.num*3/100)) {
-        return res.send('<h1>点赞数量必须为正整数,且不能大于阅读数量的3%!.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    if(orderInfo.num2 && !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) && orderInfo.num2 > (orderInfo.num*0.5/100)) {
+        return res.send('<h1>点赞数量必须为正整数,且不能大于阅读数量的0.5%!.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
 
     orderInfo.quick = true;
     orderInfo.num = parseInt(orderInfo.num);
     if(orderInfo.num2 == ''){
-        orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
+        //orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
+        orderInfo.num2 = 0;
     }
     User.open().findById(req.session.passport.user)
         .then(function (user) {

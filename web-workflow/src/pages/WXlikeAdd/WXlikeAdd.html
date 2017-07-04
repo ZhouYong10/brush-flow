@@ -83,11 +83,11 @@
                         <label for="likeNum" class="am-u-sm-4 am-u-lg-2 am-form-label">点赞数量</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <input id="likeNum" class="am-radius am-input-sm" type="text"
-                                   placeholder="如果不填则系统默认赠送 0.5% 的赞，如果不需要赠送请写 0。"
+                                   placeholder="点赞数量不能大于阅读数量的0.5%!"
                                    v-model="num2" v-on:keyup="total" v-on:change="total" name="num2"
                                    v-validate:replynum="{minnum: true, isnum: true, maxprice: true}">
                             <span class="tips" v-if="$wxlike.replynum.isnum">数量必须为正整数!</span>
-                            <span class="tips" v-if="$wxlike.replynum.minnum">点赞数量不能大于阅读数量的3%!</span>
+                            <span class="tips" v-if="$wxlike.replynum.minnum">点赞数量不能大于阅读数量的0.5%!</span>
                         </div>
                     </div>
 

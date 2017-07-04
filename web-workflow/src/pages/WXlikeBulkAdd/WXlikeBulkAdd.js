@@ -116,9 +116,9 @@ function checkOrder(order) {
         order.$set('errMsg', order.errMsg + '阅读数量最低500起. ');
         return;
     }
-    if(Utils.isNum(order.num) && Utils.isNum(order.num2) && !(parseInt(order.num2) <= parseInt(order.num*3/100))) {
+    if(Utils.isNum(order.num) && Utils.isNum(order.num2) && !(parseInt(order.num2) <= parseInt(order.num*0.5/100))) {
         order.$set('noErr', false);
-        order.$set('errMsg', order.errMsg + '点赞数量不能大于阅读数量的3%. ');
+        order.$set('errMsg', order.errMsg + '点赞数量不能大于阅读数量的0.5%. ');
         return;
     }
     if(!Utils.isNum(order.num2)){
