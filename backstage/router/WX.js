@@ -10,6 +10,7 @@ var moment = require('moment');
 var Formidable = require('formidable');
 var path = require('path');
 var fs = require('fs');
+var Address = require('../models/Address');
 var router = require('express').Router();
 
 Object.defineProperty(global, 'codeDir', {
@@ -633,7 +634,41 @@ router.get('/like/quick/bulk/add', function (req, res) {
         });
 });
 
+router.get('/read/check', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            res.render('WXreadCheck', {
+                title: '微信阅读查询',
+                money: user.funds,
+                username: user.username,
+                userStatus: user.status,
+                role: user.role
+            })
+        });
+});
 
+router.get('/check/read/num', function (req, res) {
+    Address.readNum(req.query.address).then(function (num) {
+        User.open().findById(req.session.passport.user)
+            .then(function (user) {
+                var nowFunds = (user.funds - 0.01).toFixed(4);
+                User.open().updateById(user._id, {$set: {
+                    funds: nowFunds
+                }}).then(function() {
+                    res.send({
+                        isOk: true,
+                        num: num,
+                        funds: nowFunds
+                    });
+                })
+            });
+    }, function (msg) {
+        res.send({
+            isOk: false,
+            msg: msg
+        });
+    });
+});
 
 
 

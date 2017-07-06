@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="WXreadCheck.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd">
+
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        此接口为查询微信阅读量接口，单次查询扣费 <strong style="color: red;">0.01</strong> 元。<br/>
+                    </div>
+                </div>
+
+                <div id="searchForm" class="am-form am-form-inline">
+                        <div class="am-form-group am-form-group-sm search-title">
+                            <label for="taskName" class="am-u-sm-3 am-form-label taskTypeLabel">
+                                查询地址
+                            </label>
+                            <div class="am-u-sm-9 taskTypeWrap">
+                                <input id="address" type="text" class="am-form-field am-input-sm am-radius"
+                                       placeholder="请输入文章地址">
+                            </div>
+                        </div>
+                        <div class="am-form-group am-form-group-sm">
+                            <button id="checkButton" class="am-btn am-btn-success am-radius am-btn-sm">
+                                <i class="am-icon-search"></i>
+                                查询
+                            </button>
+                        </div>
+                </div>
+
+                <div id="msg" class="am-scrollable-horizontal"></div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script>
+    require('WXreadCheck');
+</script>
+
+</body>
+</html>
