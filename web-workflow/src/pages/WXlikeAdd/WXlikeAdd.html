@@ -101,37 +101,11 @@
                     </div>
 
                     <div class="am-form-group">
-                        <label for="taskSpeed" class="am-u-sm-4 am-u-lg-2 am-form-label">阅读限速</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskSpeed" class="am-radius am-input-sm" type="text" name="speed"
-                                   placeholder="限速单位：数量/分钟， 例如限制一分钟最多增加100个阅读，输入100即可"
-                                   v-validate:spped="{isnum: true}">
-                            <span class="tips" v-if="$wxlike.spped.isnum">必须为正整数!</span>
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
                         <label for="taskRemark" class="am-u-sm-4 am-u-lg-2 am-form-label">任务备注</label>
                         <div class="am-u-sm-8 am-u-lg-10">
                             <textarea id="taskRemark" class="am-radius" rows="3" placeholder="添加任务备注" name="remark"></textarea>
                         </div>
                     </div>
-
-                    <!--<div class="am-form-group">-->
-                    <!--<label for="planTime" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>计划时间</label>-->
-                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                    <!--<input id="planTime" class="am-radius am-input-sm" type="text" placeholder="首次开始任务的时间">-->
-                    <!--</div>-->
-                    <!--</div>-->
-
-                    <!--<div class="am-form-group">-->
-                    <!--<label for="continuedTime" class="am-u-sm-4 am-u-lg-2 am-form-label">计划持续</label>-->
-                    <!--<div class="am-u-sm-8 am-u-lg-10">-->
-                    <!--<input id="continuedTime" class="am-radius am-input-sm" type="text" placeholder="任务持续的天数，以后每天在计划时间重复执行">-->
-                    <!--</div>-->
-                    <!--</div>-->
-
-
 
                     <div class="am-form-group">
                         <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
