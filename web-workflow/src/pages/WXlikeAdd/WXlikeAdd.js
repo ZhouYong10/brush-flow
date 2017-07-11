@@ -1,51 +1,109 @@
 /**
  * Created by ubuntu64 on 3/15/16.
  */
-var Vue = require('vue');
-Vue.use(require('vue-validator'));
-Vue.use(require('vue-resource'));
-
 var Utils = require('utils');
 
-new Vue({
-    el: '#wxLike',
-    data: {
-        price: '',
-        price2: '',
-        address: '',
-        articleTitle: '',
-        totalPrice: 0,
-        num: '',
-        num2: '',
-        funds: 0
-    },
-    methods: {
-        parseAddress: function() {
-            var self = this;
-            Utils.wxParseAddress(self.$http, self.address)
-                .then(function(title) {
-                    self.articleTitle = title;
-                },function(message) {
-                    alert(message);
-                })
-        },
-        total: function() {
-            this.totalPrice = (this.price * this.num + this.price2 * this.num2).toFixed(4);
+function isAddress() {
+    return new Promise(function (resolve, reject) {
+        var address = $('#address').val();
+        if (Utils.isHttp(address)) {
+            layer.closeAll();
+            resolve();
+            $.post('/parse/wx/title/by/address', {address: address}, function (data) {
+                if (data.isOk) {
+                    $('#title').val(data.title).css({color: 'green'});
+                } else {
+                    $('#title').val(data.message).css({color: 'red'});
+                }
+            })
+        } else {
+            layer.tips('请输入正确的文章地址!', '#address', {
+                tips: [1, '#f00'],
+                time: 4000
+            });
+            reject();
         }
-    },
-    validators: {
-        isaddress: function(val) {
-            return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(val);
-        },
-        minnum: function(val) {
-            var like = val ? val : 0;
-            var read = this.num ? this.num : 0;
-            return parseInt(like) <= parseInt(read*0.5/100);
-        },
-        isnum: Utils.isNum,
-        min500: Utils.min500,
-        maxprice: function() {
-            return parseFloat(this.price * this.num + this.price2 * this.num2) <= parseFloat(this.funds);
+    });
+}
+
+function checkReadLike() {
+    var price = $('#price').val();
+    var price2 = $('#price2').val();
+    var userFunds = $('#userFunds').val();
+    var readNum = $('#readNum').val();
+    var likeNum = $('#likeNum').val();
+    var totalPrice = 0;
+    var $total = $('#total');
+    if (Utils.isNum(readNum) && Utils.min500(readNum)) {
+        if(likeNum == '') {
+            totalPrice = (readNum * price).toFixed(4);
+            if(parseFloat(totalPrice) > parseFloat(userFunds)){
+                $total.val('￥ ' + totalPrice).css({color: 'red'});
+                return 'errTotal';
+            }
+            $total.val('￥ ' + totalPrice).css({color: 'green'});
+            return 'ok';
+        }else{
+            if(Utils.isNum(likeNum) && parseInt(likeNum) <= parseInt(readNum*0.5/100)){
+                totalPrice = (readNum * price + likeNum * price2).toFixed(4);
+                if(parseFloat(totalPrice) > parseFloat(userFunds)){
+                    $total.val('￥ ' + totalPrice).css({color: 'red'});
+                    return 'errTotal';
+                }
+                $total.val('￥ ' + totalPrice).css({color: 'green'});
+                return 'ok';
+            }else{
+                return 'errLike';
+            }
         }
+    } else {
+        return 'errRead';
     }
+}
+
+$(function () {
+    $('#address').change(function () {
+        isAddress();
+    });
+
+    $('#readNum').keyup(function () {
+        checkReadLike();
+    });
+
+    $('#likeNum').keyup(function () {
+        checkReadLike();
+    });
+
+    $('#commit').click(function (e) {
+        isAddress().then(function () {
+            var result = checkReadLike();
+            if (result != 'ok') {
+                e.stopPropagation();
+                e.preventDefault();
+                switch (result){
+                    case 'errTotal':
+                        layer.tips('账户余额不足，请充值!', '#total', {
+                            tips: [1, '#f00'],
+                            time: 4000
+                        });
+                        break;
+                    case 'errLike':
+                        layer.tips('点赞数必须是正整数，且不能大于阅读数的0.5%!', '#likeNum', {
+                            tips: [1, '#f00'],
+                            time: 4000
+                        });
+                        break;
+                    case 'errRead':
+                        layer.tips('阅读数必须是正整数，且不小于500!', '#readNum', {
+                            tips: [1, '#f00'],
+                            time: 4000
+                        });
+                        break;
+                }
+            }
+        }, function () {
+            e.stopPropagation();
+            e.preventDefault();
+        })
+    })
 });

@@ -77,6 +77,9 @@ module.exports = {
                 });
         });
     },
+    isHttp: function(url) {
+        return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(url);
+    },
     isNum: function(val) {
         if(val == '' || val == 0){
             return true;

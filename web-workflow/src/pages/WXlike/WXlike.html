@@ -67,7 +67,6 @@
                             <th>阅读初始量</th>
                             <th>进度</th>
                             <th>状态</th>
-                            <th>备注</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -99,11 +98,6 @@
                             <td class="am-text-middle"><%= orders[i].startReadNum %></td>
                             <td class="am-text-middle"><%= orders[i].schedule %></td>
                             <td class="am-text-middle"><%= orders[i].status %></td>
-                            <td class="am-text-middle">
-                                <a class="am-text-truncate text-break break-css" title="<%= orders[i].remark %>">
-                                    <%= orders[i].remark %>
-                                </a>
-                            </td>
                             <td class="am-text-middle">
                                 <% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error == undefined){ %>
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs orderError"

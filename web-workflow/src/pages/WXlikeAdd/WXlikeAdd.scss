@@ -11,6 +11,17 @@
 .disable{
   margin: 0;
   padding-top: 8px;
+  line-height: 30px;
+}
+
+label span{
+  border: 1px solid #ccc;
+  float: right;
+  line-height: 30px;
+  width: 80px;
+  text-align: center;
+  margin: 0;
+  font-weight: normal;
 }
 
 @media (min-width: 800px) {

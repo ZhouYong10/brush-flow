@@ -147,14 +147,21 @@ module.exports = {
                 if (err) {
                     reject({
                         isOk: false,
-                        message: '对不起，地址解析失败，请联系管理员！'
+                        message: '地址解析失败，请联系管理员！'
                     });
                 } else {
                     var $ = cheerio.load(body);
-                    resolve({
-                        isOk: true,
-                        title: $('title').text()
-                    });
+                    if($('title').text() == ''){
+                        reject({
+                            isOk: false,
+                            message: '获取文章标题失败，请检查地址是否正确，文章是否存在！'
+                        });
+                    }else{
+                        resolve({
+                            isOk: true,
+                            title: $('title').text()
+                        });
+                    }
                 }
             });
         })
