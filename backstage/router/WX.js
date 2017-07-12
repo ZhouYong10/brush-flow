@@ -128,7 +128,7 @@ router.get('/fans', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 10);
                     res.render('WXfans', {
-                        title: '公众粉丝(1000以下)',
+                        title: '公众粉丝',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -153,7 +153,7 @@ router.get('/account/search/fans', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
                     res.render('WXfans', {
-                        title: '公众粉丝(1000以下)',
+                        title: '公众粉丝',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -179,7 +179,7 @@ router.get('/fans/add', function (req, res) {
                             var myReplyPrice = replyIns.getPriceByRole(user.role);
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('WXfansAdd', {
-                                    title: '添加公众粉丝(1000以下)',
+                                    title: '添加公众粉丝',
                                     money: user.funds,
                                     username: user.username,
                                     userStatus: user.status,
