@@ -580,31 +580,35 @@ router.post('/like/quick/add', function (req, res) {
         //orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
         orderInfo.num2 = 0;
     }
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
 
-            var order = Order.wrapToInstance(orderInfo);
-            if(orderInfo.orderFlag) {
-                order.checkRandomStr(req).then(function() {
-                    order.createAndSaveTwo(user, {type: 'wx', smallType: 'readQuick'}, {type: 'wx', smallType: 'likeQuick'})
-                        .then(function () {
-                            socketIO.emit('updateNav', {'wxLikeQuick': 1});
+    Address.parseWxTitle(orderInfo.address)
+        .then(function (obj) {
+            orderInfo.title = obj.title;
+            User.open().findById(req.session.passport.user)
+                .then(function (user) {
+                    var order = Order.wrapToInstance(orderInfo);
+                    if(orderInfo.orderFlag) {
+                        order.checkRandomStr(req).then(function() {
+                            order.createAndSaveTwo(user, {type: 'wx', smallType: 'readQuick'}, {type: 'wx', smallType: 'likeQuick'})
+                                .then(function () {
+                                    socketIO.emit('updateNav', {'wxLikeQuick': 1});
+                                    res.redirect('/wx/like/quick');
+                                }, function() {
+                                    res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                                });
+                        }, function(msg) {
                             res.redirect('/wx/like/quick');
-                        }, function() {
-                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                        });
-                }, function(msg) {
-                    res.redirect('/wx/like/quick');
-                })
-            }else {
-                order.createAndSaveTwo(user, {type: 'wx', smallType: 'readQuick'}, {type: 'wx', smallType: 'likeQuick'})
-                    .then(function (result) {
-                        socketIO.emit('updateNav', {'wxLikeQuick': 1});
-                        res.send({funds: result.funds, msg: '提交成功！'});
-                    }, function() {
-                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
-                    });
-            }
+                        })
+                    }else {
+                        order.createAndSaveTwo(user, {type: 'wx', smallType: 'readQuick'}, {type: 'wx', smallType: 'likeQuick'})
+                            .then(function (result) {
+                                socketIO.emit('updateNav', {'wxLikeQuick': 1});
+                                res.send({funds: result.funds, msg: '提交成功！'});
+                            }, function() {
+                                res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                            });
+                    }
+                });
         });
 });
 

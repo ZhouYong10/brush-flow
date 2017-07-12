@@ -5,18 +5,21 @@ var Utils = require('utils');
 
 function isAddress() {
     return new Promise(function (resolve, reject) {
-        var address = $('#address').val();
+        var $address = $('#address');
+        var $title = $('#title');
+        var address = $address.val();
         if (Utils.isHttp(address)) {
-            layer.closeAll();
+            $address.css({color: 'green'});
             resolve();
             $.post('/parse/wx/title/by/address', {address: address}, function (data) {
                 if (data.isOk) {
-                    $('#title').val(data.title).css({color: 'green'});
+                    $title.val(data.title).css({color: 'green'});
                 } else {
-                    $('#title').val(data.message).css({color: 'red'});
+                    $title.val(data.message).css({color: 'red'});
                 }
             })
         } else {
+            $address.css({color: 'red'});
             layer.tips('请输入正确的文章地址!', '#address', {
                 tips: [1, '#f00'],
                 time: 4000
@@ -30,11 +33,14 @@ function checkReadLike() {
     var price = $('#price').val();
     var price2 = $('#price2').val();
     var userFunds = $('#userFunds').val();
-    var readNum = $('#readNum').val();
-    var likeNum = $('#likeNum').val();
+    var $readNum = $('#readNum');
+    var $likeNum = $('#likeNum');
+    var readNum = $readNum.val();
+    var likeNum = $likeNum.val();
     var totalPrice = 0;
     var $total = $('#total');
     if (Utils.isNum(readNum) && Utils.min500(readNum)) {
+        $readNum.css({color: 'green'});
         if(likeNum == '') {
             totalPrice = (readNum * price).toFixed(4);
             if(parseFloat(totalPrice) > parseFloat(userFunds)){
@@ -45,6 +51,7 @@ function checkReadLike() {
             return 'ok';
         }else{
             if(Utils.isNum(likeNum) && parseInt(likeNum) <= parseInt(readNum*0.5/100)){
+                $likeNum.css({color: 'green'});
                 totalPrice = (readNum * price + likeNum * price2).toFixed(4);
                 if(parseFloat(totalPrice) > parseFloat(userFunds)){
                     $total.val('￥ ' + totalPrice).css({color: 'red'});
@@ -53,10 +60,12 @@ function checkReadLike() {
                 $total.val('￥ ' + totalPrice).css({color: 'green'});
                 return 'ok';
             }else{
+                $likeNum.css({color: 'red'});
                 return 'errLike';
             }
         }
     } else {
+        $readNum.css({color: 'red'});
         return 'errRead';
     }
 }
