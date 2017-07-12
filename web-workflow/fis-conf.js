@@ -29,7 +29,6 @@ fis.match('/{src,static,test,mock}/**.es6', {
 });
 
 fis.match('/{src,static}/(**.{js,es6})', {
-    optimizer: fis.plugin('uglify-js'),
     release: '/static/js/$1'
 });
 
@@ -46,7 +45,6 @@ fis.match('/{src,static}/**.scss', {
 });
 
 fis.match('/{src,static}/(**.{css,scss})', {
-    optimizer: fis.plugin('clean-css'),
     postprocessor: fis.plugin('autoprefixer', {
         "browsers": ["last 30 versions"],
         "cascade": true,
@@ -70,27 +68,8 @@ fis.match('/src/**.html', {
     release: false
 });
 fis.match('/src/pages/**/(*.html)', {
-    release: '/$1',
-    useCache: false
+    release: '/$1'
 });
-
-fis.match('/{src,static,test,mock}/(**.{js,es6})', {
-        useHash: true
-    })
-    .match('/static/plugins/**.js', {
-        useHash: false
-    })
-    .match('/{src,static}/(**.{css,scss})', {
-        useHash: true,
-        useSprite: true
-    })
-    .match('/static/plugins/**.css', {
-        useHash: false
-    })
-    .match('/{src,static}/(**.{png,jpg,gif})', {
-        useHash: true
-    });
-
 
 /*
 * deal with plugins
@@ -114,32 +93,22 @@ fis.match('/src/pages/**.html', {
     })
 });
 
-fis.match('::packager', {
-    postpackager: fis.plugin('loader', {
-        allInOne: {
-            css: '/static/pak/${filepath}_aio.css',
-            js: '/static/pak/${filepath}_aio.js',
-            ignore: '/static/plugins/**.js'
-        },
-        useInlineMap: true
-    }),
-    spriter: fis.plugin('csssprites')
-});
-
 /*
 * production environment
 * */
 fis.media('prod')
-    .match('/{src,static,test,mock}/(**.{js,es6})', {
-        useHash: true,
+    .match('/{src,static}/(**.{js,es6})', {
         optimizer: fis.plugin('uglify-js')
+    })
+    .match('/{src,static,test,mock}/(**.{js,es6})', {
+        useHash: true
     })
     .match('/static/plugins/**.js', {
         useHash: false
     })
     .match('/{src,static}/(**.{css,scss})', {
-        useHash: true,
         optimizer: fis.plugin('clean-css'),
+        useHash: true,
         useSprite: true
     })
     .match('/static/plugins/**.css', {
@@ -147,6 +116,9 @@ fis.media('prod')
     })
     .match('/{src,static}/(**.{png,jpg,gif})', {
         useHash: true
+    })
+    .match('/src/pages/**/(*.html)', {
+        useCache: false
     })
     //.match('/src/pages/**.html', {
     //    optimizer: fis.plugin('htmlmin', {

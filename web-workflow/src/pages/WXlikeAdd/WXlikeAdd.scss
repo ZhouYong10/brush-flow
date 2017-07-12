@@ -24,8 +24,23 @@ label span{
   font-weight: normal;
 }
 
-@media (min-width: 800px) {
+.radioLable{
+  border: 1px solid #ccc;
+  line-height: 30px;
+  text-align: center;
+  margin: 0;
+  font-weight: 400;
+  background: #ECCEB1;
+}
+
+@media (min-width: 600px) {
   form{
     padding-right: 88px;
+  }
+}
+
+@media (min-width: 1000px) {
+  form{
+    padding: 0;
   }
 }

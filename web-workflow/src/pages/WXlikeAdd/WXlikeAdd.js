@@ -71,15 +71,28 @@ function checkReadLike() {
 }
 
 $(function () {
+    $('.radioLable').click(function () {
+        var model = $(this).find('input').val();
+        $.get('/WX/like/model', {model: model}, function (data) {
+            $('#priceShow').val('阅读￥ ' + data.price + '/个, 点赞￥ ' + data.price2 + '/个');
+            $('#price').val(data.price);
+            $('#price2').val(data.price2);
+        })
+    });
+
     $('#address').change(function () {
         isAddress();
     });
 
     $('#readNum').keyup(function () {
         checkReadLike();
+    }).blur(function () {
+        checkReadLike();
     });
 
     $('#likeNum').keyup(function () {
+        checkReadLike();
+    }).blur(function () {
         checkReadLike();
     });
 

@@ -1093,8 +1093,7 @@ router.get('/WX/article/already', function (req, res) {
 router.get('/WX/like/quick/wait', function (req, res) {
     Order.open().findPages({
             type: 'wx',
-            smallType: {$in: ['readQuick', 'likeQuick']},
-            quick: true,
+            smallType: 'readQuick',
             status: '未处理'
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
@@ -1112,8 +1111,7 @@ router.get('/WX/like/quick/wait', function (req, res) {
 router.get('/WX/like/quick/already', function (req, res) {
     var search = {
         type: 'wx',
-        smallType: {$in: ['readQuick', 'likeQuick']},
-        quick: true,
+        smallType: 'readQuick',
         status: {$ne: '未处理'}
     };
     Order.open().findPages(search, (req.query.page ? req.query.page : 1))
@@ -1141,7 +1139,7 @@ router.get('/WX/like/quick/already', function (req, res) {
 router.get('/WX/like/wait', function (req, res) {
     Order.open().findPages({
         type: 'wx',
-        smallType: {$in: ['read', 'like']},
+        smallType: 'read',
         status: '未处理'
     }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
@@ -1163,7 +1161,7 @@ router.get('/WX/like/wait', function (req, res) {
 router.get('/WX/like/already', function (req, res) {
     var search = {
         type: 'wx',
-        smallType: {$in: ['read', 'like']},
+        smallType: 'read',
         status: {$ne: '未处理'}
     };
     Order.open().findPages(search, (req.query.page ? req.query.page : 1))
@@ -1189,7 +1187,7 @@ router.get('/WX/like/already', function (req, res) {
 router.get('/search/WX/like/dingding', function (req, res) {
     var search = {
         type: 'wx',
-        smallType: {$in: ['read', 'like']},
+        smallType: {$in: ['read', 'readQuick']},
         status: '已处理',
         createTime: new RegExp(req.query.date)
     };

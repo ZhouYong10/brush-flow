@@ -31,26 +31,7 @@
                     <div id="searchForm" class="am-form am-form-inline" style="padding-bottom: 6px;">
                         <validator name="search">
                             <form method="get" action="/admin/search/WX/like/dingding" class="am-form-inline">
-                                <!--<div class="am-form-group">-->
-                                    <!--<input class="am-radius am-input-sm" type="text" placeholder="选择查询日期"-->
-                                           <!--onclick="laydate({istime: true,format: 'YYYY-MM-DD'})"-->
-                                           <!--v-validate:date="{required: true}" name="date">-->
-                                <!--</div>-->
-
-                                <!--<div class="am-form-group">-->
-                                    <!--<select class="am-radius am-input-sm" style="width:66px;" name="type">-->
-                                        <!--<option value=""> 平台 </option>-->
-                                        <!--<option value="tuike">推客</option>-->
-                                        <!--<option value="daiding">代丁</option>-->
-                                        <!--<option value="weichuanmei">微传媒</option>-->
-                                    <!--</select>-->
-                                <!--</div>-->
-
                                 <div class="am-form-group">
-                                    <!--<button class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">-->
-                                        <!--<i class="am-icon-search"></i>-->
-                                        <!--查询-->
-                                    <!--</button>-->
                                     <span style="float: right; padding: 3px 0 0 16px;">阅读总额: <%= readTotal %> </span>
                                 </div>
                             </form>
@@ -69,7 +50,6 @@
                                 <th>数量/速度</th>
                                 <th>阅读初始量</th>
                                 <th>价格</th>
-                                <th>备注</th>
                                 <th>返利</th>
                                 <th>操作</th>
                             </tr>
@@ -96,16 +76,10 @@
                                 </td>
                                 <td class="am-text-middle">
                                     阅读数量: <%= orders[i].num %> <br/>
-                                    点赞数量: <%= orders[i].num2 %> <br/>
-                                    速度: <%= orders[i].speed %>/分
+                                    点赞数量: <%= orders[i].num2 %>
                                 </td>
                                 <td class="am-text-middle"><%= orders[i].startReadNum %></td>
                                 <td class="am-text-middle"><%= orders[i].totalPrice %></td>
-                                <td class="am-text-middle">
-                                    <a class="am-text-truncate text-break" title="<%= orders[i].remark %>">
-                                        <%= orders[i].remark %>
-                                    </a>
-                                </td>
                                 <td class="am-text-middle">
                                     A: <%= orders[i].adminProfit %><br/>
                                     B: <%= orders[i].topProfit %><br/>

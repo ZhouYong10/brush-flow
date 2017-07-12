@@ -333,7 +333,7 @@ router.get('/like', function (req, res) {
             Order.open().findPages({
                 userId: user._id,
                 type: 'wx',
-                smallType: 'read'
+                smallType: {$in: ['read','readQuick']}
             }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 50);
@@ -357,7 +357,7 @@ router.get('/account/search/like', function (req, res) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wx',
-                    smallType: 'read',
+                    smallType: {$in: ['read','readQuick']},
                     address: req.query.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
@@ -404,8 +404,38 @@ router.get('/like/add', function (req, res) {
         });
 });
 
+router.get('/like/model', function (req, res) {
+    var model = req.query.model;
+    var readType, likeType;
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            if (model == 'normal') {
+                readType = 'read';
+                likeType = 'like';
+            } else {
+                readType = 'readQuick';
+                likeType = 'likeQuick';
+            }
+            Product.open().findOne({type: 'wx', smallType: readType})
+                .then(function (read) {
+                    var readIns = Product.wrapToInstance(read);
+                    var myReadPrice = readIns.getPriceByRole(user.role);
+                    Product.open().findOne({type: 'wx', smallType: likeType})
+                        .then(function (like) {
+                            var likeIns = Product.wrapToInstance(like);
+                            var myLikePrice = likeIns.getPriceByRole(user.role);
+                            res.send({
+                                price: myReadPrice,
+                                price2: myLikePrice
+                            });
+                        });
+                });
+        });
+});
+
 router.post('/like/add', function (req, res) {
     var orderInfo = req.body;
+    var readType, likeType;
     if(!orderInfo.address){
         return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
@@ -420,6 +450,13 @@ router.post('/like/add', function (req, res) {
         //orderInfo.num2 = parseInt(orderInfo.num * 5 / 1000);
         orderInfo.num2 = 0;
     }
+    if (orderInfo.model == 'normal') {
+        readType = 'read';
+        likeType = 'like';
+    } else {
+        readType = 'readQuick';
+        likeType = 'likeQuick';
+    }
     Address.parseWxTitle(orderInfo.address)
         .then(function (obj) {
             orderInfo.title = obj.title;
@@ -428,7 +465,7 @@ router.post('/like/add', function (req, res) {
                     var order = Order.wrapToInstance(orderInfo);
                     if(orderInfo.orderFlag) {
                         order.checkRandomStr(req).then(function() {
-                            order.createAndSaveTwo(user, {type: 'wx', smallType: 'read'}, {type: 'wx', smallType: 'like'})
+                            order.createAndSaveTwo(user, {type: 'wx', smallType: readType}, {type: 'wx', smallType: likeType})
                                 .then(function () {
                                     socketIO.emit('updateNav', {'wxLike': 1});
                                     res.redirect('/wx/like');
@@ -439,7 +476,7 @@ router.post('/like/add', function (req, res) {
                             res.redirect('/wx/like');
                         })
                     }else {
-                        order.createAndSaveTwo(user, {type: 'wx', smallType: 'read'}, {type: 'wx', smallType: 'like'})
+                        order.createAndSaveTwo(user, {type: 'wx', smallType: readType}, {type: 'wx', smallType: likeType})
                             .then(function (result) {
                                 socketIO.emit('updateNav', {'wxLike': 1});
                                 res.send({funds: result.funds, msg: '提交成功！'});
@@ -478,7 +515,6 @@ router.get('/like/bulk/add', function (req, res) {
                 });
         });
 });
-
 
 
 
@@ -639,6 +675,9 @@ router.get('/like/quick/bulk/add', function (req, res) {
                 });
         });
 });
+
+
+
 
 router.get('/read/check', function (req, res) {
     User.open().findById(req.session.passport.user)
