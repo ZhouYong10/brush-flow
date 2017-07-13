@@ -38,12 +38,12 @@
 
                     <div class="am-form-group">
                         <label class="am-u-sm-3 am-u-lg-1">
-                            <span>价格明细</span>
+                            <span>任务价格</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-2 am-u-end">
                             <input class="am-radius am-input-sm" type="text"
                                    value="公众粉丝￥<%= fansPrice %>/个" disabled>
-                            <input type="hidden" value="<%= fansPrice %>">
+                            <input id="price" type="hidden" value="<%= fansPrice %>">
                         </div>
                     </div>
 
@@ -53,7 +53,7 @@
                         </label>
                         <div class="am-u-sm-9 am-u-lg-11">
                             <input id="fansID" class="am-radius am-input-sm" type="text" name="account"
-                                   placeholder="请填写公众平台微信号或者ID">
+                                   placeholder="请填写微信号或者ID">
                         </div>
                     </div>
 
@@ -63,7 +63,7 @@
                         </label>
                         <div class="am-u-sm-9 am-u-lg-11">
                             <input id="fansNum" class="am-radius am-input-sm" type="text" name="num"
-                                   placeholder="需要增加的粉丝数量，最低100起">
+                                   placeholder="最低100起">
                         </div>
                     </div>
 
@@ -79,7 +79,7 @@
 
                     <div class="am-form-group">
                         <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
-                            <button type="submit" class="am-btn am-btn-primary am-radius" >提交任务</button>
+                            <button id="commit" type="submit" class="am-btn am-btn-primary am-radius" >提交任务</button>
                         </div>
                     </div>
                 </form>
@@ -93,12 +93,10 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
-<!--<script src="/static/js/city.js"></script>-->
-<script src="/static/plugins/laydate/laydate.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
 
 <script>
     require('WXfansAdd');
-//    init();
 </script>
 
 </body>
