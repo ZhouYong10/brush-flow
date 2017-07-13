@@ -3,6 +3,7 @@
  */
 var request = require('request');
 var cheerio = require('cheerio');
+var iconv = require('iconv-lite');
 var querystring = require('querystring');
 var http = require('http');
 var https       = require('https');
@@ -157,11 +158,9 @@ module.exports = {
                             message: '获取文章标题失败，请检查地址是否正确，文章是否存在！'
                         });
                     }else{
-                        resolve({
-                            isOk: true,
-                            title: $('title').text()
-                        });
+
                     }
+
                 }
             });
         })
@@ -198,8 +197,12 @@ module.exports = {
                 if(result) {
                     if(result.condition == 'normal'){
                         request({
-                            url: address
-                        }, function (err, obj, body) {
+                            url: address,
+                            encoding: null,
+                            headers: {
+                                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36'
+                            }
+                        }, function (err, res, body) {
                             if (err) {
                                 reject({
                                     isOk: false,
@@ -208,7 +211,8 @@ module.exports = {
                             } else {
                                 var productIns = Product.wrapToInstance(result);
                                 var myPrice = productIns.getPriceByRole(userRole);
-                                var $ = cheerio.load(body);
+                                var html = iconv.decode(body, 'gb2312');
+                                var $ = cheerio.load(html, {decodeEntities: false});
                                 resolve({
                                     isOk: true,
                                     title: $('title').text(),

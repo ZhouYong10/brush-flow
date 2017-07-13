@@ -21,7 +21,7 @@
 
         <div id="forumReply" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+            <div class="am-panel-bd am-g-collapse">
 
                 <div class="am-panel am-panel-danger">
                     <div class="am-panel-hd prompt-title">提示</div>
@@ -34,90 +34,97 @@
                     </div>
                 </div>
 
-                <validator name="forumcomment">
-                    <form class="am-form am-form-horizontal" method="post" action="/forum/comment/add">
-                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+                <form class="am-form am-form-horizontal" method="post" action="/forum/comment/add">
+                    <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
 
-                        <div class="am-form-group">
-                            <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务地址</label>
-                            <div class="am-u-sm-8 am-u-lg-10">
-                                <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写评论地址" name="address"
-                                       v-validate:address="{required: true, isaddress: true}" v-model="address" @change="parseAddress">
-                                <span class="tips" v-if="$forumcomment.address.required">任务地址不能为空!</span>
-                                <span class="tips" v-if="$forumcomment.address.isaddress">请填写合法的地址!</span>
-                            </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            <span>任务地址</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="address" class="am-radius am-input-sm" type="text"
+                                   placeholder="请填写评论地址" name="address">
                         </div>
+                    </div>
 
-                        <div class="am-form-group">
-                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务标题</label>
-                            <div class="am-u-sm-8 am-u-lg-10">
-                                <p class="disable">{{title}}</p>
-                                <input type="hidden" name="title" value="{{title}}">
-                                <input type="hidden" name="smallType" value="{{smallType}}">
-                                <input type="hidden" name="addName" value="{{addName}}">
-                                <input type="hidden" name="num" value="{{num}}">
-                            </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            <span>任务标题</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="title" class="am-radius am-input-sm" type="text" name="title" readonly>
+                            <input id="smallType" type="hidden" name="smallType">
+                            <input id="num" type="hidden" name="num">
                         </div>
+                    </div>
 
-                        <div class="am-form-group">
-                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
-                            <div class="am-u-sm-8 am-u-lg-10">
-                                <p class="disable">￥ {{price}}</p>
-                            </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            <span>价格明细</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                            <input id="showPrice" class="am-radius am-input-sm" type="text" value="￥ 0 /条" disabled>
+                            <input id="price" type="hidden">
                         </div>
+                    </div>
 
-                        <div class="am-form-group">
-                            <label for="startTime" class="am-u-sm-4 am-u-lg-2 am-form-label">定时时间</label>
-                            <div class="am-u-sm-8 am-u-lg-10">
-                                <input id="startTime" class="am-radius am-input-sm" type="text" placeholder="点击选择定时时间"
-                                       onclick="laydate({
+                    <div class="am-form-group">
+                        <label for="startTime" class="am-u-sm-3 am-u-lg-1">
+                            <span>定时时间</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                            <input id="startTime" class="am-radius am-input-sm" type="text" placeholder="点击选择定时时间"
+                                   onclick="laydate({
                                        istime: true,
                                        min: laydate.now((new Date().getTime() + 10*60*1000), 'YYYY-MM-DD hh:mm'),
                                        format: 'YYYY-MM-DD hh:mm'})" name="startTime">
-                            </div>
                         </div>
+                    </div>
 
-                        <div class="am-form-group">
-                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">评论间隔</label>
-                            <div class="am-u-sm-8 am-u-lg-10">
-                                <input class="am-radius am-input-sm speedTime" type="text" value="1" name="min"
-                                       v-validate:min="{isnum: true}">
-                                至
-                                <input class="am-radius am-input-sm speedTime" type="text" value="5" name="max"
-                                       v-validate:max="{isnum: true}">
-                                分钟
-                                <span class="tips" v-if="$forumcomment.min.isnum">必须为正整数!</span>
-                                <span class="tips" v-if="$forumcomment.max.isnum">必须为正整数!</span>
-                            </div>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            <span>评论间隔</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="min" class="am-radius am-input-sm speedTime" type="text" value="1" name="min">
+                            至
+                            <input id="max" class="am-radius am-input-sm speedTime" type="text" value="5" name="max">
+                            分钟
                         </div>
+                    </div>
 
-                        <div class="am-form-group">
-                            <label for="contentSelf" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>评论内容</label>
-                            <div class="am-u-sm-8 am-u-lg-10">
-                                <textarea id="contentSelf" class="am-radius" rows="3" placeholder="{{remark}}"
-                                          v-validate:content="{required: true, maxprice: true}"
-                                          name="content" @keyup="getTotalPrice" @blur="getTotalPrice"></textarea>
-                                <span class="tips" v-if="$forumcomment.content.required">评论内容不能为空!</span>
-                            </div>
+                    <div class="am-form-group">
+                        <label for="contentSelf" class="am-u-sm-3 am-u-lg-1">
+                            <span>评论内容</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                                <textarea id="remark" class="am-radius" rows="3"
+                                          placeholder="【每行一条内容】" name="content"></textarea>
                         </div>
+                    </div>
 
-                        <div class="am-form-group">
-                            <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
-                            <div class="am-u-sm-8 am-u-lg-10">
-                                <span class="disable">￥ {{totalPrice}} ; 合计: {{num}} 条</span>
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            <span>任务总价</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-11 am-g-collapse">
+                            <div class="am-u-lg-1">
+                                <input id="total" class="am-radius am-input-sm" type="text" value="￥ 0" disabled>
+                            </div>
+                            <div class="am-u-lg-11">
+                                <span id="showNum" class="disable"></span>
                                 <span class="tips">( 0.5金币起做,不足按0.5金币计算 )</span><br/>
-                                <span class="tips" v-if="$forumcomment.content.maxprice">您的余额不足，请充值!</span>
-                                <input type="hidden" v-model="funds" value="<%= money %>">
+                                <input id="userFunds" type="hidden" value="<%= money %>">
                             </div>
                         </div>
+                    </div>
 
-                        <div class="am-form-group">
-                            <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                                <button type="submit" class="am-btn am-btn-primary am-radius" v-if="$forumcomment.valid">提交任务</button>
-                            </div>
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                            <button id="commit" type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
                         </div>
-                    </form>
-                </validator>
+                    </div>
+                </form>
 
             </div>
         </div>
@@ -128,6 +135,7 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 <script src="/static/plugins/laydate/laydate.js"></script>
 
 <script>
