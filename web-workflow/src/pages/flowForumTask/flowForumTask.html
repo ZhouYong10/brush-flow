@@ -21,7 +21,7 @@
 
         <div id="flowForum" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+            <div class="am-panel-bd am-g-collapse">
 
                 <div class="am-panel am-panel-danger">
                     <div class="am-panel-hd prompt-title">提示</div>
@@ -33,57 +33,56 @@
                     </div>
                 </div>
 
-                <validator name="forumFlow">
                 <form class="am-form am-form-horizontal" method="post" action="/flow/forumTask">
                     <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
 
                     <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">价格明细</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <p class="disable">￥ {{price}}/5000</p>
-                            <input type="hidden" v-model="price" value="<%= price %>">
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            <span>任务价格</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                            <input class="am-radius am-input-sm" type="text" value="￥ <%= price %>/5000" disabled>
+                            <input id="price" type="hidden" value="<%= price %>">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>目标地址</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="请填写任务地址" name="address"
-                                   v-validate:address="{required: true, isaddress: true}" v-model="address">
-                            <span class="tips" v-if="$forumFlow.address.required">任务地址不能为空!</span>
-                            <span class="tips" v-if="$forumFlow.address.isaddress">请填写合法的地址!</span>
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            <span>目标地址</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="address" class="am-radius am-input-sm" type="text"
+                                   placeholder="任务地址" name="address">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="readNum" class="am-u-sm-4 am-u-lg-2 am-form-label"><span class="tips">* </span>任务数量</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
+                        <label for="readNum" class="am-u-sm-3 am-u-lg-1">
+                            <span>任务数量</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-11">
                             <input id="readNum" class="am-radius am-input-sm" type="text"
                                    placeholder="刷10000次起步，不足10000 按10000计算，超过部分按照5000来算，不足5000按5000计算"
-                                    v-model="num" name="num"
-                                   v-validate:num="{required: true, isnum: true, maxprice: true}">
-                            <span class="tips" v-if="$forumFlow.num.required">需要添加的阅读数量不能为空!</span>
-                            <span class="tips" v-if="$forumFlow.num.isnum">数量必须为正整数!</span>
+                                   name="num">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label class="am-u-sm-4 am-u-lg-2 am-form-label">任务总价</label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <span class="disable">￥ {{totalPrice}}</span>
-                            <span class="tips" v-if="$forumFlow.num.maxprice">您的余额不足，请充值!</span>
-                            <input type="hidden" v-model="funds" value="<%= money %>">
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            <span>任务总价</span>
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                            <input id="total" class="am-radius am-input-sm" type="text" value="￥ 0" disabled>
+                            <input id="userFunds" type="hidden" value="<%= money %>">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius"
-                                    v-if="$forumFlow.valid" @click.stop.prevent="judgeAddress">提交任务</button>
+                        <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                            <button id="commit" type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
                         </div>
                     </div>
                 </form>
-                </validator>
 
             </div>
         </div>
@@ -92,8 +91,8 @@
 </div>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
-
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 <script>
     require('flowForumTask');
 </script>

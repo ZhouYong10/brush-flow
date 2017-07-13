@@ -14,16 +14,6 @@
   line-height: 30px;
 }
 
-label span{
-  border: 1px solid #ccc;
-  float: right;
-  line-height: 30px;
-  width: 80px;
-  text-align: center;
-  margin: 0;
-  font-weight: normal;
-}
-
 .radioLable{
   border: 1px solid #ccc;
   line-height: 30px;
@@ -31,6 +21,16 @@ label span{
   margin: 0;
   font-weight: 400;
   background: #ECCEB1;
+}
+
+label{
+  border: 1px solid #ccc;
+  float: right;
+  line-height: 30px;
+  width: 80px;
+  text-align: center;
+  margin: 0;
+  font-weight: normal;
 }
 
 @media (min-width: 600px) {
