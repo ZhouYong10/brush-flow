@@ -43,7 +43,7 @@
                         <label class="am-u-sm-3 am-u-lg-1">
                             <span>任务模式</span>
                         </label>
-                        <div class="am-u-sm-9 am-u-lg-11">
+                        <div class="am-u-sm-9 am-u-lg-11 input">
                             <label class="am-u-sm-6 am-u-lg-1 radioLable">
                                 <input class="am-radius am-input-sm" type="radio" name="model" value="normal" checked>
                                 普通
@@ -60,7 +60,7 @@
                             <span>任务价格</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-3 am-u-end">
-                            <input id="priceShow" class="am-radius am-input-sm" type="text"
+                            <input id="priceShow" class="am-radius am-input-sm input" type="text"
                                    value="阅读￥ <%= price %>/个, 点赞￥ <%= price2 %>/个" disabled>
                             <input id="price" type="hidden" value="<%= price %>">
                             <input id="price2" type="hidden" value="<%= price2 %>">
@@ -72,7 +72,7 @@
                             <span>文章地址</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-11">
-                            <input id="address" class="am-radius am-input-sm" type="text"
+                            <input id="address" class="am-radius am-input-sm input" type="text"
                                    placeholder="文章地址" name="address">
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             <span>文章标题</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-11">
-                            <input id="title" class="am-radius am-input-sm" type="text" disabled>
+                            <input id="title" class="am-radius am-input-sm input" type="text" disabled>
                         </div>
                     </div>
 
@@ -91,7 +91,7 @@
                             <span>阅读数量</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-2 am-u-end">
-                            <input id="readNum" class="am-radius am-input-sm" type="text"
+                            <input id="readNum" class="am-radius am-input-sm input" type="text"
                                    placeholder="最低500起" name="num">
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                             <span>点赞数量</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-2 am-u-end">
-                            <input id="likeNum" class="am-radius am-input-sm" type="text"
+                            <input id="likeNum" class="am-radius am-input-sm input" type="text"
                                    placeholder="不能大于阅读数量的0.5%!" name="num2">
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                             <span>任务总价</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-1 am-u-end">
-                            <input id="total" class="am-radius am-input-sm" type="text" value="￥ 0" disabled>
+                            <input id="total" class="am-radius am-input-sm input" type="text" value="￥ 0" disabled>
                             <input id="userFunds" type="hidden" value="<%= money %>">
                         </div>
                     </div>

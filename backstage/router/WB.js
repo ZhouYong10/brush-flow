@@ -230,16 +230,22 @@ router.get('/task/search/fans', function (req, res) {
 router.get('/fans/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.getRandomStr(req).then(function(orderFlag) {
-                res.render('WBfansAdd', {
-                    title: '添加微博粉丝任务',
-                    money: user.funds,
-                    username: user.username,
-                    userStatus: user.status,
-                    role: user.role,
-                    orderFlag: orderFlag
+            Product.open().findOne({type: 'wb', smallType: 'fans'})
+                .then(function(result) {
+                    var productIns = Product.wrapToInstance(result);
+                    var myPrice = productIns.getPriceByRole(user.role);
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WBfansAdd', {
+                            title: '添加微博粉丝任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            orderFlag: orderFlag,
+                            price: myPrice
+                        });
+                    })
                 });
-            })
         });
 });
 
