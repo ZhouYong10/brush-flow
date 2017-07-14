@@ -27,9 +27,12 @@
                     <div class="am-panel-hd prompt-title">提示</div>
                     <div class="am-panel-bd">
 
-                        1.本平台不允许评论的内容包括：政治敏感话题、违法、违规、反动、未经官方证实的负面新闻、侮辱型、攻击性词语、维权话题、虚假广告等内容，如被发现立即封停帐号，余额不退，所有单子清空，并永久停止使用本平台任何业务，新开帐号也一律封杀，每天专人检查，严格执行，如有求情者一并封杀！<br/>
+                        1.本平台不允许评论的内容包括：政治敏感话题、违法、违规、反动、未经官方证实的负面新闻、侮辱型、攻击性词语、
+                        维权话题、虚假广告等内容，如被发现立即封停帐号，余额不退，所有单子清空，并永久停止使用本平台任何业务，
+                        新开帐号也一律封杀，每天专人检查，严格执行，如有求情者一并封杀！<br/>
                         2.为保证系统执行效率，单次录入不超过2000条;评论内容不能有电话,网址,QQ,邮箱等联系方式。<br/>
-                        3.单个连接的任务，如果提交的评论内容大量重复使用，或者评论内容里含有大量相同关键词的，可以提交到平台执行，但是，平台评论成功后帖子里没有显示或者差量的，一律不补，一律不退款！<br/>
+                        3.单个连接的任务，如果提交的评论内容大量重复使用，或者评论内容里含有大量相同关键词的，可以提交到平台执行，
+                        但是，平台评论成功后帖子里没有显示或者差量的，一律不补，一律不退款！<br/>
 
                     </div>
                 </div>
@@ -42,7 +45,7 @@
                             <span>任务地址</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-11">
-                            <input id="address" class="am-radius am-input-sm" type="text"
+                            <input id="address" class="am-radius am-input-sm input" type="text"
                                    placeholder="请填写评论地址" name="address">
                         </div>
                     </div>
@@ -52,7 +55,7 @@
                             <span>任务标题</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-11">
-                            <input id="title" class="am-radius am-input-sm" type="text" name="title" readonly>
+                            <input id="title" class="am-radius am-input-sm input" type="text" name="title" readonly>
                             <input id="smallType" type="hidden" name="smallType">
                             <input id="num" type="hidden" name="num">
                         </div>
@@ -63,7 +66,7 @@
                             <span>价格明细</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-2 am-u-end">
-                            <input id="showPrice" class="am-radius am-input-sm" type="text" value="￥ 0 /条" disabled>
+                            <input id="showPrice" class="am-radius am-input-sm input" type="text" value="￥ 0 /条" disabled>
                             <input id="price" type="hidden">
                         </div>
                     </div>
@@ -73,7 +76,7 @@
                             <span>定时时间</span>
                         </label>
                         <div class="am-u-sm-9 am-u-lg-2 am-u-end">
-                            <input id="startTime" class="am-radius am-input-sm" type="text" placeholder="点击选择定时时间"
+                            <input id="startTime" class="am-radius am-input-sm input" type="text" placeholder="点击选择定时时间"
                                    onclick="laydate({
                                        istime: true,
                                        min: laydate.now((new Date().getTime() + 10*60*1000), 'YYYY-MM-DD hh:mm'),
@@ -109,10 +112,10 @@
                         </label>
                         <div class="am-u-sm-9 am-u-lg-11 am-g-collapse">
                             <div class="am-u-lg-1">
-                                <input id="total" class="am-radius am-input-sm" type="text" value="￥ 0" disabled>
+                                <input id="total" class="am-radius am-input-sm input" type="text" value="￥ 0" disabled>
                             </div>
                             <div class="am-u-lg-11">
-                                <span id="showNum" class="disable"></span>
+                                <span id="showNum"></span>
                                 <span class="tips">( 0.5金币起做,不足按0.5金币计算 )</span><br/>
                                 <input id="userFunds" type="hidden" value="<%= money %>">
                             </div>

@@ -8,20 +8,15 @@
   font-weight:bold;
 }
 
-
-.disable{
-  margin: 0;
-  padding-top: 8px;
-}
-
 label{
   border: 1px solid #ccc;
-  float: right;
   line-height: 30px;
-  width: 80px;
   text-align: center;
-  margin: 0;
   font-weight: normal;
+}
+
+.am-form-group .input{
+  height: 32px;
 }
 
 @media (min-width: 600px) {
