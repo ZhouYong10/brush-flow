@@ -248,27 +248,34 @@ router.post('/changePwd', function (req, res) {
         User.open().findById(req.session.passport.user)
             .then(function(result) {
                 var user = User.wrapToInstance(result);
-                if(user.samePwd(oldPwd)){
-                    User.open().update({
-                        _id: user._id
-                    }, {$set: {
-                        password: bcrypt.hashSync(newPwd, bcrypt.genSaltSync(10))
-                    }}).then(function(user) {
-                        res.send({
-                            isOK: true,
-                            url: '/user/info'
-                        });
-                    }, function(error) {
-                        res.send({
-                            isOK: false,
-                            info: '更新用户密码失败： ' + error
-                        });
-                    })
-                }else{
+                if(user.username == 'yanshi'){
                     res.send({
                         isOK: false,
-                        info: '原密码错误！如果忘记密码，请联系管理员！！'
+                        info: '演示账户不能修改密码！'
                     });
+                }else {
+                    if(user.samePwd(oldPwd)){
+                        User.open().update({
+                            _id: user._id
+                        }, {$set: {
+                            password: bcrypt.hashSync(newPwd, bcrypt.genSaltSync(10))
+                        }}).then(function(user) {
+                            res.send({
+                                isOK: true,
+                                url: '/user/info'
+                            });
+                        }, function(error) {
+                            res.send({
+                                isOK: false,
+                                info: '更新用户密码失败： ' + error
+                            });
+                        })
+                    }else{
+                        res.send({
+                            isOK: false,
+                            info: '原密码错误！如果忘记密码，请联系管理员！！'
+                        });
+                    }
                 }
             }, function(error) {
                 res.send({
@@ -314,27 +321,44 @@ router.get('/addLowerUser', function (req, res) {
 router.post('/addLowerUser', function (req, res) {
     var userInfo = req.body;
     userInfo.username = userInfo.username.replace(/(^\s*)|(\s*$)/g, "");
-    User.open().findById(req.session.passport.user)
-        .then(function (result) {
-            var parent = User.wrapToInstance(result);
-            userInfo.parent = parent.username;
-            userInfo.parentID = parent._id;
-            userInfo.role = parent.childRole();
-            User.createUser(userInfo, function (user) {
-                parent.addChild(user[0]._id);
-                User.open().updateById(parent._id, {
-                    $set: parent
-                }).then(function (result) {
-                    res.redirect('/user/lowerUser');
-                }, function(error) {
-                    throw (new Error(error));
-                });
-            }, function (error) {
-                res.send('添加下级用户失败： ' + error);
+    User.open().findOne({
+        username: userInfo.username
+    }).then(function (user) {
+        if(user) {
+            res.send({
+                isOK: false,
+                info: '该用户已经存在！'
             });
-        }, function (error) {
-            res.send('查询上级用户信息失败： ' + error);
-        });
+        }else{
+            User.open().findById(req.session.passport.user)
+                .then(function (result) {
+                    var parent = User.wrapToInstance(result);
+                    if(parent.username == 'yanshi'){
+                        res.send({
+                            isOK: false,
+                            info: '演示账户不能添加下级！'
+                        });
+                    }else{
+                        userInfo.parent = parent.username;
+                        userInfo.parentID = parent._id;
+                        userInfo.role = parent.childRole();
+                        User.createUser(userInfo, function (user) {
+                            parent.addChild(user[0]._id);
+                            User.open().updateById(parent._id, {
+                                $set: parent
+                            }).then(function () {
+                                res.send({
+                                    isOK: true,
+                                    url: '/user/lowerUser'
+                                });
+                            }, function(error) {
+                                throw (new Error(error));
+                            });
+                        });
+                    }
+                });
+        }
+    });
 });
 
 router.get('/lowerUser', function (req, res) {

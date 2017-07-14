@@ -21,62 +21,54 @@
 
         <div id="addLowerUser" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+            <div class="am-panel-bd am-g-collapse">
 
-                <validator name="addLowerUser">
-                <form class="am-form am-form-horizontal" method="post" action="/user/addLowerUser">
+                <form class="am-form am-form-horizontal">
                     <div class="am-form-group">
-                        <label for="username" class="am-u-sm-3 am-u-lg-2 am-form-label">
-                            <span class="tips" v-if="$addLowerUser.username.required">* </span>账号
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            账号
                         </label>
-                        <div class="am-u-sm-9 am-u-lg-10">
-                            <input id="username" class="am-radius am-input-sm" type="text" placeholder="请输入用户名" v-model="username"
-                            v-validate:username="{required: true}" v-on:keyup="notRepeat" v-on:change="notRepeat" name="username">
-                            <span class="tips" v-if="$addLowerUser.username.required">用户名不能为空!</span>
-                            <span class="tips" v-if="!notrepeat">账户已经存在!</span>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="userName" class="am-radius am-input-sm input" type="text" placeholder="用户名">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="password" class="am-u-sm-3 am-u-lg-2 am-form-label">
-                            <span class="tips" v-if="$addLowerUser.password.required">* </span>密码
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            密码
                         </label>
-                        <div class="am-u-sm-9 am-u-lg-10">
-                            <input id="password" class="am-radius am-input-sm" type="password" placeholder="请输入用户密码"
-                            v-validate:password="{required: true}" name="password">
-                            <span class="tips" v-if="$addLowerUser.password.required">密码不能为空!</span>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="password" class="am-radius am-input-sm input" type="password" placeholder="用户密码">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="userQQ" class="am-u-sm-3 am-u-lg-2 am-form-label">ＱＱ</label>
-                        <div class="am-u-sm-9 am-u-lg-10">
-                            <input id="userQQ" class="am-radius am-input-sm" type="text" placeholder="请输入用户QQ" name="QQ">
+                        <label class="am-u-sm-3 am-u-lg-1">qq</label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="qq" class="am-radius am-input-sm input" type="text" placeholder="用户qq">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="user-phone" class="am-u-sm-3 am-u-lg-2 am-form-label">电话</label>
-                        <div class="am-u-sm-9 am-u-lg-10">
-                            <input id="user-phone" class="am-radius am-input-sm" type="text" placeholder="请输入用户电话" name="phone">
+                        <label class="am-u-sm-3 am-u-lg-1">电话</label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="phone" class="am-radius am-input-sm input" type="text" placeholder="用户电话">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <label for="user-remark" class="am-u-sm-3 am-u-lg-2 am-form-label">备注</label>
-                        <div class="am-u-sm-9 am-u-lg-10">
-                            <textarea id="user-remark" class="am-radius" rows="3" placeholder="添加用户备注" name="remark"></textarea>
+                        <label class="am-u-sm-3 am-u-lg-1">备注</label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <textarea id="remark" class="am-radius" rows="2" placeholder="添加用户备注"></textarea>
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button type="submit" class="am-btn am-btn-primary am-radius am-btn-sm"
-                                    v-if="$addLowerUser.valid && notrepeat" @click="isYanshi">添加子用户</button>
+                        <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                            <button id="commit" class="am-btn am-btn-primary am-radius am-btn-sm">添加用户</button>
                         </div>
                     </div>
                 </form>
-                </validator>
 
             </div>
         </div>
