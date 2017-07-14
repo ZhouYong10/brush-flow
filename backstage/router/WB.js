@@ -331,16 +331,22 @@ router.get('/task/search/forward', function (req, res) {
 router.get('/forward/add', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.getRandomStr(req).then(function(orderFlag) {
-                res.render('WBforwardAdd', {
-                    title: '添加微博转发任务',
-                    money: user.funds,
-                    username: user.username,
-                    userStatus: user.status,
-                    role: user.role,
-                    orderFlag: orderFlag
+            Product.open().findOne({type: 'wb', smallType: 'forward'})
+                .then(function(result) {
+                    var productIns = Product.wrapToInstance(result);
+                    var myPrice = productIns.getPriceByRole(user.role);
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WBforwardAdd', {
+                            title: '添加微博转发任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            orderFlag: orderFlag,
+                            price: myPrice
+                        });
+                    })
                 });
-            })
         });
 });
 
