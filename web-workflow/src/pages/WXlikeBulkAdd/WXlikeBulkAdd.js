@@ -77,8 +77,12 @@ var ordersTable = Vue.extend({
         },
         commit: function(order) {
             order.noErr = 'committed';
-            this.$http.post('/wx/like/add', {address: order.address, num: order.num, num2: order.num2})
-                .then(function (res) {
+            this.$http.post('/wx/like/add', {
+                address: order.address,
+                num: order.num,
+                num2: order.num2,
+                model: 'normal'
+            }).then(function (res) {
                     order.errMsg = res.data.msg;
                     $('.userCash').text(res.data.funds);
                 });
