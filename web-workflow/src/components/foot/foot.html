@@ -26,9 +26,11 @@
 
 <script>
     $(function() {
-        var isIndex = location.pathname == '/';
-        var isAdmin = location.pathname.split('/')[1] == 'admin';
-        if(!isIndex && !isAdmin){
+        var isClientHome = location.pathname == '/client/home';
+//        var isIndex = location.pathname == '/';
+//        var isAdmin = location.pathname.split('/')[1] == 'admin';
+//        if(!isIndex && !isAdmin){
+        if(isClientHome){
             $.get('/new/placard', function (result) {
                 var content = '<div style="padding: 0 8px; font-size: 1.3em;">' +
                         '<ul class="am-list"><li><a>' +
