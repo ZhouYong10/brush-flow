@@ -152,15 +152,18 @@ module.exports = {
                     });
                 } else {
                     var $ = cheerio.load(body);
-                    if($('title').text() == ''){
+                    var title = $('title').text();
+                    if(title == ''){
                         reject({
                             isOk: false,
                             message: '获取文章标题失败，请检查地址是否正确，文章是否存在！'
                         });
                     }else{
-
+                        resolve({
+                            isOk: true,
+                            title: $('title').text()
+                        });
                     }
-
                 }
             });
         })
