@@ -107,11 +107,14 @@ Recharge.extend({
             }).then(function (alipay) {
                 //如果充值记录存在
                 if (alipay) {
+                    //如果已充值，则不处理
                     if (alipay.isRecharge) {
                         resolve();
                     } else {
+                        //如果未充值，则通过用户id查询用户
                         if (alipay.userId) {
                             User.open().findById(alipay.userId).then(function(user) {
+                                //如果用户存在则直接充值
                                 if(user) {
                                     User.open().updateById(user._id, {$set: {
                                         funds: (parseFloat(user.funds) + parseFloat(info.money)).toFixed(4)
@@ -127,6 +130,7 @@ Recharge.extend({
                                         })
                                     })
                                 }else{
+                                    //如果用户不存在，则转到人工平台查询充值
                                     var url = 'http://www.677777778.cn/auto/recharge/to/user?' +
                                         'userId=' + alipay.userId +
                                         '&funds=' + info.money;
@@ -152,13 +156,43 @@ Recharge.extend({
                         }
                     }
                 } else {
-                    Recharge.open().insert({
-                        alipayId: info.orderid,
-                        alipayTime: info.PayTime,
-                        funds: parseFloat(info.money),
-                        isRecharge: false
-                    }).then(function () {
-                        resolve();
+                    var username = info.uid.replace(/(^\s*)|(\s*$)/g, "");
+                    //如果充值记录不存在，则通过用户名查询用户
+                    User.open().findOne({
+                        username: username
+                    }).then(function (user) {
+                        //如果用户存在则直接充值
+                        if(user) {
+                            User.open().updateById(user._id, {$set: {
+                                funds: (parseFloat(user.funds) + parseFloat(info.money)).toFixed(4)
+                            }}).then(function() {
+                                Recharge.open().insert({
+                                    type: 'brush',
+                                    username:  user.username,
+                                    userId: user._id,
+                                    userOldFunds: user.funds,
+                                    createTime: info.PayTime,
+                                    alipayId: info.orderid,
+                                    alipayTime: info.PayTime,
+                                    funds: parseFloat(info.money),
+                                    isRecharge: true,
+                                    status: '成功',
+                                    userNowFunds : (parseFloat(user.funds) + parseFloat(info.money)).toFixed(4)
+                                }).then(function () {
+                                    resolve();
+                                });
+                            })
+                        }else{
+                            //如果用户不存在，则保存一条未充值记录
+                            Recharge.open().insert({
+                                alipayId: info.orderid,
+                                alipayTime: info.PayTime,
+                                funds: parseFloat(info.money),
+                                isRecharge: false
+                            }).then(function () {
+                                resolve();
+                            });
+                        }
                     });
                 }
             });
