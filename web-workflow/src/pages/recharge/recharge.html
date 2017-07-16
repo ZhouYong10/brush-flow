@@ -22,7 +22,7 @@
 
         <div class="am-panel am-panel-primary" id="recharge">
             <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+            <div class="am-panel-bd am-g-collapse">
 
                 <div class="am-panel am-panel-danger">
                     <div class="am-panel-hd prompt-title">提示</div>
@@ -36,28 +36,23 @@
                     </div>
                 </div>
 
-                <validator name="recharge">
                 <form class="am-form am-form-horizontal">
                     <div class="am-form-group">
-                        <label for="taskAddress" class="am-u-sm-4 am-u-lg-2 am-form-label">
-                            <span class="tips" v-if="$recharge.num.required">* </span>
+                        <label class="am-u-sm-3 am-u-lg-1">
                             支付宝交易号
                         </label>
-                        <div class="am-u-sm-8 am-u-lg-10">
-                            <input id="taskAddress" class="am-radius am-input-sm" type="text" placeholder="输入28 或 32 位的支付宝交易号"
-                            v-validate:num="{required: true, minlength: 32, maxlength: 32, isnum: true}" v-model="num">
-                            <span class="tips" v-if="$recharge.num.required">支付宝交易号不能为空!</span>
-                            <span class="tips" v-if="$recharge.num.minlength || $recharge.num.maxlength || $recharge.num.isnum">请输入合法的支付宝交易号!</span>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="rechargeNum" class="am-radius am-input-sm input" type="text"
+                                   placeholder="输入 32 位的支付宝交易号">
                         </div>
                     </div>
 
                     <div class="am-form-group">
-                        <div class="am-u-sm-8 am-u-sm-offset-4 am-u-lg-10 am-u-lg-offset-2">
-                            <button class="am-btn am-btn-primary am-radius" v-if="$recharge.valid" @click.stop.prevent="commit">立即充值</button>
+                        <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                            <button id="commit" class="am-btn am-btn-primary am-radius">立即充值</button>
                         </div>
                     </div>
                 </form>
-                </validator>
 
             </div>
         </div>
