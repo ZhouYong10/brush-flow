@@ -113,7 +113,11 @@ router.get('/update/header/nav', function (req, res) {
                     if(tasks.length > 0) {
                         updateNav.complaintHT = tasks.length;
                     }
-                    Order.open().find({isQuit: true}).then(function (quitOrders) {
+                    Order.open().find({
+                        type: 'wx',
+                        status: '执行中',
+                        isQuit: true
+                    }).then(function (quitOrders) {
                         if (quitOrders.length > 0) {
                             updateNav.wxLikeQuit = quitOrders.length;
                         }
@@ -1275,6 +1279,8 @@ router.get('/WXlike/read/speed', function (req, res) {
 
 router.get('/WX/like/quit', function (req, res) {
     Order.open().findPages({
+            type: 'wx',
+            status: '执行中',
             isQuit: true
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
@@ -1287,6 +1293,43 @@ router.get('/WX/like/quit', function (req, res) {
                 path: '/admin/WX/like/quit'
             });
         });
+});
+
+router.get('/WX/like/quit/auto', function (req, res) {
+    var query = req.query;
+    console.log(req.query, '==============');
+    Order.open().findById(query.id).then(function (order) {
+        console.log(order, '===========================');
+        console.log(order.num, 'order.num -----------------------------');
+        console.log(query.info, 'query.info -----------------------------');
+        console.log(order.startReadNum, 'order.startReadNum -----------------------------');
+        console.log(order.startReadNum, 'order.startReadNum -----------------------------');
+        console.log(order.startReadNum, 'order.startReadNum -----------------------------');
+        var overNum = parseInt(order.num) - (parseInt(query.info) - parseInt(order.startReadNum));
+        console.log(overNum, 'overNum -----------------------------');
+    });
+});
+
+router.get('/WX/like/quit/handle', function (req, res) {
+    var query = req.query;
+    Order.open().findById(query.id).then(function (order) {
+        var overNum = order.num - (query.info - order.startReadNum);
+        if(parseInt(overNum) > 100){
+            order.overNum = overNum;
+            var orderIns = Order.wrapToInstance(order);
+            orderIns.quit().then(function() {
+                res.redirect(query.url);
+            })
+        }else{
+            Order.open().updateById(order._id, {$set: {
+                status: '已完成'
+            }, $unset: {
+                isQuit: true
+            }}).then(function() {
+                res.redirect(query.url);
+            })
+        }
+    });
 });
 
 

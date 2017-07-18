@@ -454,7 +454,7 @@ Order.extend({
             var order = orders[i];
             if(order.status == '执行中' || order.status == '已处理'){
                 var dealTime = order.dealTime, num = (order.type == 'flow' ? order.realNum : order.num),
-                    delay = 3 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
+                    delay = 0 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
                 if(order.smallType == 'read'){
                     speed = global.readSpeed;
                 }
@@ -864,6 +864,106 @@ Order.include({
                 })
         }else {
             self.save(callback);
+        }
+    },
+    countParentQuit: function(user, product, cb) {
+        var self = this;
+        var name = '';
+        if(user.parentID) {
+            User.open().findById(user.parentID)
+                .then(function(parent) {
+                    switch (parent.role) {
+                        case '管理员':
+                            name = 'adminQuit';
+                            break;
+                        case '顶级代理':
+                            name = 'topQuit';
+                            break;
+                        case '超级代理':
+                            name = 'superQuit';
+                            break;
+                        case '金牌代理':
+                            name = 'goldQuit';
+                            break;
+                    }
+                    var selfPrice = product.getPriceByRole(user.role);
+                    var parentPrice = product.getPriceByRole(parent.role);
+                    var quit = selfPrice - parentPrice;
+                    self[name] = (quit * self.overNum).toFixed(4);
+                    self.countParentQuit(parent, product, cb);
+                })
+        }else {
+            cb();
+        }
+    },
+    quit: function() {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            self.status = '已退款';
+            self.quitTime = moment().format('YYYY-MM-DD HH:mm:ss');
+            self.quitFunds = (self.price * self.overNum).toFixed(4);
+            self.quitDesc = self.typeName + self.smallTypeName + '撤单' + self.overNum;
+            User.open().findById(self.userId).then(function (user) {
+                User.open().updateById(user._id, {$set: {
+                    funds: (parseFloat(user.funds) + parseFloat(self.quitFunds)).toFixed(4)
+                }}).then(function() {
+                    Product.open().findOne({type: self.type, smallType: self.smallType}).then(function (product) {
+                        self.countParentQuit(user, Product.wrapToInstance(product), function () {
+                            self.parentProfitQuit(user, user, function () {
+                                var orderId = self._id;
+                                delete self._id;
+                                Order.open().updateById(orderId, {$set: self}).then(function() {
+                                    resolve();
+                                })
+                            });
+                        });
+                    });
+                })
+            });
+        });
+    },
+    parentProfitQuit: function(orderUser, child, callback) {
+        var self = this;
+        var name = '';
+        if(child.parentID) {
+            User.open().findById(child.parentID)
+                .then(function(parent) {
+                    switch (parent.role) {
+                        case '管理员':
+                            name = 'adminQuit';
+                            break;
+                        case '顶级代理':
+                            name = 'topQuit';
+                            break;
+                        case '超级代理':
+                            name = 'superQuit';
+                            break;
+                        case '金牌代理':
+                            name = 'goldQuit';
+                            break;
+                    }
+                    parent.funds = (parent.funds - self[name]).toFixed(4);
+                    User.open().updateById(parent._id, {$set: {funds: parent.funds}})
+                        .then(function () {
+                            Profit.open().insert({
+                                userId: parent._id,
+                                username: parent.username,
+                                orderUserId: orderUser._id,
+                                orderUsername: orderUser.username,
+                                typeName: self.typeName,
+                                smallTypeName: self.smallTypeName,
+                                profit: -self[name],
+                                orderId: self._id,
+                                status: 'success',
+                                createTime: self.quitTime,
+                                description: self.quitDesc
+                            }).then(function () {
+                                self.parentProfitQuit(orderUser, parent, callback);
+                            })
+                        });
+                })
+        }else {
+            callback();
         }
     },
     complete: function(callback) {

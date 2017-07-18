@@ -453,9 +453,11 @@ router.post('/like/add', function (req, res) {
     if (orderInfo.model == 'normal') {
         readType = 'read';
         likeType = 'like';
+        socketIO.emit('updateNav', {'wxLike': 1});
     } else {
         readType = 'readQuick';
         likeType = 'likeQuick';
+        socketIO.emit('updateNav', {'wxLikeQuick': 1});
     }
     Address.parseWxTitle(orderInfo.address)
         .then(function (obj) {
@@ -467,7 +469,6 @@ router.post('/like/add', function (req, res) {
                         order.checkRandomStr(req).then(function() {
                             order.createAndSaveTwo(user, {type: 'wx', smallType: readType}, {type: 'wx', smallType: likeType})
                                 .then(function () {
-                                    socketIO.emit('updateNav', {'wxLike': 1});
                                     res.redirect('/wx/like');
                                 }, function() {
                                     res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
@@ -478,7 +479,6 @@ router.post('/like/add', function (req, res) {
                     }else {
                         order.createAndSaveTwo(user, {type: 'wx', smallType: readType}, {type: 'wx', smallType: likeType})
                             .then(function (result) {
-                                socketIO.emit('updateNav', {'wxLike': 1});
                                 res.send({funds: result.funds, msg: '提交成功！'});
                             }, function() {
                                 res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
