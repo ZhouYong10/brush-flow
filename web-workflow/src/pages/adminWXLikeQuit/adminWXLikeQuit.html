@@ -8,7 +8,7 @@
 
     <link rel="import" href="../../components/head/head.html?__inline">
 
-    <link rel="stylesheet" href="./adminWXlikeQuickWait.scss?__inline">
+    <link rel="stylesheet" href="./adminWXLikeQuit.scss?__inline">
 </head>
 <body>
 
@@ -38,9 +38,9 @@
                                 <th>地址</th>
                                 <th>标题</th>
                                 <th>数量</th>
+                                <th>初始量</th>
                                 <th>价格</th>
                                 <th>返利</th>
-                                <th>标记对象</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -66,28 +66,12 @@
                                     阅读: <%= orders[i].num %> <br/>
                                     点赞: <%= orders[i].num2 %>
                                 </td>
+                                <td class="am-text-middle"><%= orders[i].startReadNum %></td>
                                 <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                                 <td class="am-text-middle">
                                     A: <%= orders[i].adminProfit %><br/>
                                     B: <%= orders[i].topProfit %><br/>
                                     C: <%= orders[i].superProfit %><br/>
-                                </td>
-                                <td class="am-text-middle">
-                                    <% if(orders[i].remote == 'daiding'){ %>
-                                    代丁
-                                    <% } %>
-
-                                    <% if(orders[i].remote == 'weichuanmei'){ %>
-                                    微传媒
-                                    <% } %>
-
-                                    <% if(orders[i].remote == 'tuike'){ %>
-                                    推客
-                                    <% } %>
-
-                                    <% if(orders[i].remote == 'weishua'){ %>
-                                    微刷
-                                    <% } %>
                                 </td>
                                 <td class="am-text-middle">
                                     <div class="operation">
@@ -130,7 +114,7 @@
 
 <script>
     require('adminMenuContent');
-    require('adminWXlikeQuickWait');
+    require('adminWXLikeQuit');
 </script>
 
 </body>

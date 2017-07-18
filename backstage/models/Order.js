@@ -452,7 +452,7 @@ Order.extend({
     addSchedule: function(orders, speedNum) {
         for(var i in orders) {
             var order = orders[i];
-            if(order.status == '已处理'){
+            if(order.status == '执行中' || order.status == '已处理'){
                 var dealTime = order.dealTime, num = (order.type == 'flow' ? order.realNum : order.num),
                     delay = 3 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
                 if(order.smallType == 'read'){
@@ -470,6 +470,10 @@ Order.extend({
                     }else {
                         percent = '100%';
                         order.status = '已完成';
+                        Order.open().updateById(order._id, {$set: {
+                            status: '已完成',
+                            schedule: percent
+                        }});
                     }
                     order.schedule = percent;
                 }else {
@@ -866,29 +870,20 @@ Order.include({
         var self = this;
         User.open().findById(self.userId)
             .then(function(user) {
-                self.profitToParent(user, user, function(order) {
+                self.profitToParent(user, user, function() {
+                    var updateInfo = {
+                        startReadNum: self.startReadNum,
+                        status: '执行中',
+                        dealTime: moment().format('YYYY-MM-DD HH:mm:ss')
+                    };
                     if(self.remote){
-                        Order.open().updateById(self._id, {
-                            $set: {
-                                startReadNum: self.startReadNum,
-                                remote: self.remote,
-                                status: '已处理',
-                                dealTime:  moment().format('YYYY-MM-DD HH:mm:ss')
-                            }
-                        }).then(function () {
-                            callback();
-                        });
-                    }else {
-                        Order.open().updateById(self._id, {
-                            $set: {
-                                startReadNum: self.startReadNum,
-                                status: '已处理',
-                                dealTime:  moment().format('YYYY-MM-DD HH:mm:ss')
-                            }
-                        }).then(function () {
-                            callback();
-                        });
+                        updateInfo.remote = self.remote;
                     }
+                    Order.open().updateById(self._id, {
+                        $set: updateInfo
+                    }).then(function () {
+                        callback();
+                    });
                 });
             })
     },

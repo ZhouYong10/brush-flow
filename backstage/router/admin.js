@@ -86,6 +86,7 @@ router.get('/update/header/nav', function (req, res) {
         wxArticle: 0,
         wxLikeQuick: 0,
         wxLike: 0,
+        wxLikeQuit: 0,
         wxComment: 0,
         wxReply: 0,
         wxFriend: 0,
@@ -97,72 +98,82 @@ router.get('/update/header/nav', function (req, res) {
     };
 
     Withdraw.open().find({status: '未处理'}).then(function (withdraws) {
-        if (withdraws) {
+        if (withdraws.length > 0) {
             updateNav.withdraw = withdraws.length;
         }
         Order.open().find({error: '未处理'}).then(function (errorOrders) {
-            if (errorOrders) {
+            if (errorOrders.length > 0) {
                 updateNav.error = errorOrders.length;
             }
             Feedback.open().find({status: '未处理'}).then(function (feedbacks) {
-                if (feedbacks) {
+                if (feedbacks.length > 0) {
                     updateNav.feedback = feedbacks.length;
                 }
                 Task.open().find({taskStatus: '被投诉'}).then(function(tasks) {
-                    if(tasks) {
+                    if(tasks.length > 0) {
                         updateNav.complaintHT = tasks.length;
                     }
-                    Order.open().find({status: {$in: ['未处理', '审核中']}})
-                        .then(function (results) {
-                            if(results) {
-                                for(var i in results) {
-                                    var result = results[i];
-                                    switch (result.type) {
-                                        case 'handle':
-                                            updateNav.waitHT += 1;
-                                            break;
-                                        case 'forum':
-                                            updateNav.reply += 1;
-                                            break;
-                                        case 'flow':
-                                            updateNav.flow += 1;
-                                            break;
-                                        case 'wx':
-                                            switch (result.smallType) {
-                                                case 'article': case 'share': case 'collect':
-                                                updateNav.wxArticle += 1;
+                    Order.open().find({isQuit: true}).then(function (quitOrders) {
+                        if (quitOrders.length > 0) {
+                            updateNav.wxLikeQuit = quitOrders.length;
+                        }
+                        Order.open().find({status: {$in: ['未处理', '审核中']}})
+                            .then(function (results) {
+                                if (results.length > 0) {
+                                    for (var i in results) {
+                                        var result = results[i];
+                                        switch (result.type) {
+                                            case 'handle':
+                                                updateNav.waitHT += 1;
                                                 break;
-                                                case 'read': case 'like':
-                                                updateNav.wxLike += 1;
+                                            case 'forum':
+                                                updateNav.reply += 1;
                                                 break;
-                                                case 'readQuick': case 'likeQuick':
-                                                updateNav.wxLikeQuick += 1;
+                                            case 'flow':
+                                                updateNav.flow += 1;
                                                 break;
-                                                case 'comment':
-                                                updateNav.wxComment += 1;
+                                            case 'wx':
+                                                switch (result.smallType) {
+                                                    case 'article':
+                                                    case 'share':
+                                                    case 'collect':
+                                                        updateNav.wxArticle += 1;
+                                                        break;
+                                                    case 'read':
+                                                    case 'like':
+                                                        updateNav.wxLike += 1;
+                                                        break;
+                                                    case 'readQuick':
+                                                    case 'likeQuick':
+                                                        updateNav.wxLikeQuick += 1;
+                                                        break;
+                                                    case 'comment':
+                                                        updateNav.wxComment += 1;
+                                                        break;
+                                                    case 'fans':
+                                                    case 'fansReply':
+                                                        updateNav.wxReply += 1;
+                                                        break;
+                                                    case 'friend':
+                                                        updateNav.wxFriend += 1;
+                                                        break;
+                                                    case 'code':
+                                                        updateNav.wxCode += 1;
+                                                        break;
+                                                }
                                                 break;
-                                                case 'fans': case 'fansReply':
-                                                updateNav.wxReply += 1;
+                                            case 'mp':
+                                                updateNav.mp += 1;
                                                 break;
-                                                case 'friend':
-                                                    updateNav.wxFriend += 1;
-                                                    break;
-                                                case 'code':
-                                                    updateNav.wxCode += 1;
-                                                    break;
-                                            }
-                                            break;
-                                        case 'mp':
-                                            updateNav.mp += 1;
-                                            break;
-                                        case 'wb':
-                                            updateNav.wb += 1;
-                                            break;
+                                            case 'wb':
+                                                updateNav.wb += 1;
+                                                break;
+                                        }
                                     }
                                 }
-                            }
-                            res.send(updateNav);
-                        });
+                                res.send(updateNav);
+                            });
+                    });
                 })
             });
         });
@@ -1260,6 +1271,22 @@ router.get('/WXlike/read/speed', function (req, res) {
     var readSpeed = parseInt(req.query.readSpeed);
     global.readSpeed = parseInt(readSpeed);
     res.end(readSpeed + '');
+});
+
+router.get('/WX/like/quit', function (req, res) {
+    Order.open().findPages({
+            isQuit: true
+        }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXLikeQuit', {
+                title: '微信任务管理 / 待处理微信阅读撤单任务',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/like/quit'
+            });
+        });
 });
 
 

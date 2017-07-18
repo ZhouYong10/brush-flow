@@ -516,6 +516,18 @@ router.get('/like/bulk/add', function (req, res) {
         });
 });
 
+router.get('/order/quit', function(req, res) {
+    Order.open().findById(req.query.id).then(function(order) {
+        if(order.status == '执行中'){
+            Order.open().updateById(order._id, {$set: {isQuit: true}});
+            socketIO.emit('updateNav', {'wxLikeQuit': 1});
+            res.send('撤单中');
+        }else{
+            res.send('该订单不在执行中，不能执行撤单操作！');
+        }
+    })
+})
+
 
 
 
