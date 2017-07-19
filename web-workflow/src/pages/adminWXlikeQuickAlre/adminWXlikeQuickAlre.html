@@ -52,6 +52,7 @@
                                 <th>价格</th>
                                 <th>返利</th>
                                 <th>状态</th>
+                                <th>执行量</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -88,6 +89,18 @@
                                 </td>
                                 <td class="am-text-middle">
                                     <%= orders[i].status %>
+                                </td>
+                                <td class="am-text-middle">
+                                    <% if(orders[i].status == '已完成' || orders[i].status == '已处理'){ %>
+                                    <%= orders[i].num %>
+                                    <% } %>
+                                    <% if(orders[i].status == '已退款'){ %>
+                                    <% if(orders[i].alrNum){ %>
+                                    <%= orders[i].alrNum %>
+                                    <% }else{ %>
+                                    0
+                                    <% } %>
+                                    <% } %>
                                 </td>
                                 <td class="am-text-middle">
                                     <% if(orders[i].status == '执行中' && orders[i].error == undefined){ %>

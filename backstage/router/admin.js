@@ -1138,10 +1138,7 @@ router.get('/WX/like/quick/already', function (req, res) {
     Order.open().findPages(search, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
             Order.open().find(search).then(function(allObj) {
-                var readTotal = 0;
-                for(var i = 0; i < allObj.length; i++) {
-                    readTotal += parseInt(allObj[i].num);
-                }
+                var readTotal = totalReadNum(allObj);
                 res.render('adminWXlikeQuickAlre', {
                     title: '微信任务管理 / 已处理阅读点赞快速任务',
                     money: req.session.systemFunds,
@@ -1179,6 +1176,18 @@ router.get('/WX/like/wait', function (req, res) {
         });
 });
 
+function totalReadNum(orders) {
+    var readTotal = 0;
+    orders.forEach(function (order) {
+        if (order.status == '已退款') {
+            readTotal += parseInt(order.alrNum ? order.alrNum : 0);
+        } else {
+            readTotal += parseInt(order.num);
+        }
+    });
+    return readTotal;
+}
+
 router.get('/WX/like/already', function (req, res) {
     var search = {
         type: 'wx',
@@ -1188,10 +1197,7 @@ router.get('/WX/like/already', function (req, res) {
     Order.open().findPages(search, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
             Order.open().find(search).then(function(allObj) {
-                var readTotal = 0;
-                for(var i = 0; i < allObj.length; i++) {
-                    readTotal += parseInt(allObj[i].num);
-                }
+                var readTotal = totalReadNum(allObj);
                 res.render('adminWXlikeAlre', {
                     title: '微信任务管理 / 已处理微信阅读点赞任务',
                     money: req.session.systemFunds,
@@ -1209,7 +1215,7 @@ router.get('/search/WX/like/dingding', function (req, res) {
     var search = {
         type: 'wx',
         smallType: {$in: ['read', 'readQuick']},
-        status: '已处理',
+        status: {$ne: '未处理'},
         createTime: new RegExp(req.query.date)
     };
     if(req.query.type) {
@@ -1218,10 +1224,7 @@ router.get('/search/WX/like/dingding', function (req, res) {
     Order.open().findPages(search, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
             Order.open().find(search).then(function(allObj) {
-                var readTotal = 0;
-                for(var i = 0; i < allObj.length; i++) {
-                    readTotal += parseInt(allObj[i].num);
-                }
+                var readTotal = totalReadNum(allObj);
                 res.render('adminWXlikeAlre', {
                     title: '微信任务管理 / 已处理微信阅读点赞任务',
                     money: req.session.systemFunds,
