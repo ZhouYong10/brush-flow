@@ -249,33 +249,33 @@ Task.include({
     }
 });
 
-(function() {
-    setInterval(function() {
-        console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 扫描了一次人工任务审核。');
-        Task.open().find({
-            taskStatus: '待审核'
-        }).then(function(tasks) {
-            followedByPayment(tasks);
-        })
-    }, 1000 * 30);
-})();
-
-function followedByPayment(tasks) {
-    if(tasks.length > 0) {
-        var task = tasks.shift();
-        var taskCreateTime = task._id.getTimestamp();
-        var timeNow = new Date().getTime();
-        if((timeNow - taskCreateTime) > 1000 * 60 * 60) {
-            var taskIns = Task.wrapToInstance(task);
-            taskIns.success().then(function () {
-                console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);
-                followedByPayment(tasks);
-            });
-        }else{
-            console.log('没有过期的审核任务，继续循环下一个任务。---------------------------------');
-            followedByPayment(tasks);
-        }
-    }
-}
+//(function() {
+//    setInterval(function() {
+//        console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 扫描了一次人工任务审核。');
+//        Task.open().find({
+//            taskStatus: '待审核'
+//        }).then(function(tasks) {
+//            followedByPayment(tasks);
+//        })
+//    }, 1000 * 30);
+//})();
+//
+//function followedByPayment(tasks) {
+//    if(tasks.length > 0) {
+//        var task = tasks.shift();
+//        var taskCreateTime = task._id.getTimestamp();
+//        var timeNow = new Date().getTime();
+//        if((timeNow - taskCreateTime) > 1000 * 60 * 60) {
+//            var taskIns = Task.wrapToInstance(task);
+//            taskIns.success().then(function () {
+//                console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ': 自动审核通过了任务' + task._id);
+//                followedByPayment(tasks);
+//            });
+//        }else{
+//            console.log('没有过期的审核任务，继续循环下一个任务。---------------------------------');
+//            followedByPayment(tasks);
+//        }
+//    }
+//}
 
 module.exports = Task;
