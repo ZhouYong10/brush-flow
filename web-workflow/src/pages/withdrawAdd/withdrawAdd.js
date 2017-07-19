@@ -7,8 +7,6 @@ function checkFunds() {
     var userFunds = $('#userFunds').val();
     var $funds = $('#funds');
     var funds = $funds.val();
-    console.log(funds, '----------------');
-    console.log(userFunds, '----------------');
     if(Utils.isfloat(funds) && funds >=1) {
         if(parseFloat(funds) > parseFloat(userFunds)){
             $funds.css({color: 'red'});
