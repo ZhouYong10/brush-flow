@@ -924,6 +924,7 @@ Order.include({
                             self.parentProfitQuit(user, user, function () {
                                 var orderId = self._id;
                                 delete self._id;
+                                delete self.isQuit;
                                 Order.open().updateById(orderId, {$set: self}).then(function() {
                                     Consume.open().insert({
                                         userId: self.userId,

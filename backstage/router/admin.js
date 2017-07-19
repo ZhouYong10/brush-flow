@@ -1297,23 +1297,40 @@ router.get('/WX/like/quit', function (req, res) {
 
 router.get('/WX/like/quit/auto', function (req, res) {
     var query = req.query;
-    console.log(req.query, '==============');
     Order.open().findById(query.id).then(function (order) {
-        console.log(order, '===========================');
-        console.log(order.num, 'order.num -----------------------------');
-        console.log(query.info, 'query.info -----------------------------');
-        console.log(order.startReadNum, 'order.startReadNum -----------------------------');
-        console.log(order.startReadNum, 'order.startReadNum -----------------------------');
-        console.log(order.startReadNum, 'order.startReadNum -----------------------------');
-        var overNum = parseInt(order.num) - (parseInt(query.info) - parseInt(order.startReadNum));
-        console.log(overNum, 'overNum -----------------------------');
+        Address.readNum(rorder.address).then(function (num) {
+            var nowReadNum = num;
+            var alrNum = nowReadNum - order.startReadNum;
+            var overNum = order.num - alrNum;
+            if(parseInt(overNum) > 100){
+                order.alrNum = alrNum;
+                order.overNum = overNum;
+                order.schedule = (alrNum / order.num * 100).toFixed(2) + '%';
+                var orderIns = Order.wrapToInstance(order);
+                orderIns.quit().then(function() {
+                    res.redirect(query.url);
+                })
+            }else{
+                Order.open().updateById(order._id, {$set: {
+                    schedule: '100%',
+                    status: '已完成'
+                }, $unset: {
+                    isQuit: true
+                }}).then(function() {
+                    res.redirect(query.url);
+                })
+            }
+        }, function (msg) {
+            res.end(msg);
+        });
     });
 });
 
 router.get('/WX/like/quit/handle', function (req, res) {
     var query = req.query;
+    var nowReadNum = query.info;
     Order.open().findById(query.id).then(function (order) {
-        var alrNum = query.info - order.startReadNum;
+        var alrNum = nowReadNum - order.startReadNum;
         var overNum = order.num - alrNum;
         if(parseInt(overNum) > 100){
             order.alrNum = alrNum;
@@ -1333,6 +1350,17 @@ router.get('/WX/like/quit/handle', function (req, res) {
                 res.redirect(query.url);
             })
         }
+    });
+});
+
+router.get('/WX/like/quit/refuse', function(req, res) {
+    var query = req.query;
+    Order.open().updateById(query.id, {$set: {
+        quitRefuseDes: query.info
+    }, $unset: {
+        isQuit: true
+    }}).then(function() {
+        res.redirect(query.url);
     });
 });
 

@@ -83,6 +83,11 @@
                                         <a class="am-btn am-btn-primary am-radius am-btn-xs orderQuit" title="手动撤单"
                                            href="/admin/WX/like/quit/handle?id=<%= orders[i]._id %>&url=<%= path %>">手动 </a>
                                     </div>
+
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs quitRefuse"
+                                           href="/admin/WX/like/quit/refuse?id=<%= orders[i]._id %>&url=<%= path %>">拒绝</a>
+                                    </div>
                                 </td>
                             </tr>
                             <% } %>
