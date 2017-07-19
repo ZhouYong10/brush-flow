@@ -293,9 +293,7 @@ router.get('/withdraw/wait', function (req, res) {
 });
 
 router.get('/withdraw/get/user/funds', function(req, res) {
-    console.log(req.query,'--------------------');
    User.open().findById(req.query.id).then(function(user) {
-       console.log(user, '=====================');
        res.send(user.funds);
    })
 });
