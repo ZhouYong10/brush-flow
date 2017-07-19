@@ -55,7 +55,7 @@ router.get('/create/task', function (req, res) {
         .then(function (user) {
             Order.getRandomStr(req).then(function(orderFlag) {
                 res.render('forumTemplate', {
-                    title: '论坛回复任务',
+                    title: '添加论坛顶贴任务',
                     money: user.funds,
                     role: user.role,
                     userStatus: user.status,
@@ -101,7 +101,7 @@ router.get('/taskHistory', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 1);
                     res.render('forumTaskHistory', {
-                        title: '论坛业务历史记录',
+                        title: '论坛顶贴任务管理',
                         money: user.funds,
                         role: user.role,
                         userStatus: user.status,
@@ -133,7 +133,7 @@ router.get('/search/forum', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 1);
                     res.render('forumTaskHistory', {
-                        title: '论坛业务历史记录',
+                        title: '论坛顶贴任务管理',
                         money: user.funds,
                         role: user.role,
                         userStatus: user.status,

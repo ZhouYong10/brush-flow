@@ -15,7 +15,7 @@ router.get('/forumTask', function (req, res) {
                     var instance = Product.wrapToInstance(result);
                     Order.getRandomStr(req).then(function(orderFlag) {
                         res.render('flowForumTask', {
-                            title: '论坛流量任务',
+                            title: '添加论坛流量任务',
                             money: user.funds,
                             userStatus: user.status,
                             username: user.username,
@@ -235,7 +235,7 @@ router.get('/taskHistory', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 100);
                     res.render('flowTaskHistory', {
-                        title: '流量业务任务历史',
+                        title: '流量任务管理',
                         money: user.funds,
                         role: user.role,
                         userStatus: user.status,
@@ -262,7 +262,7 @@ router.get('/search/flow', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 100);
                     res.render('flowTaskHistory', {
-                        title: '流量业务任务历史',
+                        title: '流量任务管理',
                         money: user.funds,
                         role: user.role,
                         userStatus: user.status,

@@ -128,7 +128,7 @@ router.get('/fans', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 10);
                     res.render('WXfans', {
-                        title: '公众粉丝',
+                        title: '微信粉丝',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -153,7 +153,7 @@ router.get('/account/search/fans', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
                     res.render('WXfans', {
-                        title: '公众粉丝',
+                        title: '微信粉丝',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -179,7 +179,7 @@ router.get('/fans/add', function (req, res) {
                             var myReplyPrice = replyIns.getPriceByRole(user.role);
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('WXfansAdd', {
-                                    title: '添加公众粉丝',
+                                    title: '添加微信粉丝',
                                     money: user.funds,
                                     username: user.username,
                                     userStatus: user.status,
@@ -338,7 +338,7 @@ router.get('/like', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 50);
                     res.render('WXlike', {
-                        title: '图文阅读/点赞',
+                        title: '微信阅读',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -363,7 +363,7 @@ router.get('/account/search/like', function (req, res) {
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
                     res.render('WXlike', {
-                        title: '图文阅读/点赞',
+                        title: '微信阅读',
                         money: user.funds,
                         username: user.username,
                         userStatus: user.status,
@@ -389,7 +389,7 @@ router.get('/like/add', function (req, res) {
                             var myLikePrice = likeIns.getPriceByRole(user.role);
                             Order.getRandomStr(req).then(function(orderFlag) {
                                 res.render('WXlikeAdd', {
-                                    title: '添加微信图文阅读点赞任务',
+                                    title: '添加微信阅读',
                                     money: user.funds,
                                     username: user.username,
                                     userStatus: user.status,
