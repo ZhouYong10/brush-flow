@@ -1304,8 +1304,7 @@ router.get('/WX/like/quit', function (req, res) {
 router.get('/WX/like/quit/auto', function (req, res) {
     var query = req.query;
     Order.open().findById(query.id).then(function (order) {
-        Address.readNum(rorder.address).then(function (num) {
-            var nowReadNum = num;
+        Address.readNum(order.address).then(function (nowReadNum) {
             var alrNum = nowReadNum - order.startReadNum;
             var overNum = order.num - alrNum;
             if(parseInt(overNum) > 100){
