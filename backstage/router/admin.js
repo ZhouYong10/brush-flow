@@ -292,6 +292,14 @@ router.get('/withdraw/wait', function (req, res) {
         })
 });
 
+router.get('/withdraw/get/user/funds', function(req, res) {
+    console.log(req.query,'--------------------');
+   User.open().findById(req.query.id).then(function(user) {
+       console.log(user, '=====================');
+       res.send(user.funds);
+   })
+});
+
 router.get('/withdraw/already', function (req, res) {
     Withdraw.open().findPages({status: {$in: ['成功', '失败']}}, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
