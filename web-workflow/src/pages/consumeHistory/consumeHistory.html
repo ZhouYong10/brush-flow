@@ -60,26 +60,18 @@
                             <th>#</th>
                             <th>消费时间</th>
                             <th>类型	</th>
-                            <th>消费金额</th>
-                            <th>余额	</th>
+                            <th>金额</th>
                             <th>描述	</th>
                         </tr>
                         </thead>
                         <tbody>
 
                         <% for(var i = 0; i < orders.length; i++){ %>
-                        <tr class="<% if(orders[i].status == '已处理'){ %> am-primary
-                        <% }else if(orders[i].status == '已退款'){ %> am-danger <% } %>">
+                        <tr class="<% if(orders[i].funds < 0){ %> am-primary
+                        <% }else if(orders[i].funds > 0){ %> am-danger <% } %>">
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
-                            <td class="am-text-middle"><%= orders[i].typeName %><%= orders[i].smallTypeName %></td>
-                            <% if(orders[i].status == '已处理'){ %>
-                            <td class="am-text-middle">￥ -<%= orders[i].totalPrice %></td>
-                            <% } %>
-
-                            <% if(orders[i].status == '已退款'){ %>
-                            <td class="am-text-middle">￥ +<%= orders[i].totalPrice %></td>
-                            <% } %>
+                            <td class="am-text-middle"><%= orders[i].type %></td>
                             <td class="am-text-middle">￥ <%= orders[i].funds %></td>
                             <td class="am-text-middle"><%= orders[i].description %></td>
                         </tr>

@@ -44,7 +44,7 @@
                             </button>
                         </div>
                     </validator>
-                    <div class="totalProfit">总计： ￥<%= totalProfit %></div>
+                    <div class="totalProfit">总计返利： ￥<%= totalProfit %></div>
                 </div>
 
                 <div class="am-scrollable-horizontal am-text-center flowTask-content">
@@ -55,8 +55,8 @@
                             <th>时间</th>
                             <th>用户</th>
                             <th>类型	</th>
-                            <th>返利金额</th>
-                            <th>状态</th>
+                            <th>金额</th>
+                            <th>描述</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -69,14 +69,13 @@
                             <td><%= profits[i].typeName %><%= profits[i].smallTypeName %></td>
                             <% if(profits[i].status == 'success'){ %>
                             <td>
-                                <span class="profitSuccess">+ ￥<%= profits[i].profit %></span>
+                                <span class="profitSuccess">￥<%= profits[i].profit %></span>
                             </td>
-                            <td>完成</td>
                             <% } %>
                             <% if(profits[i].status == 'refund'){ %>
-                            <td>- ￥<%= profits[i].profit %></td>
-                            <td>退款</td>
+                            <td>￥<%= profits[i].profit %></td>
                             <% } %>
+                            <td><%= profits[i].description %></td>
                         </tr>
                         <% } %>
 

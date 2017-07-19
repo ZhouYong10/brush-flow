@@ -9,6 +9,7 @@ var Withdraw = require('../models/Withdraw');
 var Profit = require('../models/Profit');
 var Product = require('../models/Product');
 var Task = require('../models/Task');
+var Consume = require('../models/Consume');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
@@ -145,9 +146,8 @@ router.get('/search/recharge', function (req, res) {
 router.get('/consume/history', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
-                userId: user._id,
-                status: {$in: ['已处理', '已退款']}
+            Consume.open().findPages({
+                userId: user._id
             }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     res.render('consumeHistory', {
@@ -166,9 +166,8 @@ router.get('/consume/history', function (req, res) {
 router.get('/search/consume', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Order.open().findPages({
+            Consume.open().findPages({
                     userId: user._id,
-                    status: {$in: ['已处理', '已退款']},
                     createTime: new RegExp(req.query.createTime)
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
@@ -474,7 +473,7 @@ router.get('/my/price', function (req, res) {
 router.get('/lowerUser/profit', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            Profit.getProfitTotal({userId: user._id, status: 'success'})
+            Profit.getProfitTotal({userId: user._id})
                 .then(function(totalProfit) {
                     Profit.open().findPages({userId: user._id}, (req.query.page ? req.query.page : 1))
                         .then(function(obj) {
@@ -498,7 +497,6 @@ router.get('/search/lowerUser/profit', function (req, res) {
         .then(function (user) {
             Profit.getProfitTotal({
                 userId: user._id,
-                status: 'success',
                 createTime: new RegExp(req.query.createTime)
             }).then(function(totalProfit) {
                     Profit.open().findPages({

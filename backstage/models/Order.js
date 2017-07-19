@@ -6,6 +6,7 @@ var User = require('./User');
 var Product = require('./Product');
 var Profit = require('./Profit');
 var Address = require('./Address');
+var Consume = require('./Consume');
 var request = require('request');
 var cheerio = require('cheerio');
 
@@ -477,8 +478,10 @@ Order.extend({
                     }
                     order.schedule = percent;
                 }else {
-                    order.status = '未处理';
+                    order.status = '排队中';
                 }
+            }else if(order.status == '未处理'){
+                order.status = '排队中';
             }
         }
         return orders;
@@ -527,7 +530,16 @@ Order.include({
             .then(function () {
                 User.open().updateById(self.userId, {$set: {funds: self.funds}})
                     .then(function () {
-                        callback(self);
+                        Consume.open().insert({
+                            userId: self.userId,
+                            orderId: self._id,
+                            createTime: self.createTime,
+                            type: self.typeName + self.smallTypeName,
+                            funds: - self.totalPrice,
+                            description: self.description
+                        }).then(function() {
+                            callback(self);
+                        })
                     });
             });
     },
@@ -913,7 +925,16 @@ Order.include({
                                 var orderId = self._id;
                                 delete self._id;
                                 Order.open().updateById(orderId, {$set: self}).then(function() {
-                                    resolve();
+                                    Consume.open().insert({
+                                        userId: self.userId,
+                                        orderId: self._id,
+                                        createTime: self.quitTime,
+                                        type: self.typeName + self.smallTypeName,
+                                        funds: + self.quitFunds,
+                                        description: self.quitDesc
+                                    }).then(function() {
+                                        resolve();
+                                    })
                                 })
                             });
                         });
@@ -952,9 +973,9 @@ Order.include({
                                 orderUsername: orderUser.username,
                                 typeName: self.typeName,
                                 smallTypeName: self.smallTypeName,
-                                profit: -self[name],
+                                profit: - self[name],
                                 orderId: self._id,
-                                status: 'success',
+                                status: 'refund',
                                 createTime: self.quitTime,
                                 description: self.quitDesc
                             }).then(function () {
@@ -1020,7 +1041,8 @@ Order.include({
                                 profit: self[name],
                                 orderId: self._id,
                                 status: 'success',
-                                createTime: self.createTime
+                                createTime: self.createTime,
+                                description: self.description
                             }).then(function (profit) {
                                 self.profitToParent(orderUser, parent, callback);
                             })
@@ -1035,6 +1057,8 @@ Order.include({
         self.status = '已退款';
         self.error = '已处理';
         self.refundInfo = info;
+        self.quitDesc = self.typeName + self.smallTypeName + '撤单' + self.num;
+        self.schedule = '0%';
         Order.open().updateById(self._id, self)
             .then(function () {
                 User.open().findById(self.userId)
@@ -1042,7 +1066,16 @@ Order.include({
                         user.funds = (parseFloat(self.totalPrice) + parseFloat(user.funds)).toFixed(4);
                         User.open().updateById(user._id, {$set: {funds: user.funds}})
                             .then(function () {
-                                callback();
+                                Consume.open().insert({
+                                    userId: self.userId,
+                                    orderId: self._id,
+                                    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                    type: self.typeName + self.smallTypeName,
+                                    funds: + self.totalPrice,
+                                    description: self.quitDesc
+                                }).then(function() {
+                                    callback();
+                                })
                             });
                     });
             });

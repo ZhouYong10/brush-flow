@@ -1313,15 +1313,19 @@ router.get('/WX/like/quit/auto', function (req, res) {
 router.get('/WX/like/quit/handle', function (req, res) {
     var query = req.query;
     Order.open().findById(query.id).then(function (order) {
-        var overNum = order.num - (query.info - order.startReadNum);
+        var alrNum = query.info - order.startReadNum;
+        var overNum = order.num - alrNum;
         if(parseInt(overNum) > 100){
+            order.alrNum = alrNum;
             order.overNum = overNum;
+            order.schedule = (alrNum / order.num * 100).toFixed(2) + '%';
             var orderIns = Order.wrapToInstance(order);
             orderIns.quit().then(function() {
                 res.redirect(query.url);
             })
         }else{
             Order.open().updateById(order._id, {$set: {
+                schedule: '100%',
                 status: '已完成'
             }, $unset: {
                 isQuit: true
