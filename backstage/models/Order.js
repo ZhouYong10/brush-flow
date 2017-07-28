@@ -312,7 +312,7 @@ function startFans() {
 
 function commitFans(result) {
     request.post({
-        url:'http://178.rocks/weixin/user?page=guanzhu',
+        url:'http://7893971.cn/weixin/user?page=guanzhu',
         headers:{
             "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             "Accept-Encoding": 'gzip, deflate',
@@ -321,9 +321,9 @@ function commitFans(result) {
             "Connection": 'keep-alive',
             "Content-Type": 'application/x-www-form-urlencoded',
             "Cookie": wxFansCookieInfo,
-            "Host": '178.rocks',
-            "Origin": 'http://178.rocks',
-            "Referer": 'http://178.rocks/weixin/user?page=guanzhu',
+            "Host": '7893971.cn',
+            "Origin": 'http://7893971.cn',
+            "Referer": 'http://7893971.cn/weixin/user?page=guanzhu',
             "Upgrade-Insecure-Requests": 1,
             "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
         },
@@ -337,6 +337,7 @@ function commitFans(result) {
         if(err) {
             return console.log(err);
         }
+        console.log(res.headers['set-cookie'], '===============================');
         wxFansCookieInfo = res.headers['set-cookie'][0].split(';')[0];
         var $ = cheerio.load(body);
         var aimItem = $('table').children().last();
@@ -357,7 +358,7 @@ function commitFans(result) {
 
 function freshFansCookie() {
     request.get({
-        url:'http://178.rocks/weixin/user?page=guanzhu',
+        url:'http://7893971.cn/weixin/user?page=guanzhu',
         headers:{
             "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             "Accept-Encoding": 'gzip, deflate, sdch',
@@ -365,8 +366,8 @@ function freshFansCookie() {
             "Cache-Control": 'max-age=0',
             "Connection": 'keep-alive',
             "Cookie": wxFansCookieInfo,
-            "Host": '178.rocks',
-            "Referer": 'http://178.rocks/weixin/user?page=guanzhu',
+            "Host": '7893971.cn',
+            "Referer": 'http://7893971.cn/weixin/user?page=guanzhu',
             "Upgrade-Insecure-Requests": 1,
             "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
         }
