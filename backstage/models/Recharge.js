@@ -41,7 +41,7 @@ Recharge.extend({
                     isOK: false,
                     message: '该交易号已经过期！'
                 });
-            }else if(!(/^[0-9]*[1-9][0-9]*$/.test(alipayInfo.alipayId)) || alipayInfo.alipayId.length != 32){
+            }else if(!(/^[0-9]*[1-9][0-9]*$/.test(alipayInfo.alipayId)) || (alipayInfo.alipayId.length != 32 && alipayInfo.alipayId.length != 28)){
                 reject({
                     isOK: false,
                     message: '请输入合法的支付宝交易号!'

@@ -10,7 +10,7 @@ $(function() {
         var $alipayNum = $('#rechargeNum');
         var alipayNum = $alipayNum.val();
         var numLen = alipayNum.length;
-        if(Utils.isNum(alipayNum) && numLen ==32){
+        if(Utils.isNum(alipayNum) && (numLen == 32 || numLen == 28)){
             $.post('/user/recharge', {
                 alipayId: alipayNum
             }).then(function(data) {
