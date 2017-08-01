@@ -49,7 +49,11 @@
                             <% for(var i = 0; i < orders.length; i++){ %>
                             <tr class="<% if(orders[i].remote){ %> am-danger <% } %>">
                                 <td class="am-text-middle"><%= i + 1  %></td>
-                                <td class="am-text-middle"><%= orders[i].user %></td>
+                                <td class="am-text-middle">
+                                    <a href="/admin/search/user?username=<%= orders[i].user %>&one=true">
+                                        <%= orders[i].user %>
+                                    </a>
+                                </td>
                                 <td class="am-text-middle"><%= orders[i].createTime %></td>
                                 <td class="am-text-middle">
                                     <input type="text" value="<%= orders[i].address %>" style="width: 56px;"><br/>

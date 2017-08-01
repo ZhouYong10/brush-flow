@@ -44,7 +44,11 @@
                         <% for(var i = 0; i < feedbacks.length; i++){ %>
                         <tr>
                             <td><%= i + 1 %></td>
-                            <td><%= feedbacks[i].user %></td>
+                            <td>
+                                <a href="/admin/search/user?username=<%= feedbacks[i].user %>&one=true">
+                                    <%= feedbacks[i].user %>
+                                </a>
+                            </td>
                             <td><%= feedbacks[i].createTime %></td>
                             <td class="feedback-content"><%= feedbacks[i].content %></td>
                             <td>

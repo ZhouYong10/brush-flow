@@ -50,7 +50,11 @@
                         <% for(var i = 0; i < orders.length; i++){ %>
                         <tr>
                             <td class="am-text-middle"><%= i + 1 %></td>
-                            <td class="am-text-middle"><%= orders[i].user %></td>
+                            <td class="am-text-middle">
+                                <a href="/admin/search/user?username=<%= orders[i].user %>&one=true">
+                                    <%= orders[i].user %>
+                                </a>
+                            </td>
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].smallTypeName %></td>
                             <td class="am-text-middle">

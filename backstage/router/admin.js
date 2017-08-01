@@ -241,7 +241,8 @@ router.get('/search/user/funds/records', function (req, res) {
                 title: '用户资金变动记录',
                 money: req.session.systemFunds,
                 freezeFunds: req.session.freezeFunds,
-                records: records
+                records: records,
+                userId: userId
             });
         })
     })
@@ -263,7 +264,8 @@ router.get('/search/user/recharge', function (req, res) {
             title: '用户资金变动记录',
             money: req.session.systemFunds,
             freezeFunds: req.session.freezeFunds,
-            records: recharges
+            records: recharges,
+            userId: userId
         });
     });
 });
@@ -282,7 +284,8 @@ router.get('/search/user/consume', function (req, res) {
             title: '用户资金变动记录',
             money: req.session.systemFunds,
             freezeFunds: req.session.freezeFunds,
-            records: consume
+            records: consume,
+            userId: userId
         });
     });
 });
