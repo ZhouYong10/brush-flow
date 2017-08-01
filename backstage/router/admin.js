@@ -7,6 +7,7 @@ var Recharge = require('../models/Recharge');
 var Error = require('../models/Error');
 var Feedback = require('../models/Feedback');
 var Withdraw = require('../models/Withdraw');
+var Consume = require('../models/Consume');
 
 var Product = require('../models/Product');
 var Order = require('../models/Order');
@@ -221,23 +222,69 @@ router.get('/search/recharge/by/alipayId', function (req, res) {
         })
 });
 
-router.get('/search/user/recharge', function (req, res) {
-    if(req.query.userId){
-        req.session.searchRecharge = req.query.userId;
-    }
-    Recharge.findRechargeByUserId(req.session.searchRecharge, (req.query.page ? req.query.page : 1))
-        .then(function (obj) {
-            res.render('adminRechargeHistory', {
-                title: '资金管理 / 充值记录',
+router.get('/search/user/funds/records', function (req, res) {
+    var userId = Recharge.toObjectID(req.query.userId);
+    req.session.recordUserId = userId;
+    Recharge.open().find({
+        type: 'brush',
+        isRecharge: true,
+        userId: userId
+    }).then(function(recharges) {
+        Consume.open().find({userId: userId}).then(function(consumes) {
+            var records = recharges.concat(consumes);
+            records.sort(function (r, c) {
+                var rTime = Date.parse(r.createTime);
+                var cTime = Date.parse(c.createTime);
+                return cTime - rTime;
+            });
+            res.render('adminUserFundsRecords', {
+                title: '用户资金变动记录',
                 money: req.session.systemFunds,
                 freezeFunds: req.session.freezeFunds,
-                recharges: obj.results,
-                pages: obj.pages,
-                path: '/admin/recharge/history'
+                records: records
             });
-        }, function (error) {
-            res.send('查询充值记录失败： ' + error);
+        })
+    })
+});
+
+router.get('/search/user/recharge', function (req, res) {
+    var userId = Recharge.toObjectID(req.session.recordUserId);
+    Recharge.open().find({
+        type: 'brush',
+        isRecharge: true,
+        userId: userId
+    }).then(function (recharges) {
+        recharges.sort(function (r, c) {
+            var rTime = Date.parse(r.createTime);
+            var cTime = Date.parse(c.createTime);
+            return cTime - rTime;
         });
+        res.render('adminUserFundsRecords', {
+            title: '用户资金变动记录',
+            money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
+            records: recharges
+        });
+    });
+});
+
+router.get('/search/user/consume', function (req, res) {
+    var userId = Consume.toObjectID(req.session.recordUserId);
+    Consume.open().find({
+        userId: userId
+    }).then(function (consume) {
+        consume.sort(function (r, c) {
+            var rTime = Date.parse(r.createTime);
+            var cTime = Date.parse(c.createTime);
+            return cTime - rTime;
+        });
+        res.render('adminUserFundsRecords', {
+            title: '用户资金变动记录',
+            money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
+            records: consume
+        });
+    });
 });
 
 router.get('/hand/recharge', function (req, res) {

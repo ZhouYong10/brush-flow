@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="./adminUserFundsRecords.scss?__inline">
+</head>
+<body>
+
+<div id="app">
+
+    <link rel="import" href="../../components/adminHeader/adminHeader.html?__inline">
+    <link rel="import" href="../../components/adminMenu/adminMenu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/adminMenuContent/adminMenuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-scrollable-horizontal">
+
+                    <div class="am-form am-form-inline">
+                        <div class="am-form-group am-form-group-sm">
+                            <a href="/admin/search/user/recharge" class="am-btn am-btn-success am-radius am-btn-sm">
+                                充值记录
+                            </a>
+                        </div>
+                        <div class="am-form-group am-form-group-sm">
+                            <a href="/admin/search/user/consume" class="am-btn am-btn-success am-radius am-btn-sm">
+                                消费记录
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="am-scrollable-horizontal am-text-center recharge-content">
+                        <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>用户</th>
+                                <th>日期</th>
+                                <th>交易号/类型</th>
+                                <th>之前余额</th>
+                                <th>金额</th>
+                                <th>之后余额</th>
+                                <th>描述</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i = 0; i < records.length; i++){ %>
+                            <tr class="<% if(records[i].funds < 0){ %> am-primary
+                        <% }else if(records[i].funds > 0){ %> am-danger <% } %>">
+                                <td  class="am-text-middle"><%= i + 1 %></td>
+                                <td  class="am-text-middle">
+                                   <a href="/admin/search/user?username=<%= records[i].username %>&one=true">
+                                       <%= records[i].username %>
+                                   </a>
+                                </td>
+                                <td  class="am-text-middle"><%= records[i].createTime %></td>
+                                <td  class="am-text-middle">
+                                    <% if(records[i].isRecharge){ %>
+                                    <%= records[i].alipayId %>
+                                    <% }else{ %>
+                                    <%= records[i].type %>
+                                    <% } %>
+                                </td>
+                                <td  class="am-text-middle"><%= records[i].userOldFunds %></td>
+                                <td  class="am-text-middle"><%= records[i].funds %></td>
+                                <td  class="am-text-middle"><%= records[i].userNowFunds %></td>
+                                <td  class="am-text-middle">
+                                    <% if(records[i].isRecharge){ %>
+                                    <%= records[i].status %>
+                                    <% }else{ %>
+                                    <%= records[i].description %>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <% } %>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+
+<script>
+    require('adminMenuContent');
+</script>
+
+</body>
+</html>

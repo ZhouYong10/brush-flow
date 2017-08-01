@@ -533,6 +533,7 @@ Order.include({
                     .then(function () {
                         Consume.open().insert({
                             userId: self.userId,
+                            username: self.user,
                             orderId: self._id,
                             createTime: self.createTime,
                             type: self.typeName + self.smallTypeName,
@@ -935,6 +936,7 @@ Order.include({
                                 Order.open().updateById(orderId, {$set: self}).then(function() {
                                     Consume.open().insert({
                                         userId: self.userId,
+                                        username: self.user,
                                         orderId: self._id,
                                         createTime: self.quitTime,
                                         type: self.typeName + self.smallTypeName,
@@ -1080,6 +1082,7 @@ Order.include({
                             .then(function () {
                                 Consume.open().insert({
                                     userId: self.userId,
+                                    username: self.user,
                                     orderId: self._id,
                                     createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                                     type: self.typeName + self.smallTypeName,
