@@ -60,7 +60,8 @@
                             <th>#</th>
                             <th>消费时间</th>
                             <th>类型	</th>
-                            <th>金额</th>
+                            <th>消费金额</th>
+                            <th>账户余额</th>
                             <th>描述	</th>
                         </tr>
                         </thead>
@@ -73,6 +74,7 @@
                             <td class="am-text-middle"><%= orders[i].createTime %></td>
                             <td class="am-text-middle"><%= orders[i].type %></td>
                             <td class="am-text-middle">￥ <%= orders[i].funds %></td>
+                            <td class="am-text-middle">￥ <%= orders[i].userFunds %></td>
                             <td class="am-text-middle"><%= orders[i].description %></td>
                         </tr>
                         <% } %>

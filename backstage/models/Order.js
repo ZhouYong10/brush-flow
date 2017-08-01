@@ -537,6 +537,7 @@ Order.include({
                             createTime: self.createTime,
                             type: self.typeName + self.smallTypeName,
                             funds: - self.totalPrice,
+                            userFunds: self.funds,
                             description: self.description
                         }).then(function() {
                             callback(self);
@@ -917,8 +918,9 @@ Order.include({
             self.quitFunds = (self.price * self.overNum).toFixed(4);
             self.quitDesc = self.typeName + self.smallTypeName + '撤单' + self.overNum;
             User.open().findById(self.userId).then(function (user) {
+                self.nowUserFunds = (parseFloat(user.funds) + parseFloat(self.quitFunds)).toFixed(4);
                 User.open().updateById(user._id, {$set: {
-                    funds: (parseFloat(user.funds) + parseFloat(self.quitFunds)).toFixed(4)
+                    funds: self.nowUserFunds
                 }}).then(function() {
                     Product.open().findOne({type: self.type, smallType: self.smallType}).then(function (product) {
                         self.countParentQuit(user, Product.wrapToInstance(product), function () {
@@ -933,6 +935,7 @@ Order.include({
                                         createTime: self.quitTime,
                                         type: self.typeName + self.smallTypeName,
                                         funds: + self.quitFunds,
+                                        userFunds: self.nowUserFunds,
                                         description: self.quitDesc
                                     }).then(function() {
                                         resolve();
@@ -1065,7 +1068,8 @@ Order.include({
             .then(function () {
                 User.open().findById(self.userId)
                     .then(function (user) {
-                        user.funds = (parseFloat(self.totalPrice) + parseFloat(user.funds)).toFixed(4);
+                        self.nowUserFunds = (parseFloat(self.totalPrice) + parseFloat(user.funds)).toFixed(4);
+                        user.funds = self.nowUserFunds;
                         User.open().updateById(user._id, {$set: {funds: user.funds}})
                             .then(function () {
                                 Consume.open().insert({
@@ -1074,6 +1078,7 @@ Order.include({
                                     createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                                     type: self.typeName + self.smallTypeName,
                                     funds: + self.totalPrice,
+                                    userFunds: self.nowUserFunds,
                                     description: self.quitDesc
                                 }).then(function() {
                                     callback();
