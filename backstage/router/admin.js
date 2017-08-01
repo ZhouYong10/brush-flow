@@ -347,8 +347,14 @@ router.get('/manage/user', function (req, res) {
 });
 
 router.get('/search/user', function (req, res) {
+    var query;
+    if(req.query.one){
+        query = req.query.username;
+    }else{
+        query = new RegExp(req.query.username)
+    }
     User.open().findPages({
-        username: new RegExp(req.query.username)
+        username: query
     }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
             res.render('adminManageUser', {
