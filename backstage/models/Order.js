@@ -537,6 +537,7 @@ Order.include({
                             createTime: self.createTime,
                             type: self.typeName + self.smallTypeName,
                             funds: - self.totalPrice,
+                            userOldFunds: self.userOldFunds,
                             userFunds: self.funds,
                             description: self.description
                         }).then(function() {
@@ -760,6 +761,7 @@ Order.include({
                     self.smallTypeName = product.smallTypeName;
                     self.status = '未处理';
                     self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                    self.userOldFunds = user.funds;
                     self.funds = (user.funds - self.totalPrice).toFixed(4);
                     self.description = self.typeName + self.smallTypeName + '执行' + self.num;
                     self.countParentProfit(user, product, function(obj) {
@@ -802,6 +804,7 @@ Order.include({
                             self.smallTypeName = product1.smallTypeName;
                             self.status = '未处理';
                             self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                            self.userOldFunds = user.funds;
                             self.funds = (user.funds - self.totalPrice).toFixed(4);
                             self.description = self.typeName + self.smallTypeName + '执行' + self.num + '; ' +
                                                product2.typeName + product2.smallTypeName + '执行' + self.num2;
@@ -918,6 +921,7 @@ Order.include({
             self.quitFunds = (self.price * self.overNum).toFixed(4);
             self.quitDesc = self.typeName + self.smallTypeName + '撤单' + self.overNum;
             User.open().findById(self.userId).then(function (user) {
+                self.userOldFunds = user.funds;
                 self.nowUserFunds = (parseFloat(user.funds) + parseFloat(self.quitFunds)).toFixed(4);
                 User.open().updateById(user._id, {$set: {
                     funds: self.nowUserFunds
@@ -935,6 +939,7 @@ Order.include({
                                         createTime: self.quitTime,
                                         type: self.typeName + self.smallTypeName,
                                         funds: + self.quitFunds,
+                                        userOldFunds: + self.userOldFunds,
                                         userFunds: self.nowUserFunds,
                                         description: self.quitDesc
                                     }).then(function() {
@@ -1068,6 +1073,7 @@ Order.include({
             .then(function () {
                 User.open().findById(self.userId)
                     .then(function (user) {
+                        self.userOldFunds = user.funds;
                         self.nowUserFunds = (parseFloat(self.totalPrice) + parseFloat(user.funds)).toFixed(4);
                         user.funds = self.nowUserFunds;
                         User.open().updateById(user._id, {$set: {funds: user.funds}})
@@ -1078,6 +1084,7 @@ Order.include({
                                     createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                                     type: self.typeName + self.smallTypeName,
                                     funds: + self.totalPrice,
+                                    userOldFunds: + self.userOldFunds,
                                     userFunds: self.nowUserFunds,
                                     description: self.quitDesc
                                 }).then(function() {
