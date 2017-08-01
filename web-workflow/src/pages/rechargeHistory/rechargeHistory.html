@@ -63,7 +63,9 @@
                             <th>#</th>
                             <th>订单号</th>
                             <th>充值时间</th>
+                            <th>之前余额</th>
                             <th>充值金额</th>
+                            <th>之后余额</th>
                             <th>状态</th>
                             <th>描述</th>
                         </tr>
@@ -75,7 +77,9 @@
                             <td class="am-text-middle"><%= i + 1 %></td>
                             <td class="am-text-middle"><%= recharges[i].alipayId %></td>
                             <td class="am-text-middle"><%= recharges[i].createTime %></td>
+                            <td class="am-text-middle"><%= recharges[i].userOldFunds %></td>
                             <td class="am-text-middle"><%= recharges[i].funds %></td>
+                            <td class="am-text-middle"><%= recharges[i].userNowFunds %></td>
                             <td class="am-text-middle"><%= recharges[i].status %></td>
                             <td class="am-text-middle"><%= recharges[i].dec %></td>
                         </tr>
