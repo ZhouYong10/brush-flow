@@ -538,7 +538,7 @@ Order.include({
                             type: self.typeName + self.smallTypeName,
                             funds: - self.totalPrice,
                             userOldFunds: self.userOldFunds,
-                            userFunds: self.funds,
+                            userNowFunds: self.funds,
                             description: self.description
                         }).then(function() {
                             callback(self);
@@ -940,7 +940,7 @@ Order.include({
                                         type: self.typeName + self.smallTypeName,
                                         funds: + self.quitFunds,
                                         userOldFunds: + self.userOldFunds,
-                                        userFunds: self.nowUserFunds,
+                                        userNowFunds: self.nowUserFunds,
                                         description: self.quitDesc
                                     }).then(function() {
                                         resolve();
@@ -1085,7 +1085,7 @@ Order.include({
                                     type: self.typeName + self.smallTypeName,
                                     funds: + self.totalPrice,
                                     userOldFunds: + self.userOldFunds,
-                                    userFunds: self.nowUserFunds,
+                                    userNowFunds: self.nowUserFunds,
                                     description: self.quitDesc
                                 }).then(function() {
                                     callback();
