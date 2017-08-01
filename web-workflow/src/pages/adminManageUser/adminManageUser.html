@@ -75,14 +75,22 @@
                                     <td class="am-text-middle"><%= i + 1 %></td>
                                     <td class="am-text-middle"><%= users[i].createTime %></td>
                                     <td class="am-text-middle"><%= users[i].role %></td>
-                                    <td  class="am-text-middle"><%= users[i].username %></td>
+                                    <td  class="am-text-middle">
+                                        <a href="/admin/search/user?username=<%= users[i].username %>&one=true">
+                                            <%= users[i].username %>
+                                        </a>
+                                    </td>
                                     <td  class="am-text-middle"><%= users[i].status %></td>
                                     <td  class="am-text-middle">
                                         <a href="/admin/search/user/funds/records?userId=<%= users[i]._id %>">
                                             ￥ <%= users[i].funds %>
                                         </a>
                                     </td>
-                                    <td  class="am-text-middle"><%= users[i].parent %></td>
+                                    <td  class="am-text-middle">
+                                        <a href="/admin/search/user?username=<%= users[i].parent %>&one=true">
+                                            <%= users[i].parent %>
+                                        </a>
+                                    </td>
                                     <td  class="am-text-middle">
                                         <a href="/admin/lowerUsers/of/user?userId=<%= users[i]._id %>">
                                             <%= users[i].childNum %>
