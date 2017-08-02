@@ -918,6 +918,7 @@ Order.include({
         var self = this;
         return new Promise(function(resolve, reject) {
             self.status = '已退款';
+            self.error = '已处理';
             self.quitTime = moment().format('YYYY-MM-DD HH:mm:ss');
             self.quitFunds = (self.price * self.overNum).toFixed(4);
             self.quitDesc = self.typeName + self.smallTypeName + '撤单' + self.overNum;
