@@ -15,5 +15,5 @@ $(function () {
     Utils.breakText();
     Utils.clipboard();
     Utils.layPrompt('请输入错误处理信息！', '.dealError');
-    Utils.layPrompt('请输入退款理由！', '.refundProfit');
+    Utils.layPrompt('请输入任务的当前阅读量！', '.orderQuit');
 });

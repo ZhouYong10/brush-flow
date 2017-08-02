@@ -108,8 +108,14 @@
                                 </td>
                                 <td class="am-text-middle">
                                     <% if(orders[i].status == '执行中' && orders[i].error == undefined){ %>
-                                    <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
-                                       href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs" title="一键撤单"
+                                           href="/admin/WX/like/quit/auto?id=<%= orders[i]._id %>&url=<%= path %>">自动撤单</a>
+                                    </div>
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs orderQuit" title="手动撤单"
+                                           href="/admin/WX/like/quit/handle?id=<%= orders[i]._id %>&url=<%= path %>">手动撤单</a>
+                                    </div>
                                     <% }else if(orders[i].status == '执行中' && orders[i].error != undefined){ %>
 
                                     <% if(orders[i].errorInfo != undefined){ %>
@@ -129,19 +135,27 @@
                                         </a>
                                     </div>
                                     <div class="operation">
-                                        <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
-                                           href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs" title="一键撤单"
+                                           href="/admin/WX/like/quit/auto?id=<%= orders[i]._id %>&url=<%= path %>">自动撤单</a>
+                                    </div>
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs orderQuit" title="手动撤单"
+                                           href="/admin/WX/like/quit/handle?id=<%= orders[i]._id %>&url=<%= path %>">手动撤单</a>
                                     </div>
                                     <% } %>
 
                                     <% if(orders[i].errorDealInfo == undefined){ %>
                                     <div class="operation">
                                         <a class="am-btn am-btn-primary am-radius am-btn-xs dealError"
-                                           href="/admin/order/dealError?id=<%= orders[i]._id %>&url=<%= path %>">处理</a>
+                                           href="/admin/order/dealError?id=<%= orders[i]._id %>&url=<%= path %>">问题处理</a>
                                     </div>
                                     <div class="operation">
-                                        <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"
-                                           href="/admin/order/refundProfit?id=<%= orders[i]._id %>&url=<%= path %>">退款</a>
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs" title="一键撤单"
+                                           href="/admin/WX/like/quit/auto?id=<%= orders[i]._id %>&url=<%= path %>">自动撤单</a>
+                                    </div>
+                                    <div class="operation">
+                                        <a class="am-btn am-btn-primary am-radius am-btn-xs orderQuit" title="手动撤单"
+                                           href="/admin/WX/like/quit/handle?id=<%= orders[i]._id %>&url=<%= path %>">手动撤单</a>
                                     </div>
                                     <% } %>
 
