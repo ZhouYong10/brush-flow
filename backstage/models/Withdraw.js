@@ -44,9 +44,10 @@ Withdraw.extend({
                     var userFunds = (parseFloat(user.funds) - parseFloat(withdraw.funds)).toFixed(4);
                     withdraw.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
                     withdraw.status = '未处理';
-                    withdraw.user = user.username;
+                    withdraw.username = user.username;
                     withdraw.userId = user._id;
-                    withdraw.userFunds = userFunds;
+                    withdraw.userOldFunds = user.funds;
+                    withdraw.userNowFunds = userFunds;
                     if(userFunds >= 0){
                         Withdraw.open().insert(withdraw)
                             .then(function(results) {

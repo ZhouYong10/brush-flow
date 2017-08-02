@@ -975,8 +975,8 @@ Order.include({
                             name = 'goldQuit';
                             break;
                     }
-                    parent.funds = (parent.funds - self[name]).toFixed(4);
-                    User.open().updateById(parent._id, {$set: {funds: parent.funds}})
+                    parent.userNowFunds = (parent.funds - self[name]).toFixed(4);
+                    User.open().updateById(parent._id, {$set: {funds: parent.userNowFunds}})
                         .then(function () {
                             Profit.open().insert({
                                 userId: parent._id,
@@ -985,7 +985,9 @@ Order.include({
                                 orderUsername: orderUser.username,
                                 typeName: self.typeName,
                                 smallTypeName: self.smallTypeName,
-                                profit: - self[name],
+                                funds: - self[name],
+                                userOldFunds: parent.funds,
+                                userNowFunds: parent.userNowFunds,
                                 orderId: self._id,
                                 status: 'refund',
                                 createTime: self.quitTime,
@@ -1003,18 +1005,18 @@ Order.include({
         var self = this;
         User.open().findById(self.userId)
             .then(function(user) {
-                self.profitToParent(user, user, function() {
-                    var updateInfo = {
-                        startReadNum: self.startReadNum,
-                        status: '执行中',
-                        dealTime: moment().format('YYYY-MM-DD HH:mm:ss')
-                    };
-                    if(self.remote){
-                        updateInfo.remote = self.remote;
-                    }
-                    Order.open().updateById(self._id, {
-                        $set: updateInfo
-                    }).then(function () {
+                var updateInfo = {
+                    startReadNum: self.startReadNum,
+                    status: '执行中',
+                    dealTime: self.dealTime = moment().format('YYYY-MM-DD HH:mm:ss')
+                };
+                if(self.remote){
+                    updateInfo.remote = self.remote;
+                }
+                Order.open().updateById(self._id, {
+                    $set: updateInfo
+                }).then(function () {
+                    self.profitToParent(user, user, function() {
                         callback();
                     });
                 });
@@ -1040,8 +1042,8 @@ Order.include({
                             name = 'goldProfit';
                             break;
                     }
-                    parent.funds = (parseFloat(self[name]) + parseFloat(parent.funds)).toFixed(4);
-                    User.open().updateById(parent._id, {$set: {funds: parent.funds}})
+                    parent.userNowFunds = (parseFloat(self[name]) + parseFloat(parent.funds)).toFixed(4);
+                    User.open().updateById(parent._id, {$set: {funds: parent.userNowFunds}})
                         .then(function () {
                             Profit.open().insert({
                                 userId: parent._id,
@@ -1050,10 +1052,12 @@ Order.include({
                                 orderUsername: orderUser.username,
                                 typeName: self.typeName,
                                 smallTypeName: self.smallTypeName,
-                                profit: self[name],
+                                funds: self[name],
+                                userOldFunds: parent.funds,
+                                userNowFunds: parent.userNowFunds,
                                 orderId: self._id,
                                 status: 'success',
-                                createTime: self.createTime,
+                                createTime: self.dealTime,
                                 description: self.description
                             }).then(function (profit) {
                                 self.profitToParent(orderUser, parent, callback);
@@ -1064,7 +1068,7 @@ Order.include({
             callback(self);
         }
     },
-    refund: function(info, callback) {
+    refund: function(info, isProfit, callback) {
         var self = this;
         self.status = '已退款';
         self.error = '已处理';
@@ -1075,10 +1079,8 @@ Order.include({
             .then(function () {
                 User.open().findById(self.userId)
                     .then(function (user) {
-                        self.userOldFunds = user.funds;
                         self.nowUserFunds = (parseFloat(self.totalPrice) + parseFloat(user.funds)).toFixed(4);
-                        user.funds = self.nowUserFunds;
-                        User.open().updateById(user._id, {$set: {funds: user.funds}})
+                        User.open().updateById(user._id, {$set: {funds: self.nowUserFunds}})
                             .then(function () {
                                 Consume.open().insert({
                                     userId: self.userId,
@@ -1087,15 +1089,67 @@ Order.include({
                                     createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                                     type: self.typeName + self.smallTypeName,
                                     funds: + self.totalPrice,
-                                    userOldFunds: + self.userOldFunds,
+                                    userOldFunds: + user.funds,
                                     userNowFunds: self.nowUserFunds,
                                     description: self.quitDesc
                                 }).then(function() {
-                                    callback();
+                                    if(isProfit) {
+                                        self.parentProfitRefund(user, user, function() {
+                                            callback();
+                                        });
+                                    }else{
+                                        callback();
+                                    }
                                 })
                             });
                     });
             });
+    },
+    parentProfitRefund: function(orderUser, child, callback) {
+        var self = this;
+        var name = '';
+        if(child.parentID) {
+            User.open().findById(child.parentID)
+                .then(function(parent) {
+                    switch (parent.role) {
+                        case '管理员':
+                            name = 'adminProfit';
+                            break;
+                        case '顶级代理':
+                            name = 'topProfit';
+                            break;
+                        case '超级代理':
+                            name = 'superProfit';
+                            break;
+                        case '金牌代理':
+                            name = 'goldProfit';
+                            break;
+                    }
+                    parent.userNowFunds = (parent.funds - self[name]).toFixed(4);
+                    User.open().updateById(parent._id, {$set: {funds: parent.userNowFunds}})
+                        .then(function () {
+                            Profit.open().insert({
+                                userId: parent._id,
+                                username: parent.username,
+                                orderUserId: orderUser._id,
+                                orderUsername: orderUser.username,
+                                typeName: self.typeName,
+                                smallTypeName: self.smallTypeName,
+                                funds: - self[name],
+                                userOldFunds: parent.funds,
+                                userNowFunds: parent.userNowFunds,
+                                orderId: self._id,
+                                status: 'refund',
+                                createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                description: self.quitDesc
+                            }).then(function () {
+                                self.parentProfitRefund(orderUser, parent, callback);
+                            })
+                        });
+                })
+        }else {
+            callback(self);
+        }
     },
     remoteError: function(msg) {
         var self = this;
@@ -1109,25 +1163,6 @@ Order.include({
                resolve();
            })
        })
-    },
-    refundProfit: function(info, callback) {
-        var self = this;
-        self.refund(info, function() {
-            Profit.open().find({orderId: self._id})
-                .then(function(profits) {
-                    profits.forEach(function(profit) {
-                        User.open().findById(profit.userId)
-                            .then(function(user) {
-                                user.funds = (parseFloat(user.funds) - parseFloat(profit.profit)).toFixed(4);
-                                User.open().updateById(user._id, {$set: {funds: user.funds}})
-                                    .then(function() {
-                                        Profit.open().updateById(profit._id, {$set: {status: 'refund'}});
-                                    })
-                            })
-                    });
-                    callback();
-                })
-        })
     },
     orderError: function(info, callback) {
         Order.open().updateById(this._id, {

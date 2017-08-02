@@ -33,9 +33,11 @@
                         <tr>
                             <th>#</th>
                             <th>申请日期</th>
-                            <th>提现金额</th>
                             <th>支付宝账户</th>
                             <th>支付宝昵称</th>
+                            <th>之前余额</th>
+                            <th>提现金额</th>
+                            <th>之后余额</th>
                             <th>状态</th>
                             <th>失败反馈</th>
                         </tr>
@@ -47,13 +49,15 @@
                          <% }else if(withdraws[i].status ==  '失败'){ %> am-danger <% } %>">
                             <td><%= i + 1 %></td>
                             <td><%= withdraws[i].createTime %></td>
-                            <td><%= withdraws[i].funds %></td>
                             <td>
                                 <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                    title="<%= withdraws[i].alipayCount %>"
                                    data-clipboard-text="<%= withdraws[i].alipayCount %>">复制</a>
                             </td>
                             <td><%= withdraws[i].alipayName %></td>
+                            <td><%= withdraws[i].userOldFunds %></td>
+                            <td><%= withdraws[i].funds %></td>
+                            <td><%= withdraws[i].userNowFunds %></td>
                             <td><%= withdraws[i].status %></td>
                             <td>
                                 <a class="am-text-truncate text-break" title="<%= withdraws[i].refuseInfo %>">

@@ -41,8 +41,18 @@
                             </a>
                         </div>
                         <div class="am-form-group am-form-group-sm">
+                            <a href="/admin/search/user/withdraw" class="am-btn am-btn-success am-radius am-btn-sm">
+                                提现记录
+                            </a>
+                        </div>
+                        <div class="am-form-group am-form-group-sm">
                             <a href="/admin/search/user/consume" class="am-btn am-btn-success am-radius am-btn-sm">
                                 消费记录
+                            </a>
+                        </div>
+                        <div class="am-form-group am-form-group-sm">
+                            <a href="/admin/search/user/profit" class="am-btn am-btn-success am-radius am-btn-sm">
+                                返利记录
                             </a>
                         </div>
                     </div>
@@ -54,7 +64,8 @@
                                 <th>#</th>
                                 <th>用户</th>
                                 <th>日期</th>
-                                <th>交易号/类型</th>
+                                <th>记录类型</th>
+                                <th>类别信息</th>
                                 <th>之前余额</th>
                                 <th>金额</th>
                                 <th>之后余额</th>
@@ -75,7 +86,22 @@
                                 <td  class="am-text-middle"><%= records[i].createTime %></td>
                                 <td  class="am-text-middle">
                                     <% if(records[i].isRecharge){ %>
+                                    充值记录
+                                    <% }else if(records[i].alipayCount){ %>
+                                    提现记录
+                                    <% }else if(records[i].typeName){ %>
+                                    返利记录
+                                    <% }else{ %>
+                                    消费记录
+                                    <% } %>
+                                </td>
+                                <td  class="am-text-middle">
+                                    <% if(records[i].isRecharge){ %>
                                     <%= records[i].alipayId %>
+                                    <% }else if(records[i].alipayCount){ %>
+                                    <%= records[i].alipayCount %>
+                                    <% }else if(records[i].typeName){ %>
+                                    <%= records[i].typeName %><%= records[i].smallTypeName %>
                                     <% }else{ %>
                                     <%= records[i].type %>
                                     <% } %>
@@ -84,7 +110,7 @@
                                 <td  class="am-text-middle"><%= records[i].funds %></td>
                                 <td  class="am-text-middle"><%= records[i].userNowFunds %></td>
                                 <td  class="am-text-middle">
-                                    <% if(records[i].isRecharge){ %>
+                                    <% if(records[i].isRecharge || records[i].alipayCount){ %>
                                     <%= records[i].status %>
                                     <% }else{ %>
                                     <%= records[i].description %>

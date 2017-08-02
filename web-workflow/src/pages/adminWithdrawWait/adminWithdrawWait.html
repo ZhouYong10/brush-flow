@@ -34,8 +34,9 @@
                             <th>#</th>
                             <th>用户</th>
                             <th>申请日期</th>
+                            <th>之前余额</th>
                             <th>提现金额</th>
-                            <th>提现余额</th>
+                            <th>之后余额</th>
                             <th>当前余额</th>
                             <th>支付宝账户</th>
                             <th>支付宝昵称</th>
@@ -47,10 +48,18 @@
                         <% for(var i = 0; i < withdraws.length; i++){ %>
                         <tr>
                             <td><%= i + 1 %></td>
-                            <td><%= withdraws[i].user %></td>
+                            <td>
+                                <% if(withdraws[i].username){ %>
+                                <%= withdraws[i].username %>
+                                <% } %>
+                                <% if(withdraws[i].user){ %>
+                                withdraws[i].user
+                                <% } %>
+                            </td>
                             <td><%= withdraws[i].createTime %></td>
+                            <td><%= withdraws[i].userOldFunds %></td>
                             <td><%= withdraws[i].funds %></td>
-                            <td><%= withdraws[i].userFunds %></td>
+                            <td><%= withdraws[i].userNowFunds %></td>
                             <td>
                                 <span class="userNowFunds"></span><br>
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs getUserFunds"

@@ -52,10 +52,12 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>时间</th>
-                            <th>用户</th>
-                            <th>类型	</th>
-                            <th>金额</th>
+                            <th>消费时间</th>
+                            <th>返利用户</th>
+                            <th>消费类型</th>
+                            <th>之前余额</th>
+                            <th>返利金额</th>
+                            <th>之后余额</th>
                             <th>描述</th>
                         </tr>
                         </thead>
@@ -67,14 +69,16 @@
                             <td><%= profits[i].createTime %></td>
                             <td><%= profits[i].orderUsername %></td>
                             <td><%= profits[i].typeName %><%= profits[i].smallTypeName %></td>
+                            <td><%= profits[i].userOldFunds %></td>
                             <% if(profits[i].status == 'success'){ %>
                             <td>
-                                <span class="profitSuccess">￥<%= profits[i].profit %></span>
+                                <span class="profitSuccess">￥<%= profits[i].funds %></span>
                             </td>
                             <% } %>
                             <% if(profits[i].status == 'refund'){ %>
-                            <td>￥<%= profits[i].profit %></td>
+                            <td>￥<%= profits[i].funds %></td>
                             <% } %>
+                            <td><%= profits[i].userNowFunds %></td>
                             <td><%= profits[i].description %></td>
                         </tr>
                         <% } %>

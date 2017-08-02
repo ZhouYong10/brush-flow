@@ -23,7 +23,7 @@ Profit.extend({
             Profit.open().find(obj).then(function(results) {
                 var count = 0;
                 results.forEach(function (result) {
-                    count += parseFloat(result.profit);
+                    count += parseFloat(result.funds);
                 });
                 resolve(count.toFixed(4));
             })

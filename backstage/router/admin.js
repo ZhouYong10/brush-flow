@@ -8,6 +8,7 @@ var Error = require('../models/Error');
 var Feedback = require('../models/Feedback');
 var Withdraw = require('../models/Withdraw');
 var Consume = require('../models/Consume');
+var Profit = require('../models/Profit');
 
 var Product = require('../models/Product');
 var Order = require('../models/Order');
@@ -230,20 +231,24 @@ router.get('/search/user/funds/records', function (req, res) {
         isRecharge: true,
         userId: userId
     }).then(function(recharges) {
-        Consume.open().find({userId: userId}).then(function(consumes) {
-            var records = recharges.concat(consumes);
-            records.sort(function (r, c) {
-                var rTime = Date.parse(r.createTime);
-                var cTime = Date.parse(c.createTime);
-                return cTime - rTime;
-            });
-            res.render('adminUserFundsRecords', {
-                title: '用户资金变动记录',
-                money: req.session.systemFunds,
-                freezeFunds: req.session.freezeFunds,
-                records: records,
-                userId: userId
-            });
+        Withdraw.open().find({userId: userId}).then(function(withdraws) {
+            Consume.open().find({userId: userId}).then(function(consumes) {
+                Profit.open().find({userId: userId}).then(function(profits) {
+                    var records = recharges.concat(consumes, withdraws, profits);
+                    records.sort(function (r, c) {
+                        var rTime = Date.parse(r.createTime);
+                        var cTime = Date.parse(c.createTime);
+                        return cTime - rTime;
+                    });
+                    res.render('adminUserFundsRecords', {
+                        title: '用户资金变动记录',
+                        money: req.session.systemFunds,
+                        freezeFunds: req.session.freezeFunds,
+                        records: records,
+                        userId: userId
+                    });
+                })
+            })
         })
     })
 });
@@ -270,12 +275,12 @@ router.get('/search/user/recharge', function (req, res) {
     });
 });
 
-router.get('/search/user/consume', function (req, res) {
-    var userId = Consume.toObjectID(req.session.recordUserId);
-    Consume.open().find({
+router.get('/search/user/withdraw', function (req, res) {
+    var userId = Withdraw.toObjectID(req.session.recordUserId);
+    Withdraw.open().find({
         userId: userId
-    }).then(function (consume) {
-        consume.sort(function (r, c) {
+    }).then(function (withdraws) {
+        withdraws.sort(function (r, c) {
             var rTime = Date.parse(r.createTime);
             var cTime = Date.parse(c.createTime);
             return cTime - rTime;
@@ -284,11 +289,53 @@ router.get('/search/user/consume', function (req, res) {
             title: '用户资金变动记录',
             money: req.session.systemFunds,
             freezeFunds: req.session.freezeFunds,
-            records: consume,
+            records: withdraws,
             userId: userId
         });
     });
 });
+
+router.get('/search/user/consume', function (req, res) {
+    var userId = Consume.toObjectID(req.session.recordUserId);
+    Consume.open().find({
+        userId: userId
+    }).then(function (consumes) {
+        consumes.sort(function (r, c) {
+            var rTime = Date.parse(r.createTime);
+            var cTime = Date.parse(c.createTime);
+            return cTime - rTime;
+        });
+        res.render('adminUserFundsRecords', {
+            title: '用户资金变动记录',
+            money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
+            records: consumes,
+            userId: userId
+        });
+    });
+});
+
+router.get('/search/user/profit', function (req, res) {
+    var userId = Profit.toObjectID(req.session.recordUserId);
+    Profit.open().find({
+        userId: userId
+    }).then(function (profits) {
+        profits.sort(function (r, c) {
+            var rTime = Date.parse(r.createTime);
+            var cTime = Date.parse(c.createTime);
+            return cTime - rTime;
+        });
+        res.render('adminUserFundsRecords', {
+            title: '用户资金变动记录',
+            money: req.session.systemFunds,
+            freezeFunds: req.session.freezeFunds,
+            records: profits,
+            userId: userId
+        });
+    });
+});
+
+
 
 router.get('/hand/recharge', function (req, res) {
     var msg = req.query;
@@ -788,34 +835,39 @@ router.get('/order/handle/release', function (req, res) {
 /*
 * order complete
 * */
+global.isComplete = true;
 //自动获取初始阅读量
 router.get('/order/complete', function (req, res) {
     var orderId = req.query.id;
     var url = req.query.url;
-    Order.open().findById(orderId)
-        .then(function(order) {
-            var orderIns = Order.wrapToInstance(order);
-            if(orderIns.status == '未处理'){
-                if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
-                    Address.readNum(orderIns.address).then(function (num) {
-                        orderIns.startReadNum = num;
-                        orderIns.complete(function () {
-                            res.redirect(url);
+    if(global.isComplete) {
+        global.isComplete = false;
+        Order.open().findById(orderId)
+            .then(function(order) {
+                var orderIns = Order.wrapToInstance(order);
+                if(orderIns.status == '未处理'){
+                    if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
+                        Address.readNum(orderIns.address).then(function (num) {
+                            orderIns.startReadNum = num;
+                            orderIns.complete(function () {
+                                global.isComplete = true;
+                                res.redirect(url);
+                            });
+                        }, function (msg) {
+                            global.isComplete = true;
+                            res.end(msg);
                         });
-                    }, function (msg) {
-                        res.end(msg);
-                    });
-                    /*
-                    * 下面是旧接口获取阅读数的方式
-                    * */
-                    //Address.getReadNum('http://120.24.58.35:13000/api2/getArticleInfoAndExt', {  //微信帮接口，
-                    //Address.getReadNum('http://115.159.216.117:8080/read/getReadNum', {
-                    //    "key": "xIwp2ohi", //微信帮
+                        /*
+                         * 下面是旧接口获取阅读数的方式
+                         * */
+                        //Address.getReadNum('http://120.24.58.35:13000/api2/getArticleInfoAndExt', {  //微信帮接口，
+                        //Address.getReadNum('http://115.159.216.117:8080/read/getReadNum', {
+                        //    "key": "xIwp2ohi", //微信帮
                         //"key": "wxkey_1003930471_Ht32U",   //这是原来的key　还有19224次
                         //"key": "wxkey_20170316_I7bg5O",   //这是新的key 有１万次
                         //"url": orderIns.address
-                    //}).then(function (result) {
-                    //    console.log(result, '=================================');
+                        //}).then(function (result) {
+                        //    console.log(result, '=================================');
                         //var jResult = JSON.parse(result);
                         //if(jResult.result == 'succ' && jResult.wxdata.code == 1) {
                         //    orderIns.startReadNum = jResult.wxdata.read_num;
@@ -829,16 +881,21 @@ router.get('/order/complete', function (req, res) {
                         //}else{
                         //    res.end('获取阅读初始量失败: 可能由于服务器限制，请再试一次。');
                         //}
-                    //});
+                        //});
+                    }else {
+                        orderIns.complete(function() {
+                            global.isComplete = true;
+                            res.redirect(url);
+                        });
+                    }
                 }else {
-                    orderIns.complete(function() {
-                        res.redirect(url);
-                    });
+                    global.isComplete = true;
+                    res.redirect(url);
                 }
-            }else {
-                res.redirect(url);
-            }
-        })
+            })
+    }else{
+        res.redirect(url);
+    }
 });
 
 
@@ -847,51 +904,72 @@ router.get('/order/complete/handle', function (req, res) {
     var startReadNum = parseInt(req.query.info);
     var orderId = req.query.id;
     var url = req.query.url;
-    Order.open().findById(orderId)
-        .then(function(order) {
-            var orderIns = Order.wrapToInstance(order);
-            if(orderIns.status == '未处理'){
-                if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
-                    orderIns.startReadNum = startReadNum;
-                }
-                orderIns.complete(function() {
+    if( global.isComplete){
+        global.isComplete = false;
+        Order.open().findById(orderId)
+            .then(function(order) {
+                var orderIns = Order.wrapToInstance(order);
+                if(orderIns.status == '未处理'){
+                    if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
+                        orderIns.startReadNum = startReadNum;
+                    }
+                    orderIns.complete(function() {
+                        global.isComplete = true;
+                        res.redirect(url);
+                    });
+                }else {
+                    global.isComplete = true;
                     res.redirect(url);
-                });
-            }else {
-                res.redirect(url);
-            }
-        })
+                }
+            })
+    }else{
+        res.redirect(url);
+    }
 });
 
 
 router.get('/order/refund', function (req, res) {
     var msg = req.query;
-    Order.open().findById(msg.id)
-        .then(function(order) {
-            if(order.status != '已退款'){
-                var orderIns = Order.wrapToInstance(order);
-                orderIns.refund(msg.info, function() {
+    if(global.isComplete){
+        global.isComplete = false;
+        Order.open().findById(msg.id)
+            .then(function(order) {
+                if(order.status != '已退款'){
+                    var orderIns = Order.wrapToInstance(order);
+                    orderIns.refund(msg.info, false, function() {
+                        global.isComplete = true;
+                        res.redirect(msg.url);
+                    });
+                }else {
+                    global.isComplete = true;
                     res.redirect(msg.url);
-                });
-            }else {
-                res.redirect(msg.url);
-            }
-        })
+                }
+            })
+    }else{
+        res.redirect(msg.url);
+    }
 });
 
 router.get('/order/refundProfit', function (req, res) {
     var msg = req.query;
-    Order.open().findById(msg.id)
-        .then(function(order) {
-            if(order.status != '已退款'){
-                var orderIns = Order.wrapToInstance(order);
-                orderIns.refundProfit(msg.info, function() {
+    if(global.isComplete){
+        global.isComplete = false;
+        Order.open().findById(msg.id)
+            .then(function(order) {
+                if(order.status != '已退款'){
+                    var orderIns = Order.wrapToInstance(order);
+                    orderIns.refund(msg.info, true, function() {
+                        global.isComplete = true;
+                        res.redirect(msg.url);
+                    });
+                }else {
+                    global.isComplete = true;
                     res.redirect(msg.url);
-                });
-            }else {
-                res.redirect(msg.url);
-            }
-        })
+                }
+            })
+    }else{
+        res.redirect(msg.url);
+    }
 });
 
 router.get('/order/dealError', function (req, res) {
@@ -1362,8 +1440,48 @@ router.get('/WX/like/quit', function (req, res) {
 
 router.get('/WX/like/quit/auto', function (req, res) {
     var query = req.query;
-    Order.open().findById(query.id).then(function (order) {
-        Address.readNum(order.address).then(function (nowReadNum) {
+    if(global.isComplete){
+        global.isComplete = false;
+        Order.open().findById(query.id).then(function (order) {
+            Address.readNum(order.address).then(function (nowReadNum) {
+                var alrNum = nowReadNum - order.startReadNum;
+                var overNum = order.num - alrNum;
+                if(parseInt(overNum) > 100){
+                    order.alrNum = alrNum;
+                    order.overNum = overNum;
+                    order.schedule = (alrNum / order.num * 100).toFixed(2) + '%';
+                    var orderIns = Order.wrapToInstance(order);
+                    orderIns.quit().then(function() {
+                        global.isComplete = true;
+                        res.redirect(query.url);
+                    })
+                }else{
+                    Order.open().updateById(order._id, {$set: {
+                        schedule: '100%',
+                        status: '已完成'
+                    }, $unset: {
+                        isQuit: true
+                    }}).then(function() {
+                        global.isComplete = true;
+                        res.redirect(query.url);
+                    })
+                }
+            }, function (msg) {
+                global.isComplete = true;
+                res.end(msg);
+            });
+        });
+    }else{
+        res.redirect(query.url);
+    }
+});
+
+router.get('/WX/like/quit/handle', function (req, res) {
+    var query = req.query;
+    var nowReadNum = query.info;
+    if(global.isComplete){
+        global.isComplete = false;
+        Order.open().findById(query.id).then(function (order) {
             var alrNum = nowReadNum - order.startReadNum;
             var overNum = order.num - alrNum;
             if(parseInt(overNum) > 100){
@@ -1372,6 +1490,7 @@ router.get('/WX/like/quit/auto', function (req, res) {
                 order.schedule = (alrNum / order.num * 100).toFixed(2) + '%';
                 var orderIns = Order.wrapToInstance(order);
                 orderIns.quit().then(function() {
+                    global.isComplete = true;
                     res.redirect(query.url);
                 })
             }else{
@@ -1381,40 +1500,14 @@ router.get('/WX/like/quit/auto', function (req, res) {
                 }, $unset: {
                     isQuit: true
                 }}).then(function() {
+                    global.isComplete = true;
                     res.redirect(query.url);
                 })
             }
-        }, function (msg) {
-            res.end(msg);
         });
-    });
-});
-
-router.get('/WX/like/quit/handle', function (req, res) {
-    var query = req.query;
-    var nowReadNum = query.info;
-    Order.open().findById(query.id).then(function (order) {
-        var alrNum = nowReadNum - order.startReadNum;
-        var overNum = order.num - alrNum;
-        if(parseInt(overNum) > 100){
-            order.alrNum = alrNum;
-            order.overNum = overNum;
-            order.schedule = (alrNum / order.num * 100).toFixed(2) + '%';
-            var orderIns = Order.wrapToInstance(order);
-            orderIns.quit().then(function() {
-                res.redirect(query.url);
-            })
-        }else{
-            Order.open().updateById(order._id, {$set: {
-                schedule: '100%',
-                status: '已完成'
-            }, $unset: {
-                isQuit: true
-            }}).then(function() {
-                res.redirect(query.url);
-            })
-        }
-    });
+    }else{
+        res.redirect(query.url);
+    }
 });
 
 router.get('/WX/like/quit/refuse', function(req, res) {
