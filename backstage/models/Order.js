@@ -941,7 +941,7 @@ Order.include({
                                     Consume.open().insert({
                                         userId: self.userId,
                                         username: self.user,
-                                        orderId: self._id,
+                                        orderId: orderId,
                                         type: self.type,
                                         typeName: self.typeName,
                                         smallType: self.smallType,
