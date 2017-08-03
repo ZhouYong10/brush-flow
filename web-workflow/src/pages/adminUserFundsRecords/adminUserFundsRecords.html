@@ -100,8 +100,13 @@
                                     <%= records[i].alipayId %>
                                     <% }else if(records[i].alipayCount){ %>
                                     <%= records[i].alipayCount %>
-                                    <% }else if(records[i].typeName){ %>
-                                    <%= records[i].typeName %><%= records[i].smallTypeName %>
+                                    <% }else if(records[i].typeName && !records[i].smallType){ %>
+                                    <%= records[i].typeName %>/<%= records[i].smallTypeName %>
+                                    <% }else if(records[i].typeName && records[i].smallType){ %>
+                                    <a class="am-btn am-btn-secondary am-radius am-btn-xs"
+                                       href="/admin/redirect/aim/order?id=<%= records[i].orderId %>&type=<%= records[i].type %>&smallType=<%= records[i].smallType %>">
+                                        <%= records[i].typeName %> / <%= records[i].smallTypeName %>
+                                    </a>
                                     <% }else{ %>
                                     <%= records[i].type %>
                                     <% } %>

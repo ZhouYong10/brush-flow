@@ -535,11 +535,14 @@ Order.include({
                             userId: self.userId,
                             username: self.user,
                             orderId: self._id,
-                            createTime: self.createTime,
-                            type: self.typeName + self.smallTypeName,
+                            type: self.type,
+                            typeName: self.typeName,
+                            smallType: self.smallType,
+                            smallTypeName: self.smallTypeName,
                             funds: - self.totalPrice,
                             userOldFunds: self.userOldFunds,
                             userNowFunds: self.funds,
+                            createTime: self.createTime,
                             description: self.description
                         }).then(function() {
                             callback(self);
@@ -939,11 +942,14 @@ Order.include({
                                         userId: self.userId,
                                         username: self.user,
                                         orderId: self._id,
-                                        createTime: self.quitTime,
-                                        type: self.typeName + self.smallTypeName,
+                                        type: self.type,
+                                        typeName: self.typeName,
+                                        smallType: self.smallType,
+                                        smallTypeName: self.smallTypeName,
                                         funds: + self.quitFunds,
                                         userOldFunds: + self.userOldFunds,
                                         userNowFunds: self.nowUserFunds,
+                                        createTime: self.quitTime,
                                         description: self.quitDesc
                                     }).then(function() {
                                         resolve();
@@ -982,14 +988,16 @@ Order.include({
                             Profit.open().insert({
                                 userId: parent._id,
                                 username: parent.username,
+                                orderId: self._id,
                                 orderUserId: orderUser._id,
                                 orderUsername: orderUser.username,
+                                type: self.type,
                                 typeName: self.typeName,
+                                smallType: self.smallType,
                                 smallTypeName: self.smallTypeName,
                                 funds: - self[name],
                                 userOldFunds: parent.funds,
                                 userNowFunds: parent.userNowFunds,
-                                orderId: self._id,
                                 status: 'refund',
                                 createTime: self.quitTime,
                                 description: self.quitDesc
@@ -1049,14 +1057,16 @@ Order.include({
                             Profit.open().insert({
                                 userId: parent._id,
                                 username: parent.username,
+                                orderId: self._id,
                                 orderUserId: orderUser._id,
                                 orderUsername: orderUser.username,
+                                type: self.type,
                                 typeName: self.typeName,
+                                smallType: self.smallType,
                                 smallTypeName: self.smallTypeName,
                                 funds: self[name],
                                 userOldFunds: parent.funds,
                                 userNowFunds: parent.userNowFunds,
-                                orderId: self._id,
                                 status: 'success',
                                 createTime: self.dealTime,
                                 description: self.description
@@ -1087,11 +1097,14 @@ Order.include({
                                     userId: self.userId,
                                     username: self.user,
                                     orderId: self._id,
-                                    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-                                    type: self.typeName + self.smallTypeName,
+                                    type: self.type,
+                                    typeName: self.typeName,
+                                    smallType: self.smallType,
+                                    smallTypeName: self.smallTypeName,
                                     funds: + self.totalPrice,
                                     userOldFunds: + user.funds,
                                     userNowFunds: self.nowUserFunds,
+                                    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                                     description: self.quitDesc
                                 }).then(function() {
                                     if(isProfit) {
@@ -1132,14 +1145,16 @@ Order.include({
                             Profit.open().insert({
                                 userId: parent._id,
                                 username: parent.username,
+                                orderId: self._id,
                                 orderUserId: orderUser._id,
                                 orderUsername: orderUser.username,
+                                type: self.type,
                                 typeName: self.typeName,
+                                smallType: self.smallType,
                                 smallTypeName: self.smallTypeName,
                                 funds: - self[name],
                                 userOldFunds: parent.funds,
                                 userNowFunds: parent.userNowFunds,
-                                orderId: self._id,
                                 status: 'refund',
                                 createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                                 description: self.quitDesc
