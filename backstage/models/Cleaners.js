@@ -4,9 +4,10 @@
 var Schedule = require('node-schedule');
 var Feedback = require('./Feedback');
 var Order = require('./Order');
+var Consume = require('./Consume');
+var Profit = require('./Profit');
 var Task = require('./Task');
 var Placard = require('./Placard');
-var Profit = require('./Profit');
 var Recharge = require('./Recharge');
 var Withdraw = require('./Withdraw');
 
@@ -26,24 +27,6 @@ function removePhoto(path) {
     fs.unlink(photoPath, function() {
 
     });
-}
-
-function remove(model, date) {
-    model.open().find().then(function(results) {
-        for(var i = 0; i < results.length; i++){
-            var result = results[i];
-            var ts = result._id.getTimestamp();
-            if(ts < date){
-                if(result.type == 'handle'){
-                    if(result.status == '已退款' || result.status == '已完成'){
-                        removeTask(result, model);
-                    }
-                }else {
-                    model.open().remove(result);
-                }
-            }
-        }
-    })
 }
 
 function removeTask(order, model) {
@@ -68,15 +51,39 @@ function removeTask(order, model) {
     }
 }
 
+function remove(model, date) {
+    model.open().find().then(function(results) {
+        for(var i = 0; i < results.length; i++){
+            var result = results[i];
+            var ts = result._id.getTimestamp();
+            if(ts < date){
+                if(result.type == 'handle'){
+                    if(result.status == '已退款' || result.status == '已完成'){
+                        removeTask(result, model);
+                    }
+                }else {
+                    model.open().remove(result);
+                }
+            }
+        }
+    })
+}
+
 module.exports = {
     test: function() {
         var older = Date.parse(getDateStr(-30));
+        console.log('开始清理数据了 ===============================================');
         remove(Feedback, older);
         remove(Order, older);
-        //remove(Placard, older);
+        remove(Consume, older);
         remove(Profit, older);
-        remove(Recharge, older);
-        remove(Withdraw, older);
+
+        //remove(Feedback, older);
+        //remove(Order, older);
+        //remove(Placard, older);
+        //remove(Profit, older);
+        //remove(Recharge, older);
+        //remove(Withdraw, older);
     },
     seconds: function () {
         var rule = new Schedule.RecurrenceRule();
@@ -112,8 +119,9 @@ module.exports = {
             console.log('开始清理数据了 ===============================================');
             remove(Feedback, older);
             remove(Order, older);
+            remove(Consume, older);
+            remove(Profit, older);
             //remove(Placard, older);
-            //remove(Profit, older);
             //remove(Recharge, older);
             //remove(Withdraw, older);
         })
