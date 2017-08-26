@@ -150,6 +150,29 @@ app.get('/yzf/recharge', function (req, res) {
   }
 });
 
+/*
+ * 易支付 vip电影会员
+ * */
+var VipRecharge = require('./models/VipRecharge');
+app.get('/vip/video/recharge', function (req, res) {
+  var info = req.query;
+  console.log(info,'====================================');
+  if(info.key === 'vip@chong@zhi@3.1415'){
+    var temp = info.uid ? info.uid.split('-') : [];
+    var uid;
+    if(temp.length > 1){
+      uid = temp[2];
+    }else{
+      uid = temp[0];
+    }
+    info.uid = uid;
+    VipRecharge.yzfAutoInsert(info);
+    res.end('1');
+  }else{
+    res.end('<h1>你是假冒的充值记录，别以为我真的不知道！等着被查水表吧！</h1>');
+  }
+});
+
 app.get('/', function (req, res) {
   res.render('index', {title: '用户登陆'});
   //res.render('platformClose', {title: '平台暂时关闭'});
