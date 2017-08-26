@@ -156,7 +156,6 @@ app.get('/yzf/recharge', function (req, res) {
 var VipRecharge = require('./models/VipRecharge');
 app.get('/vip/video/recharge', function (req, res) {
   var info = req.query;
-  console.log(info,'====================================');
   if(info.key === 'vip@chong@zhi@3.1415'){
     var temp = info.uid ? info.uid.split('-') : [];
     var uid;
