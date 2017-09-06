@@ -249,26 +249,56 @@ function commitOrderToWeiBang() {
         status: '未处理',
         type: 'wx',
         smallType: {$in: ['read', 'like']},
-        num: {$lte: global.weichuanmeiOrderNum}
+        num: {$lte: global.weichuanmeiOrderNum},
+        taskId: {$exists: false}
     }).then(function (order) {
+        //console.log(order, '这是提交订单的－－－－－－－－－－－－－');
         if(order && order._id.toString() != commitOrderId) {
             commitOrderId = order._id.toString();
-            var orderIns = Order.wrapToInstance(order);
             Address.postWeiBang('http://120.24.58.35:13000/api2/placeOrder',{
                 "appkey": "xIwp2ohi",
-                "url": orderIns.address,
-                "taskReadNum": parseInt(orderIns.num),
-                "taskLikeNum": parseInt(orderIns.num2),
+                "url": order.address,
+                "taskReadNum": parseInt(order.num),
+                "taskLikeNum": parseInt(order.num2),
                 "readPerMinute": 100,
                 "forceStopAfterHours": 46 * 60
             }).then(function (result) {
-                var result_json = JSON.parse(result);
-                orderIns.remote = 'weibang';
-                if(result_json.status == 1) {
-                    orderIns.startReadNum = result_json.data.startReadNum;
+                var jresult = JSON.parse(result);
+                //console.log(jresult, '这是提交订单的－－－－－－－－－－－－－－－－－－－');
+                if(jresult.status == 1 && jresult.message == '成功'){
+                    Order.open().updateById(order._id, {$set: {
+                        remote: 'weibang',
+                        taskId: jresult.data.taskId
+                    }})
+                }
+            });
+        }
+    });
+}
+
+setInterval(function () {
+    checkWeiBangOrder();
+}, 1000 * 30);
+
+function checkWeiBangOrder() {
+    Order.open().findOne({
+        status: '未处理',
+        type: 'wx',
+        smallType: {$in: ['read', 'like']},
+        remote: 'weibang'
+    }).then(function (order) {
+        //console.log(order, '这是查询订单初始阅读量的＝＝＝＝＝＝＝＝＝＝＝＝＝');
+        if(order) {
+            var orderIns = Order.wrapToInstance(order);
+            Address.postWeiBang('http://120.24.58.35:13000/api2/taskInfo',{
+                "appkey": "xIwp2ohi",
+                "taskId": orderIns.taskId
+            }).then(function (result) {
+                var jresult = JSON.parse(result);
+                //console.log(jresult, '这是查询订单初始阅读量的＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝');
+                if(jresult.status == 1 && jresult.message == '成功' && jresult.data.startReadNum != 0){
+                    orderIns.startReadNum = jresult.data.startReadNum;
                     orderIns.complete();
-                }else{
-                    orderIns.remoteError(result_json.message);
                 }
             });
         }
