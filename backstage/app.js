@@ -204,6 +204,7 @@ app.post('/login', function(req, res, next) {
 });
 
 //对外公共接口
+app.use('/proxy', require('./router/proxy.js'));
 var Order = require('./models/Order');
 
 global.weichuanmeiOrderNum = 1;
