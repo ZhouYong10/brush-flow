@@ -171,7 +171,7 @@ app.post('/yzf/recharge', function (req, res) {
         info.uid = uid;
         console.log(info, '------------------------------');
         Recharge.yzfAutoInsert(info);
-        res.end('1');
+        res.end('success');
     }else{
         res.end('<h1>你是假冒的充值记录，别以为我真的不知道！等着被查水表吧！</h1>');
     }
