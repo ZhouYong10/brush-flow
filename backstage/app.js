@@ -134,8 +134,6 @@ var Recharge = require('./models/Recharge');
 * */
 app.get('/yzf/recharge', function (req, res) {
   var info = req.query;
-    console.log(req.body, '------------------------------');
-    console.log(info, '=================================');
   if(info.key === 'chong@zhi@3.1415'){
     var temp = info.uid.split('-');
     var uid;
@@ -154,8 +152,29 @@ app.get('/yzf/recharge', function (req, res) {
 
 
 app.post('/yzf/recharge', function (req, res) {
-    console.log(req.body, '------------------------------');
-    console.log(info, '=================================');
+    var info = {
+        uid: req.body.title,
+        money: req.body.Money,
+        PayTime: req.body.Paytime,
+        orderid: req.body.tradeNo,
+        key: req.body.memo
+    };
+
+    if(info.key === 'chong@zhi@3.1415'){
+        var temp = info.uid.split('-');
+        var uid;
+        if(temp.length > 1){
+            uid = temp[2];
+        }else{
+            uid = temp[0];
+        }
+        info.uid = uid;
+        console.log(info, '------------------------------');
+        Recharge.yzfAutoInsert(info);
+        res.end('1');
+    }else{
+        res.end('<h1>你是假冒的充值记录，别以为我真的不知道！等着被查水表吧！</h1>');
+    }
 });
 
 /*
