@@ -169,7 +169,6 @@ app.post('/yzf/recharge', function (req, res) {
             uid = temp[0];
         }
         info.uid = uid;
-        console.log(info, '------------------------------');
         Recharge.yzfAutoInsert(info);
         res.end('success');
     }else{
