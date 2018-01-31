@@ -152,6 +152,12 @@ app.get('/yzf/recharge', function (req, res) {
   }
 });
 
+
+app.post('/yzf/recharge', function (req, res) {
+    console.log(req.body, '------------------------------');
+    console.log(info, '=================================');
+});
+
 /*
  * 易支付 vip电影会员
  * */
