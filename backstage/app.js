@@ -134,6 +134,7 @@ var Recharge = require('./models/Recharge');
 * */
 app.get('/yzf/recharge', function (req, res) {
   var info = req.query;
+    console.log(req.body, '------------------------------');
     console.log(info, '=================================');
   if(info.key === 'chong@zhi@3.1415'){
     var temp = info.uid.split('-');
