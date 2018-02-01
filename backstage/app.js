@@ -157,11 +157,13 @@ app.post('/yzf/recharge', function (req, res) {
     times[0] = year;
     var time = times.join(' ');
     var info = {
+        fee: req.body.Money,
         uid: req.body.title,
         money: req.body.Money,
         PayTime: time,
         orderid: req.body.tradeNo,
-        key: req.body.memo
+        key: req.body.memo,
+        type: 1
     };
 
     if(info.key === 'chong@zhi@3.1415'){
