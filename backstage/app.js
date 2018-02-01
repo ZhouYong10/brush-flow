@@ -152,15 +152,18 @@ app.get('/yzf/recharge', function (req, res) {
 
 
 app.post('/yzf/recharge', function (req, res) {
-    var times = req.body.Paytime.split(" ");
-    var year = times[0].split('/').join('-');
-    times[0] = year;
-    var time = times.join(' ');
+    var day_time = req.body.Paytime.split(" ");
+    var year_day = day_time[0].split('/');
+    year_day[1] = parseInt(year_day[1]) < 10 ? '0' + year_day[1] : year_day[1];
+    year_day[2] = parseInt(year_day[2]) < 10 ? '0' + year_day[2] : year_day[2];
+    day_time[0] = year_day.join('-');
+    var payTime = day_time.join(' ');
+
     var info = {
         fee: req.body.Money,
         uid: req.body.title,
         money: req.body.Money,
-        PayTime: time,
+        PayTime: payTime,
         orderid: req.body.tradeNo,
         key: req.body.memo,
         type: 1
