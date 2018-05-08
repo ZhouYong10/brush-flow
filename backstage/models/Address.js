@@ -152,7 +152,9 @@ module.exports = {
                     });
                 } else {
                     var $ = cheerio.load(body);
-                    var title = $('title').text();
+                    var title1 = $('title').text().replace(/(^\s*)|(\s*$)/g, "");
+                    var title2 = $('#activity-name').text().replace(/(^\s*)|(\s*$)/g, "");
+                    var title = title1 == "" ? title2 : title1;
                     if(title == ''){
                         reject({
                             isOk: false,
@@ -161,7 +163,7 @@ module.exports = {
                     }else{
                         resolve({
                             isOk: true,
-                            title: $('title').text()
+                            title: title
                         });
                     }
                 }
