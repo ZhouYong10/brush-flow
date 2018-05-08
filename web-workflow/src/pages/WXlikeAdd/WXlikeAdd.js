@@ -8,7 +8,7 @@ function isAddress() {
         var $address = $('#address');
         var $title = $('#title');
         var address = $address.val();
-        if (Utils.isHttp(address)) {
+        if (Utils.isWXhttp(address)) {
             $address.css({color: 'green'});
             resolve();
             $.post('/parse/wx/title/by/address', {address: address}, function (data) {
@@ -20,7 +20,7 @@ function isAddress() {
             })
         } else {
             $address.css({color: 'red'});
-            layer.tips('请输入正确的文章地址!', '#address', {
+            layer.tips('请输入正确的微信文章地址!', '#address', {
                 tips: [1, '#f00'],
                 time: 4000
             });

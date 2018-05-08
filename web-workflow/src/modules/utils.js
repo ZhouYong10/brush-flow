@@ -77,6 +77,11 @@ module.exports = {
                 });
         });
     },
+    isWXhttp: function(url) {
+        var match = url.match('mp.weixin.qq.com');
+        var isHttp = /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(url);
+        return match != null && isHttp;
+    },
     isHttp: function(url) {
         return /((http|ftp|https|file):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig.test(url);
     },
