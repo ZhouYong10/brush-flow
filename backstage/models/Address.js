@@ -146,7 +146,7 @@ module.exports = {
                 }
             }, function (err, obj, body) {
                 if (err) {
-                    reject({
+                    resolve({
                         isOk: false,
                         message: '地址解析失败，请联系管理员！'
                     });
