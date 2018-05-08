@@ -461,7 +461,7 @@ router.post('/like/add', function (req, res) {
     }
     Address.parseWxTitle(orderInfo.address)
         .then(function (obj) {
-            orderInfo.title = obj.title;
+            orderInfo.title = (obj.title ? obj.title : "");
             User.open().findById(req.session.passport.user)
                 .then(function (user) {
                     var order = Order.wrapToInstance(orderInfo);

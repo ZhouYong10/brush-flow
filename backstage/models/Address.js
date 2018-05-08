@@ -156,9 +156,9 @@ module.exports = {
                     var title2 = $('#activity-name').text().replace(/(^\s*)|(\s*$)/g, "");
                     var title = title1 == "" ? title2 : title1;
                     if(title == ''){
-                        reject({
+                        resolve({
                             isOk: false,
-                            message: '获取文章标题失败，请检查地址是否正确，文章是否存在！'
+                            message: '获取文章标题失败，可能网络不给力，或者文章地址错误！'
                         });
                     }else{
                         resolve({
