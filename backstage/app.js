@@ -261,6 +261,24 @@ app.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
+app.post('/logup', function(req, res, next) {
+
+})
+
+app.post('/username/notrepeat', function (req, res) {
+    User.open().findOne({
+        username: req.body.username
+    }).then(function (user) {
+        if(user) {
+            res.send({notRepeat: false});
+        }else{
+            res.send({notRepeat: true});
+        }
+    }, function (error) {
+        res.send('查询用户信息失败： ' + error);
+    });
+});
+
 //对外公共接口
 app.use('/proxy', require('./router/proxy.js'));
 var Order = require('./models/Order');
