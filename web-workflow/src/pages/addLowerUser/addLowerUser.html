@@ -22,7 +22,13 @@
         <div id="addLowerUser" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd am-g-collapse">
-
+                <p>
+                    点击复制链接，通过以上链接注册的用户即为你的下级用户。<br/>
+                    推广链接：　<span><%= host %></span>
+                    <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                       title="<%= host %>"
+                       data-clipboard-text="<%= host %>">复制</a>
+                </p>
                 <form class="am-form am-form-horizontal">
                     <div class="am-form-group">
                         <label class="am-u-sm-3 am-u-lg-1">
@@ -79,6 +85,7 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/js/clipboard.js"></script>
 <script src="/static/plugins/layer/layer.js"></script>
 
 <script>

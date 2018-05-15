@@ -1,3 +1,4 @@
+var Utils = require('utils');
 
 function userName() {
     return new Promise(function (resolve) {
@@ -41,6 +42,8 @@ function password() {
 }
 
 $(function () {
+    Utils.clipboard();
+
     $('#userName').blur(function () {
         userName();
     });

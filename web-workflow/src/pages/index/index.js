@@ -193,6 +193,19 @@ $(function () {
                 }, {expires: 14, path: '/'});
             }
 
+            $.post('/logup', {
+                username: username,
+                password: password,
+                repassword: repassword,
+                securityCode: checkCode,
+                parentId: $.trim(location.search.split('?')[1])
+            }).then(function (data) {
+                if (data.isOK) {
+                    location.href = data.path;
+                } else {
+                    layer.msg(data.message);
+                }
+            });
 
         });
 
@@ -214,7 +227,7 @@ $(function () {
 
 
     if(location.search) {
-        console.log(location.search, '===================');
+        console.log($.trim(location.search.split('?')[1]), '===================');
         $('#btnLogup').click();
     }else {
         $('#btnLogin').click();

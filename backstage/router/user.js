@@ -312,7 +312,8 @@ router.get('/addLowerUser', function (req, res) {
                 money: user.funds,
                 username: user.username,
                 userStatus: user.status,
-                role: user.role
+                role: user.role,
+                host: req.protocol + '://' + req.headers.host + '?' + require('../models/CiAndDeci').doCipher(user._id + '')
             });
         });
 });

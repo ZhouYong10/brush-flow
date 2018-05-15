@@ -261,8 +261,19 @@ app.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
+var CiAndDeci = require('./models/CiAndDeci');
 app.post('/logup', function(req, res, next) {
+    var userInfo = req.body;
+    User.open().findOne({username: userInfo.username}).then(function(user) {
+        console.log(user, '-------------------------');
+        if(user) {
+            res.send({
+                isOK: false,
+                message: "账户： " + userInfo.username + " 已存在！"
+            })
+        }
 
+    })
 })
 
 app.post('/username/notrepeat', function (req, res) {
