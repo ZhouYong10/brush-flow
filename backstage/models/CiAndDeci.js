@@ -9,10 +9,14 @@ function doCipher(string) {
 }
 
 function doDecipher(string) {
-    var decipher = crypto.createDecipher('aes192', key);
-    var decrypted = decipher.update(string, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+    try{
+        var decipher = crypto.createDecipher('aes192', key);
+        var decrypted = decipher.update(string, 'hex', 'utf8');
+        decrypted += decipher.final('utf8');
+        return decrypted;
+    }catch(e){
+        return null;
+    }
 }
 
 

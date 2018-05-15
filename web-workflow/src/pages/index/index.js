@@ -208,26 +208,10 @@ $(function () {
             });
 
         });
-
-
-
-
-        // $.post('/login', {
-        //     username: username,
-        //     password: password,
-        //     securityCode: checkCode
-        // }).then(function (data) {
-        //     if (data.isOK) {
-        //         location.href = data.path;
-        //     } else {
-        //         layer.msg(data.message);
-        //     }
-        // });
-    })
+    });
 
 
     if(location.search) {
-        console.log($.trim(location.search.split('?')[1]), '===================');
         $('#btnLogup').click();
     }else {
         $('#btnLogin').click();

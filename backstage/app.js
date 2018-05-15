@@ -230,51 +230,126 @@ app.post('/login', function(req, res, next) {
         message: info
       });
     }
-    req.logIn(user, function(err) {
-      if (err) {
-        return next(err);
-      }
-      User.open().updateById(user._id, {
-        $set: {
-          lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
-        }
-      }).then(function () {
-        var userIns = User.wrapToInstance(user);
-        if(userIns.isAdmin()) {
-          res.send({
-            isOK: true,
-            path: '/admin/home'
-          });
-        }else{
-          res.send({
-            isOK: true,
-            path: '/client/home'
-          });
-        }
-      }, function (error) {
-        res.send({
-          isOK: false,
-          message: '更新用户登陆时间失败： ' + error
-        });
-      });
-    });
+    userLogin(req, res, user);
   })(req, res, next);
 });
 
-var CiAndDeci = require('./models/CiAndDeci');
-app.post('/logup', function(req, res, next) {
-    var userInfo = req.body;
-    User.open().findOne({username: userInfo.username}).then(function(user) {
-        console.log(user, '-------------------------');
-        if(user) {
+function userLogin(req, res, user) {
+    req.logIn(user, function(err) {
+        if (err) {
+            return next(err);
+        }
+        User.open().updateById(user._id, {
+            $set: {
+                lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+        }).then(function () {
+            var userIns = User.wrapToInstance(user);
+            if(userIns.isAdmin()) {
+                res.send({
+                    isOK: true,
+                    path: '/admin/home'
+                });
+            }else{
+                res.send({
+                    isOK: true,
+                    path: '/client/home'
+                });
+            }
+        }, function (error) {
             res.send({
                 isOK: false,
+                message: '更新用户登陆时间失败： ' + error
+            });
+        });
+    });
+}
+
+app.post('/logup', function (req, res, next) {
+    var userInfo = req.body;
+    User.open().findOne({username: userInfo.username}).then(function (user) {
+        /*
+        * 验证数据的有效性
+        *   验证账户名不存在
+        *   验证两次输入的密码一致
+        *   验证码正确
+        * */
+        if (user) {
+            return res.send({
+                isOK: false,
                 message: "账户： " + userInfo.username + " 已存在！"
-            })
+            });
         }
 
-    })
-})
+        if (userInfo.password != userInfo.repassword) {
+            return res.send({
+                isOK: false,
+                message: "两次输入的密码不一致！"
+            });
+        }
+
+        //判断验证码
+        if (userInfo.securityCode.toLowerCase() != req.session.securityCode) {
+            return res.send({
+                isOK: false,
+                message: '验证码错误！'
+            });
+        }
+
+        /*
+        * 判断推广链接存在
+        *   解密推广链接得到userId
+        *   通过userId查询出推广用户
+        *   注册新用户，并关联上下级关系
+        *
+        * 推广链接不存在
+        *   查出管理员用户
+        *   注册新用户，并并关联上下级关系
+        * */
+        var addLowerUser = function(parentObj) {
+            var newUser = {
+                username: userInfo.username,
+                password: userInfo.password,
+                qq: '',
+                phone: '',
+                role: '金牌代理'
+            };
+            newUser.parent = parentObj.username;
+            newUser.parentID = parentObj._id;
+            if(parentObj.username != 'admin') {
+                newUser.role = parentObj.childRole();
+            }
+            User.createUser(newUser, function (result) {
+                var user = result[0];
+                parentObj.addChild(user._id);
+                User.open().updateById(parentObj._id, {
+                    $set: parentObj
+                }).then(function () {
+                    userLogin(req, res, user);
+                });
+            });
+        };
+        var parentId = require('./models/CiAndDeci').doDecipher(userInfo.parentId);
+        if (parentId) {
+            User.open().findById(parentId).then(function (parent) {
+                if (parent) {
+                    var parentObj = User.wrapToInstance(parent);
+                    addLowerUser(parentObj)
+                } else {
+                    User.open().findOne({username: 'admin'}).then(function (admin) {
+                        var parentObj = User.wrapToInstance(admin);
+                        addLowerUser(parentObj)
+                    })
+                }
+            })
+        } else {
+            User.open().findOne({username: 'admin'}).then(function (admin) {
+                var parentObj = User.wrapToInstance(admin);
+                addLowerUser(parentObj)
+            })
+        }
+    });
+});
 
 app.post('/username/notrepeat', function (req, res) {
     User.open().findOne({

@@ -338,7 +338,7 @@ router.post('/addLowerUser', function (req, res) {
                             isOK: false,
                             info: '演示账户不能添加下级！'
                         });
-                    }else{
+                    }else{   
                         userInfo.parent = parent.username;
                         userInfo.parentID = parent._id;
                         userInfo.role = parent.childRole();
