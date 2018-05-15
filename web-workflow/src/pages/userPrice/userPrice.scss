@@ -7,9 +7,15 @@
   overflow: hidden;
 }
 
-th{
-  text-align: center;
+table caption {
+  border: 1px solid #DDDDDD;
+  background: #E7F5E7;
+  color: #5EB95E;
+  line-height: 36px;
+  font-weight: bold;
+  font-size: large;
 }
+
 
 .am-panel-success{
   margin: 0;

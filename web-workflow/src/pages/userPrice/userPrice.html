@@ -24,7 +24,163 @@
             <div class="am-panel-bd">
 
                 <div class="am-g">
+                    <div class="am-u-sm-12 am-scrollable-horizontal">
+                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
+                            <caption>微信业务</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>业务类型</th>
+                                <th>顶级代理</th>
+                                <th>超级代理</th>
+                                <th>金牌代理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <% for(var i = 0; i < wxs.length; i ++){ %>
+                                <tr>
+                                    <td><%= i + 1 %></td>
+                                    <td><%= wxs[i].name %></td>
+                                    <td><%= wxs[i].topPrice %></td>
+                                    <td><%= wxs[i].superPrice %></td>
+                                    <td><%= wxs[i].goldPrice %></td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
 
+                    <div class="am-u-sm-12 am-scrollable-horizontal">
+                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
+                            <caption>微博业务</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>业务类型</th>
+                                <th>顶级代理</th>
+                                <th>超级代理</th>
+                                <th>金牌代理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% for(var i = 0; i < wbs.length; i ++){ %>
+                            <tr>
+                                <td><%= i + 1 %></td>
+                                <td><%= wbs[i].name %></td>
+                                <td><%= wbs[i].topPrice %></td>
+                                <td><%= wbs[i].superPrice %></td>
+                                <td><%= wbs[i].goldPrice %></td>
+                            </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="am-u-sm-12 am-scrollable-horizontal">
+                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
+                            <caption>人工任务</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>业务类型</th>
+                                <th>顶级代理</th>
+                                <th>超级代理</th>
+                                <th>金牌代理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% for(var i = 0; i < handles.length; i ++){ %>
+                            <tr>
+                                <td><%= i + 1 %></td>
+                                <td><%= handles[i].name %></td>
+                                <td><%= handles[i].topPrice %></td>
+                                <td><%= handles[i].superPrice %></td>
+                                <td><%= handles[i].goldPrice %></td>
+                            </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="am-u-sm-12 am-scrollable-horizontal">
+                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
+                            <caption>美拍业务</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>业务类型</th>
+                                <th>顶级代理</th>
+                                <th>超级代理</th>
+                                <th>金牌代理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% for(var i = 0; i < mps.length; i ++){ %>
+                            <tr>
+                                <td><%= i + 1 %></td>
+                                <td><%= mps[i].name %></td>
+                                <td><%= mps[i].topPrice %></td>
+                                <td><%= mps[i].superPrice %></td>
+                                <td><%= mps[i].goldPrice %></td>
+                            </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="am-u-sm-12 am-scrollable-horizontal">
+                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
+                            <caption>流量业务</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>业务类型</th>
+                                <th>顶级代理</th>
+                                <th>超级代理</th>
+                                <th>金牌代理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% for(var i = 0; i < flows.length; i ++){ %>
+                            <tr>
+                                <td><%= i + 1 %></td>
+                                <td><%= flows[i].name %></td>
+                                <td><%= flows[i].topPrice %></td>
+                                <td><%= flows[i].superPrice %></td>
+                                <td><%= flows[i].goldPrice %></td>
+                            </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="am-u-sm-12 am-scrollable-horizontal">
+                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
+                            <caption>论坛回复</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>业务类型</th>
+                                <th>顶级代理</th>
+                                <th>超级代理</th>
+                                <th>金牌代理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>#</td>
+                                <td>论坛回复</td>
+                                <td><%= forums[0].topPrice %></td>
+                                <td><%= forums[0].superPrice %></td>
+                                <td><%= forums[0].goldPrice %></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                    <% if(false){ %>
                     <div class="am-u-sm-12 am-u-lg-6">
                         <div class="am-panel am-panel-success">
                             <div class="am-panel-hd">
@@ -174,7 +330,7 @@
                             </ul>
                         </div>
                     </div>
-
+                    <% } %>
                 </div>
 
             </div>
