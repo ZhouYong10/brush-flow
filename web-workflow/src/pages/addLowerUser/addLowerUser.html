@@ -28,6 +28,9 @@
                     <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                        title="<%= host %>"
                        data-clipboard-text="<%= host %>">复制</a>
+                    <br/>
+                    我的下级，升级返利规则：　<span><%= userUpdatePrice.upToTop.name %>返利 <%= userUpdatePrice.upToTop.toParent %></span> ;　
+                    <span><%= userUpdatePrice.upToSuper.name %>返利 <%= userUpdatePrice.upToSuper.toParent %></span>
                 </p>
                 <form class="am-form am-form-horizontal">
                     <div class="am-form-group">

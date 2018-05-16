@@ -10,6 +10,7 @@ var Profit = require('../models/Profit');
 var Product = require('../models/Product');
 var Task = require('../models/Task');
 var Consume = require('../models/Consume');
+var UserUpdatePrice = require('../models/UserUpdatePrice');
 var router = require('express').Router();
 
 var bcrypt = require('bcryptjs');
@@ -307,13 +308,25 @@ router.post('/username/notrepeat', function (req, res) {
 router.get('/addLowerUser', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
-            res.render('addLowerUser', {
-                title: '添加下级用户',
-                money: user.funds,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role,
-                host: req.protocol + '://' + req.headers.host + '?' + require('../models/CiAndDeci').doCipher(user._id + '')
+            UserUpdatePrice.open().find().then(function (userUpdatePrices) {
+                var userUpdatePriceObj = {};
+                for (var i = 0; i < userUpdatePrices.length; i++) {
+                    if (userUpdatePrices[i].type == 'upToSuper') {
+                        userUpdatePriceObj.upToSuper = userUpdatePrices[i];
+                    }
+                    if (userUpdatePrices[i].type == 'upToTop') {
+                        userUpdatePriceObj.upToTop = userUpdatePrices[i];
+                    }
+                }
+                res.render('addLowerUser', {
+                    title: '添加下级用户',
+                    money: user.funds,
+                    username: user.username,
+                    userStatus: user.status,
+                    role: user.role,
+                    userUpdatePrice: userUpdatePriceObj,
+                    host: req.protocol + '://' + req.headers.host + '?' + require('../models/CiAndDeci').doCipher(user._id + '')
+                });
             });
         });
 });
@@ -449,18 +462,30 @@ router.get('/my/price', function (req, res) {
                         product.find({type: 'mp'}).then(function(mps) {
                             product.find({type: 'wb'}).then(function(wbs) {
                                 product.find({type: 'handle'}).then(function(handles) {
-                                    res.render('userPrice', {
-                                        title: '我的价格详情',
-                                        money: user.funds,
-                                        username: user.username,
-                                        userStatus: user.status,
-                                        role: user.role,
-                                        forums: forums,
-                                        flows: flows,
-                                        wxs: wxs,
-                                        mps: mps,
-                                        wbs: wbs,
-                                        handles: handles
+                                    UserUpdatePrice.open().find().then(function (userUpdatePrices){
+                                        var userUpdatePriceObj = {};
+                                        for(var i = 0; i < userUpdatePrices.length; i++) {
+                                            if(userUpdatePrices[i].type == 'upToSuper') {
+                                                userUpdatePriceObj.upToSuper = userUpdatePrices[i];
+                                            }
+                                            if(userUpdatePrices[i].type == 'upToTop') {
+                                                userUpdatePriceObj.upToTop = userUpdatePrices[i];
+                                            }
+                                        }
+                                        res.render('userPrice', {
+                                            title: '我的价格详情',
+                                            money: user.funds,
+                                            username: user.username,
+                                            userStatus: user.status,
+                                            role: user.role,
+                                            forums: forums,
+                                            flows: flows,
+                                            wxs: wxs,
+                                            mps: mps,
+                                            wbs: wbs,
+                                            handles: handles,
+                                            userUpdatePrice: userUpdatePriceObj
+                                        });
                                     });
                                 })
                             })
