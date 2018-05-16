@@ -21,6 +21,18 @@ var initUsers = [{
     createTime: moment().format('YYYY-MM-DD HH:mm:ss')
 }];
 
+var userUpdatePrices = [{
+    type: 'upToSuper',
+    name: '升级到超级',
+    price: 500,
+    toParent: 300
+}, {
+    type: 'upToTop',
+    name: '升级到顶级',
+    price: 800,
+    toParent: 500
+}];
+
 
 exports.initUser = function(User) {
     initUsers.map(function(user) {
@@ -42,6 +54,32 @@ exports.initUser = function(User) {
                     console.log('添加初始化账户失败： ' + error);
                 }else{
                     console.log('添加初始化账户成功!');
+                }
+            })
+        })
+    })
+};
+
+exports.initUserUpdatePrice = function(UserUpdatePrice) {
+    userUpdatePrices.map(function(userUpdatePrice) {
+        UserUpdatePrice.findOne({type: userUpdatePrice.type}, function(error, result) {
+            if(error) {
+                return console.log('初始化查询用户信息失败： ' + error);
+            }
+            if(result) {
+                userUpdatePrice = result;
+                delete userUpdatePrice._id;
+            }
+            UserUpdatePrice.findAndModify({
+                type: userUpdatePrice.type
+            }, [], {$set: userUpdatePrice}, {
+                new: true,
+                upsert: true
+            }, function(error, result) {
+                if(error) {
+                    console.log('添加初始化账户失败： ' + error);
+                }else{
+                    console.log('添加初始化账户升级价格成功!');
                 }
             })
         })

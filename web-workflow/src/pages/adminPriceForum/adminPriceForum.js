@@ -66,7 +66,7 @@ var priceItemText = '<tr> ' +
     '<td class="remark"><a class="am-text-truncate text-break" title=""></a></td> ' +
     '<td class="operation"> </td> ' +
     '</tr>';
-var $changeItemTr ;
+var $changeItemTrs = [] ;
 
 $(function () {
     Utils.layPage();
@@ -95,8 +95,8 @@ function registerEditDelete($tbody) {
         var self = this;
         var $parentTd = $(self).parent();
         var $parentTr = $parentTd.parent();
-        $changeItemTr = $parentTr;
         var num = $parentTr.find('.num').text();
+        $changeItemTrs[num] = $parentTr;
 
         var $newParentTr = $(priceItem);
 
@@ -213,16 +213,17 @@ function registerChangeSaveGiveUp($tbody) {
     $tbody.find('.giveUp').off().click(function () {
         var $parentTd = $(this).parent();
         var $tr = $parentTd.parent();
+        var num = $tr.find('.num').text();
 
         var $aim ;
         if($tr.prev().length > 0) {
             $aim = $tr.prev();
             $tr.remove();
-            $aim.after($changeItemTr);
+            $aim.after($changeItemTrs[num]);
         }else {
             $aim = $tr.parent();
             $tr.remove();
-            $aim.prepend($changeItemTr);
+            $aim.prepend($changeItemTrs[num]);
         }
         registerEditDelete($tbody);
         Utils.breakText();

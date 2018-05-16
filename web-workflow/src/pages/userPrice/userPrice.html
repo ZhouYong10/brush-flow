@@ -25,6 +25,25 @@
 
                 <div class="am-g">
                     <div class="am-u-sm-12 am-scrollable-horizontal">
+                        <div style="padding-bottom: 10px;">
+                            <% if(role == '超级代理'){ %>
+                            <a type="button"  class="am-btn am-btn-primary am-btn-sm">
+                                顶级代理(800)<br/>
+                                立即升级
+                            </a>
+                            <% } %>
+
+                            <% if(role == '金牌代理'){ %>
+                            <a type="button"  class="am-btn am-btn-primary am-btn-sm">
+                                顶级代理(800)<br/>
+                                立即升级
+                            </a>
+                            <a type="button" class="am-btn am-btn-success am-btn-sm">
+                                超级代理(500)<br/>
+                                立即升级
+                            </a>
+                            <% } %>
+                        </div>
                         <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
                             <caption>微信业务</caption>
                             <thead>

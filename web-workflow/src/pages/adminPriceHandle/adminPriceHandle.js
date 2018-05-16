@@ -50,7 +50,7 @@ var priceItemText = '<tr> ' +
     '<td class="goldPer"> </td> ' +
     '<td class="operation"> </td> ' +
     '</tr>';
-var $changeItemTr ;
+var $changeItemTrs = [] ;
 
 $(function () {
     registerEditDelete($('.priceFlow tbody'));
@@ -76,8 +76,8 @@ function registerEditDelete($tbody) {
         var self = this;
         var $parentTd = $(self).parent();
         var $parentTr = $parentTd.parent();
-        $changeItemTr = $parentTr;
         var num = $parentTr.find('.num').text();
+        $changeItemTrs[num] = $parentTr;
 
         var $newParentTr = $(priceItem);
 
@@ -178,16 +178,17 @@ function registerChangeSaveGiveUp($tbody) {
     $tbody.find('.giveUp').off().click(function () {
         var $parentTd = $(this).parent();
         var $tr = $parentTd.parent();
+        var num = $tr.find('.num').text();
 
         var $aim ;
         if($tr.prev().length > 0) {
             $aim = $tr.prev();
             $tr.remove();
-            $aim.after($changeItemTr);
+            $aim.after($changeItemTrs[num]);
         }else {
             $aim = $tr.parent();
             $tr.remove();
-            $aim.prepend($changeItemTr);
+            $aim.prepend($changeItemTrs[num]);
         }
         registerEditDelete($tbody);
     });

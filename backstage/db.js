@@ -5,7 +5,9 @@ var mongoskin = require('mongoskin');
 var dbConf = require('./db-conf');
 var db = null;
 
-require('./init-user').initUser(getCollection('User'));
+var initDate = require('./init-user');
+initDate.initUser(getCollection('User'));
+initDate.initUserUpdatePrice(getCollection('UserUpdatePrice'));
 
 
 

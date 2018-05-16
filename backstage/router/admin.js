@@ -9,6 +9,7 @@ var Feedback = require('../models/Feedback');
 var Withdraw = require('../models/Withdraw');
 var Consume = require('../models/Consume');
 var Profit = require('../models/Profit');
+var UserUpdatePrice = require('../models/UserUpdatePrice');
 
 var Product = require('../models/Product');
 var Order = require('../models/Order');
@@ -571,6 +572,27 @@ router.get('/lowerUsers/of/user', function (req, res) {
 /*
  * manage price
  * */
+// user update price
+router.get('/user/update/price', function (req, res) {
+    UserUpdatePrice.open().find().then(function (userUpdatePrices) {
+            res.render('adminUserUpdatePrice', {
+                title: '价格&状态管理 / 用户升级价格',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                userUpdatePrices: userUpdatePrices
+            });
+        });
+});
+
+router.post('/user/update/price/update', function(req, res) {
+    var id = req.body.id;
+    delete req.body.id;
+    UserUpdatePrice.open().updateById(id, {$set: req.body})
+        .then(function (result) {
+            res.end();
+        });
+})
+
 // price forum
 router.get('/price/forum', function (req, res) {
     Product.open().findPages({type: 'forum'}, (req.query.page ? req.query.page : 1))
