@@ -99,30 +99,28 @@ $(function () {
         });
     })
 
-    function userName($userName) {
-        return new Promise(function (resolve) {
-            var userName = $userName.val().trim();
-            if(userName == ''){
-                layer.tips('用户名不能为空!', '#logupUsername', {
-                    tips: [1, '#f00'],
-                    time: 4000
+    function userName($userName, callback) {
+        var userName = $userName.val().trim();
+        if(userName == ''){
+            layer.tips('用户名不能为空!', '#logupUsername', {
+                tips: [1, '#f00'],
+                time: 4000
+            });
+        }else{
+            $.post('/username/notrepeat', {username: userName})
+                .then(function (data) {
+                    if(data.notRepeat) {
+                        $userName.css({color: 'green'});
+                        callback();
+                    }else{
+                        $userName.css({color: 'red'});
+                        layer.tips('该用户名已经存在!', '#logupUsername', {
+                            tips: [1, '#f00'],
+                            time: 4000
+                        });
+                    }
                 });
-            }else{
-                $.post('/username/notrepeat', {username: userName})
-                    .then(function (data) {
-                        if(data.notRepeat) {
-                            $userName.css({color: 'green'});
-                            resolve();
-                        }else{
-                            $userName.css({color: 'red'});
-                            layer.tips('该用户名已经存在!', '#logupUsername', {
-                                tips: [1, '#f00'],
-                                time: 4000
-                            });
-                        }
-                    });
-            }
-        });
+        }
     }
 
     //验证注册名是否已经存在
@@ -160,7 +158,7 @@ $(function () {
 
         var saveMe = $('#saveMe').prop('checked');
 
-        userName($logupUsername).then(function () {
+        userName($logupUsername, function() {
             if (password == '') {
                 layer.tips('密码不能为空!', '#password', {
                     tips: [1, '#f00'],
@@ -206,7 +204,6 @@ $(function () {
                     layer.msg(data.message);
                 }
             });
-
         });
     });
 

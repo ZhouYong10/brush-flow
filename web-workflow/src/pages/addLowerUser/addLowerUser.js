@@ -1,30 +1,28 @@
 var Utils = require('utils');
 
-function userName() {
-    return new Promise(function (resolve) {
-        var $userName = $('#userName');
-        var userName = $userName.val().trim();
-        if(userName == ''){
-            layer.tips('用户名不能为空!', '#userName', {
-                tips: [1, '#f00'],
-                time: 4000
+function userName(callback) {
+    var $userName = $('#userName');
+    var userName = $userName.val().trim();
+    if(userName == ''){
+        layer.tips('用户名不能为空!', '#userName', {
+            tips: [1, '#f00'],
+            time: 4000
+        });
+    }else{
+        $.post('/user/username/notrepeat', {username: userName})
+            .then(function (data) {
+                if(data.notRepeat) {
+                    $userName.css({color: 'green'});
+                    callback();
+                }else{
+                    $userName.css({color: 'red'});
+                    layer.tips('该用户名已经存在!', '#userName', {
+                        tips: [1, '#f00'],
+                        time: 4000
+                    });
+                }
             });
-        }else{
-            $.post('/user/username/notrepeat', {username: userName})
-                .then(function (data) {
-                    if(data.notRepeat) {
-                        $userName.css({color: 'green'});
-                        resolve();
-                    }else{
-                        $userName.css({color: 'red'});
-                        layer.tips('该用户名已经存在!', '#userName', {
-                            tips: [1, '#f00'],
-                            time: 4000
-                        });
-                    }
-                });
-        }
-    });
+    }
 }
 
 function password() {
@@ -55,7 +53,7 @@ $(function () {
     $('#commit').click(function (e) {
         e.stopPropagation();
         e.preventDefault();
-        userName().then(function () {
+        userName(function() {
             if (password()) {
                 $.post('/user/addLowerUser', {
                     username: $('#userName').val(),
@@ -64,13 +62,13 @@ $(function () {
                     phone: $('#phone').val(),
                     remark: $('#remark').val()
                 }).then(function (data) {
-                        if(data.isOK) {
-                            $('<a href="' + data.url + '" ></a>').get(0).click();
-                        }else{
-                            layer.msg(data.info);
-                        }
-                    });
+                    if(data.isOK) {
+                        $('<a href="' + data.url + '" ></a>').get(0).click();
+                    }else{
+                        layer.msg(data.info);
+                    }
+                });
             }
-        })
+        });
     })
 });
