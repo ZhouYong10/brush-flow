@@ -496,6 +496,133 @@ router.get('/my/price', function (req, res) {
         });
 });
 
+router.post('/update/user/role', function (req, res) {
+    UserUpdatePrice.open().findById(req.body.userUpdatePriceId).then(function (userUpdatePrice) {
+        if (userUpdatePrice) {
+            User.open().findById(req.session.passport.user).then(function (user) {
+                if (user.funds - userUpdatePrice.price < 0) {
+                    return res.send({
+                        isOK: false,
+                        msg: '升级失败: 账户余额不足，请充值！'
+                    });
+                }
+                User.open().findById(user.parentID).then(function (parent) {
+                    var parentObj = User.wrapToInstance(parent);
+                    if (!parentObj.isAdmin()) {
+                        //如果上级不是admin,则更改用户等级关系，然后升级
+                        User.open().findOne({username: 'admin'}).then(function (admin) {
+                            var adminObj = User.wrapToInstance(admin);
+
+                            parentObj.removeChild(user._id + '');
+                            adminObj.addChild(user._id);
+
+                            profitToParent(user, parentObj, userUpdatePrice, true).then(function () {
+                                profitToParent(user, adminObj, userUpdatePrice, false).then(function () {
+                                    updateUser(user, userUpdatePrice, adminObj).then(function (data) {
+                                        res.send({
+                                            isOK: true,
+                                            userNowFunds: data.userNowFunds,
+                                            nowRole: data.nowRole,
+                                            msg: '升级成功！'
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    } else {
+                        console.log('直接上级是admin,直接升级，用户等级关系不变')
+                        //如果上级是admin,则直接升级，用户等级关系不变
+                        profitToParent(user, parentObj, userUpdatePrice, true).then(function () {
+                            updateUser(user, userUpdatePrice, false).then(function (data) {
+                                res.send({
+                                    isOK: true,
+                                    userNowFunds: data.userNowFunds,
+                                    nowRole: data.nowRole,
+                                    msg: '升级成功！'
+                                })
+                            });
+                        });
+                    }
+                })
+            });
+        } else {
+            res.send({
+                isOK: false,
+                msg: '升级失败: 无法查询到升级信息！'
+            })
+        }
+    });
+    function profitToParent(user, parent, userUpdatePrice, isDirectParent) {
+        return new Promise(function(resolve, reject) {
+            var toParentProfit;
+            if(isDirectParent && parent.isAdmin()){
+                toParentProfit = userUpdatePrice.price;
+            }else if(isDirectParent && !parent.isAdmin()){
+                toParentProfit = userUpdatePrice.toParent;
+            }else if(!isDirectParent && parent.isAdmin()){
+                toParentProfit = (parseFloat(userUpdatePrice.price) - parseFloat(userUpdatePrice.toParent)).toFixed(4);
+            }else {
+                throw new Error('非直接父级，必须是admin!');
+            }
+            var pareanOldFunds = parent.funds;
+            parent.funds = (parseFloat(parent.funds) + parseFloat(toParentProfit)).toFixed(4);
+            User.open().updateById(parent._id, {$set: parent}).then(function () {
+                Profit.open().insert({
+                    userId: parent._id,
+                    username: parent.username,
+                    orderId: '',
+                    orderUserId: user._id,
+                    orderUsername: user.username,
+                    type: '',
+                    typeName: '代理升级',
+                    smallType: '',
+                    smallTypeName: '',
+                    funds: toParentProfit,
+                    userOldFunds: pareanOldFunds,
+                    userNowFunds: parent.funds,
+                    status: 'success',
+                    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    description: user.username + "从" + user.role + "升级到" + userUpdatePrice.toRole + ", 返利" + toParentProfit + "元。"
+                }).then(function () {
+                    resolve();
+                });
+            });
+        })
+    }
+    function updateUser(user, userUpdatePrice, admin) {
+        return new Promise(function(resolve, reject) {
+            if(admin) {
+                user.parent = admin.username;
+                user.parentID = admin._id;
+            }
+            user.role = userUpdatePrice.toRole;
+            var userOldFunds = user.funds;
+            user.funds = (parseFloat(user.funds) - parseFloat(userUpdatePrice.price)).toFixed(4);
+            User.open().updateById(user._id, {$set: user}).then(function () {
+                Consume.open().insert({
+                    userId: user._id,
+                    username: user.username,
+                    orderId:'',
+                    type:'',
+                    typeName:'代理升级',
+                    smallType:'',
+                    smallTypeName:'',
+                    funds: userUpdatePrice.price,
+                    userOldFunds: userOldFunds,
+                    userNowFunds: user.funds,
+                    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    description: "从" + user.role + "升级到" + userUpdatePrice.toRole + ", 消费" + userUpdatePrice.price + "元。"
+                }).then(function () {
+                    resolve({
+                        userNowFunds: user.funds,
+                        nowRole: userUpdatePrice.toRole
+                    });
+                });
+            });
+        })
+    }
+});
+
 router.get('/lowerUser/profit', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {

@@ -23,12 +23,14 @@ var initUsers = [{
 
 var userUpdatePrices = [{
     type: 'upToSuper',
-    name: '升级到超级',
+    toRole: '超级代理',
+    name: '升级到超级代理',
     price: 500,
     toParent: 300
 }, {
     type: 'upToTop',
-    name: '升级到顶级',
+    toRole: '顶级代理',
+    name: '升级到顶级代理',
     price: 800,
     toParent: 500
 }];

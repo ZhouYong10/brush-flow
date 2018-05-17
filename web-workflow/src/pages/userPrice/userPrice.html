@@ -25,23 +25,26 @@
 
                 <div class="am-g">
                     <div class="am-u-sm-12 am-scrollable-horizontal">
-                        <div style="padding-bottom: 10px;">
+                        <div id="userUpRole" style="padding-bottom: 10px;">
                             <% if(role == '超级代理'){ %>
-                            <a type="button"  class="am-btn am-btn-primary am-btn-sm">
+                            <button type="button" data-id="<%= userUpdatePrice.upToTop._id %>"
+                               class="am-btn am-btn-primary am-btn-sm">
                                 <%= userUpdatePrice.upToTop.name %>(<%= userUpdatePrice.upToTop.price %>)<br/>
                                 立即升级
-                            </a>
+                            </button>
                             <% } %>
 
                             <% if(role == '金牌代理'){ %>
-                            <a type="button"  class="am-btn am-btn-primary am-btn-sm">
+                            <button type="button" data-id="<%= userUpdatePrice.upToTop._id %>"
+                               class="am-btn am-btn-primary am-btn-sm">
                                 <%= userUpdatePrice.upToTop.name %>(<%= userUpdatePrice.upToTop.price %>)<br/>
                                 立即升级
-                            </a>
-                            <a type="button"  class="am-btn am-btn-success am-btn-sm">
+                            </button>
+                            <button type="button" data-id="<%= userUpdatePrice.upToSuper._id %>"
+                               class="am-btn am-btn-success am-btn-sm">
                                 <%= userUpdatePrice.upToSuper.name %>(<%= userUpdatePrice.upToSuper.price %>)<br/>
                                 立即升级
-                            </a>
+                            </button>
                             <% } %>
                         </div>
                         <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
@@ -361,7 +364,26 @@
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
 <!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
 
-
+<script>
+    $(function() {
+        $('#userUpRole button').click(function() {
+            var self = $(this);
+            var id = self.attr('data-id');
+            $.post('/user/update/user/role', {userUpdatePriceId: id}, function(data) {
+                if(data.isOK) {
+                    //修改用户的可用余额
+                    $('.userCash').text(data.userNowFunds);
+                    $('#headerUserRole').text(data.nowRole);
+                    self.remove();
+                    layer.msg(data.msg);
+                }else{
+                    layer.msg(data.msg);
+                }
+            })
+        })
+    })
+</script>
 </body>
 </html>
