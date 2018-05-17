@@ -219,19 +219,19 @@ app.get('/securityImg', function (req, res) {
   res.end(ary[1]);
 });
 
-app.post('/login', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.send({
-        isOK: false,
-        message: info
-      });
-    }
-      userLogin(req, res, user);
-  })(req, res, next);
+app.post('/login', function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.send({
+                isOK: false,
+                message: info
+            });
+        }
+        userLogin(req, res, user);
+    })(req, res, next);
 });
 
 function userLogin(req, res, user) {
@@ -325,35 +325,7 @@ app.post('/logup', function (req, res, next) {
                 User.open().updateById(parentObj._id, {
                     $set: parentObj
                 }).then(function () {
-                    req.logIn(user, function(err) {
-                        if (err) {
-                            return next(err);
-                        }
-                        User.open().updateById(user._id, {
-                            $set: {
-                                lastLoginTime: moment().format('YYYY-MM-DD HH:mm:ss')
-                            }
-                        }).then(function () {
-                            var userIns = User.wrapToInstance(user);
-                            if(userIns.isAdmin()) {
-                                res.send({
-                                    isOK: true,
-                                    path: '/admin/home'
-                                });
-                            }else{
-                                res.send({
-                                    isOK: true,
-                                    path: '/client/home'
-                                });
-                            }
-                        }, function (error) {
-                            res.send({
-                                isOK: false,
-                                message: '更新用户登陆时间失败： ' + error
-                            });
-                        });
-                    });
-
+                    userLogin(req, res, user);
                 });
             });
         };
