@@ -16,6 +16,23 @@ table caption {
   font-size: large;
 }
 
+.td-title {
+  vertical-align: middle!important;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  background: #EDFAED;
+  border-bottom: 3px solid #81b381;
+}
+
+.td-border-bottom {
+  border-bottom: 3px solid #81b381;
+}
+
+.td-color {
+  color: red;
+  font-weight: 500;
+}
 
 .am-panel-success{
   margin: 0;

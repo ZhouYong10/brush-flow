@@ -22,16 +22,23 @@
         <div id="addLowerUser" class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd am-g-collapse">
-                <p>
-                    点击复制链接，通过以上链接注册的用户即为你的下级用户。<br/>
-                    推广链接：　<span><%= host %></span>
-                    <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
-                       title="<%= host %>"
-                       data-clipboard-text="<%= host %>">复制</a>
-                    <br/>
-                    我的下级，升级返利规则：　<span><%= userUpdatePrice.upToTop.name %>返利 <%= userUpdatePrice.upToTop.toParent %></span> ;　
-                    <span><%= userUpdatePrice.upToSuper.name %>返利 <%= userUpdatePrice.upToSuper.toParent %></span>
-                </p>
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        <p style="font-size: 15px;">
+                            推广说明：　通过以下链接注册的用户即为你的下级用户。<br/>
+                            推广链接：　<span><%= host %></span>
+                            <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                               title="<%= host %>"
+                               data-clipboard-text="<%= host %>">点击复制</a>
+                            <br/>
+                            返利规则：　<span><%= userUpdatePrice.upToSuper.name %>返利 <%= userUpdatePrice.upToSuper.toParent %></span>元 ;　
+                            <span><%= userUpdatePrice.upToTop.name %>返利 <%= userUpdatePrice.upToTop.toParent %></span>元。
+
+                        </p>
+                    </div>
+                </div>
+
                 <form class="am-form am-form-horizontal">
                     <div class="am-form-group">
                         <label class="am-u-sm-3 am-u-lg-1">

@@ -42,11 +42,11 @@
                             </button>
                             <% } %>
                         </div>
-                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
-                            <caption>微信业务</caption>
+
+                        <table class="am-table am-table-bordered">
                             <thead>
                             <tr>
-                                <th>#</th>
+                                <th></th>
                                 <th>业务类型</th>
                                 <th>顶级代理</th>
                                 <th>超级代理</th>
@@ -56,146 +56,74 @@
                             <tbody>
                                 <% for(var i = 0; i < wxs.length; i ++){ %>
                                 <tr>
-                                    <td><%= i + 1 %></td>
-                                    <td><%= wxs[i].name %></td>
-                                    <td><%= wxs[i].topPrice %></td>
-                                    <td><%= wxs[i].superPrice %></td>
-                                    <td><%= wxs[i].goldPrice %></td>
+                                    <% if(i == 0){ %>
+                                    <td class="td-title am-text-middle" rowspan="<%= wxs.length %>">微信业务</td>
+                                    <% } %>
+                                    <td class="<% if(i == wxs.length - 1){ %>td-border-bottom<% } %>"><%= wxs[i].name %></td>
+                                    <td class="<% if(i == wxs.length - 1){ %>td-border-bottom<% } %> <% if(role == '顶级代理'){ %>td-color<% } %>"><%= wxs[i].topPrice %></td>
+                                    <td class="<% if(i == wxs.length - 1){ %>td-border-bottom<% } %> <% if(role == '超级代理'){ %>td-color<% } %>"><%= wxs[i].superPrice %></td>
+                                    <td class="<% if(i == wxs.length - 1){ %>td-border-bottom<% } %> <% if(role == '金牌代理'){ %>td-color<% } %>"><%= wxs[i].goldPrice %></td>
                                 </tr>
                                 <% } %>
+
+                                <% for(var i = 0; i < wbs.length; i ++){ %>
+                                <tr>
+                                    <% if(i == 0){ %>
+                                    <td class="td-title" rowspan="<%= wbs.length %>">微博业务</td>
+                                    <% } %>
+                                    <td class="<% if(i == wbs.length - 1){ %>td-border-bottom<% } %>"><%= wbs[i].name %></td>
+                                    <td class="<% if(i == wbs.length - 1){ %>td-border-bottom<% } %> <% if(role == '顶级代理'){ %>td-color<% } %>"><%= wbs[i].topPrice %></td>
+                                    <td class="<% if(i == wbs.length - 1){ %>td-border-bottom<% } %> <% if(role == '超级代理'){ %>td-color<% } %>"><%= wbs[i].superPrice %></td>
+                                    <td class="<% if(i == wbs.length - 1){ %>td-border-bottom<% } %> <% if(role == '金牌代理'){ %>td-color<% } %>"><%= wbs[i].goldPrice %></td>
+                                </tr>
+                                <% } %>
+
+                                <% for(var i = 0; i < handles.length; i ++){ %>
+                                <tr>
+                                    <% if(i == 0){ %>
+                                    <td class="td-title" rowspan="<%= handles.length %>">人工任务</td>
+                                    <% } %>
+                                    <td class="<% if(i == handles.length - 1){ %>td-border-bottom<% } %>"><%= handles[i].name %></td>
+                                    <td class="<% if(i == handles.length - 1){ %>td-border-bottom<% } %> <% if(role == '顶级代理'){ %>td-color<% } %>"><%= handles[i].topPrice %></td>
+                                    <td class="<% if(i == handles.length - 1){ %>td-border-bottom<% } %> <% if(role == '超级代理'){ %>td-color<% } %>"><%= handles[i].superPrice %></td>
+                                    <td class="<% if(i == handles.length - 1){ %>td-border-bottom<% } %> <% if(role == '金牌代理'){ %>td-color<% } %>"><%= handles[i].goldPrice %></td>
+                                </tr>
+                                <% } %>
+
+                                <% for(var i = 0; i < mps.length; i ++){ %>
+                                <tr>
+                                    <% if(i == 0){ %>
+                                    <td class="td-title" rowspan="<%= mps.length %>">美拍业务</td>
+                                    <% } %>
+                                    <td class="<% if(i == mps.length - 1){ %>td-border-bottom<% } %>"><%= mps[i].name %></td>
+                                    <td class="<% if(i == mps.length - 1){ %>td-border-bottom<% } %> <% if(role == '顶级代理'){ %>td-color<% } %>"><%= mps[i].topPrice %></td>
+                                    <td class="<% if(i == mps.length - 1){ %>td-border-bottom<% } %> <% if(role == '超级代理'){ %>td-color<% } %>"><%= mps[i].superPrice %></td>
+                                    <td class="<% if(i == mps.length - 1){ %>td-border-bottom<% } %> <% if(role == '金牌代理'){ %>td-color<% } %>"><%= mps[i].goldPrice %></td>
+                                </tr>
+                                <% } %>
+
+                                <% for(var i = 0; i < flows.length; i ++){ %>
+                                <tr>
+                                    <% if(i == 0){ %>
+                                    <td class="td-title" rowspan="<%= flows.length %>">流量业务</td>
+                                    <% } %>
+                                    <td class="<% if(i == flows.length - 1){ %>td-border-bottom<% } %>"><%= flows[i].name %></td>
+                                    <td class="<% if(i == flows.length - 1){ %>td-border-bottom<% } %> <% if(role == '顶级代理'){ %>td-color<% } %>"><%= flows[i].topPrice %></td>
+                                    <td class="<% if(i == flows.length - 1){ %>td-border-bottom<% } %> <% if(role == '超级代理'){ %>td-color<% } %>"><%= flows[i].superPrice %></td>
+                                    <td class="<% if(i == flows.length - 1){ %>td-border-bottom<% } %> <% if(role == '金牌代理'){ %>td-color<% } %>"><%= flows[i].goldPrice %></td>
+                                </tr>
+                                <% } %>
+
+                                <tr>
+                                    <td class="td-title" style="border:none;">论坛业务</td>
+                                    <td>论坛回复</td>
+                                    <td class="<% if(role == '顶级代理'){ %>td-color<% } %>"><%= forums[0].topPrice %></td>
+                                    <td class="<% if(role == '超级代理'){ %>td-color<% } %>"><%= forums[0].superPrice %></td>
+                                    <td class="<% if(role == '金牌代理'){ %>td-color<% } %>"><%= forums[0].goldPrice %></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-
-                    <div class="am-u-sm-12 am-scrollable-horizontal">
-                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
-                            <caption>微博业务</caption>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>业务类型</th>
-                                <th>顶级代理</th>
-                                <th>超级代理</th>
-                                <th>金牌代理</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <% for(var i = 0; i < wbs.length; i ++){ %>
-                            <tr>
-                                <td><%= i + 1 %></td>
-                                <td><%= wbs[i].name %></td>
-                                <td><%= wbs[i].topPrice %></td>
-                                <td><%= wbs[i].superPrice %></td>
-                                <td><%= wbs[i].goldPrice %></td>
-                            </tr>
-                            <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="am-u-sm-12 am-scrollable-horizontal">
-                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
-                            <caption>人工任务</caption>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>业务类型</th>
-                                <th>顶级代理</th>
-                                <th>超级代理</th>
-                                <th>金牌代理</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <% for(var i = 0; i < handles.length; i ++){ %>
-                            <tr>
-                                <td><%= i + 1 %></td>
-                                <td><%= handles[i].name %></td>
-                                <td><%= handles[i].topPrice %></td>
-                                <td><%= handles[i].superPrice %></td>
-                                <td><%= handles[i].goldPrice %></td>
-                            </tr>
-                            <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="am-u-sm-12 am-scrollable-horizontal">
-                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
-                            <caption>美拍业务</caption>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>业务类型</th>
-                                <th>顶级代理</th>
-                                <th>超级代理</th>
-                                <th>金牌代理</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <% for(var i = 0; i < mps.length; i ++){ %>
-                            <tr>
-                                <td><%= i + 1 %></td>
-                                <td><%= mps[i].name %></td>
-                                <td><%= mps[i].topPrice %></td>
-                                <td><%= mps[i].superPrice %></td>
-                                <td><%= mps[i].goldPrice %></td>
-                            </tr>
-                            <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="am-u-sm-12 am-scrollable-horizontal">
-                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
-                            <caption>流量业务</caption>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>业务类型</th>
-                                <th>顶级代理</th>
-                                <th>超级代理</th>
-                                <th>金牌代理</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <% for(var i = 0; i < flows.length; i ++){ %>
-                            <tr>
-                                <td><%= i + 1 %></td>
-                                <td><%= flows[i].name %></td>
-                                <td><%= flows[i].topPrice %></td>
-                                <td><%= flows[i].superPrice %></td>
-                                <td><%= flows[i].goldPrice %></td>
-                            </tr>
-                            <% } %>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="am-u-sm-12 am-scrollable-horizontal">
-                        <table class="am-table am-table-radius am-table-striped am-table-hover am-text-nowrap">
-                            <caption>论坛回复</caption>
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>业务类型</th>
-                                <th>顶级代理</th>
-                                <th>超级代理</th>
-                                <th>金牌代理</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>#</td>
-                                <td>论坛回复</td>
-                                <td><%= forums[0].topPrice %></td>
-                                <td><%= forums[0].superPrice %></td>
-                                <td><%= forums[0].goldPrice %></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-
 
                     <% if(false){ %>
                     <div class="am-u-sm-12 am-u-lg-6">
@@ -374,8 +302,8 @@
                     self.remove();
                     layer.msg(data.msg);
                     setTimeout(function () {
-                        location.reload();
-                    }, 500);
+
+                    }, 200);
                 }else{
                     layer.msg(data.msg);
                 }
