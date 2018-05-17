@@ -373,6 +373,9 @@
                     $('#headerUserRole').text(data.nowRole);
                     self.remove();
                     layer.msg(data.msg);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 500);
                 }else{
                     layer.msg(data.msg);
                 }
