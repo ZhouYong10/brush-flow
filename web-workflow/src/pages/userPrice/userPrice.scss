@@ -1,19 +1,13 @@
 
-.taskTypeLabel{
-  padding: 7px 3px 0;
-}
 
-.search-title{
-  overflow: hidden;
-}
-
-table caption {
-  border: 1px solid #DDDDDD;
-  background: #E7F5E7;
-  color: #5EB95E;
-  line-height: 36px;
-  font-weight: bold;
+.prompt-title {
+  text-align: center;
   font-size: large;
+  font-weight: bold;
+}
+
+.currentRole {
+  cursor: default;
 }
 
 .td-title {

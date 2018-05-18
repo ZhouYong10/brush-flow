@@ -25,26 +25,51 @@
 
                 <div class="am-g">
                     <div class="am-u-sm-12 am-scrollable-horizontal">
-                        <div id="userUpRole" style="padding-bottom: 10px;">
-                            <% if(role == '超级代理'){ %>
-                            <button type="button" data-id="<%= userUpdatePrice.upToTop._id %>"
-                               class="am-btn am-btn-primary am-btn-sm">
-                                <%= userUpdatePrice.upToTop.name %>(<%= userUpdatePrice.upToTop.price %>)<br/>
-                                立即升级
-                            </button>
-                            <% } %>
-
-                            <% if(role == '金牌代理'){ %>
-                            <button type="button" data-id="<%= userUpdatePrice.upToSuper._id %>"
-                               class="am-btn am-btn-success am-btn-sm">
-                                <%= userUpdatePrice.upToSuper.name %>(<%= userUpdatePrice.upToSuper.price %>)<br/>
-                                立即升级
-                            </button>
-                            <% } %>
+                        <div class="am-panel am-panel-danger">
+                            <div class="am-panel-hd prompt-title">提示</div>
+                            <div class="am-panel-bd">
+                                <p style="font-size: 15px;">
+                                    升级优点：　升级代理后下单价格更低，发展下级代理可赚取差价；下级代理升级，有分成。<br/>
+                                    升级价格：　<%= userUpdatePrice.upToSuper.name %>，<%= userUpdatePrice.upToSuper.price %>元；<br/>
+                                    <span style="margin-left: 89px;"><%= userUpdatePrice.upToTop.name %>，<%= userUpdatePrice.upToTop.price %>元。</span><br/>
+                                    <span style="color:red;">升级规则：　代理只能逐级升级，不能跳级升级。</span>
+                                </p>
+                            </div>
                         </div>
 
                         <table class="am-table am-table-bordered">
                             <thead>
+                            <tr>
+                                <th class="td-title am-text-middle">代理升级</th>
+                                <th></th>
+                                <th>
+                                    <% if(role == '顶级代理'){ %>
+                                    <span class="am-btn am-btn-danger am-btn-sm am-radius currentRole">当前等级</span>
+                                    <% } %>
+                                    <% if(role == '超级代理'){ %>
+                                    <button data-id="<%= userUpdatePrice.upToTop._id %>"
+                                            class="am-btn am-btn-danger am-btn-sm am-radius userUpdateRole">
+                                        立即升级
+                                    </button>
+                                    <% } %>
+                                </th>
+                                <th>
+                                    <% if(role == '超级代理'){ %>
+                                    <span class="am-btn am-btn-primary am-btn-sm am-radius currentRole">当前等级</span>
+                                    <% } %>
+                                    <% if(role == '金牌代理'){ %>
+                                    <button data-id="<%= userUpdatePrice.upToSuper._id %>"
+                                            class="am-btn am-btn-danger am-btn-sm am-radius userUpdateRole">
+                                        立即升级
+                                    </button>
+                                    <% } %>
+                                </th>
+                                <th>
+                                    <% if(role == '金牌代理'){ %>
+                                    <span class="am-btn am-btn-success am-btn-sm am-radius currentRole">当前等级</span>
+                                    <% } %>
+                                </th>
+                            </tr>
                             <tr>
                                 <th></th>
                                 <th>业务类型</th>
@@ -291,7 +316,7 @@
 
 <script>
     $(function() {
-        $('#userUpRole button').click(function() {
+        $('.userUpdateRole').click(function() {
             var self = $(this);
             var id = self.attr('data-id');
             $.post('/user/update/user/role', {userUpdatePriceId: id}, function(data) {
