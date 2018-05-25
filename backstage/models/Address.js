@@ -131,44 +131,60 @@ module.exports = {
     },
     parseWxTitle: function (address) {
         return new Promise(function (resolve, reject) {
-            request({
-                url: address,
-                headers: {
-                    "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                    "Accept-Encoding": 'UTF-8',
-                    "Accept-Language": 'zh-CN,zh;q=0.8',
-                    "Cache-Control": 'max-age=0',
-                    "Connection": 'keep-alive',
-                    "Cookie": 'ptui_loginuin=1059981087; RK=hPsrImNHUm; pt2gguin=o1059981087; ptcz=689d9b584768e14052c8c4135026df9cbd6ce284322ecf5fa1e515f34645f3d7; uid=47735014; o_cookie=1059981087; pgv_pvid=590193236',
-                    "Host": 'mp.weixin.qq.com',
-                    "Upgrade-Insecure-Requests": 1,
-                    "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
-                }
-            }, function (err, obj, body) {
-                if (err) {
+            request.post('http://127.0.0.1:8899?address=' + address, function (err, res, body) {
+                if (body && body != 'get title failed') {
                     resolve({
-                        isOk: false,
-                        message: '地址解析失败，请联系管理员！'
+                        isOk: true,
+                        title: body
                     });
                 } else {
-                    var $ = cheerio.load(body);
-                    var title1 = $('title').text().replace(/(^\s*)|(\s*$)/g, "");
-                    var title2 = $('#activity-name').text().replace(/(^\s*)|(\s*$)/g, "");
-                    var title = title1 == "" ? title2 : title1;
-                    if(title == ''){
-                        resolve({
-                            isOk: false,
-                            message: '获取文章标题失败，可能网络不给力，或者文章地址错误！'
-                        });
-                    }else{
-                        resolve({
-                            isOk: true,
-                            title: title
-                        });
-                    }
+                    resolve({
+                        isOk: false,
+                        message: '获取文章标题失败，可能网络不给力，或者文章地址错误,也可能程序欠修理！'
+                    });
                 }
             });
-        })
+        });
+
+        //return new Promise(function (resolve, reject) {
+        //    request({
+        //        url: address,
+        //        headers: {
+        //            "Accept": 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        //            "Accept-Encoding": 'UTF-8',
+        //            "Accept-Language": 'zh-CN,zh;q=0.8',
+        //            "Cache-Control": 'max-age=0',
+        //            "Connection": 'keep-alive',
+        //            "Cookie": 'ptui_loginuin=1059981087; RK=hPsrImNHUm; pt2gguin=o1059981087; ptcz=689d9b584768e14052c8c4135026df9cbd6ce284322ecf5fa1e515f34645f3d7; uid=47735014; o_cookie=1059981087; pgv_pvid=590193236',
+        //            "Host": 'mp.weixin.qq.com',
+        //            "Upgrade-Insecure-Requests": 1,
+        //            "User-Agent": 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36'
+        //        }
+        //    }, function (err, obj, body) {
+        //        if (err) {
+        //            resolve({
+        //                isOk: false,
+        //                message: '地址解析失败，请联系管理员！'
+        //            });
+        //        } else {
+        //            var $ = cheerio.load(body);
+        //            var title1 = $('title').text().replace(/(^\s*)|(\s*$)/g, "");
+        //            var title2 = $('#activity-name').text().replace(/(^\s*)|(\s*$)/g, "");
+        //            var title = title1 == "" ? title2 : title1;
+        //            if(title == ''){
+        //                resolve({
+        //                    isOk: false,
+        //                    message: '获取文章标题失败，可能网络不给力，或者文章地址错误！'
+        //                });
+        //            }else{
+        //                resolve({
+        //                    isOk: true,
+        //                    title: title
+        //                });
+        //            }
+        //        }
+        //    });
+        //})
     },
     parseMpTitle: function (address) {
         return new Promise(function (resolve, reject) {

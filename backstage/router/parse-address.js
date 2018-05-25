@@ -11,6 +11,7 @@ router.post('/wx/title/by/address', function (req, res) {
     var address = req.body.address;
     Address.parseWxTitle(address)
         .then(function (obj) {
+            req.session[address] = obj.title;
             res.send(obj);
         }, function (obj) {
             res.send(obj);
