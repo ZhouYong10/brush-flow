@@ -11,16 +11,6 @@ new Vue({
 });
 
 $(function () {
-    $('.isQuit').click(function (e) {
-        e.stopPropagation();
-        e.preventDefault();
-        var self = $(this);
-        var href = self.attr('href');
-        $.get(href, function (data) {
-            self.parent().text(data);
-        })
-    });
-
     Utils.layPrompt('请输入错误原因！');
     Utils.breakText();
     Utils.isFreeze();

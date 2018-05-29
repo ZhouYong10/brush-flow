@@ -65,7 +65,6 @@
                             <th>进度</th>
                             <th>状态</th>
                             <th>操作</th>
-                            <th>撤单</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -151,23 +150,6 @@
                                 </div>
                                 <% } %>
 
-                                <% } %>
-                            </td>
-                            <td class="am-text-middle">
-                                <% if(orders[i].status == '执行中' && !orders[i].isQuit && !orders[i].quitRefuseDes){ %>
-                                <a class="am-btn am-btn-danger am-radius am-btn-xs isQuit"
-                                   href="/WX/order/quit?id=<%= orders[i]._id %>">撤单</a>
-                                <% } %>
-                                <% if(orders[i].status == '执行中' && orders[i].isQuit){ %>
-                                撤单中
-                                <% } %>
-                                <% if(orders[i].status == '执行中' && orders[i].quitRefuseDes){ %>
-                                <div class="operation">
-                                    <a class="am-text-truncate text-break break-css am-badge-warning am-radius"
-                                       title="orders[i].quitRefuseDes">
-                                        <%= orders[i].quitRefuseDes %>
-                                    </a>
-                                </div>
                                 <% } %>
                             </td>
                         </tr>
