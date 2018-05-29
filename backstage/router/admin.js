@@ -38,7 +38,9 @@ router.use(function(req, res, next) {
                 User.getSystemFunds().then(function (canUse) {
                     req.session.systemFunds = canUse;
                     Order.getOrderFreezeFunds().then(function(orderFreeze) {
+                        console.log(orderFreeze, '111111111111111');
                         Withdraw.getWithdrawFreezeFunds().then(function(withdrawFreeze) {
+                            console.log(withdrawFreeze, '2222222222222222222');
                             req.session.freezeFunds = (parseFloat(orderFreeze) + parseFloat(withdrawFreeze)).toFixed(4);
                             next();
                         })
@@ -89,6 +91,7 @@ router.get('/update/header/nav', function (req, res) {
         wxArticle: 0,
         wxLikeQuick: 0,
         wxLike: 0,
+        wxDianzan: 0,
         wxLikeQuit: 0,
         wxComment: 0,
         wxReply: 0,
@@ -151,8 +154,10 @@ router.get('/update/header/nav', function (req, res) {
                                                         updateNav.wxLike += 1;
                                                         break;
                                                     case 'readQuick':
-                                                    case 'likeQuick':
                                                         updateNav.wxLikeQuick += 1;
+                                                        break;
+                                                    case 'likeQuick':
+                                                        updateNav.wxDianzan += 1;
                                                         break;
                                                     case 'comment':
                                                         updateNav.wxComment += 1;
@@ -932,7 +937,7 @@ router.get('/order/complete/handle', function (req, res) {
             .then(function(order) {
                 var orderIns = Order.wrapToInstance(order);
                 if(orderIns.status == '未处理'){
-                    if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){
+                    if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick' || orderIns.smallType == 'likeQuick'){
                         orderIns.startReadNum = startReadNum;
                     }
                     orderIns.complete(function() {
@@ -1308,6 +1313,70 @@ router.get('/WX/like/quick/already', function (req, res) {
         });
 });
 
+router.get('/WX/dianzan/wait', function (req, res) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: 'likeQuick',
+        status: '未处理'
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXdianzanWait', {
+                title: '微信任务管理 / 待处理文章点赞任务',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/dianzan/wait'
+            });
+        });
+});
+
+router.get('/WX/dianzan/already', function (req, res) {
+    var search = {
+        type: 'wx',
+        smallType: 'likeQuick',
+        status: {$ne: '未处理'}
+    };
+    Order.open().findPages(search, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            Order.open().find(search).then(function(allObj) {
+                var readTotal = totalReadNum(allObj);
+                res.render('adminWXdianzanAlre', {
+                    title: '微信任务管理 / 已处理文章点赞任务',
+                    money: req.session.systemFunds,
+                    freezeFunds: req.session.freezeFunds,
+                    orders: obj.results,
+                    pages: obj.pages,
+                    path: '/admin/WX/dianzan/already',
+                    readTotal: readTotal
+                });
+            })
+        });
+});
+
+router.get('/search/WX/dianzan', function (req, res) {
+    var search = {
+        type: 'wx',
+        smallType: 'likeQuick',
+        status: {$ne: '未处理'},
+        createTime: new RegExp(req.query.date)
+    };
+    Order.open().findPages(search, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            Order.open().find(search).then(function(allObj) {
+                var readTotal = totalReadNum(allObj);
+                res.render('adminWXdianzanAlre', {
+                    title: '微信任务管理 / 已处理文章点赞任务',
+                    money: req.session.systemFunds,
+                    freezeFunds: req.session.freezeFunds,
+                    orders: obj.results,
+                    pages: obj.pages,
+                    path: '/admin/WX/dianzan/already',
+                    readTotal: readTotal
+                });
+            })
+        });
+});
 
 
 router.get('/WX/like/wait', function (req, res) {

@@ -367,7 +367,6 @@ function commitFans(result) {
         if(err) {
             return console.log(err);
         }
-        console.log(res.headers['set-cookie'], '===============================');
         wxFansCookieInfo = res.headers['set-cookie'][0].split(';')[0];
         var $ = cheerio.load(body);
         var aimItem = $('table').children().last();
@@ -406,7 +405,6 @@ function freshFansCookie() {
             return console.log(err);
         }
         wxFansCookieInfo = res.headers['set-cookie'][0].split(';')[0];
-        console.log('刷新页面了。。。。。。。。。。。。。。。');
     });
 }
 
@@ -486,7 +484,7 @@ Order.extend({
             var order = orders[i];
             if(order.status == '执行中' || order.status == '已处理'){
                 var dealTime = order.dealTime, num = (order.type == 'flow' ? order.realNum : order.num),
-                    delay = 0 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
+                    delay = 1 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
                 if(order.smallType == 'read'){
                     speed = global.readSpeed;
                 }

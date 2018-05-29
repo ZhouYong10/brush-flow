@@ -35,6 +35,7 @@ function updateNav(obj, isAdd) {
     //var wxArticle = parseInt($('.updateNum.wxArticle').text().split(' ')[2]);
     var wxLikeQuick = parseInt($('.updateNum.wxLikeQuick').text().split(' ')[2]);
     var wxLike = parseInt($('.updateNum.wxLike').text().split(' ')[2]);
+    var wxDianzan = parseInt($('.updateNum.wxDianzan').text().split(' ')[2]);
     var wxLikeQuit = parseInt($('.updateNum.wxLikeQuit').text().split(' ')[2]);
     //var wxComment = parseInt($('.updateNum.wxComment').text().split(' ')[2]);
     var wxReply = parseInt($('.updateNum.wxReply').text().split(' ')[2]);
@@ -43,8 +44,8 @@ function updateNav(obj, isAdd) {
     //var wxNum = wxArticle + wxLikeQuick + wxLike + wxComment + wxReply + wxFriend + wxCode;
     //var wxNum = wxLikeQuick + wxLike + wxComment + wxReply + wxFriend;
     //var wxNum = wxLikeQuick + wxLike + wxLikeQuit + wxReply + wxFriend;
-    var wxNum = wxLikeQuick + wxLike + wxLikeQuit + wxReply;
+    var wxNum = wxLikeQuick + wxLike + wxDianzan + wxLikeQuit + wxReply;
     if(wxNum > 0) {
-        $('.tips.wxArticle.wxLikeQuick.wxLike.wxLikeQuit.wxComment.wxReply.wxFriend.wxCode').css('display', 'inline');
+        $('.tips.wxArticle.wxLikeQuick.wxLike.wxDianzan.wxLikeQuit.wxComment.wxReply.wxFriend.wxCode').css('display', 'inline');
     }
 }

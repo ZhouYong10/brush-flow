@@ -410,6 +410,7 @@ router.post('/dianzan/add', function (req, res) {
     orderInfo.title = req.session[orderInfo.address];
     User.open().findById(req.session.passport.user)
         .then(function (user) {
+            socketIO.emit('updateNav', {'wxDianzan': 1});
             var order = Order.wrapToInstance(orderInfo);
             if(orderInfo.orderFlag) {
                 order.checkRandomStr(req).then(function() {
