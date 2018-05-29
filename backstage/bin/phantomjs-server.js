@@ -2,6 +2,7 @@
  * Created by zhouyong10 on 5/20/18.
  * start server command:
  *      phantomjs --ignore-ssl-errors=true --ssl-protocol=any phantomjs-server.js
+ *      nohup phantomjs --ignore-ssl-errors=true --ssl-protocol=any phantomjs-server.js &
  */
 var webserver = require('webserver').create();
 var page = require('webpage').create();

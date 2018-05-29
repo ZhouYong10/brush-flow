@@ -92,6 +92,9 @@ module.exports = {
             return /^[0-9]*[1-9][0-9]*$/.test(val);
         }
     },
+    max25000: function(val) {
+        return parseInt(val) <= 25000;
+    },
     min100: function(val) {
         return parseInt(val) >= 100;
     },

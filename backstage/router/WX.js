@@ -327,6 +327,116 @@ router.get('/get/price/by/type', function (req, res) {
         });
 });
 
+router.get('/dianzan', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wx',
+                smallType: 'likeQuick'
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 50);
+                    res.render('WXdianzan', {
+                        title: '微信-文章点赞',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/dianzan'
+                    })
+                });
+        });
+});
+
+router.get('/account/search/dianzan', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wx',
+                smallType: 'likeQuick',
+                address: req.query.account
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WXdianzan', {
+                        title: '微信-文章点赞',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/dianzan'
+                    })
+                });
+        });
+});
+
+router.get('/dianzan/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'likeQuick'})
+                .then(function(read) {
+                    var readIns = Product.wrapToInstance(read);
+                    var myDianzanPrice = readIns.getPriceByRole(user.role);
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WXdianzanAdd', {
+                            title: '添加微信文章点赞',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myDianzanPrice,
+                            orderFlag: orderFlag
+                        });
+                    })
+                });
+        });
+});
+
+router.post('/dianzan/add', function (req, res) {
+    var orderInfo = req.body;
+    if(!orderInfo.address){
+        return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo.num < 100 || orderInfo.num >25000) {
+        return res.send('<h1>点赞数量不能为空,且必须是正整数，最低100起，最高25000.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    orderInfo.num = parseInt(orderInfo.num);
+    orderInfo.title = req.session[orderInfo.address];
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var order = Order.wrapToInstance(orderInfo);
+            if(orderInfo.orderFlag) {
+                order.checkRandomStr(req).then(function() {
+                    order.createAndSave(user, {type: 'wx', smallType: 'likeQuick'})
+                        .then(function () {
+                            res.redirect('/wx/dianzan');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }, function(msg) {
+                    res.redirect('/wx/dianzan');
+                })
+            }else {
+                order.createAndSave(user, {type: 'wx', smallType: 'likeQuick'})
+                    .then(function (result) {
+                        res.send({funds: result.funds, msg: '提交成功！'});
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }
+        });
+});
+
+
+
+
+
 router.get('/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
