@@ -1,40 +1,34 @@
+
+.tips{
+  color: red;
+}
+
 .prompt-title{
   text-align: center;
   font-size: large;
   font-weight:bold;
 }
 
-.forumTemplate-content{
-  th{
-    text-align: center;
-  }
-  img{
-    width: 130px;
-    height: 40px;
-  }
+label{
+  border: 1px solid #ccc;
+  line-height: 30px;
+  text-align: center;
+  font-weight: normal;
+  background: rgb(238, 238, 238);
 }
 
-.tips{
-  color: red;
+.am-form-group .input{
+  height: 32px;
 }
 
-.title-text, .title-url{
-  line-height: 11px;
-}
-
-.disable{
-  display: inline-block;
-  margin: 0;
-  padding-top: 8px;
-}
-
-.speedTime{
-  display: inline-block !important;
-  width: 50px !important;
-}
-
-@media (min-width: 800px) {
+@media (min-width: 600px) {
   form{
     padding-right: 88px;
+  }
+}
+
+@media (min-width: 1000px) {
+  form{
+    padding: 0;
   }
 }

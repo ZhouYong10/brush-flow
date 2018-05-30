@@ -484,7 +484,7 @@ Order.extend({
             var order = orders[i];
             if(order.status == '执行中' || order.status == '已处理'){
                 var dealTime = order.dealTime, num = (order.type == 'flow' ? order.realNum : order.num),
-                    delay = 1 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
+                    delay = 0 * 60 * 1000, speed = order.speed ? order.speed : speedNum;
                 if(order.smallType == 'read'){
                     speed = global.readSpeed;
                 }

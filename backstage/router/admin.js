@@ -1902,7 +1902,7 @@ router.get('/redirect/aim/order', function (req, res) {
     var orderId = req.query.id, type = req.query.type, smallType = req.query.smallType,
         render = '', title = '', money = req.session.systemFunds, freezeFunds = req.session.freezeFunds,
         pages = 1, path = '/admin/error/wait';
-    Order.open().findById(orderId).then(function(result) {
+    Order.open().findById(orderId).then(function (result) {
         var arr = [];
         arr.push(result);
         switch (type) {
@@ -1916,18 +1916,22 @@ router.get('/redirect/aim/order', function (req, res) {
                 break;
             case 'wx':
                 switch (smallType) {
-                    case 'article': case 'share': case 'collect':
-                    render = 'adminWXarticleAlre';
-                    title = '微信任务管理 / 已处理微信原文任务';
-                    break;
-                    case 'read': case 'like':
-                    render = 'adminWXlikeAlre';
-                    title = '微信任务管理 / 已处理微信阅读点赞任务';
+                    case 'article':
+                    case 'share':
+                    case 'collect':
+                        render = 'adminWXarticleAlre';
+                        title = '微信任务管理 / 已处理微信原文任务';
                         break;
-                    case 'readQuick': case 'likeQuick':
-                    render = 'adminWXlikeQuickAlre';
-                    title = '微信任务管理 / 已处理微信阅读点赞快速任务';
-                    break;
+                    case 'read':
+                    case 'like':
+                        render = 'adminWXlikeAlre';
+                        title = '微信任务管理 / 已处理微信阅读点赞任务';
+                        break;
+                    case 'readQuick':
+                    case 'likeQuick':
+                        render = 'adminWXlikeQuickAlre';
+                        title = '微信任务管理 / 已处理微信阅读点赞快速任务';
+                        break;
                     case 'fans':
                         render = 'adminWXreplyAlre';
                         title = '微信任务管理 / 已处理公众粉丝回复任务';
@@ -1939,6 +1943,11 @@ router.get('/redirect/aim/order', function (req, res) {
                     case 'code':
                         render = 'adminWXcodeAlre';
                         title = '微信任务管理 / 已处理微信好友地区扫码';
+                        break;
+                    case 'comment':
+                    case 'fansComment':
+                        render = 'adminWXcommentAlre';
+                        title: '微信任务管理 / 已处理微信图文评论任务';
                         break;
                 }
                 break;

@@ -37,14 +37,14 @@ function updateNav(obj, isAdd) {
     var wxLike = parseInt($('.updateNum.wxLike').text().split(' ')[2]);
     var wxDianzan = parseInt($('.updateNum.wxDianzan').text().split(' ')[2]);
     var wxLikeQuit = parseInt($('.updateNum.wxLikeQuit').text().split(' ')[2]);
-    //var wxComment = parseInt($('.updateNum.wxComment').text().split(' ')[2]);
+    var wxComment = parseInt($('.updateNum.wxComment').text().split(' ')[2]);
     var wxReply = parseInt($('.updateNum.wxReply').text().split(' ')[2]);
     //var wxFriend = parseInt($('.updateNum.wxFriend').text().split(' ')[2]);
     //var wxCode = parseInt($('.updateNum.wxCode').text().split(' ')[2]);
     //var wxNum = wxArticle + wxLikeQuick + wxLike + wxComment + wxReply + wxFriend + wxCode;
     //var wxNum = wxLikeQuick + wxLike + wxComment + wxReply + wxFriend;
     //var wxNum = wxLikeQuick + wxLike + wxLikeQuit + wxReply + wxFriend;
-    var wxNum = wxLikeQuick + wxLike + wxDianzan + wxLikeQuit + wxReply;
+    var wxNum = wxLikeQuick + wxLike + wxDianzan + wxLikeQuit + wxReply + wxComment;
     if(wxNum > 0) {
         $('.tips.wxArticle.wxLikeQuick.wxLike.wxDianzan.wxLikeQuit.wxComment.wxReply.wxFriend.wxCode').css('display', 'inline');
     }

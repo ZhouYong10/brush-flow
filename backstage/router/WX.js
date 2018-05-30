@@ -883,21 +883,51 @@ router.get('/comment/add', function (req, res) {
         });
 });
 
+router.get('/comment/model', function (req, res) {
+    var smallType = req.query.model;
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: smallType})
+                .then(function (commentType) {
+                    var commentTypeIns = Product.wrapToInstance(commentType);
+                    var myCommentPrice = commentTypeIns.getPriceByRole(user.role);
+                    res.send({
+                        price: myCommentPrice
+                    });
+                });
+        });
+});
+
+// { orderFlag: 'ksgbupk181fko6r',
+//     model: 'comment',
+//     address: 'https://mp.weixin.qq.com/s/DJWrgTgRuCCbe7sdggOPQw',
+//     title: '哈里王子大婚，各品牌上演蹭热点大戏，可以说是非常有趣了',
+//     content: '航空喊口号\r\n很快很快\r\n航空喊口号\r\n好看好看好看\r\n航空喊口号\r\n很快快更公开' }
+
 router.post('/comment/add', function (req, res) {
     var orderInfo = req.body;
-    if(!orderInfo.address){
+    if(!orderInfo.address || orderInfo.address.replace(/(^\s*)|(\s*$)/g, "") == ''){
         return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
-    if(orderInfo.content == '') {
+    if(!orderInfo.content || orderInfo.content.replace(/(^\s*)|(\s*$)/g, "") == '') {
         return res.send('<h1>评论内容不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
-    var num = orderInfo.content.split('\n').length;
-    orderInfo.num = (num > 5) ? num : 5;
+    var contents = orderInfo.content.split('\n');
+    orderInfo.num = 0;
+    for(var i = 0; i < contents.length; i++) {
+        var comment = contents[i].replace(/(^\s*)|(\s*$)/g, "");
+        if(comment != ''){
+            orderInfo.num += 1;
+        }
+    }
+    if(orderInfo.num < 5) {
+        orderInfo.num = 5;
+    }
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);
             order.checkRandomStr(req).then(function() {
-                order.createAndSave(user, {type: 'wx', smallType: 'comment'})
+                order.createAndSave(user, {type: 'wx', smallType: orderInfo.model})
                     .then(function () {
                         socketIO.emit('updateNav', {'wxComment': 1});
                         res.redirect('/wx/comment');

@@ -84,13 +84,13 @@
                                 </a>
                             </td>
                             <td class="am-text-middle">
-                                <a class="am-text-truncate text-break" title="<%= orders[i].title %>">
+                                <a class="am-text-truncate break-css" href="<%= orders[i].address %>" target="_blank" title="<%= orders[i].title %>">
                                     <%= orders[i].title %>
                                 </a>
                             </td>
                             <td class="am-text-middle">
-                                <a class="am-text-truncate text-break" title="<%= orders[i].content.split('\r\n').join(' 【&】 ') %>">
-                                    <%= orders[i].content.split('\r\n').join(' 【&】 ') %>
+                                <a class="am-text-truncate text-break" title="<%= orders[i].content %>">
+                                    <%= orders[i].content.split('\r\n').join('<br/>') %>
                                 </a>
                             </td>
                             <td class="am-text-middle"><%= orders[i].num %> / 条</td>

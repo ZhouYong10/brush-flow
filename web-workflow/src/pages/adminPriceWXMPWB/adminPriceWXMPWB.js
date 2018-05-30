@@ -14,6 +14,7 @@ var wxSmallType = '<td> ' +
     '<option value="readQuick">快速阅读</option> ' +
     '<option value="likeQuick">快速点赞</option> ' +
     '<option value="comment">图文评论</option> ' +
+    '<option value="fansComment">关注评论</option> ' +
     '<option value="code">扫码关注</option> ' +
     '<option value="codeReply">扫码回复</option> ' +
     '</select> ' +
