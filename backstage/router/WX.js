@@ -407,7 +407,6 @@ router.post('/dianzan/add', function (req, res) {
         return res.send('<h1>点赞数量不能为空,且必须是正整数，最低100起，最高25000.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
     orderInfo.num = parseInt(orderInfo.num);
-    orderInfo.title = req.session[orderInfo.address];
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             socketIO.emit('updateNav', {'wxDianzan': 1});
@@ -570,7 +569,6 @@ router.post('/like/add', function (req, res) {
         likeType = 'likeQuick';
         socketIO.emit('updateNav', {'wxLikeQuick': 1});
     }
-    orderInfo.title = req.session[orderInfo.address];
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var order = Order.wrapToInstance(orderInfo);

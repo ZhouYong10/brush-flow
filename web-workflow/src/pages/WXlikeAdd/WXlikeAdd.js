@@ -3,30 +3,19 @@
  */
 var Utils = require('utils');
 
-function isAddress() {
-    return new Promise(function (resolve, reject) {
-        var $address = $('#address');
-        var $title = $('#title');
-        var address = $address.val();
-        if (Utils.isWXhttp(address)) {
-            $address.css({color: 'green'});
-            resolve();
-            $.post('/parse/wx/title/by/address', {address: address}, function (data) {
-                if (data.isOk) {
-                    $title.val(data.title).css({color: 'green'});
-                } else {
-                    $title.val(data.message).css({color: 'red'});
-                }
-            })
-        } else {
-            $address.css({color: 'red'});
-            layer.tips('请输入正确的微信文章地址!', '#address', {
-                tips: [1, '#f00'],
-                time: 4000
-            });
-            reject();
-        }
-    });
+function isAddress(callback) {
+    var $address = $('#address');
+    var address = $address.val();
+    if (Utils.isWXhttp(address)) {
+        callback();
+    } else {
+        $address.css({color: 'red'});
+        layer.tips('请输入正确的微信文章地址!', '#address', {
+            tips: [1, '#f00'],
+            time: 4000
+        });
+        callback(new Error('请输入正确的微信文章地址!'));
+    }
 }
 
 function checkReadLike() {
@@ -77,11 +66,27 @@ $(function () {
             $('#priceShow').val('阅读￥ ' + data.price + '/个, 点赞￥ ' + data.price2 + '/个');
             $('#price').val(data.price);
             $('#price2').val(data.price2);
+            checkReadLike();
         })
     });
 
     $('#address').change(function () {
-        isAddress();
+        var $address = $(this);
+        var $title = $('#title');
+        isAddress(function(err) {
+            if(!err) {
+                $address.css({color: 'green'});
+                $title.val("加载文章标题中......").css({color: 'green'});
+                $.post('/parse/wx/title/by/address', {address: $address.val()}, function (data) {
+                    if (data.isOk) {
+                        $title.val(data.title).css({color: 'green'});
+                        $('#titleCommit').val(data.title);
+                    } else {
+                        $title.val(data.message).css({color: 'red'});
+                    }
+                })
+            }
+        });
     });
 
     $('#readNum').keyup(function () {
@@ -97,7 +102,13 @@ $(function () {
     });
 
     $('#commit').click(function (e) {
-        isAddress().then(function () {
+        isAddress(function(err) {
+            if(err) {
+                e.stopPropagation();
+                e.preventDefault();
+                return ;
+            }
+
             var result = checkReadLike();
             if (result != 'ok') {
                 e.stopPropagation();
@@ -123,9 +134,6 @@ $(function () {
                         break;
                 }
             }
-        }, function () {
-            e.stopPropagation();
-            e.preventDefault();
         })
     })
 });

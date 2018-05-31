@@ -84,6 +84,7 @@ $(function () {
                 var $address = $('#address');
                 var $title = $('#title');
                 $address.css({color: 'green'});
+                $title.val("加载文章标题中......").css({color: 'green'});
                 $.post('/parse/wx/title/by/address', {address: $address.val()}, function (data) {
                     if (data.isOk) {
                         $title.val(data.title).css({color: 'green'});

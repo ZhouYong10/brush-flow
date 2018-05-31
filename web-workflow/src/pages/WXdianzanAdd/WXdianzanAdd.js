@@ -5,18 +5,9 @@ var Utils = require('utils');
 
 function isAddress(callback) {
     var $address = $('#address');
-    var $title = $('#title');
     var address = $address.val();
     if (Utils.isWXhttp(address)) {
-        $address.css({color: 'green'});
         callback(null);
-        $.post('/parse/wx/title/by/address', {address: address}, function (data) {
-            if (data.isOk) {
-                $title.val(data.title).css({color: 'green'});
-            } else {
-                $title.val(data.message).css({color: 'red'});
-            }
-        })
     } else {
         $address.css({color: 'red'});
         layer.tips('请输入正确的微信文章地址!', '#address', {
@@ -60,7 +51,22 @@ $(function () {
     });
 
     $('#address').blur(function () {
-        isAddress(function() {});
+        var $address = $(this);
+        var $title = $('#title');
+        isAddress(function(err) {
+            if(!err) {
+                $address.css({color: 'green'});
+                $title.val("加载文章标题中......").css({color: 'green'});
+                $.post('/parse/wx/title/by/address', {address: $address.val()}, function (data) {
+                    if (data.isOk) {
+                        $title.val(data.title).css({color: 'green'});
+                        $('#titleCommit').val(data.title);
+                    } else {
+                        $title.val(data.message).css({color: 'red'});
+                    }
+                })
+            }
+        });
     });
 
     $('#likeNum').keyup(function () {
@@ -71,7 +77,7 @@ $(function () {
 
     $('#commit').click(function (e) {
         isAddress(function (err) {
-            if (err) {
+            if(err) {
                 e.stopPropagation();
                 e.preventDefault();
                 return;
