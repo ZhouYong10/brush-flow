@@ -59,8 +59,7 @@
                             <th>#</th>
                             <th>创建时间</th>
                             <th>二维码</th>
-                            <th>数量/限速</th>
-                            <th>关注后回复</th>
+                            <th>数量</th>
                             <th>总价</th>
                             <th>进度</th>
                             <th>状态</th>
@@ -79,13 +78,7 @@
                                 <img src="<%= orders[i].photo %>" alt="二维码" title="二维码" width="80" height="80">
                             </td>
                             <td class="am-text-middle">
-                                数量: <%= orders[i].num %> <br/>
-                                限速: <%= orders[i].speed %>/分
-                            </td>
-                            <td class="am-text-middle">
-                                <a class="am-text-truncate text-break" title="<%= orders[i].reply %>">
-                                    <%= orders[i].reply %>
-                                </a>
+                                <%= orders[i].num %>
                             </td>
                             <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                             <td class="am-text-middle"><%= orders[i].schedule %></td>

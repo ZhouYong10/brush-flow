@@ -46,8 +46,7 @@
                                 <th>用户</th>
                                 <th>下单日期</th>
                                 <th>二维码</th>
-                                <th>数量/限速</th>
-                                <th>关注后回复</th>
+                                <th>数量</th>
                                 <th>价格</th>
                                 <th>返利</th>
                                 <th>操作</th>
@@ -61,17 +60,12 @@
                                 <td class="am-text-middle"><%= orders[i].user %></td>
                                 <td class="am-text-middle"><%= orders[i].createTime %></td>
                                 <td class="am-text-middle">
-                                    <img src="<%= orders[i].photo %>" alt="二维码" title="二维码" width="80" height="80">
+                                    <a href="<%= orders[i].photo %>" download="公众号二维码">
+                                        <img src="<%= orders[i].photo %>" alt="二维码" title="二维码" width="80" height="80">
+                                    </a>
                                 </td>
                                 <td class="am-text-middle">
-                                    数量: <%= orders[i].num %> <br/>
-                                    限速: <%= orders[i].speed %>/分
-                                </td>
-                                <td class="am-text-middle">
-                                    <input type="text" value="<%= orders[i].reply %>" style="width: 56px;"><br/>
-                                    <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
-                                       title="<%= orders[i].reply %>"
-                                       data-clipboard-text="<%= orders[i].reply %>">复制</a>
+                                    <%= orders[i].num %>
                                 </td>
                                 <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                                 <td class="am-text-middle">

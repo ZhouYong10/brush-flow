@@ -1001,7 +1001,7 @@ router.get('/date/search/code', function (req, res) {
                     createTime: new RegExp(req.query.createTime)
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    Order.addSchedule(obj.results, 50);
+                    Order.addSchedule(obj.results, 10);
                     res.render('WXcode', {
                         title: '扫码关注',
                         money: user.funds,
@@ -1023,23 +1023,17 @@ router.get('/code/add', function (req, res) {
                 .then(function(fans) {
                     var fansIns = Product.wrapToInstance(fans);
                     var myFansPrice = fansIns.getPriceByRole(user.role);
-                    Product.open().findOne({type: 'wx', smallType: 'codeReply'})
-                        .then(function(reply) {
-                            var replyIns = Product.wrapToInstance(reply);
-                            var myReplyPrice = replyIns.getPriceByRole(user.role);
-                            Order.getRandomStr(req).then(function(orderFlag) {
-                                res.render('WXcodeAdd', {
-                                    title: '添加扫码关注任务',
-                                    money: user.funds,
-                                    username: user.username,
-                                    userStatus: user.status,
-                                    role: user.role,
-                                    fansPrice: myFansPrice,
-                                    replyPrice: myReplyPrice,
-                                    orderFlag: orderFlag
-                                });
-                            })
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WXcodeAdd', {
+                            title: '添加扫码关注任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            fansPrice: myFansPrice,
+                            orderFlag: orderFlag
                         });
+                    })
                 });
         });
 });
@@ -1067,12 +1061,11 @@ router.post('/code/add', function (req, res) {
             var newFilePath = path.join(logoDir + newFileName);
             fs.rename(filePath, newFilePath, function (err) {
                 order[field] = '/codes/' + newFileName;
-                order.num2 = order.reply == '' ? 0 : order.num;
                 User.open().findById(req.session.passport.user)
                     .then(function (user) {
                         var orderIns = Order.wrapToInstance(order);
                         orderIns.checkRandomStr(req).then(function() {
-                            orderIns.createAndSaveTwo(user, {type: 'wx', smallType: 'code'}, {type: 'wx', smallType: 'codeReply'})
+                            orderIns.createAndSave(user, {type: 'wx', smallType: 'code'})
                                 .then(function () {
                                     socketIO.emit('updateNav', {'wxCode': 1});
                                     res.redirect('/wx/code');
