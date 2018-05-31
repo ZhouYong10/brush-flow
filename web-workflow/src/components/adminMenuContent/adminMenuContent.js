@@ -2,6 +2,18 @@
  * Created by ubuntu64 on 3/3/16.
  */
 $(function () {
+
+    var pathname = location.pathname;
+    console.log(pathname,'pathname 1111111')
+    var aims = $('section').find("a[href='"+ pathname +"']");
+    aims.css('color', 'white')
+        .parent().css('background', "#57c6ff");
+
+    aims.parentsUntil('dl').addClass('am-in');
+    aims.parentsUntil('section').addClass('am-active');
+
+
+
     $.get('/admin/update/header/nav', function (obj) {
         updateNav(obj);
     });
