@@ -26,14 +26,14 @@
                     <div class="am-panel-hd prompt-title">提示</div>
                     <div class="am-panel-bd">
                         <p style="font-size: 15px;">
-                            推广说明：　通过以下链接注册的用户即为你的下级用户。<br/>
+                            推广说明：　通过您的推广渠道，从以下链接注册的用户即为您的下级用户。<br/>
                             推广链接：　<span><%= host %></span>
                             <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
                                title="<%= host %>"
                                data-clipboard-text="<%= host %>">点击复制</a>
                             <br/>
-                            返利规则：　<span><%= userUpdatePrice.upToSuper.name %>返利 <%= userUpdatePrice.upToSuper.toParent %></span>元 ;　
-                            <span><%= userUpdatePrice.upToTop.name %>返利 <%= userUpdatePrice.upToTop.toParent %></span>元。
+                            返利规则：　下级充值消费，返利相应的差价。下级从<span><%= userUpdatePrice.upToSuper.name %>返利 <%= userUpdatePrice.upToSuper.toParent %></span>元 ;　
+                            从<span><%= userUpdatePrice.upToTop.name %>返利 <%= userUpdatePrice.upToTop.toParent %></span>元。
 
                         </p>
                     </div>
