@@ -1,0 +1,255 @@
+
+<link rel="stylesheet" href="menuContent.scss?__inline">
+
+
+<section data-am-widget="accordion" class="am-accordion am-accordion-gapped menuContent" data-am-accordion='{  }'>
+
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            人工任务大厅
+            <span class="navTips complaints"> * </span>
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li>
+                        <a id="handleTaskAll" href="/task/all">任务大厅</a>
+                    </li>
+                    <li>
+                        <a id="handleTaskAlre" href="/task/alre">做过的任务</a>
+                    </li>
+                    <li>
+                        <a href="/task/complaints">被投诉任务
+                        <span class="navTips navUpdateNum complaints"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/task/complaints/alre">已处理投诉</a>
+                    </li>
+                    <li>
+                        <a href="/task/account">我的信息</a>
+                    </li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
+
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            人工任务发布
+            <span class="navTips checks"> * </span>
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li>
+                        <a id="handleWXfans" href="/artificial/WX/fans">微信人工关注</a>
+                    </li>
+                    <li>
+                        <a id="handleWXfriend" href="/artificial/WX/friend">微信人工好友</a>
+                    </li>
+                    <li>
+                        <a id="handleWXvote" href="/artificial/WX/vote">微信人工投票</a>
+                    </li>
+                    <li>
+                        <a id="handleWXcode" href="/artificial/WX/code">微信人工扫码</a>
+                    </li>
+                    <li>
+                        <a id="handleWXarticle" href="/artificial/WX/article">微信原文分享</a>
+                    </li>
+                    <li>
+                        <a href="/artificial/task/check">
+                            待验收任务
+                            <span class="navTips navUpdateNum checks"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/artificial/task/complaint">我的投诉</a>
+                    </li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
+
+    <!--<dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            论坛顶贴
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            &lt;!&ndash; 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 &ndash;&gt;
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li>
+                        <a href="/forum/create/task">提交任务</a>
+                    </li>
+                    <li>
+                        <a href="/forum/taskHistory">任务管理</a>
+                    </li>
+                </ul>
+            </div>
+        </dd>
+    </dl>-->
+
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            视频推广
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+                    <li>
+                        <a href="/flow/forumTask">论坛流量任务</a>
+                    </li>
+
+                    <!--<li>-->
+                    <!--<a href="/flow/videoTask">视频流量任务</a>-->
+                    <!--</li>-->
+
+                    <li>
+                        <a id="flowVideoList" href="/flow/videoList">视频流量任务</a>
+                    </li>
+
+                    <li>
+                        <a id="flowTaskHistory" href="/flow/taskHistory">任务管理</a>
+                    </li>
+                </ul>
+            </div>
+        </dd>
+    </dl>
+
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            微信推广
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+
+                    <!--<li>-->
+                    <!--<a href="/WX/friend" class="menu-item">公众粉丝(1000以上)</a>-->
+                    <!--</li>-->
+
+                    <li>
+                        <a id="WXlike" href="/WX/like">微信阅读</a>
+                    </li>
+
+                    <li>
+                        <a id="WXfans" href="/WX/fans">搜索关注</a>
+                    </li>
+
+                    <li>
+                        <a id="WXcode" href="/WX/code">扫码关注</a>
+                    </li>
+
+                    <li>
+                        <a id="WXdianzan" href="/WX/dianzan">文章点赞</a>
+                    </li>
+
+                    <!--<li>-->
+                    <!--<a href="/WX/like/quick"><span>图文阅读</span><span> ( </span><span style="color: red;">快速</span><span> ) </span></a>-->
+                    <!--</li>-->
+
+                    <li>
+                        <a id="WXcomment" href="/WX/comment">图文评论</a>
+                    </li>
+
+                    <!--<li>-->
+                    <!--<a href="/WX/share">原文/分享/收藏任务</a>-->
+                    <!--</li>-->
+
+                </ul>
+            </div>
+        </dd>
+    </dl>
+
+    <!--<dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            美拍推广
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            &lt;!&ndash; 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 &ndash;&gt;
+            <div class="am-accordion-content">
+                <ul class="list">
+
+                    <li>
+                        <a href="/MP/like">点赞任务</a>
+                    </li>
+
+                    <li>
+                        <a href="/MP/comment">评论任务</a>
+                    </li>
+
+                    <li>
+                        <a href="/MP/attention">关注任务</a>
+                    </li>
+
+                    <li>
+                        <a href="/MP/forward">转发任务</a>
+                    </li>
+
+                </ul>
+            </div>
+        </dd>
+    </dl>-->
+
+    <dl class="am-accordion-item">
+        <dt class="am-accordion-title title">
+            微博推广
+        </dt>
+        <dd class="am-accordion-bd am-collapse ">
+            <!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+            <div class="am-accordion-content">
+                <ul class="list">
+
+                    <li>
+                        <a id="WBlike" href="/WB/like">微博点赞</a>
+                    </li>
+
+                    <!--<li>-->
+                    <!--<a href="/WB/vote">投票任务</a>-->
+                    <!--</li>-->
+
+                    <li>
+                        <a id="WBfans" href="/WB/fans">微博粉丝</a>
+                    </li>
+
+                    <li>
+                        <a id="WBforward" href="/WB/forward">微博转发</a>
+                    </li>
+
+                </ul>
+            </div>
+        </dd>
+    </dl>
+
+    <!--<dl class="am-accordion-item">
+        <dt class="titleAlone">
+            <a href="/WX/read/check">阅读查询</a>
+        </dt>
+    </dl>-->
+
+    <dl class="am-accordion-item">
+        <dt class="titleAlone">
+            <a href="/user/recharge" style="color:red;">在线充值</a>
+        </dt>
+    </dl>
+
+    <dl class="am-accordion-item">
+        <dt class="titleAlone">
+            <a href="/user/addLowerUser">推广赚钱</a>
+        </dt>
+    </dl>
+
+    <dl class="am-accordion-item">
+        <dt class="titleAlone">
+            <a href="/user/my/price">代理升级</a>
+        </dt>
+    </dl>
+</section>
+
+<script src="/socket.io/socket.io.js"></script>
+

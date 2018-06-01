@@ -12,7 +12,79 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-g-collapse">
+
+                    <div class="am-panel am-panel-danger">
+                        <div class="am-panel-hd prompt-title">提示</div>
+                        <div class="am-panel-bd">
+                            1、提现金额不能小于1元。<br/>
+                            2、平台用户提现支付宝必须和充值支付宝一致，否则平台不受理（投手提现不受此限制）。<br/>
+                            3、提现支付宝昵称请填实名（个别支付宝用户需要实名验证，敬请谅解），否则支付宝无法转账。<br/>
+                            <span class="tips">注: 提现将在1至2个工作日内到账。</span>
+                        </div>
+                    </div>
+
+                    <form class="am-form am-form-horizontal" method="post" action="/user/withdraw/add">
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                提现金额
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-4 am-u-end">
+                                <input id="userFunds" type="hidden" value="<%= money %>">
+                                <input id="funds" class="am-radius am-input-sm input" type="text"
+                                       placeholder="最少提现1元" name="funds">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                支付宝账户
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-4 am-u-end">
+                                <input id="aliCount" class="am-radius am-input-sm input" type="text"
+                                       placeholder="务必核对准确" name="alipayCount">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                支付宝昵称
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-4 am-u-end">
+                                <input id="aliName" class="am-radius am-input-sm input" type="text"
+                                       placeholder="务必核对准确" name="alipayName">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                                <button id="commit" type="submit" class="am-btn am-btn-primary am-radius">确认提现</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -76,7 +148,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 <!--import plugin-->

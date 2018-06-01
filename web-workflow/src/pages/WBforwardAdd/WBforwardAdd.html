@@ -12,7 +12,125 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-g-collapse">
+
+                    <div class="am-panel am-panel-danger">
+                        <div class="am-panel-hd prompt-title">提示</div>
+                        <div class="am-panel-bd">
+                            1.本平台不允许赞的内容包括：政治敏感话题、违法、违规、反动、未经官方证实的负面新闻、侮辱型、攻击性词语、维权话题、虚假广告等内容，发现立即封停帐号。
+                            <br/>
+                            2.个别微博进度有延时，实际进度请看下单链接。<br/>
+
+                            3.平台最低下单100起，不足100不能提交订单。
+                        </div>
+                    </div>
+
+                    <form class="am-form am-form-horizontal" method="post" action="/wb/forward/add">
+                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                任务价格
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11 am-g-collapse">
+                                <div class="am-u-sm-12 am-u-lg-2">
+                                    <select id="taskPrice" class="am-radius am-input-sm input" name="smallType">
+                                        <option value="forward">转发</option>
+                                        <option value="forwardTwo">转发-达人20%</option>
+                                        <option value="forwardEight">转发-达人80%</option>
+                                    </select>
+                                </div>
+                                <div class="am-u-sm-12 am-u-lg-10">
+                                    <span id="showPrice" class="tips">价格为￥ <%= price %>/个</span>
+                                    <input id="price" type="hidden" value="<%= price %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                微博地址
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="address" class="am-radius am-input-sm input" type="text" name="address"
+                                       placeholder="例如：http://weibo.com/u/1742727537 或者微博ID: 1742727537">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                任务数量
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input id="readNum" class="am-radius am-input-sm input" type="text"
+                                       placeholder="最少100,无上限。" name="num">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                任务总价
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input id="total" class="am-radius am-input-sm input" type="text" value="￥ 0" disabled>
+                                <input id="userFunds" type="hidden" value="<%= money %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                转发类型
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <label class="am-radio-inline" style="border: none; background: none;">
+                                    <input id="forward" type="radio" name="forwardType" value="纯转发" checked>纯转发
+                                </label>
+                                <label class="am-radio-inline" style="border: none; background: none;">
+                                    <input id="commentForward" type="radio" name="forwardType" value="转发并评论给作者"><span>转发并评论给作者</span>
+                                    <span class="tips priceTip forwardTip">(＊如选择“纯转发”将会只转发，不会有任何评论)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group commentContent">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                评论内容
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                            <textarea id="commentContent" class="am-radius" rows="3"
+                                      name="content" placeholder="评论内容(一行一条)"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                                <button id="commit" type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -122,7 +240,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 <!--import plugin-->

@@ -119,11 +119,11 @@ router.get('/alre', function (req, res) {
         });
 });
 
-router.get('/search/task', function (req, res) {
+router.post('/search/task', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var query = {taskUserId: user._id};
-            var titleOrAds = req.query.titleOrAds;
+            var titleOrAds = req.body.titleOrAds;
             if (titleOrAds) {
                 if(titleOrAds.indexOf('http://') != -1) {
                     query.address = titleOrAds;
@@ -131,8 +131,8 @@ router.get('/search/task', function (req, res) {
                     query.title = new RegExp(titleOrAds);
                 }
             }
-            if (req.query.createTime) {
-                query.createTime = new RegExp(req.query.createTime);
+            if (req.body.createTime) {
+                query.createTime = new RegExp(req.body.createTime);
             }
             Task.open().findPages(query, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {

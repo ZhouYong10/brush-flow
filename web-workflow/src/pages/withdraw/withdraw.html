@@ -12,7 +12,81 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd">
+
+                    <a href="/user/withdraw/add" class="am-btn am-btn-success am-radius">
+                        <i class="am-icon-plus-circle"></i>
+                        我要提现
+                    </a>
+                    <div class="am-scrollable-horizontal am-text-center withdraw-content">
+                        <table class="am-table am-table-bordered am-table-radius am-text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>申请日期</th>
+                                <th>支付宝账户</th>
+                                <th>支付宝昵称</th>
+                                <th>之前余额</th>
+                                <th>提现金额</th>
+                                <th>之后余额</th>
+                                <th>状态</th>
+                                <th>失败反馈</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i = 0; i < withdraws.length; i++){ %>
+                            <tr class="<% if(withdraws[i].status ==  '成功'){ %> am-primary
+                         <% }else if(withdraws[i].status ==  '失败'){ %> am-danger <% } %>">
+                                <td><%= i + 1 %></td>
+                                <td><%= withdraws[i].createTime %></td>
+                                <td>
+                                    <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                       title="<%= withdraws[i].alipayCount %>"
+                                       data-clipboard-text="<%= withdraws[i].alipayCount %>">复制</a>
+                                </td>
+                                <td><%= withdraws[i].alipayName %></td>
+                                <td><%= withdraws[i].userOldFunds %></td>
+                                <td><%= withdraws[i].funds %></td>
+                                <td><%= withdraws[i].userNowFunds %></td>
+                                <td><%= withdraws[i].status %></td>
+                                <td>
+                                    <a class="am-text-truncate text-break" title="<%= withdraws[i].refuseInfo %>">
+                                        <%= withdraws[i].refuseInfo %>
+                                    </a>
+                                </td>
+                            </tr>
+                            <% } %>
+
+                            </tbody>
+                        </table>
+
+                        <input type="hidden" value="<%= pages %>" id="pages">
+                        <div id="laypage"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -78,7 +152,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 

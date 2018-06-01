@@ -12,7 +12,93 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-g-collapse">
+                    <div class="am-panel am-panel-danger">
+                        <div class="am-panel-hd prompt-title">提示</div>
+                        <div class="am-panel-bd">
+                            <p style="font-size: 15px;">
+                                推广说明：　通过您的推广渠道，从以下链接注册的用户即为您的下级用户。<br/>
+                                推广链接：　<span><%= host %></span>
+                                <a class="clipboard am-btn am-btn-primary am-radius am-btn-xs"
+                                   title="<%= host %>"
+                                   data-clipboard-text="<%= host %>">点击复制</a>
+                                <br/>
+                                返利规则：　下级充值消费，返利相应的差价。下级从<span><%= userUpdatePrice.upToSuper.name %>返利 <%= userUpdatePrice.upToSuper.toParent %></span>元 ;　
+                                从<span><%= userUpdatePrice.upToTop.name %>返利 <%= userUpdatePrice.upToTop.toParent %></span>元。
+
+                            </p>
+                        </div>
+                    </div>
+
+                    <form class="am-form am-form-horizontal">
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                账号
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="userName" class="am-radius am-input-sm input" type="text" placeholder="用户名">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                密码
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="password" class="am-radius am-input-sm input" type="password" placeholder="用户密码">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">qq</label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="qq" class="am-radius am-input-sm input" type="text" placeholder="用户qq">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">电话</label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="phone" class="am-radius am-input-sm input" type="text" placeholder="用户电话">
+                            </div>
+                        </div>
+
+                        <!--<div class="am-form-group">-->
+                        <!--<label class="am-u-sm-3 am-u-lg-1">备注</label>-->
+                        <!--<div class="am-u-sm-9 am-u-lg-11">-->
+                        <!--<textarea id="remark" class="am-radius" rows="1" placeholder="添加用户备注"></textarea>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                                <button id="commit" class="am-btn am-btn-primary am-radius am-btn-sm">添加用户</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -72,12 +158,12 @@
                         </div>
                     </div>
 
-                    <!--<div class="am-form-group">-->
-                        <!--<label class="am-u-sm-3 am-u-lg-1">备注</label>-->
-                        <!--<div class="am-u-sm-9 am-u-lg-11">-->
-                            <!--<textarea id="remark" class="am-radius" rows="1" placeholder="添加用户备注"></textarea>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    &lt;!&ndash;<div class="am-form-group">&ndash;&gt;
+                    &lt;!&ndash;<label class="am-u-sm-3 am-u-lg-1">备注</label>&ndash;&gt;
+                    &lt;!&ndash;<div class="am-u-sm-9 am-u-lg-11">&ndash;&gt;
+                    &lt;!&ndash;<textarea id="remark" class="am-radius" rows="1" placeholder="添加用户备注"></textarea>&ndash;&gt;
+                    &lt;!&ndash;</div>&ndash;&gt;
+                    &lt;!&ndash;</div>&ndash;&gt;
 
                     <div class="am-form-group">
                         <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
@@ -90,7 +176,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 

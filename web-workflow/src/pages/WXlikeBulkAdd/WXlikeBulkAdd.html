@@ -12,7 +12,35 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div id="wxLike" class="am-panel-bd">
+
+                    <input type="hidden" value="<%= price %>" v-model="readPrice">
+                    <input type="hidden" value="<%= price2 %>" v-model="likePrice">
+
+                    <component :is="currentView" :view.sync="currentView" :orders.sync="orders" :price="readPrice" :price2="likePrice"></component>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -32,7 +60,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 

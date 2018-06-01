@@ -12,7 +12,64 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd">
+
+                    <a class="am-btn am-btn-success am-radius" href="/user/feedback/add">
+                        <i class="am-icon-plus-circle"></i>
+                        我要提意见
+                    </a>
+                    <div class="am-scrollable-horizontal am-text-center feedback-content">
+                        <table class="am-table am-table-bordered am-table-radius am-table-striped am-text-nowrap am-table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>提交日期</th>
+                                <th>反馈内容</th>
+                                <th>状态</th>
+                                <th>处理人意见</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i = 0; i < feedbacks.length; i++){ %>
+                            <tr>
+                                <td><%= i + 1 %></td>
+                                <td><%= feedbacks[i].createTime %></td>
+                                <td><%= feedbacks[i].content %></td>
+                                <td><%= feedbacks[i].status %></td>
+                                <td><%= feedbacks[i].treatAdvice %></td>
+                            </tr>
+                            <% } %>
+
+                            </tbody>
+                        </table>
+
+                        <input type="hidden" value="<%= pages %>" id="pages">
+                        <div id="laypage"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -61,7 +118,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 

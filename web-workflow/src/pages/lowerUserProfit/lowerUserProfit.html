@@ -12,7 +12,97 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd">
+
+                    <div id="searchForm" class="am-form am-form-inline">
+                        <validator name="search">
+                            <div class="am-form-group am-form-group-sm search-title">
+                                <label for="rechargeTime" class="am-u-sm-3 am-form-label taskTypeLabel">消费时间</label>
+                                <div class="am-u-sm-9 taskTypeWrap">
+                                    <form id="search" method="get" action="/user/search/lowerUser/profit">
+                                        <input id="rechargeTime" type="text" class="am-form-field am-input-sm am-radius"
+                                               name="createTime" placeholder="点击选择消费日期"
+                                               onclick="laydate({istime: false, format: 'YYYY-MM-DD'})"
+                                               v-validate:createTime="{required: true}">
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="am-form-group am-form-group-sm">
+                                <button form="search" class="am-btn am-btn-success am-radius am-btn-sm" v-if="$search.valid">
+                                    <i class="am-icon-search"></i>
+                                    搜索
+                                </button>
+                            </div>
+                        </validator>
+                        <div class="totalProfit">总计返利： ￥<%= totalProfit %></div>
+                    </div>
+
+                    <div class="am-scrollable-horizontal am-text-center flowTask-content">
+                        <table class="am-table am-table-bordered am-table-radius am-text-nowrap am-table-hover">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>消费时间</th>
+                                <th>返利用户</th>
+                                <th>消费类型</th>
+                                <th>之前余额</th>
+                                <th>返利金额</th>
+                                <th>之后余额</th>
+                                <th>描述</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i = 0; i < profits.length; i ++ ){ %>
+                            <tr class="<% if(profits[i].status == 'refund'){ %> am-danger <% } %>">
+                                <td><%= i + 1 %></td>
+                                <td><%= profits[i].createTime %></td>
+                                <td><%= profits[i].orderUsername %></td>
+                                <td><%= profits[i].typeName %><%= profits[i].smallTypeName %></td>
+                                <td><%= profits[i].userOldFunds %></td>
+                                <% if(profits[i].status == 'success'){ %>
+                                <td>
+                                    <span class="profitSuccess">￥<%= profits[i].funds %></span>
+                                </td>
+                                <% } %>
+                                <% if(profits[i].status == 'refund'){ %>
+                                <td>￥<%= profits[i].funds %></td>
+                                <% } %>
+                                <td><%= profits[i].userNowFunds %></td>
+                                <td><%= profits[i].description %></td>
+                            </tr>
+                            <% } %>
+
+                            </tbody>
+                        </table>
+
+                        <input type="hidden" value="<%= pages %>" id="pages">
+                        <div id="laypage"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -94,7 +184,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 

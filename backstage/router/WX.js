@@ -107,12 +107,12 @@ router.post('/friend/add', function (req, res) {
                 order.createAndSave(user, {type: 'wx', smallType: 'friend'})
                     .then(function () {
                         socketIO.emit('updateNav', {'wxFriend': 1});
-                        res.redirect('/wx/friend');
+                        res.redirect('/WX/friend');
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！!</h1>')
                     });
             }, function(msg) {
-                res.redirect('/wx/friend');
+                res.redirect('/WX/friend');
             })
         });
 });
@@ -141,14 +141,14 @@ router.get('/fans', function (req, res) {
         });
 });
 
-router.get('/account/search/fans', function (req, res) {
+router.post('/account/search/fans', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wx',
                     smallType: 'fans',
-                    account: req.query.account
+                    account: req.body.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
@@ -211,12 +211,12 @@ router.post('/fans/add', function (req, res) {
                 order.createAndSave(user, {type: 'wx', smallType: 'fans'})
                     .then(function () {
                         socketIO.emit('updateNav', {'wxReply': 1});
-                        res.redirect('/wx/fans');
+                        res.redirect('/WX/fans');
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                     });
             }, function(msg) {
-                res.redirect('/wx/fans');
+                res.redirect('/WX/fans');
             })
         });
 });
@@ -305,12 +305,12 @@ router.post('/share/add', function (req, res) {
                 order.createAndSave(user, {type: 'wx', smallType: orderInfo.smallType})
                     .then(function () {
                         socketIO.emit('updateNav', {'wxArticle': 1});
-                        res.redirect('/wx/share');
+                        res.redirect('/WX/share');
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                     });
             }, function(msg) {
-                res.redirect('/wx/share');
+                res.redirect('/WX/share');
             })
         });
 });
@@ -351,14 +351,14 @@ router.get('/dianzan', function (req, res) {
         });
 });
 
-router.get('/account/search/dianzan', function (req, res) {
+router.post('/account/search/dianzan', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                 userId: user._id,
                 type: 'wx',
                 smallType: 'likeQuick',
-                address: req.query.account
+                address: req.body.account
             }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
@@ -415,12 +415,12 @@ router.post('/dianzan/add', function (req, res) {
                 order.checkRandomStr(req).then(function() {
                     order.createAndSave(user, {type: 'wx', smallType: 'likeQuick'})
                         .then(function () {
-                            res.redirect('/wx/dianzan');
+                            res.redirect('/WX/dianzan');
                         }, function() {
                             res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                         });
                 }, function(msg) {
-                    res.redirect('/wx/dianzan');
+                    res.redirect('/WX/dianzan');
                 })
             }else {
                 order.createAndSave(user, {type: 'wx', smallType: 'likeQuick'})
@@ -461,14 +461,14 @@ router.get('/like', function (req, res) {
         });
 });
 
-router.get('/account/search/like', function (req, res) {
+router.post('/account/search/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wx',
                     smallType: {$in: ['read','readQuick']},
-                    address: req.query.account
+                    address: req.body.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
@@ -576,12 +576,12 @@ router.post('/like/add', function (req, res) {
                 order.checkRandomStr(req).then(function() {
                     order.createAndSaveTwo(user, {type: 'wx', smallType: readType}, {type: 'wx', smallType: likeType})
                         .then(function () {
-                            res.redirect('/wx/like');
+                            res.redirect('/WX/like');
                         }, function() {
                             res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                         });
                 }, function(msg) {
-                    res.redirect('/wx/like');
+                    res.redirect('/WX/like');
                 })
             }else {
                 order.createAndSaveTwo(user, {type: 'wx', smallType: readType}, {type: 'wx', smallType: likeType})
@@ -746,12 +746,12 @@ router.post('/like/quick/add', function (req, res) {
                             order.createAndSaveTwo(user, {type: 'wx', smallType: 'readQuick'}, {type: 'wx', smallType: 'likeQuick'})
                                 .then(function () {
                                     socketIO.emit('updateNav', {'wxLikeQuick': 1});
-                                    res.redirect('/wx/like/quick');
+                                    res.redirect('/WX/like/quick');
                                 }, function() {
                                     res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                                 });
                         }, function(msg) {
-                            res.redirect('/wx/like/quick');
+                            res.redirect('/WX/like/quick');
                         })
                     }else {
                         order.createAndSaveTwo(user, {type: 'wx', smallType: 'readQuick'}, {type: 'wx', smallType: 'likeQuick'})
@@ -928,24 +928,24 @@ router.post('/comment/add', function (req, res) {
                 order.createAndSave(user, {type: 'wx', smallType: orderInfo.model})
                     .then(function () {
                         socketIO.emit('updateNav', {'wxComment': 1});
-                        res.redirect('/wx/comment');
+                        res.redirect('/WX/comment');
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                     });
             }, function(msg) {
-                res.redirect('/wx/comment');
+                res.redirect('/WX/comment');
             })
         });
 });
 
-router.get('/account/search/comment', function (req, res) {
+router.post('/account/search/comment', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wx',
                     smallType: 'comment',
-                    address: req.query.account
+                    address: req.body.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results);
@@ -989,14 +989,14 @@ router.get('/code', function (req, res) {
         });
 });
 
-router.get('/date/search/code', function (req, res) {
+router.post('/date/search/code', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wx',
                     smallType: 'code',
-                    createTime: new RegExp(req.query.createTime)
+                    createTime: new RegExp(req.body.createTime)
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 10);
@@ -1066,12 +1066,12 @@ router.post('/code/add', function (req, res) {
                             orderIns.createAndSave(user, {type: 'wx', smallType: 'code'})
                                 .then(function () {
                                     socketIO.emit('updateNav', {'wxCode': 1});
-                                    res.redirect('/wx/code');
+                                    res.redirect('/WX/code');
                                 }, function() {
                                     res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                                 });
                         }, function(msg) {
-                            res.redirect('/wx/code');
+                            res.redirect('/WX/code');
                         })
                     });
             });

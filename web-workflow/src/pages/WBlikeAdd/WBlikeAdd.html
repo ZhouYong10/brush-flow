@@ -12,7 +12,91 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-g-collapse">
+
+                    <div class="am-panel am-panel-danger">
+                        <div class="am-panel-hd prompt-title">提示</div>
+                        <div class="am-panel-bd">
+                            1.本平台不允许赞的内容包括：政治敏感话题、违法、违规、反动、未经官方证实的负面新闻、侮辱型、攻击性词语、维权话题、虚假广告等内容，发现立即封停帐号。
+                            <br/>
+                            2.个别微博进度有延时，实际进度请看下单链接。<br/>
+
+                            3.平台最低下单100起，不足100不能提交订单。
+                        </div>
+                    </div>
+
+                    <form class="am-form am-form-horizontal" method="post" action="/wb/like/add">
+                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                任务价格
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input class="am-radius am-input-sm input" type="text" value="￥ <%= price %>/个" disabled>
+                                <input id="price" type="hidden" value="<%= price %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                任务地址
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="address" class="am-radius am-input-sm input" type="text"
+                                       placeholder="评论地址" name="address">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                任务数量
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input id="readNum" class="am-radius am-input-sm input" type="text"
+                                       placeholder="最少100,无上限。" name="num">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                任务总价
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input id="total" class="am-radius am-input-sm input" type="text" value="￥ 0" disabled>
+                                <input id="userFunds" type="hidden" value="<%= money %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                                <button id="commit" type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -88,7 +172,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 <!--import plugin-->

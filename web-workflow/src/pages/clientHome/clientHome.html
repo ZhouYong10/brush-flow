@@ -12,43 +12,87 @@
 </head>
 <body>
 
-<div id="app">
+<% if(true){ %>
+    <div id="app">
 
-    <link rel="import" href="../../components/header/header.html?__inline">
-    <link rel="import" href="../../components/menu/menu.html?__inline">
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
 
     <div id="app-content" class="app-content am-g">
 
-        <div class="am-panel am-panel-primary">
-            <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd">
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
 
-                <ul class="am-list">
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd">
 
-                    <% for(var i = 0; i < placards.length; i++) { %>
-                    <li>
-                        <a>
-                            <span>【<%= placards[i].placardName %>】 </span>
-                            <span><%= placards[i].sendTime %> &nbsp;</span>
-                            <span>
+                    <ul class="am-list">
+
+                        <% for(var i = 0; i < placards.length; i++) { %>
+                        <li>
+                            <a>
+                                <span>【<%= placards[i].placardName %>】 </span>
+                                <span><%= placards[i].sendTime %> &nbsp;</span>
+                                <span>
                                 <%= placards[i].placardContent %>
                                 <% if(i == 0 || i == 1){ %>
                                 <img src="/static/images/new-placard.gif" style="display: inline;" width="38">
                                 <% } %>
                             </span>
-                        </a>
-                    </li>
-                    <% } %>
+                            </a>
+                        </li>
+                        <% } %>
 
-                </ul>
+                    </ul>
 
-                <input type="hidden" value="<%= pages %>" id="pages">
-                <div id="laypage" class="am-text-center"></div>
+                    <input type="hidden" value="<%= pages %>" id="pages">
+                    <div id="laypage" class="am-text-center"></div>
+
+                </div>
             </div>
         </div>
-
     </div>
 </div>
+<% }else{ %>
+   <!-- <div id="app">
+   <link rel="import" href="../../components/header/header.html?__inline">
+   <link rel="import" href="../../components/menu/menu.html?__inline">
+
+   <div id="app-content" class="app-content am-g">
+
+       <div class="am-panel am-panel-primary">
+           <div class="am-panel-hd"><%= title %></div>
+           <div class="am-panel-bd">
+
+               <ul class="am-list">
+
+                   <% for(var i = 0; i < placards.length; i++) { %>
+                   <li>
+                       <a>
+                           <span>【<%= placards[i].placardName %>】 </span>
+                           <span><%= placards[i].sendTime %> &nbsp;</span>
+                           <span>
+                               <%= placards[i].placardContent %>
+                               <% if(i == 0 || i == 1){ %>
+                               <img src="/static/images/new-placard.gif" style="display: inline;" width="38">
+                               <% } %>
+                           </span>
+                       </a>
+                   </li>
+                   <% } %>
+
+               </ul>
+
+               <input type="hidden" value="<%= pages %>" id="pages">
+               <div id="laypage" class="am-text-center"></div>
+           </div>
+       </div>
+   </div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 

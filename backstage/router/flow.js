@@ -150,13 +150,13 @@ router.get('/videoList', function (req, res) {
         });
 });
 
-router.get('/product/search/name', function (req, res) {
+router.post('/product/search/name', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Product.open().find({
                 type: 'flow',
                 smallType: 'video',
-                name: new RegExp(req.query.productName)
+                name: new RegExp(req.body.productName)
             }).then(function (obj) {
                 res.render('flowVideoList', {
                     title: '视频流量任务列表',
@@ -248,15 +248,15 @@ router.get('/taskHistory', function (req, res) {
         });
 });
 
-router.get('/search/flow', function (req, res) {
+router.post('/search/flow', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             var query = {userId: user._id, type: 'flow'};
-            if(req.query.address){
-                query.address = req.query.address;
+            if(req.body.address){
+                query.address = req.body.address;
             }
-            if (req.query.createTime) {
-                query.createTime = new RegExp(req.query.createTime);
+            if (req.body.createTime) {
+                query.createTime = new RegExp(req.body.createTime);
             }
             Order.open().findPages(query, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {

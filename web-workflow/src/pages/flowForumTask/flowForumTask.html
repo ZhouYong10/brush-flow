@@ -12,14 +12,98 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-g-collapse">
+
+                    <div class="am-panel am-panel-danger">
+                        <div class="am-panel-hd prompt-title">提示</div>
+                        <div class="am-panel-bd">
+                            1、平台通用刷流量业务，经过我们一定时间测试，支持市面上90%以上的页面刷流量，但任然有一部分页面不支持【后续技术会针对这类网站逐步单独开发】<br>
+                            2、已支持的网站，流量任务完成后如果实际流量数量不够，系统自动免费补刷。<br><br>
+                            <span class="tips">价格说明：刷10000次起步，不足10000 按10000计算，超过部分按照5000来算，不足5000按5000计算</span>
+
+                        </div>
+                    </div>
+
+                    <form class="am-form am-form-horizontal" method="post" action="/flow/forumTask">
+                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                <span>任务价格</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input class="am-radius am-input-sm input" type="text" value="￥ <%= price %>/5000" disabled>
+                                <input id="price" type="hidden" value="<%= price %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                <span>目标地址</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="address" class="am-radius am-input-sm input" type="text"
+                                       placeholder="任务地址" name="address">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="readNum" class="am-u-sm-3 am-u-lg-1">
+                                <span>任务数量</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="readNum" class="am-radius am-input-sm input" type="text"
+                                       placeholder="刷10000次起步，不足10000 按10000计算，超过部分按照5000来算，不足5000按5000计算"
+                                       name="num">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                <span>任务总价</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input id="total" class="am-radius am-input-sm input" type="text" value="￥ 0" disabled>
+                                <input id="userFunds" type="hidden" value="<%= money %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                                <button id="commit" type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
 
     <div id="app-content" class="app-content am-g">
 
-        <div id="flowForum" class="am-panel am-panel-primary">
+        <div class="am-panel am-panel-primary">
             <div class="am-panel-hd"><%= title %></div>
             <div class="am-panel-bd am-g-collapse">
 
@@ -88,7 +172,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 <!--import plugin-->

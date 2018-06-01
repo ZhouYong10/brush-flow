@@ -28,14 +28,14 @@ router.get('/like', function (req, res) {
         });
 });
 
-router.get('/task/search/like', function (req, res) {
+router.post('/task/search/like', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                 userId: user._id,
                 type: 'wb',
                 smallType: 'like',
-                address: req.query.account
+                address: req.body.account
             }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
@@ -83,12 +83,12 @@ router.post('/like/add', function (req, res) {
                 order.createAndSave(user, {type: 'wb', smallType: 'like'})
                     .then(function () {
                         socketIO.emit('updateNav', {'wb': 1});
-                        res.redirect('/wb/like');
+                        res.redirect('/WB/like');
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                     });
             }, function(msg) {
-                res.redirect('/wb/like');
+                res.redirect('/WB/like');
             })
         });
 });
@@ -168,12 +168,12 @@ router.post('/vote/add', function (req, res) {
                 order.createAndSave(user, {type: 'wb', smallType: 'vote'})
                     .then(function () {
                         socketIO.emit('updateNav', {'wb': 1});
-                        res.redirect('/wb/vote');
+                        res.redirect('/WB/vote');
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                     });
             }, function(msg) {
-                res.redirect('/wb/vote');
+                res.redirect('/WB/vote');
             })
         });
 });
@@ -202,14 +202,14 @@ router.get('/fans', function (req, res) {
         });
 });
 
-router.get('/task/search/fans', function (req, res) {
+router.post('/task/search/fans', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wb',
                     smallType: {$in: ['fans', 'fansTwo', 'fansEight']},
-                    address: req.query.account
+                    address: req.body.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
@@ -257,12 +257,12 @@ router.post('/fans/add', function (req, res) {
                 order.createAndSave(user, {type: 'wb', smallType: order.smallType})
                     .then(function () {
                         socketIO.emit('updateNav', {'wb': 1});
-                        res.redirect('/wb/fans');
+                        res.redirect('/WB/fans');
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                     });
             }, function(msg) {
-                res.redirect('/wb/fans');
+                res.redirect('/WB/fans');
             })
         });
 });
@@ -303,14 +303,14 @@ router.get('/forward', function (req, res) {
         });
 });
 
-router.get('/task/search/forward', function (req, res) {
+router.post('/task/search/forward', function (req, res) {
     User.open().findById(req.session.passport.user)
         .then(function (user) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wb',
                     smallType: {$in: ['forward', 'forwardTwo', 'forwardEight']},
-                    address: req.query.account
+                    address: req.body.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function(obj) {
                     Order.addSchedule(obj.results);
@@ -358,12 +358,12 @@ router.post('/forward/add', function (req, res) {
                 order.createAndSave(user, {type: 'wb', smallType: order.smallType})
                     .then(function () {
                         socketIO.emit('updateNav', {'wb': 1});
-                        res.redirect('/wb/forward');
+                        res.redirect('/WB/forward');
                     }, function() {
                         res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
                     });
             }, function(msg) {
-                res.redirect('/wb/forward');
+                res.redirect('/WB/forward');
             })
         });
 });
