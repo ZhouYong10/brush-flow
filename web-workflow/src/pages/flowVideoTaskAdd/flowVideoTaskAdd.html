@@ -12,7 +12,89 @@
 </head>
 <body>
 
+<% if(true){ %>
 <div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-g-collapse">
+
+                    <div class="am-panel am-panel-danger">
+                        <div class="am-panel-hd prompt-title">提示</div>
+                        <div class="am-panel-bd prompt-content">
+                            <span class="tips">价格说明：初始10000流量起步执行，不足10000按10000算，超过部分按照1000来算，不足1000按1000计算。</span>
+                        </div>
+                    </div>
+
+                    <form class="am-form am-form-horizontal" method="post" action="/flow/videoTask/add">
+                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                <span>任务价格</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input class="am-radius am-input-sm input" type="text" value="￥ <%= price %>/1000" disabled>
+                                <input id="price" type="hidden" value="<%= price %>">
+                                <input type="hidden" name="name" value="<%= productName %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                <span>任务地址</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="address" class="am-radius am-input-sm input" type="text"
+                                       placeholder="请填写任务地址" name="address">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="readNum" class="am-u-sm-3 am-u-lg-1">
+                                <span>任务数量</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="readNum" class="am-radius am-input-sm input" type="text"
+                                       placeholder="10000起步执行，不足10000按10000算，超过部分按照1000算，不足1000按1000算"
+                                       name="num">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                <span>任务总价</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input id="total" class="am-radius am-input-sm input" type="text" value="￥ 0" disabled>
+                                <input id="userFunds" type="hidden" value="<%= money %>">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                                <button id="commit" type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
 
     <link rel="import" href="../../components/header/header.html?__inline">
     <link rel="import" href="../../components/menu/menu.html?__inline">
@@ -86,7 +168,8 @@
         </div>
 
     </div>
-</div>
+</div>-->
+<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 <!--import plugin-->
