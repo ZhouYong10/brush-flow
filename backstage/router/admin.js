@@ -97,6 +97,7 @@ router.get('/update/header/nav', function (req, res) {
         wxReply: 0,
         wxFriend: 0,
         wxCode: 0,
+        wxVote: 0,
         mp: 0,
         wb: 0,
         error: 0,
@@ -171,6 +172,10 @@ router.get('/update/header/nav', function (req, res) {
                                                         break;
                                                     case 'code':
                                                         updateNav.wxCode += 1;
+                                                        break;
+                                                    case 'vote':
+                                                    case 'fansVote':
+                                                        updateNav.wxVote += 1;
                                                         break;
                                                 }
                                                 break;
@@ -1651,6 +1656,44 @@ router.get('/WX/comment/already', function (req, res) {
 });
 
 
+router.get('/WX/vote/wait', function (req, res) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: {$in: ['vote','fansVote']},
+        status: '未处理'
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXvoteWait', {
+                title: '微信任务管理 / 待处理投票任务',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/vote/wait',
+                wxFansIsOpen: Order.wxFansIsOpen()
+            });
+        });
+});
+
+router.get('/WX/vote/already', function (req, res) {
+    Order.open().findPages({
+        type: 'wx',
+        smallType: {$in: ['vote','fansVote']},
+        status: {$ne: '未处理'}
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminWXvoteAlre', {
+                title: '微信任务管理 / 已处理投票任务',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/WX/vote/already'
+            });
+        });
+});
+
+
 router.get('/WX/reply/wait', function (req, res) {
     Order.open().findPages({
         type: 'wx',
@@ -1948,6 +1991,11 @@ router.get('/redirect/aim/order', function (req, res) {
                     case 'fansComment':
                         render = 'adminWXcommentAlre';
                         title: '微信任务管理 / 已处理微信图文评论任务';
+                        break;
+                    case 'vote':
+                    case 'fansVote':
+                        render = 'adminWXvoteAlre';
+                        title: '微信任务管理 / 已处理投票任务';
                         break;
                 }
                 break;

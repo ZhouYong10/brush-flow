@@ -434,6 +434,139 @@ router.post('/dianzan/add', function (req, res) {
 });
 
 
+router.get('/vote', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wx',
+                smallType: {$in: ['vote','fansVote']}
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results, 1);
+                    res.render('WXvote', {
+                        title: '微信投票',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/vote'
+                    })
+                });
+        });
+});
+
+router.post('/account/search/vote', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'wx',
+                smallType: {$in: ['vote','fansVote']},
+                address: req.body.account
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    Order.addSchedule(obj.results);
+                    res.render('WXvote', {
+                        title: '微信投票',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/WX/vote'
+                    })
+                });
+        });
+});
+
+router.get('/vote/add', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().findOne({type: 'wx', smallType: 'vote'})
+                .then(function(vote) {
+                    var voteIns = Product.wrapToInstance(vote);
+                    var myVotePrice = voteIns.getPriceByRole(user.role);
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('WXvoteAdd', {
+                            title: '添加微信投票任务',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            price: myVotePrice,
+                            orderFlag: orderFlag
+                        });
+                    })
+                });
+        });
+});
+
+router.get('/vote/model', function (req, res) {
+    var model = req.query.model;
+    var voteType;
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            if (model == 'normal') {
+                voteType = 'vote';
+            } else {
+                voteType = 'fansVote';
+            }
+            Product.open().findOne({type: 'wx', smallType: voteType})
+                .then(function (vote) {
+                    var voteIns = Product.wrapToInstance(vote);
+                    var myVotePrice = voteIns.getPriceByRole(user.role);
+                    res.send({
+                        price: myVotePrice
+                    });
+                });
+        });
+});
+
+router.post('/vote/add', function (req, res) {
+    var orderInfo = req.body;
+    var voteType;
+    if(!orderInfo.address){
+        return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 10) {
+        return res.send('<h1>需要添加的投票数量不能为空,且必须是正整数， 最低10起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    }
+    orderInfo.num = parseInt(orderInfo.num);
+    if (orderInfo.model == 'normal') {
+        voteType = 'vote';
+        socketIO.emit('updateNav', {'wxVote': 1});
+    } else {
+        voteType = 'fansVote';
+        socketIO.emit('updateNav', {'wxVote': 1});
+    }
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var order = Order.wrapToInstance(orderInfo);
+            if(orderInfo.orderFlag) {
+                order.checkRandomStr(req).then(function() {
+                    order.createAndSave(user, {type: 'wx', smallType: voteType})
+                        .then(function () {
+                            res.redirect('/WX/vote');
+                        }, function() {
+                            res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                        });
+                }, function(msg) {
+                    res.redirect('/WX/vote');
+                })
+            }else {
+                order.createAndSave(user, {type: 'wx', smallType: voteType})
+                    .then(function (result) {
+                        res.send({funds: result.funds, msg: '提交成功！'});
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }
+        });
+});
 
 
 

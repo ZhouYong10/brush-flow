@@ -53,11 +53,12 @@ function updateNav(obj, isAdd) {
     var wxReply = parseInt($('.updateNum.wxReply').text().split(' ')[2]);
     //var wxFriend = parseInt($('.updateNum.wxFriend').text().split(' ')[2]);
     var wxCode = parseInt($('.updateNum.wxCode').text().split(' ')[2]);
+    var wxVote = parseInt($('.updateNum.wxVote').text().split(' ')[2]);
     //var wxNum = wxArticle + wxLikeQuick + wxLike + wxComment + wxReply + wxFriend + wxCode;
     //var wxNum = wxLikeQuick + wxLike + wxComment + wxReply + wxFriend;
     //var wxNum = wxLikeQuick + wxLike + wxLikeQuit + wxReply + wxFriend;
-    var wxNum = wxLikeQuick + wxLike + wxDianzan + wxLikeQuit + wxReply + wxComment + wxCode;
+    var wxNum = wxLikeQuick + wxLike + wxDianzan + wxLikeQuit + wxReply + wxComment + wxCode + wxVote;
     if(wxNum > 0) {
-        $('.tips.wxArticle.wxLikeQuick.wxLike.wxDianzan.wxLikeQuit.wxComment.wxReply.wxFriend.wxCode').css('display', 'inline');
+        $('.tips.wxArticle.wxLikeQuick.wxLike.wxDianzan.wxLikeQuit.wxComment.wxReply.wxFriend.wxCode.wxVote').css('display', 'inline');
     }
 }

@@ -17,6 +17,8 @@ var wxSmallType = '<td> ' +
     '<option value="fansComment">关注评论</option> ' +
     '<option value="code">扫码关注</option> ' +
     '<option value="codeReply">扫码回复</option> ' +
+    '<option value="vote">直接投票</option> ' +
+    '<option value="fansVote">关注投票</option> ' +
     '</select> ' +
     '</td> ';
 var wbSmallType = '<td> ' +
