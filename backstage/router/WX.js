@@ -532,8 +532,8 @@ router.post('/vote/add', function (req, res) {
     if(!orderInfo.address){
         return res.send('<h1>任务地址不能为空不能为空.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
-    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 10) {
-        return res.send('<h1>需要添加的投票数量不能为空,且必须是正整数， 最低10起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
+    if(!orderInfo.num || !/^[0-9]*[1-9][0-9]*$/.test(orderInfo.num) || orderInfo < 100) {
+        return res.send('<h1>需要添加的投票数量不能为空,且必须是正整数， 最低100起.请不要跳过前端验证,如果是浏览器兼容性不好导致前端验证失效，推荐使用谷歌浏览器！！！</h1>');
     }
     orderInfo.num = parseInt(orderInfo.num);
     if (orderInfo.model == 'normal') {

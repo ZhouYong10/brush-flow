@@ -32,13 +32,9 @@
                     <div class="am-panel am-panel-danger">
                         <div class="am-panel-hd prompt-title">提示</div>
                         <div class="am-panel-bd">
-                            1.多个平台提交任务会导致量不足，责任自负。<br/>
-
-                            2.微信点赞数量不能大于阅读数量的10%，否则无法执行。<br/>
-
-                            3.微信阅读最低速度8个/分钟，最高速度137个/分钟。<br/>
-
-                            4.个别任务会有延时，显示完成后半小时之后会显示。<br/>
+                            1.暂时只支持第三方投票，mp投票暂时不支持。<br/>
+                            2.投票上限暂时为 20000。<br/>
+                            3.新业务上架，有任何问题，请提交问题反馈，我们会第一时间处理。<br/>
                         </div>
                     </div>
 
@@ -84,11 +80,21 @@
 
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-u-lg-1">
+                                <span>投票选手</span>
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-3 am-u-end">
+                                <input id="voteAim" class="am-radius am-input-sm input" type="text"
+                                       placeholder="请填写选手的号码或名字" name="voteAim">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
                                 <span>投票数量</span>
                             </label>
                             <div class="am-u-sm-9 am-u-lg-2 am-u-end">
                                 <input id="voteNum" class="am-radius am-input-sm input" type="text"
-                                       placeholder="最少10票起投" name="num">
+                                       placeholder="最少100票起投" name="num">
                             </div>
                         </div>
 

@@ -6,7 +6,7 @@ var Utils = require('utils');
 function isAddress(callback) {
     var $address = $('#address');
     var address = $address.val();
-    if (Utils.isWXhttp(address)) {
+    if (Utils.isHttp(address)) {
         $address.css({color: 'green'});
         callback();
     } else {
@@ -29,7 +29,7 @@ function checkReadLike() {
     if (Utils.isNum(voteNum)) {
         totalPrice = (voteNum * price).toFixed(4);
         $total.val('￥ ' + totalPrice).css({color: 'green'});
-        if(Utils.min10(voteNum)) {
+        if(Utils.min100(voteNum)) {
             $voteNum.css({color: 'green'});
             if(parseFloat(totalPrice) > parseFloat(userFunds)){
                 $total.val('￥ ' + totalPrice).css({color: 'red'});
@@ -44,6 +44,12 @@ function checkReadLike() {
         $voteNum.css({color: 'red'});
         return 'errVote';
     }
+}
+
+function noAim() {
+    var $voteAim = $('#voteAim');
+    var voteAim = $.trim($voteAim.val());
+    return voteAim == '';
 }
 
 $(function () {
@@ -73,12 +79,21 @@ $(function () {
                     });
                     break;
                 case 'errVote':
-                    layer.tips('投票数必须是正整数，且不小于10!', '#voteNum', {
+                    layer.tips('投票数必须是正整数，且不小于100!', '#voteNum', {
                         tips: [1, '#f00'],
                         time: 4000
                     });
                     break;
             }
+        }
+    });
+
+    $('#voteAim').blur(function () {
+        if (noAim()) {
+            layer.tips('投票选手不能为空!', '#voteAim', {
+                tips: [1, '#f00'],
+                time: 4000
+            });
         }
     });
 
@@ -102,12 +117,22 @@ $(function () {
                         });
                         break;
                     case 'errVote':
-                        layer.tips('投票数必须是正整数，且不小于10!', '#voteNum', {
+                        layer.tips('投票数必须是正整数，且不小于100!', '#voteNum', {
                             tips: [1, '#f00'],
                             time: 4000
                         });
                         break;
                 }
+                return ;
+            }
+
+            if(noAim()) {
+                e.stopPropagation();
+                e.preventDefault();
+                layer.tips('投票选手不能为空!', '#voteAim', {
+                    tips: [1, '#f00'],
+                    time: 4000
+                });
             }
         })
     })
