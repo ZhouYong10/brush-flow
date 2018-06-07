@@ -1,6 +1,7 @@
 # ignore output folder
 backstage/public
 backstage/views
+backstage/bin/nohup.out
 
 # ignore node_moduels
 backstage/node_modules
