@@ -171,7 +171,7 @@ Recharge.extend({
                                     username:  user.username,
                                     userId: user._id,
                                     userOldFunds: user.funds,
-                                    createTime: info.PayTime,
+                                    createTime: info.createTime,
                                     alipayId: info.orderid,
                                     alipayTime: info.PayTime,
                                     funds: parseFloat(info.money),
@@ -186,6 +186,7 @@ Recharge.extend({
                             //如果用户不存在，则保存一条未充值记录
                             Recharge.open().insert({
                                 alipayId: info.orderid,
+                                createTime: info.createTime,
                                 alipayTime: info.PayTime,
                                 funds: parseFloat(info.money),
                                 isRecharge: false

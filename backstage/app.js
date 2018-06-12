@@ -144,6 +144,7 @@ app.get('/yzf/recharge', function (req, res) {
       uid = temp[0];
     }
     info.uid = uid;
+    info.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
     Recharge.yzfAutoInsert(info);
     res.end('1');
   }else{
@@ -153,18 +154,11 @@ app.get('/yzf/recharge', function (req, res) {
 
 
 app.post('/yzf/recharge', function (req, res) {
-    var day_time = req.body.Paytime.split(" ");
-    var year_day = day_time[0].split('/');
-    year_day[1] = parseInt(year_day[1]) < 10 ? '0' + year_day[1] : year_day[1];
-    year_day[2] = parseInt(year_day[2]) < 10 ? '0' + year_day[2] : year_day[2];
-    day_time[0] = year_day.join('-');
-    var payTime = day_time.join(' ');
-
     var info = {
         fee: req.body.Money,
         uid: req.body.title,
         money: req.body.Money,
-        PayTime: payTime,
+        PayTime: req.body.Paytime,
         orderid: req.body.tradeNo,
         key: req.body.memo,
         type: 1
@@ -179,6 +173,7 @@ app.post('/yzf/recharge', function (req, res) {
             uid = temp[0];
         }
         info.uid = uid;
+        info.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
         Recharge.yzfAutoInsert(info);
         res.end('success');
     }else{
@@ -201,6 +196,7 @@ app.get('/vip/video/recharge', function (req, res) {
       uid = temp[0];
     }
     info.uid = uid;
+    info.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
     VipRecharge.yzfAutoInsert(info);
     res.end('1');
   }else{
