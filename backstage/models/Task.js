@@ -129,26 +129,42 @@ Task.include({
                                     }
                                 }).then(function() {
                                     self.profitToTaskUser(user, function() {
-                                        console.log('self.userId:   ', self.userId);
-                                        User.open().findById(self.userId).then(function(orderUser) {
-                                            self.profitToOrderUser(orderUser, function() {
-                                                Consume.open().insert({
-                                                    userId: user._id,
-                                                    username: user.username,
-                                                    orderId: self.orderId,
-                                                    type: self.type,
-                                                    typeName: self.typeName,
-                                                    smallType: self.smallType,
-                                                    smallTypeName: self.smallTypeName,
-                                                    funds: + orderTaskPrice,
-                                                    userOldFunds: user.funds,
-                                                    userNowFunds: userNowFunds,
-                                                    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-                                                    description: "做" + self.typeName + "/" + self.smallTypeName + ",赚取" + orderTaskPrice
-                                                });
-                                                resolve();
-                                            })
-                                        })
+                                        Consume.open().insert({
+                                            userId: user._id,
+                                            username: user.username,
+                                            orderId: self.orderId,
+                                            type: self.type,
+                                            typeName: self.typeName,
+                                            smallType: self.smallType,
+                                            smallTypeName: self.smallTypeName,
+                                            funds: + orderTaskPrice,
+                                            userOldFunds: user.funds,
+                                            userNowFunds: userNowFunds,
+                                            createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                            description: "做" + self.typeName + "/" + self.smallTypeName + ",赚取" + orderTaskPrice
+                                        });
+                                        resolve();
+
+                                        // console.log('self.userId:   ', self.userId);
+                                        // User.open().findById(self.userId).then(function(orderUser) {
+                                        //     self.profitToOrderUser(orderUser, function() {
+                                        //         Consume.open().insert({
+                                        //             userId: user._id,
+                                        //             username: user.username,
+                                        //             orderId: self.orderId,
+                                        //             type: self.type,
+                                        //             typeName: self.typeName,
+                                        //             smallType: self.smallType,
+                                        //             smallTypeName: self.smallTypeName,
+                                        //             funds: + orderTaskPrice,
+                                        //             userOldFunds: user.funds,
+                                        //             userNowFunds: userNowFunds,
+                                        //             createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                        //             description: "做" + self.typeName + "/" + self.smallTypeName + ",赚取" + orderTaskPrice
+                                        //         });
+                                        //         resolve();
+                                        //     })
+                                        // })
                                     })
                                 })
                             }else{
