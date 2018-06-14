@@ -161,6 +161,7 @@ router.get('/update/header/nav', function (req, res) {
                                                         updateNav.wxDianzan += 1;
                                                         break;
                                                     case 'comment':
+                                                    case 'fansComment':
                                                         updateNav.wxComment += 1;
                                                         break;
                                                     case 'fans':
@@ -1621,7 +1622,7 @@ router.get('/WX/like/quit/refuse', function(req, res) {
 router.get('/WX/comment/wait', function (req, res) {
     Order.open().findPages({
             type: 'wx',
-            smallType: 'comment',
+            smallType: {$in: ['comment','fansComment']},
             status: '未处理'
         }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
@@ -1639,7 +1640,7 @@ router.get('/WX/comment/wait', function (req, res) {
 router.get('/WX/comment/already', function (req, res) {
     var search = {
         type: 'wx',
-        smallType: 'comment',
+        smallType: {$in: ['comment','fansComment']},
         status: {$ne: '未处理'}
     };
     Order.open().findPages(search, (req.query.page ? req.query.page : 1))

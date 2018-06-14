@@ -974,7 +974,7 @@ router.get('/comment', function (req, res) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wx',
-                    smallType: 'comment'
+                    smallType: {$in: ['comment','fansComment']}
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
                     Order.addSchedule(obj.results, 0.5);
@@ -1077,7 +1077,7 @@ router.post('/account/search/comment', function (req, res) {
             Order.open().findPages({
                     userId: user._id,
                     type: 'wx',
-                    smallType: 'comment',
+                    smallType: {$in: ['comment','fansComment']},
                     address: req.body.account
                 }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
