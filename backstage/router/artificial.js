@@ -5,6 +5,7 @@ var User = require('../models/User');
 var Order = require('../models/Order');
 var Product = require('../models/Product');
 var Task = require('../models/Task');
+var Consume = require('../models/Consume');
 
 var moment = require('moment');
 var path = require('path');
@@ -550,6 +551,20 @@ router.get('/order/refund', function (req, res) {
                         User.open().updateById(user._id, {$set: {
                             funds: funds
                         }}).then(function() {
+                            Consume.open().insert({
+                                userId: user._id,
+                                username: user.username,
+                                orderId: order._id,
+                                type: order.type,
+                                typeName: order.typeName,
+                                smallType: order.smallType,
+                                smallTypeName: order.smallTypeName,
+                                funds: order.surplus,
+                                userOldFunds: user.funds,
+                                userNowFunds: funds,
+                                createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                description: order.typeName + order.smallTypeName + '撤单' + (order.num - order.taskNum)
+                            });
                             res.redirect(req.query.path);
                         })
                     })
