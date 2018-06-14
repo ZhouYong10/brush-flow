@@ -67,7 +67,7 @@
                                 <th>消费时间</th>
                                 <th>类型	</th>
                                 <th>之前余额</th>
-                                <th>消费金额</th>
+                                <th>金额</th>
                                 <th>之后余额</th>
                                 <th>描述	</th>
                             </tr>
@@ -79,7 +79,12 @@
                         <% }else if(orders[i].funds > 0){ %> am-danger <% } %>">
                                 <td class="am-text-middle"><%= i + 1 %></td>
                                 <td class="am-text-middle"><%= orders[i].createTime %></td>
-                                <td class="am-text-middle"><%= orders[i].typeName %></td>
+                                <td class="am-text-middle">
+                                    <%= orders[i].typeName %>
+                                    <% if(orders[i].smallTypeName){ %>
+                                    /<%= orders[i].smallTypeName %>
+                                    <% } %>
+                                </td>
                                 <td class="am-text-middle">￥ <%= orders[i].userOldFunds %></td>
                                 <td class="am-text-middle">￥ <%= orders[i].funds %></td>
                                 <td class="am-text-middle">￥ <%= orders[i].userNowFunds %></td>

@@ -6,6 +6,7 @@ var Class = require('./Class');
 var Order = require('./Order');
 var User = require('./User');
 var Profit = require('./Profit');
+var Consume = require('./Consume');
 var moment = require('moment');
 
 
@@ -120,15 +121,31 @@ Task.include({
                     }}).then(function() {
                         User.open().findById(self.taskUserId).then(function(user) {
                             if(user) {
+                                var orderTaskPrice = self.getPriceByRole(user.role);
+                                var userNowFunds = (parseFloat(orderTaskPrice) + parseFloat(user.funds)).toFixed(4)
                                 User.open().updateById(self.taskUserId, {
                                     $set: {
-                                        funds: (parseFloat(self.getPriceByRole(user.role)) + parseFloat(user.funds)).toFixed(4)
+                                        funds: userNowFunds
                                     }
                                 }).then(function() {
                                     self.profitToTaskUser(user, function() {
                                         console.log('self.userId:   ', self.userId);
                                         User.open().findById(self.userId).then(function(orderUser) {
                                             self.profitToOrderUser(orderUser, function() {
+                                                Consume.open().insert({
+                                                    userId: user._id,
+                                                    username: user.username,
+                                                    orderId: self.orderId,
+                                                    type: self.type,
+                                                    typeName: self.typeName,
+                                                    smallType: self.smallType,
+                                                    smallTypeName: self.smallTypeName,
+                                                    funds: + orderTaskPrice,
+                                                    userOldFunds: user.funds,
+                                                    userNowFunds: userNowFunds,
+                                                    createTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                                                    description: "做" + self.typeName + "/" + self.smallTypeName + ",赚取" + orderTaskPrice
+                                                });
                                                 resolve();
                                             })
                                         })
@@ -165,14 +182,20 @@ Task.include({
                             Profit.open().insert({
                                 userId: parent._id,
                                 username: parent.username,
+                                orderId: self._id,
                                 orderUserId: self.taskUserId,
                                 orderUsername: self.taskUser,
+                                type: self.type,
                                 typeName: self.typeName,
+                                smallType: self.smallType,
                                 smallTypeName: self.smallTypeName,
+                                funds: profit,
+                                userOldFunds: parent.funds,
+                                userNowFunds: funds,
                                 profit: profit,
-                                orderId: self._id + '',
                                 status: 'success',
-                                createTime: self.createTime
+                                createTime: self.createTime,
+                                description: '任务方：' + self.taskUser + "做" + self.typeName + '/' + self.smallTypeName + '返利' + profit
                             }).then(function (profit) {
                                 self.profitToTaskUser(parent, cb);
                             })
@@ -194,14 +217,20 @@ Task.include({
                             Profit.open().insert({
                                 userId: parent._id,
                                 username: parent.username,
+                                orderId: self._id,
                                 orderUserId: self.taskUserId,
                                 orderUsername: self.taskUser,
+                                type: self.type,
                                 typeName: self.typeName,
+                                smallType: self.smallType,
                                 smallTypeName: self.smallTypeName,
+                                funds: profit,
+                                userOldFunds: parent.funds,
+                                userNowFunds: funds,
                                 profit: profit,
-                                orderId: self._id + '',
                                 status: 'success',
-                                createTime: self.createTime
+                                createTime: self.createTime,
+                                description: '发布方：' +　self.typeName + '/' + self.smallTypeName + '完成一次，返利' + profit
                             }).then(function (profit) {
                                 self.profitToOrderUser(parent, cb);
                             })

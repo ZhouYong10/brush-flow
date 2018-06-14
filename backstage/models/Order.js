@@ -977,7 +977,7 @@ Order.include({
                                         smallType: self.smallType,
                                         smallTypeName: self.smallTypeName,
                                         funds: + self.quitFunds,
-                                        userOldFunds: + self.userOldFunds,
+                                        userOldFunds: self.userOldFunds,
                                         userNowFunds: self.nowUserFunds,
                                         createTime: self.quitTime,
                                         description: self.quitDesc
