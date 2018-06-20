@@ -41,6 +41,7 @@
                             <th>任务单价</th>
                             <th>任务总价</th>
                             <th>返利</th>
+                            <th>初始量</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -83,6 +84,7 @@
                                 B: <%= orders[i].topProfit %><br/>
                                 C: <%= orders[i].superProfit %><br/>
                             </td>
+                            <td class="am-text-middle"><%= orders[i].startReadNum %></td>
                             <td class="am-text-middle">
                                 <% if(orders[i].status == '执行中' && orders[i].error == undefined){ %>
                                 <a class="am-btn am-btn-primary am-radius am-btn-xs refundProfit"

@@ -43,6 +43,7 @@ new Vue({
 $(function () {
     Utils.clipboard();
     Utils.layPrompt('请输入拒绝接单的理由！', '.orderRefund');
+    Utils.layPrompt('请输入订单初始投票数量！', '.orderComplete');
     Utils.breakText();
     Utils.layPage();
 });

@@ -943,9 +943,7 @@ router.get('/order/complete/handle', function (req, res) {
             .then(function(order) {
                 var orderIns = Order.wrapToInstance(order);
                 if(orderIns.status == '未处理'){
-                    if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick' || orderIns.smallType == 'likeQuick'){
-                        orderIns.startReadNum = startReadNum;
-                    }
+                    orderIns.startReadNum = startReadNum;
                     orderIns.complete(function() {
                         global.isComplete = true;
                         res.redirect(url);
@@ -1683,6 +1681,7 @@ router.get('/WX/vote/already', function (req, res) {
         status: {$ne: '未处理'}
     }, (req.query.page ? req.query.page : 1))
         .then(function (obj) {
+            console.log(obj.results, '=============================');
             res.render('adminWXvoteAlre', {
                 title: '微信任务管理 / 已处理投票任务',
                 money: req.session.systemFunds,
