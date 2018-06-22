@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title><%=title%></title>
+
+    <link rel="import" href="../../components/head/head.html?__inline">
+
+    <link rel="stylesheet" href="ZBtuiguang.scss?__inline">
+</head>
+<body>
+
+<% if(true){ %>
+<div id="app">
+
+    <link rel="import" href="../../components/header/header1.html?__inline">
+    <link rel="import" href="../../components/menu/menu1.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-hide-sm am-u-lg-2 am-u-md-3">
+            <link rel="import" href="../../components/menuContent/menuContent.html?__inline">
+        </div>
+
+        <div class="am-u-lg-10 am-u-md-9">
+            <div class="am-panel am-panel-primary">
+                <div class="am-panel-hd"><%= title %></div>
+                <div class="am-panel-bd am-g-collapse">
+
+                    <div class="am-panel am-panel-danger">
+                        <div class="am-panel-hd prompt-title">提示</div>
+                        <div class="am-panel-bd">
+                            <div class="am-g am-g-collapse">
+                                <span class="tips">新增第三方直播业务下单平台：</span><br/>
+                                1、新增业务：抖音业务，火山小视频，快手，全民k歌，小红书，秒拍，花椒直播，美拍，今日直播业务。<br/>
+                                2、业务类型：粉丝，评论，分享，播放，点赞，收藏等。<br/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="http://826ds.cn/" type="button" class="am-btn am-btn-primary am-btn-block am-radius am-btn-lg"
+                       target="_blank">立即下单</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% }else{ %>
+<!--<div id="app">
+
+    <link rel="import" href="../../components/header/header.html?__inline">
+    <link rel="import" href="../../components/menu/menu.html?__inline">
+
+    <div id="app-content" class="app-content am-g">
+
+        <div class="am-panel am-panel-primary" id="recharge">
+            <div class="am-panel-hd"><%= title %></div>
+            <div class="am-panel-bd am-g-collapse">
+
+                <div class="am-panel am-panel-danger">
+                    <div class="am-panel-hd prompt-title">提示</div>
+                    <div class="am-panel-bd">
+                        <div class="am-g am-g-collapse">
+                            <div class="am-u-lg-6">
+                                <span class="tips">方式一【扫码充值】：</span><br/>
+                                1、通过扫码充值，付款金额为您需要充值的金额。<br/>
+                                2、付款说明（转账付款时请填写备注）填写您在本系统的账号为： <span class="tips"><%= username %></span><br/>
+                                3、如付款备注账号错误或未备注充值账号，会导致扫码自动充值失败，此情况请使用方式二充值。<br/>
+
+                                <span class="tips">方式二【交易号充值】：</span><br/>
+                                1、请优先使用方式一充值，如方式一充值失败，可提交交易号充值。 <br/>
+                                2、转账完成后，点击付款页面的“查看详情”，记录下 32 位的交易号。<br/>
+                                3、输入交易号，稍等 30 秒即可自动入账。<br/>
+                                4、如果提示交易号仍无法充值，请提交问题反馈。<br/><br/>
+                                <span class="tips">注意： 此方式交易号当天有效（晚上十二点之前），第二天提交会自动过期。</span>
+                            </div>
+                            <div class="am-u-lg-6">
+                                <img class="am-radius" src="./recharge.png" alt="扫码充值" height="270" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <form class="am-form am-form-horizontal">
+                    <div class="am-form-group">
+                        <label class="am-u-sm-3 am-u-lg-1">
+                            交易号
+                        </label>
+                        <div class="am-u-sm-9 am-u-lg-11">
+                            <input id="rechargeNum" class="am-radius am-input-sm input" type="text"
+                                   placeholder="输入 28 或 32 位的支付宝交易号">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                            <button id="commit" class="am-btn am-btn-primary am-radius">立即充值</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>-->
+<% } %>
+
+<link rel="import" href="../../components/foot/foot.html?__inline">
+
+<!--import plugin-->
+<script src="/static/plugins/layer/layer.js"></script>
+
+<script>
+    require('./ZBtuiguang');
+</script>
+
+</body>
+</html>
