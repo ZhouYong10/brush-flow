@@ -83,6 +83,7 @@ router.get('/get/system/funds', function(req, res) {
 * */
 router.get('/update/header/nav', function (req, res) {
     var updateNav = {
+        zhibo: 0,
         withdraw: 0,
         waitHT: 0,
         complaintHT: 0,
@@ -134,6 +135,8 @@ router.get('/update/header/nav', function (req, res) {
                                     for (var i in results) {
                                         var result = results[i];
                                         switch (result.type) {
+                                            case 'zhibo':
+                                                updateNav.zhibo += 1;
                                             case 'handle':
                                                 updateNav.waitHT += 1;
                                                 break;
