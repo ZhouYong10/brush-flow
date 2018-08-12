@@ -13,7 +13,6 @@
 </head>
 <body>
 
-<% if(true){ %>
 <div id="app">
 
     <link rel="import" href="../../components/header/header1.html?__inline">
@@ -41,75 +40,68 @@
                         </div>
                     </div>
 
-                    <a href="http://826ds.cn/" type="button" class="am-btn am-btn-primary am-btn-block am-radius am-btn-lg"
-                       target="_blank">立即下单</a>
+                    <!--<a href="http://826ds.cn/" type="button" class="am-btn am-btn-primary am-btn-block am-radius am-btn-lg"-->
+                       <!--target="_blank">立即下单</a>-->
+
+                    <form class="am-form am-form-horizontal" method="post" action="/wb/fans/add">
+                        <input type="hidden" value="" name="orderFlag">
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                选择商品
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11 am-g-collapse">
+                                <div class="am-u-sm-12 am-u-lg-2">
+                                    <select id="taskPrice" class="am-radius am-input-sm input" name="smallType">
+                                        <option value="fans">粉丝</option>
+                                        <option value="fansTwo">粉丝-达人20%</option>
+                                        <option value="fansEight">粉丝-达人80%</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                商品价格
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-11">
+                                <input id="address" class="am-radius am-input-sm input"
+                                       type="text" name="address" disabled>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                下单数量
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input id="readNum" class="am-radius am-input-sm input" type="text"
+                                       placeholder="最少100,无上限。" name="num">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-u-lg-1">
+                                任务总价
+                            </label>
+                            <div class="am-u-sm-9 am-u-lg-2 am-u-end">
+                                <input id="total" class="am-radius am-input-sm input" type="text" value="￥ 0" disabled>
+                                <input id="userFunds" type="hidden" value="">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
+                                <button id="commit" type="submit" class="am-btn am-btn-primary am-radius">提交任务</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<% }else{ %>
-<!--<div id="app">
-
-    <link rel="import" href="../../components/header/header.html?__inline">
-    <link rel="import" href="../../components/menu/menu.html?__inline">
-
-    <div id="app-content" class="app-content am-g">
-
-        <div class="am-panel am-panel-primary" id="recharge">
-            <div class="am-panel-hd"><%= title %></div>
-            <div class="am-panel-bd am-g-collapse">
-
-                <div class="am-panel am-panel-danger">
-                    <div class="am-panel-hd prompt-title">提示</div>
-                    <div class="am-panel-bd">
-                        <div class="am-g am-g-collapse">
-                            <div class="am-u-lg-6">
-                                <span class="tips">方式一【扫码充值】：</span><br/>
-                                1、通过扫码充值，付款金额为您需要充值的金额。<br/>
-                                2、付款说明（转账付款时请填写备注）填写您在本系统的账号为： <span class="tips"><%= username %></span><br/>
-                                3、如付款备注账号错误或未备注充值账号，会导致扫码自动充值失败，此情况请使用方式二充值。<br/>
-
-                                <span class="tips">方式二【交易号充值】：</span><br/>
-                                1、请优先使用方式一充值，如方式一充值失败，可提交交易号充值。 <br/>
-                                2、转账完成后，点击付款页面的“查看详情”，记录下 32 位的交易号。<br/>
-                                3、输入交易号，稍等 30 秒即可自动入账。<br/>
-                                4、如果提示交易号仍无法充值，请提交问题反馈。<br/><br/>
-                                <span class="tips">注意： 此方式交易号当天有效（晚上十二点之前），第二天提交会自动过期。</span>
-                            </div>
-                            <div class="am-u-lg-6">
-                                <img class="am-radius" src="./recharge.png" alt="扫码充值" height="270" />
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <form class="am-form am-form-horizontal">
-                    <div class="am-form-group">
-                        <label class="am-u-sm-3 am-u-lg-1">
-                            交易号
-                        </label>
-                        <div class="am-u-sm-9 am-u-lg-11">
-                            <input id="rechargeNum" class="am-radius am-input-sm input" type="text"
-                                   placeholder="输入 28 或 32 位的支付宝交易号">
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <div class="am-u-sm-9 am-u-sm-offset-3 am-u-lg-11 am-u-lg-offset-1">
-                            <button id="commit" class="am-btn am-btn-primary am-radius">立即充值</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-
-    </div>
-</div>-->
-<% } %>
 
 <link rel="import" href="../../components/foot/foot.html?__inline">
 
