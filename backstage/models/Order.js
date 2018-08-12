@@ -1087,6 +1087,8 @@ Order.include({
                         self.profitToParent(user, user, function() {
                             callback();
                         });
+                    }else {
+                        callback();
                     }
                 });
             })

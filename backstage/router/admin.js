@@ -917,6 +917,7 @@ router.get('/order/complete', function (req, res) {
         global.isComplete = false;
         Order.open().findById(orderId)
             .then(function(order) {
+                console.log(order,'====================')
                 var orderIns = Order.wrapToInstance(order);
                 if(orderIns.status == '未处理'){
                     if(orderIns.smallType == 'read' || orderIns.smallType == 'readQuick'){

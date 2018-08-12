@@ -39,6 +39,7 @@
                                 <th>数量</th>
                                 <th>总价</th>
                                 <th>状态</th>
+                                <th>退单信息</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -63,6 +64,58 @@
                                 </td>
                                 <td class="am-text-middle"><%= orders[i].totalPrice %></td>
                                 <td class="am-text-middle"><%= orders[i].status %></td>
+                                <td class="am-text-middle">
+                                    <% if((orders[i].status == '执行中' || orders[i].status == '已完成') && orders[i].error != undefined){ %>
+
+                                        <% if(orders[i].errorInfo != undefined){ %>
+                                        <div class="operation">
+                                            <a class="am-text-truncate text-break break-css am-badge-warning am-radius"
+                                               title="<%= orders[i].errorInfo %>">
+                                                <%= orders[i].errorInfo %>
+                                            </a>
+                                        </div>
+                                        <% } %>
+
+                                        <% if(orders[i].errorDealInfo != undefined){ %>
+                                        <div class="operation">
+                                            <a class="am-text-truncate text-break break-css am-badge-primary am-radius"
+                                               title="<%= orders[i].errorDealInfo %>">
+                                                <%= orders[i].errorDealInfo %>
+                                            </a>
+                                        </div>
+                                        <% } %>
+
+                                    <% }else if(orders[i].status == '已退款'){ %>
+
+                                        <% if(orders[i].errorInfo != undefined){ %>
+                                        <div class="operation">
+                                            <a class="am-text-truncate text-break break-css am-badge-warning am-radius"
+                                               title="<%= orders[i].errorInfo %>">
+                                                <%= orders[i].errorInfo %>
+                                            </a>
+                                        </div>
+                                        <% } %>
+
+                                        <% if(orders[i].errorDealInfo != undefined){ %>
+                                        <div class="operation">
+                                            <a class="am-text-truncate text-break break-css am-badge-primary am-radius"
+                                               title="<%= orders[i].errorDealInfo %>">
+                                                <%= orders[i].errorDealInfo %>
+                                            </a>
+                                        </div>
+                                        <% } %>
+
+                                        <% if(orders[i].refundInfo != undefined){ %>
+                                        <div class="operation">
+                                            <a class="am-text-truncate text-break break-css am-badge-danger am-radius"
+                                               title="<%= orders[i].refundInfo %>">
+                                                <%= orders[i].refundInfo %>
+                                            </a>
+                                        </div>
+                                        <% } %>
+
+                                    <% } %>
+                                </td>
                             </tr>
                             <% } %>
 
