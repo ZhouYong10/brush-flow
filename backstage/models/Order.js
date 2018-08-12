@@ -541,6 +541,34 @@ Order.extend({
 });
 
 Order.include({
+    saveZhibo: function(user, info) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            Product.open().findOne(info)
+                .then(function (product) {
+                    self.totalPrice = (product.price * self.num).toFixed(4);
+                    if((self.totalPrice - user.funds) > 0) {
+                        return reject();
+                    }
+                    self.price = product.price;
+                    self.user = user.username;
+                    self.userId = user._id;
+                    self.name = product.name;
+                    self.type = product.type;
+                    self.typeName = product.typeName;
+                    self.smallType = product.smallType;
+                    self.smallTypeName = product.smallTypeName;
+                    self.status = '未处理';
+                    self.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+                    self.userOldFunds = user.funds;
+                    self.funds = (user.funds - self.totalPrice).toFixed(4);
+                    self.description = self.typeName + self.smallTypeName + '执行' + self.num;
+                    self.save(function(obj) {
+                        resolve(obj);
+                    });
+                });
+        })
+    },
     checkRandomStr: function(req) {
         var self = this;
         return new Promise(function(resolve, reject) {

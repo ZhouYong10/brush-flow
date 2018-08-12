@@ -3,28 +3,84 @@
  */
 var Utils = require('utils');
 
+
+function checkNum() {
+    var price = $('#price').val();
+    if(!price) {
+        layer.tips('请选择商品！', '#productType', {
+            tips: [1, '#f00'],
+            time: 4000
+        });
+    }
+    var userFunds = $('#userFunds').val();
+    var $num = $('#num');
+    var num = $num.val();
+    var totalPrice = 0;
+    var $total = $('#total');
+
+    if (Utils.isNum(num) && Utils.min100(num)) {
+        $num.css({color: 'green'});
+        totalPrice = (num * price).toFixed(4);
+        if(parseFloat(totalPrice) > parseFloat(userFunds)){
+            $total.val('￥ ' + totalPrice).css({color: 'red'});
+            return 'errTotal';
+        }
+        $total.val('￥ ' + totalPrice).css({color: 'green'});
+        return 'ok';
+    } else {
+        $num.css({color: 'red'});
+        return 'errRead';
+    }
+}
+
 $(function() {
-    $('#commit').click(function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        var $alipayNum = $('#rechargeNum');
-        var alipayNum = $alipayNum.val();
-        var numLen = alipayNum.length;
-        if(Utils.isNum(alipayNum) && (numLen == 32 || numLen == 28)){
-            $.post('/user/recharge', {
-                alipayId: alipayNum
-            }).then(function(data) {
-                if(data.isOK) {
-                    $('<a href="' + data.path + '" ></a>').get(0).click();
-                }else{
-                    layer.msg(data.message);
+    $('#productType').on('change', function (e) {
+        var $selected = $(this).find('option:selected');
+        var price = $selected.attr('data_price');
+        $('#priceShow').val(price + ' 元/个');
+        $('#price').val(price);
+        checkNum();
+    });
+
+    $('#num').keyup(function () {
+        checkNum();
+    }).blur(function () {
+        checkNum();
+    });
+
+    $('#commit').click(function (e) {
+        console.log($('#productType').val(), 'productType value');
+        var productType = $('#productType').val();
+
+        if(productType){
+            var result = checkNum();
+            if (result != 'ok') {
+                e.stopPropagation();
+                e.preventDefault();
+                switch (result){
+                    case 'errTotal':
+                        layer.tips('账户余额不足，请充值!', '#total', {
+                            tips: [1, '#f00'],
+                            time: 4000
+                        });
+                        break;
+                    case 'errRead':
+                        layer.tips('数量必须是正整数，且不小于100!', '#num', {
+                            tips: [1, '#f00'],
+                            time: 4000
+                        });
+                        break;
                 }
-            });
+            }
         }else{
-            layer.tips('请输入合法的支付宝交易号!', '#rechargeNum', {
+            layer.tips('请选择商品！', '#productType', {
                 tips: [1, '#f00'],
                 time: 4000
             });
+            e.stopPropagation();
+            e.preventDefault();
         }
     })
 })
+
+

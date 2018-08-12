@@ -43,8 +43,8 @@
                     <!--<a href="http://826ds.cn/" type="button" class="am-btn am-btn-primary am-btn-block am-radius am-btn-lg"-->
                        <!--target="_blank">立即下单</a>-->
 
-                    <form class="am-form am-form-horizontal" method="post" action="/wb/fans/add">
-                        <input type="hidden" value="" name="orderFlag">
+                    <form class="am-form am-form-horizontal" method="post" action="/user/zhibo/add">
+                        <input type="hidden" value="<%= orderFlag %>" name="orderFlag">
 
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-u-lg-1">
@@ -52,10 +52,11 @@
                             </label>
                             <div class="am-u-sm-9 am-u-lg-11 am-g-collapse">
                                 <div class="am-u-sm-12 am-u-lg-2">
-                                    <select id="taskPrice" class="am-radius am-input-sm input" name="smallType">
-                                        <option value="fans">粉丝</option>
-                                        <option value="fansTwo">粉丝-达人20%</option>
-                                        <option value="fansEight">粉丝-达人80%</option>
+                                    <select id="productType" class="am-radius am-input-sm input" name="smallType">
+                                        <option value="">选择商品</option>
+                                        <% for(var i = 0; i < products.length; i++){ %>
+                                        <option value="<%= products[i].smallType %>" data_price="<%= products[i].price %>"><%= products[i].name %></option>
+                                        <% } %>
                                     </select>
                                 </div>
                             </div>
@@ -66,8 +67,9 @@
                                 商品价格
                             </label>
                             <div class="am-u-sm-9 am-u-lg-11">
-                                <input id="address" class="am-radius am-input-sm input"
+                                <input id="priceShow" class="am-radius am-input-sm input"
                                        type="text" name="address" disabled>
+                                <input type="hidden" id="price">
                             </div>
                         </div>
 
@@ -76,8 +78,8 @@
                                 下单数量
                             </label>
                             <div class="am-u-sm-9 am-u-lg-2 am-u-end">
-                                <input id="readNum" class="am-radius am-input-sm input" type="text"
-                                       placeholder="最少100,无上限。" name="num">
+                                <input id="num" class="am-radius am-input-sm input" type="text"
+                                       placeholder="最少100" name="num">
                             </div>
                         </div>
 
@@ -87,7 +89,7 @@
                             </label>
                             <div class="am-u-sm-9 am-u-lg-2 am-u-end">
                                 <input id="total" class="am-radius am-input-sm input" type="text" value="￥ 0" disabled>
-                                <input id="userFunds" type="hidden" value="">
+                                <input id="userFunds" type="hidden" value="<%= money %>">
                             </div>
                         </div>
 

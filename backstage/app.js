@@ -513,18 +513,6 @@ app.get('/client/home', function (req, res) {
       });
 });
 
-app.get('/zb/tuiguang', function (req, res) {
-    User.open().findById(req.session.passport.user)
-        .then(function (user) {
-            res.render('ZBtuiguang', {
-                title: '网络直播业务推广',
-                money: user.funds,
-                username: user.username,
-                userStatus: user.status,
-                role: user.role
-            })
-        });
-});
 
 app.use('/user', require('./router/user.js'));
 app.use('/task', require('./router/task.js'));
@@ -546,7 +534,6 @@ app.use('/admin', require('./router/admin.js'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  console.log('======================================');
   var err = new Error('Not Found');
   err.status = 404;
   next(err);

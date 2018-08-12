@@ -823,4 +823,67 @@ router.get('/order/error', function (req, res) {
         })
 });
 
+router.get('/zhibo/list', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Order.open().findPages({
+                userId: user._id,
+                type: 'zhibo'
+            }, (req.query.page ? req.query.page : 1))
+                .then(function (obj) {
+                    console.log(obj)
+                    Order.addSchedule(obj.results, 50);
+                    res.render('ZBtuiguanglist', {
+                        title: '网络直播任务列表',
+                        money: user.funds,
+                        username: user.username,
+                        userStatus: user.status,
+                        role: user.role,
+                        orders: obj.results,
+                        pages: obj.pages,
+                        path: '/user/zhibo/list'
+                    })
+                });
+        });
+});
+
+router.get('/zhibo', function (req, res) {
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            Product.open().find({type: 'zhibo'})
+                .then(function (prod) {
+                    Order.getRandomStr(req).then(function(orderFlag) {
+                        res.render('ZBtuiguang', {
+                            title: '网络直播业务下单',
+                            money: user.funds,
+                            username: user.username,
+                            userStatus: user.status,
+                            role: user.role,
+                            orderFlag: orderFlag,
+                            products: prod
+                        });
+                    })
+                });
+        });
+});
+
+router.post('/zhibo/add', function(req, res) {
+    console.log(req.body);
+    User.open().findById(req.session.passport.user)
+        .then(function (user) {
+            var order = Order.wrapToInstance(req.body);
+            order.checkRandomStr(req).then(function() {
+                order.saveZhibo(user, {type: 'zhibo', smallType: order.smallType})
+                    .then(function () {
+                        socketIO.emit('updateNav', {'zhibo': 1});
+                        res.redirect('/user/zhibo');
+                    }, function() {
+                        res.send('<h1>您的余额不足，请充值！ 顺便多说一句，请不要跳过页面非法提交数据。。。不要以为我不知道哦！！</h1>')
+                    });
+            }, function(msg) {
+                res.redirect('/user/zhibo');
+            })
+        });
+})
+
 module.exports = router;
