@@ -1083,9 +1083,11 @@ Order.include({
                 Order.open().updateById(self._id, {
                     $set: updateInfo
                 }).then(function () {
-                    self.profitToParent(user, user, function() {
-                        callback();
-                    });
+                    if(self.type != 'zhibo'){
+                        self.profitToParent(user, user, function() {
+                            callback();
+                        });
+                    }
                 });
             })
     },

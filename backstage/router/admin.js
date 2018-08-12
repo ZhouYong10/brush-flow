@@ -1239,6 +1239,40 @@ router.get('/reply/already', function (req, res) {
 });
 
 
+router.get('/zhibo/wait', function (req, res) {
+    Order.open().findPages({
+        type: 'zhibo',
+        status: '未处理'
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminZhiboWait', {
+                title: '直播任务管理 / 待处理订单',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/zhibo/wait'
+            });
+        });
+});
+
+router.get('/zhibo/already', function (req, res) {
+    Order.open().findPages({
+        type: 'zhibo',
+        status: {$ne: '未处理'}
+    }, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminZhiboAlre', {
+                title: '直播任务管理 / 已处理订单',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                orders: obj.results,
+                pages: obj.pages,
+                path: '/admin/zhibo/already'
+            });
+        });
+});
+
 
 router.get('/flow/wait', function (req, res) {
     Order.open().findPages({

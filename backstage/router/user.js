@@ -831,7 +831,6 @@ router.get('/zhibo/list', function (req, res) {
                 type: 'zhibo'
             }, (req.query.page ? req.query.page : 1))
                 .then(function (obj) {
-                    console.log(obj)
                     Order.addSchedule(obj.results, 50);
                     res.render('ZBtuiguanglist', {
                         title: '网络直播任务列表',
