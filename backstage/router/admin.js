@@ -604,6 +604,43 @@ router.post('/user/update/price/update', function(req, res) {
         });
 })
 
+// price zhibo
+router.get('/price/zhibo', function (req, res) {
+    Product.open().findPages({type: 'zhibo'}, (req.query.page ? req.query.page : 1))
+        .then(function (obj) {
+            res.render('adminPriceZhibo', {
+                title: '价格&状态管理 / 直播业务',
+                money: req.session.systemFunds,
+                freezeFunds: req.session.freezeFunds,
+                products: obj.results,
+                pages: obj.pages
+            });
+        });
+});
+
+router.post('/price/zhibo', function (req, res) {
+    Product.open().insert(req.body)
+        .then(function (result) {
+            res.send(result[0]);
+        });
+});
+
+router.post('/price/zhibo/update', function (req, res) {
+    var id = req.body.id;
+    delete req.body.id;
+    Product.open().updateById(id, {$set: req.body})
+        .then(function (result) {
+            res.end();
+        });
+});
+
+router.post('/price/zhibo/delete', function (req, res) {
+    Product.open().removeById(req.body.id)
+        .then(function () {
+            res.end();
+        });
+});
+
 // price forum
 router.get('/price/forum', function (req, res) {
     Product.open().findPages({type: 'forum'}, (req.query.page ? req.query.page : 1))
