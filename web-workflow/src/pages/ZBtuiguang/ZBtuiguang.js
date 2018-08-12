@@ -49,7 +49,6 @@ $(function() {
     });
 
     $('#commit').click(function (e) {
-        console.log($('#productType').val(), 'productType value');
         var productType = $('#productType').val();
 
         if(productType){
