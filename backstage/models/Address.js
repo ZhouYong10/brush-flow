@@ -140,7 +140,7 @@ module.exports = {
                 } else {
                     resolve({
                         isOk: false,
-                        message: '获取文章标题失败，可能网络不给力，或者文章地址错误,也可能程序欠修理！'
+                        message: '文章标题检测失败，但不影响正常下单和执行！'
                     });
                 }
             });
