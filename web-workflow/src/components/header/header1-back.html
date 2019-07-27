@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="header.scss?__inline">
+<link rel="stylesheet" href="header1.scss?__inline">
 
 <header data-am-widget="header" class="am-header am-header-default">
     <div class="am-u-lg-10 am-u-lg-centered">
@@ -7,21 +7,20 @@
                 <i class="am-header-icon am-icon-home am-hide-lg"></i>
                 <h1 class="am-hide-sm" style="background: url(/static/images/favicon.ico) no-repeat;
                      background-size: 32px 32px; background-position: 6px 6px; padding-left:40px;">
-                    678营销平台
+                    678网络营销(推广)平台
                 </h1>
-                &nbsp;&nbsp;
-                <div class="am-hide-lg-only" style="font-size: 1.5em;">
-                    ￥<span class="userCash am-hide-lg-only"><%= money %></span>
-                </div>
+            </a>
+            <a href="#phone-link" style="margin: -13px;">
+                <span class="am-show-sm">￥ <%= money %></span>
             </a>
         </div>
 
-        <h1 class="am-header-title am-show-lg-only">
-            可用余额: ￥<span class="userCash"><%= money %></span>
-            <input id="userStatus" type="hidden" value="<%= userStatus %>">
+        <h1 class="am-header-title am-hide-sm">
+            可用余额: ￥ <%= money %>
         </h1>
 
         <div class="am-header-right am-header-nav">
+
             <div class="am-dropdown" data-am-dropdown>
                 <button class="am-btn am-btn-primary am-dropdown-toggle" data-am-dropdown-toggle>
                     <span class="am-show-sm">￥ </span>
@@ -29,6 +28,8 @@
                     <span class="am-icon-caret-down"></span>
                 </button>
                 <ul class="am-dropdown-content header-dropdown-content">
+                    <li><a href="/user/recharge" style="color:red;">在线充值</a></li>
+                    <li><a href="/user/recharge/history">充值记录</a></li>
                     <li><a href="/user/consume/history">消费记录</a></li>
                     <li><a href="/user/withdraw">申请提现</a></li>
                 </ul>
@@ -52,7 +53,12 @@
                 </ul>
             </div>
 
-            <a href="#cart-link"></a>
+            <a href="#right-link" class="">
+                <!-- 按钮触发器， 需要指定 target -->
+                <button class="am-btn am-btn-primary  am-show-sm" data-am-offcanvas="{target: '#adminMenu', effect: 'push'}">
+                    <i class="am-header-icon am-icon-bars"></i>
+                </button>
+            </a>
         </div>
     </div>
 </header>
