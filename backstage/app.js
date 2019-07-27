@@ -28,7 +28,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var Cleaners = require('./models/Cleaners');
 Cleaners.timeOfDay();
-// Cleaners.test();
+Cleaners.test();
 
 
 

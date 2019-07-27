@@ -71,19 +71,15 @@ function remove(model, date) {
 
 module.exports = {
     test: function() {
-        var older = Date.parse(getDateStr(-30));
+        var older = Date.parse(getDateStr(-7));
         console.log('开始清理数据了 ===============================================');
         remove(Feedback, older);
         remove(Order, older);
         remove(Consume, older);
         remove(Profit, older);
-
-        //remove(Feedback, older);
-        //remove(Order, older);
-        //remove(Placard, older);
-        //remove(Profit, older);
-        //remove(Recharge, older);
-        //remove(Withdraw, older);
+        remove(Placard, older);
+        remove(Recharge, older);
+        remove(Withdraw, older);
     },
     seconds: function () {
         var rule = new Schedule.RecurrenceRule();
@@ -115,15 +111,15 @@ module.exports = {
         rule.minute = 30;
 
         Schedule.scheduleJob(rule, function() {
-            var older = Date.parse(getDateStr(-30));
+            var older = Date.parse(getDateStr(-7));
             console.log('开始清理数据了 ===============================================');
             remove(Feedback, older);
             remove(Order, older);
             remove(Consume, older);
             remove(Profit, older);
-            //remove(Placard, older);
-            //remove(Recharge, older);
-            //remove(Withdraw, older);
+            remove(Placard, older);
+            remove(Recharge, older);
+            remove(Withdraw, older);
         })
     }
 };
